@@ -14,7 +14,7 @@ cfo.ai spreadsheet: <!-- FILL:cfo_xlsx -->
 |---|---|---|---|
 | Free | $0 | 1, weekly | 4 |
 | Team | $49 | 10, nightly | 300 |
-| Scale | $299 | 100, nightly, with PRs | 3,000 |
+| Scale | $299 | 100, nightly, with PRs, Docs Bisect and Prerequisite Proof | 3,000 |
 
 ## Measured Cost per Run Is $0.02771
 
@@ -31,6 +31,24 @@ neatlogs measured 4 v1 `firstrun.run` traces. Compute is a priced assumption, so
 | Total cost per run | $0.02771 | no | $0.02623 + $0.00148 |
 
 The model cost uses Sonnet 5.5 list price. Anthropic did not bill it.
+
+## v2 Measured Cost, With Recovery and Verification, Is $0.02232 per Run
+
+The v1 numbers above assumed a recovery multiplier of 1.0. The 4 final v2 traces measure it directly: they include recovery attempts and the second clean run that verifies a fix.
+
+| Input | Value | Measured | Source |
+|---|---|---|---|
+| Model cost per run, v2 | $0.0200 | yes | 4 v2 `firstrun.run` traces, neatlogs, evidence/before_after_traces.json |
+| Run duration, v2 | 200.8 s | yes | same traces, verification included |
+| Compute cost per run, v2 | $0.00232 | no | $0.0416 x 200.8 / 3600 |
+| Total cost per run, v2 | $0.02232 | no | $0.0200 + $0.00232 |
+
+| Tier | Revenue | Cost (runs x $0.02232) | Gross profit | Gross margin |
+|---|---|---|---|---|
+| Team | $49.00 | 300 x 0.02232 = $6.70 | $42.30 | 86.3% |
+| Scale | $299.00 | 3,000 x 0.02232 = $66.96 | $232.04 | 77.6% |
+
+A Docs Bisect probe and a Prerequisite Proof replay stored commands, so they cost $0 in model calls. A bisect probe ran about 75 s, which is $0.00087 of compute at the same VM price. 100 bisects of 5 probes each add $0.43 a month to a Scale customer.
 
 ## Team and Scale Keep a Gross Margin Above 70%
 

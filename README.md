@@ -94,6 +94,27 @@ flowchart TD
 
 A `budget` GUARDRAIL span runs before every recovery. The root span `firstrun.run` is a WORKFLOW span that holds the whole tree. [docs/architecture.md](docs/architecture.md) lists the states, the failure classes, the budgets and every span.
 
+## One Engine Answers Three Questions About a Quickstart
+
+| Question | Command | What it does |
+|---|---|---|
+| Does my quickstart work today? | `firstrun <url>` | Runs every step in a clean container, fixes the first break, proves the fix in a second clean container |
+| Which release broke it, and when? | `firstrun bisect <run> --package <pkg>` | Binary-searches the package's releases, one fresh container per probe, version pinned with `PIP_CONSTRAINT` |
+| What does it silently assume? | `firstrun prereqs <run>` | Turns the run's container fixes into a Prerequisites block, then proves it: a fresh container with only those items runs the docs as written |
+
+Bisect and Prerequisite Proof replay stored commands, so they make no model calls.
+
+**Bisect found that the dbt DuckDB guide never worked in a clean environment.** Its step `jafgen --years 6` passes on jafgen 0.3.1 (2023-01-17) and fails on 0.4.6 (2024-04-07), and PyPI has no release between them. The guide merged on 2025-03-14, 11 months after `--years` was gone. 5 probes found it.
+
+**Prerequisite Proof found what four quickstarts assume and proved three of them.**
+
+| Quickstart | The docs assume | Proof in a clean `python:3.11-slim` |
+|---|---|---|
+| AccuKnox knoxctl | curl, ca-certificates, gnupg, sudo | proven, 5/5 steps |
+| MkDocs | curl | proven, 9/9 steps |
+| Entire install | curl, git, `~/.local/bin` on `PATH` | proven, 4/4 steps, git found in round 2 |
+| dbt + DuckDB | Python 3.12 or later, git | steps 1 to 9 pass on `python:3.12-slim`; step 10 is the jafgen docs bug |
+
 ## Each of the 8 Focus Areas Has a Feature You Can Open
 
 | Focus area | Feature | Where you see it |
