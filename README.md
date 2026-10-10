@@ -187,8 +187,11 @@ Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app
 
 [docs/known-limits.md](docs/known-limits.md) lists what FirstRun does not do yet. Examples: a hung step is not retried, and version pinning covers pip only.
 
-## Six Worker Agents Built It in Parallel on One Branch
+## Parallel Agents Built It and Entire Reviewed Every Layer
 
-Six worker agents each built one track on `main`, and the lead made one commit per track. All agents ran on Sonnet 5.5.
+- **Build:** a lead session planned the work and ran worker agents in parallel, one track each: fixtures, planner, executor, recovery, verification, report page, then edge cases. All agents ran on Sonnet 5.5 at medium effort.
+- **Review:** each layer is an Entire Trail, so Entire runners reviewed every commit since kickoff. They found 3 real bugs, all fixed: a secret retry loop, a Windows-only Docker default, and a cd guard that was written but never called.
+- **CI:** GitHub Actions runs the 246 offline tests on every push and pull request.
+- **Jury self-test:** the Entire judge plugin, run on this repo with the real start time, ranked it with no excluded work: 3.93 of 5, authenticity 4.5, integrity 5.0. The report is [evidence/jury-selftest.txt](evidence/jury-selftest.txt).
 
 Planning happened before the event in a private repo. No FirstRun code existed before kickoff on 2026-10-10 at 12:30 PM IST. The build log is [hackathon.md](hackathon.md).
