@@ -9,3 +9,11 @@ HOmepage got a lot of additions recently so those need to be kinda broguht under
 ---
 
 ofc be in sync with the NOTES plan as well D:\Atharva\Notes > projects > neathack don't stray!! and refer other sessions or recent memory
+
+---
+
+please commit and push and merge
+
+There is some duplication and slop so use /impeccable to clean up some things first and be a bit precise and simple otherwise we will end up confuising people. 
+
+Use icons and try to make things more simple and clear and direct for people to follow and page should be fast without too much design overhead  if it slows down the page!!!
