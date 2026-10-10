@@ -96,3 +96,206 @@ netlify redeployed, schedule both posts via zernio
 ---
 
 continue working, push things - might be a good time to revisit the NOTES folders project plan for this and evaluate whether things have happened and show list of all the open tasks!!! This is important, also advice on which images i should screenshot from the the three integration apps etc etc as needed if needed!
+
+---
+
+<task-notification>
+<task-id>a3812f547df423e3a</task-id>
+<tool-use-id>toolu_014GXGfuteco1jdpRpKTy96w</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\c94b37e7-70e0-472a-b1d9-6dddb786f269\tasks\a3812f547df423e3a.output</output-file>
+<status>completed</status>
+<summary>Agent "Audit neatHack plan vs reality" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>I checked the plan files, the repo on `origin/main`, the live site, the GitHub PRs and the Zernio ledger. One fact in your brief is out of date. The live site now serves `origin/main`, including #19 and #20. I stripped CRLF and the Netlify comment from both 1run.netlify.app and firstrun.atharvashah.com, then diffed them against `origin/main`. Only Netlify's URL rewrites (`/run` in place of `run.html`) differ, and `id="plan"` and "month 14" appear live. PR #20 (run page overhaul) also merged after #19.
+
+## 1. Deliverables and Status
+
+| Task | Source | Status | Evidence, or what is missing |
+|---|---|---|---|
+| Pre-kickoff setup: Trails access, Entire app, cfo.ai signup, check-in | 00 N1–N3, items 1–3 | DONE | Ticked in 00. Trails were in use. |
+| Crustdata code | 00 N4, 22 M5 | OPEN | Optional |
+| Discord questions, judge connection notes, follows, bio line | 00 #8 and #10, 22 M1–M2, 26 G06–G08 | OPEN | I found no evidence |
+| OBS installed | 22 M4 | OPEN | I found no evidence |
+| `entire enable` before commit 1, public repo | 00 #15, 16 | DONE | hackathon.md line 34 |
+| Layer 1: planner, Docker executor, report, one trace per run | 01, 25 D02–D10 | DONE | 32 C1–C5, `bbc986b` |
+| v1 runs and mistakes list (4 targets, not 3) | 00 #18, 09, 25 D12/D14 | DONE | hackathon.md lines 61–86 |
+| 2 detections, 1 Investigate, fix over MCP | 00 #19, 25 D16–D17 | DONE | `3ca6f11`, evidence/neatlogs-investigation.md |
+| Recovery, ask-once, verify, patch.diff, pr_body | 01 Layer 2, 25 D07/D08/D19/D20 | DONE | trace-recovered-entire-v2.md |
+| v2 runs and before/after table | 25 D21/D23 | DONE | README line 429, before_after_traces.json |
+| Failed-and-recovered trace exported | 06, 21, 25 D24 | DONE | evidence/trace-recovered-entire-v2.md |
+| neatlogs AI evaluator ("1 eval") | 07 F5, 21, 25 D22, 32 | PARTLY | The evaluator exists. The scheduled run is not confirmed, and evidence/neatlogs.md has no eval row. |
+| neatlogs alerts (3 rules) | session | DONE (per brief) | Not in evidence/ |
+| Trace links that open logged out | 21 gap 4 | OPEN | No trace has sharing turned on |
+| Trails, Graph, Brain | 16, 25 D11/D25 | DONE | evidence/entire.md, graph.ndjson |
+| Checkpoint link with ID | 16, hackathon.md | DONE | hackathon.md line 149 |
+| Jury self-test | 06, 25 D32 | DONE | evidence/jury-selftest.txt, 3.93/5 |
+| Entire "Best Use" submission (5 items) | 16 lines 51–57 | OPEN | I cannot tell if it needs its own form |
+| cfo.ai model, scenarios, public link, BUSINESS_PLAN.md | 06, 25 D29 | DONE | PRs #15, #17, #18, cfo.ai/s/_u5lbrHIl9KX_JQE |
+| `business/plan.xlsx` | 06 lines 56/65, 21, 22 | OPEN | Not in the repo |
+| Static report page T6 | 22, 25 D09/D26 | PARTLY | report/index.html last built `a9d6112` at 14:14 Sat, so it is stale. docs/ became the real site. |
+| Landing page plus run replay, live | 25 D43, 32 C16–C18 | DONE | PRs #12–#20, both domains return 200 |
+| cfo.ai proof modal on the site | 34 line 56 | PARTLY | docs/index.html line 1024: 5 of 6 slots are empty and render "[X: phase]" placeholders live |
+| FirstRun on its own README | 00, 25 D33 | DONE | PR #10. It found 2 gaps, not a clean pass. |
+| Upstream PRs plus proof comments | 00 #23, 29, 33 | DONE | All 4 are OPEN with REVIEW_REQUIRED, no maintainer comments yet, and Vercel needs authorization on both dbt PRs |
+| Ecosystem issues on neatlogs and Entire repos | 26 G01/G02/G10 | PARTLY | entireio/cli#2724 is the only one. No neatlogs issue. |
+| cfo.ai product feedback | 26 G11 | OPEN | |
+| Friction log and drafts | 25 D49, 29 | DONE | plan/30, plan/31 |
+| Feature freeze, secret scan, logged-out link check | 25 D34/D35 | OPEN | Monday |
+| Rehearse demo 3 times | 09, 25 D27 | OPEN | |
+| Office hour with Chetan Raj | 09 Sun 1 PM, 00 #21 | OPEN | Sunday |
+| Demo video, 3:00 or less, 15 points | 06, 13, 35, 11 #12 | OPEN | No `video-studio/video-projects/firstrun-demo` folder. No H, S or M shots exist. |
+| Thumbnail filled | 11 #4, 13, 26 I09 | OPEN | Template only |
+| X posts A1–A9 | 17 | DONE | A1 is live. A2–A9 are scheduled in `_sent.tsv`. |
+| Extra X posts | 17 B rows | PARTLY | 3 posts published (ledger 13:14, 13:26, 18:23). B5 is set for Mon 12:00, the PRs post for Mon 13:30. B1–B4 and B6 are not mapped in 17. |
+| B7 submission quote post | 04 #6, 06, 17 | OPEN | Monday |
+| Post URLs in hackathon.md "Built in public" | 04, 06, 21, 26 B01 | OPEN | The section does not exist |
+| LinkedIn L01–L04 | 26 | DONE (per 26) | Scheduled in Zernio |
+| LinkedIn L05 and launch post L06 | 26 C10 | OPEN | |
+| Website posts W1–W6, screenshot ledger | 34, 26 I11–I16 | OPEN | "Used in" column is empty. File 16 (`16-desktop-prism-gate.png`) is missing. Files 1–15 predate PRs #13–#20. |
+| Cards I04, I06–I08, launch card | 11, 26 | PARTLY | `x/b5-cfo-plan-chart.png` exists. The 4:5 tool map and before/after card do not. |
+| README GIF (red to green) | 11 #10, 25 D45 | OPEN | The README has the 44 s launch film instead |
+| Teaser V02, vertical cut V03 | 26 | OPEN | V03 is set for Tuesday |
+| Substack article, Dev.to, X Article | 24, 26 B01–B06, X01–X05 | OPEN | Wednesday |
+| Show HN, Reddit, Discord 3 a day | 22, 26, 27 | OPEN | I found no evidence |
+| Layer 3 parallel coordinator | 01 | DROPPED | Cut by design |
+
+## 2. Open Tasks Ranked
+
+**Must do before Mon 7 PM IST**
+
+1. Record the judge cut (3:00 or less) with all 5 points per tool. Owner: Atharva for voice, camera and screen (about 120 min). The agent builds plates, motion graphics and the edit (about 180 min).
+2. Upload to YouTube and test playback logged out. Owner: Atharva, 15 min.
+3. Add a "Built in public" section to hackathon.md with every live #neatHack URL (A1, the 3 published posts, A2–A9 as they go live). Owner: agent, 20 min.
+4. Fill or remove the 5 empty cfo.ai modal slots. Owner: Atharva takes screenshots behind his login (15 min), then the agent fills them (30 min).
+5. Confirm the scheduled neatlogs eval (Atharva, 15 min), then add an eval and alerts row to evidence/neatlogs.md (agent, 10 min).
+6. Fix hackathon.md: line 121 still says the cfo.ai model is "Planned", line 136 says "Video pending", and the Submission ticks at lines 146–151 are open. Owner: agent, 10 min.
+7. Add cfo.ai, the Entire session link and neatlogs alerts to evidence/README.md. Owner: agent, 15 min.
+8. Run the secret scan and the logged-out check of every link (D35). Owner: agent, 20 min.
+9. Find out whether "Best Use of Entire" needs a separate form. Owner: Atharva, 10 min.
+10. Write the B7 text, then submit at 7:00 PM. Owner: Atharva, 20 min.
+
+**Should do**
+
+- Enable public sharing on one neatlogs trace, the recovered one. Owner: Atharva, 10 min.
+- Export `business/plan.xlsx`, or delete the requirement from 06, 21 and 22. Owner: Atharva, 10 min.
+- Regenerate report/index.html, or remove it. Owner: agent, 15 min.
+- Draft the LinkedIn launch post (agent, 30 min). Atharva approves and posts at 7:30 PM (5 min).
+- Retake site screenshots 1–16 and draft W posts. Owner: agent, 30 min.
+- Change B6 to "README self-run found 2 gaps". Owner: agent, 15 min.
+- Office hour Sunday. Owner: Atharva, 60 min.
+- Discord posts. Owner: Atharva, 10 min a day.
+
+**Nice to have**
+
+- Vertical cut. Owner: agent, 60 min.
+- Teaser and README GIF. Owner: agent, 45 min.
+- Neatlogs repo issue. Owner: agent drafts (20 min), Atharva opens.
+- cfo.ai feedback note. Owner: Atharva, 10 min.
+- Article, Show HN, Reddit and Dev.to. Owner: Tue–Wed work.
+
+## 3. Stale Plan Items
+
+- **13 Video Production**
+  - Line 26: replace "Same five quickstarts" and the `&lt;before&gt;`/`&lt;after&gt;` slots with 2→3 of 4 finished and $0.0262→$0.0200. Replace "looped on failed commands" with "planner invented a step".
+  - Line 30: `&lt;count&gt;` checkpoints is unfilled. 34 was the count at 16:07.
+  - Line 34: the cfo.ai beat ("what if Team costs less") is replaced by the new story. The $0.50 cap runs cash out in month 14, the Scale cap is now $0.028, and the mean run costs $0.0167 over 64 traces.
+  - Line 42: "It passed" is wrong. The self-run found 2 gaps.
+  - Line 64: thumbnail says `step 4/7`, but the real break is step 10 (`--years`).
+- **01 Project Plan**
+  - Lines 159–172: "5 quickstarts" and a "?" table. The real run used 4 targets, and the table is in README line 429.
+  - Line 52: says "no web UI", but the site shipped.
+- **06 Demo and Submission**
+  - Lines 33–56: the cfo.ai prompts are done.
+  - Lines 56 and 65: `plan.xlsx` does not exist.
+  - Lines 62–68: the checkboxes are unticked.
+- **09 Run Sheet**
+  - Lines 30 and 43: say "3 targets". The real count is 4.
+  - Line 54: cfo.ai on Monday. It was done on Saturday.
+- **21 Grading Checklist**
+  - Lines 16–20 and 37–43 are all unticked, yet most claims are DONE.
+  - Line 40: names `plan.xlsx`.
+- **22 Packaging and Distribution**
+  - Lines 21–39: built on report/index.html and plan.xlsx.
+  - Line 30 and 25 D26/D43: say GitHub Pages. The site runs on Netlify.
+- **32 Live Status**
+  - Line 11: "Sat 19:00, paused".
+  - Line 36: C13 is still ⬜, but cfo.ai is done.
+  - Line 43: C15 is marked both ✅ and ⬜.
+  - Lines 45–53: the "Waiting on Atharva" items are mostly done (bisect comment, cfo.ai, approvals).
+- **20 Build Log**: it ends at 18:09. PRs #15–#20, cfo.ai, alerts and the proof comments are missing.
+- **35 Demo Video Shot Sheet**
+  - Line 48: says the /run page may not be live. #20 is merged and live, so re-shoot S02–S12 on the new UI.
+- **34 Website Screenshots**
+  - Line 37: W5 waits on `[FILL]` cells, but #14 removed them.
+  - Line 39: file 16 is missing.
+- **17 X Queue**: the B5 row has no schedule status, and the 3 published posts are not mapped to B rows.
+- **Repo files**
+  - README line 85 says "about $0.02 per run". The measured mean is $0.0167.
+  - docs/index.html line 1021: the cfo.ai `xyz` still reads "Pricing, after the cost per run is measured".
+  - Build Log line 43 has margins 86.3% and 77.6% at $0.02232. The current figures are 88.6% and 81.3% at mean (BUSINESS_PLAN.md). No README or site copy carries the old ones.
+
+## 4. Screenshots and Clips
+
+**neatlogs**
+
+- Expected (11, 17, 35 S20):
+  - First trace span tree (B1)
+  - v1-tagged trace list
+  - A detection firing and its list (B2)
+  - Investigate result
+  - Claude Code reading the fix over MCP
+  - Before/after table (B3)
+  - S20 live: trace, then detection, then Investigate
+- Exist:
+  - `neathack/x/b0-neatlogs-trace.png`
+  - docs/assets: `t-neatlogs-{trace,detection,investigate,analysis,analytics,bisect,recovery}.webp` and `shot-neatlogs.webp`
+- Missing:
+  - The MCP session capture
+  - The v1-tag list
+  - The table card
+  - The S20 clip
+
+**Entire**
+
+- Expected:
+  - The commit checkpoint on entire.io
+  - `entire why` on one line
+  - The graph
+  - S21 checkpoint page `01M4JGJ6NTE7YNB9Z0YW5FYVHN`
+- Exist:
+  - `x/b0-entire-analytics.png` and `x/b0-entire-trails.png`
+  - docs/assets: `t-entire-{checkpoint,analytics,board,findings,gate,review}.webp` and `shot-entire.webp`
+- Missing:
+  - `entire why` output
+  - The graph view
+  - The public session page capture
+  - The S21 plate
+
+**cfo.ai**
+
+- Expected:
+  - The scenario chart and one number's lineage (11)
+  - The plan card (11 #11, 26 I08, B5)
+  - S14 landing cash chart
+  - S22 public model cash forecast
+- Exist:
+  - `x/b0-cfo-ai-ari.png` and `x/b5-cfo-plan-chart.png`
+  - docs/assets: `t-cfo-ari.webp` and `shot-cfoai.webp`
+- Missing:
+  - The lineage click
+  - The scenario comparison
+  - The S14 and S22 plates
+  - The 5 site modal slots
+
+**Shared assets**
+
+- Exist:
+  - `neathack/video/firstrun-concept.mp4`
+  - docs/assets `firstrun-launch.mp4`, the source for M03, M10 and M12
+  - `x/b8-four-prs-public-proof.png` and `x/c1-four-docs-prs-day-one.jpg`
+  - logos, brand cards, `cards/x/a4–a9`, the tool map and the architecture PNG
+- Missing:
+  - All H01–H13, S01–S22 and M01–M12 shots
+  - `D:\hack-images\16-desktop-prism-gate.png`</result>
+<usage><subagent_tokens>203598</subagent_tokens><tool_uses>24</tool_uses><duration_ms>208950</duration_ms></usage>
+</task-notification>
