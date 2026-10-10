@@ -333,3 +333,42 @@ I rejected Prefect because its quickstart needs a cloud login. I dropped Litesta
 <status>failed</status>
 <summary>Background command "Write targets.txt and run v1 Layer 1 batch" failed with exit code 1</summary>
 </task-notification>
+
+---
+
+<task-notification>
+<task-id>a3810c02f834e9d73</task-id>
+<tool-use-id>toolu_01671HaYQzcvg3wG3LEasfWR</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\a3810c02f834e9d73.output</output-file>
+<status>completed</status>
+<summary>Agent "T7 edge case tests track" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>T7 is done. The offline suite passes, 147 passed, 23 skipped, 1 xfailed, and the live rows run clean with Docker.
+
+- **Tests:** `tests/test_edge_{planner,executor,recovery,verify,demo}.py` plus a helper, `tests/_edge_fakes.py`.
+  - Offline: 147 pass, 0 fail.
+  - Live: 20 pass, 0 xfail. The only live failure is the lead's existing `test_live_skipped_by_default`, which asserts it is skipped, so it fails under FIRSTRUN_LIVE=1 by design.
+  - Skipped by hand: D3 and D4.
+  - xfail: D1, because there is no `evidence/` folder yet.
+- **Trace export:** `conftest.py` now forces FIRSTRUN_NO_EXPORT=1 unless FIRSTRUN_EXPORT_TESTS=1. An autouse session fixture calls `neatlogs.init(disable_export=True)` once.
+- **`models.py` (additions only):** `Step.skipped_out_of_scope`, `Step.skip_reason`, `StepStatus.SKIPPED` and `StepStatus.NEEDS_HUMAN`.
+- **Behavior change to confirm:** `planner.plan` no longer falls back to the heuristic after a model failure (P1 and K2). It raises `PlanError` and the run stops. I edited the old assertion in `tests/test_planner.py` to match.
+- **Modules changed:**
+  - `planner.py`: `PlanError` and `DocsUnreachable`, the 10-step and zero-step limits, skipped steps, Wayback banner strip, Windows path rewrite.
+  - `cli.py`: early-stop reports, exit code 2 for runs that never started, unknown `--resume` id error, pins passed to verify.
+  - `executor.py`: `DockerUnavailable` handling, budget check on every attempt, skipped steps, `needs_human` status, verify only after a patch, pip pin capture, output redaction.
+  - `sandbox.py`: `DockerUnavailable`, truncation marker, stale `firstrun-` container removal, redaction at the source. The stale removal had a bug where WSL ran the docker format string through bash, so it never removed anything. Fixed.
+  - `recovery.py`: 60 second ask timeout, timeout classified as `environment`, network-drop retry once, search terms logged.
+  - `classify.py`: blocks model calls during verification.
+  - `llm.py`: `ModelAuthError`.
+  - `precedents.py`: moves a corrupt file aside.
+  - `verify.py`: blocks model calls and honors pins.
+  - `state.py`: unique run ids and `pins.txt`.
+  - `config.py`: `block_model_calls` and `ModelCallBlocked`.
+  - `report.py`: fixture label.
+  - `tracing.py`: missing-key warning.
+  - `templates/report.html`: build time at the top.
+  - New `redact.py`.
+- **Known limits:** `docs/known-limits.md`.</result>
+<usage><subagent_tokens>251571</subagent_tokens><tool_uses>94</tool_uses><duration_ms>1778202</duration_ms></usage>
+</task-notification>
