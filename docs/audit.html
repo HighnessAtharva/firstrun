@@ -102,6 +102,7 @@ body{position:relative}
 .nl a:hover{color:var(--ink);background:rgba(255,255,255,.65)}
 .nl a[aria-current]{color:var(--ink);background:rgba(255,255,255,.85);box-shadow:0 0 0 1px var(--hair)}
 @media(max-width:860px){.nl{display:none}}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -111,18 +112,18 @@ body{position:relative}
 
 <section id="start">
 <h1>Find the Docs Your Product Outgrew.</h1>
-<p class="lede">A docs audit reads your repo's git history. It ranks every page by age, flags the pages your code changed underneath, finds shipped features that no page names, and drafts the release notes.</p>
+<p class="lede">Point it at a GitHub repo. It reads the git history and lists the pages your code changed underneath.</p>
 <form class="ask g" id="f"><label for="repo" class="hidden">GitHub repo</label><input id="repo" placeholder="owner/repo, for example fastapi/typer" autocomplete="off" spellcheck="false"><button class="pillbtn" type="submit">Get the command</button></form>
 <div class="cmd g mono" id="cmdbox" hidden><code id="cmd"></code><button class="pillbtn ghost" type="button" id="cpcmd">Copy</button></div>
 <p class="note">The audit runs on your machine with one blobless clone. It reads text and history, so it costs $0 in model calls. Jev sorts commits that have no conventional prefix, if a key is set.</p>
+<h2>Open a Real Audit</h2>
+<ol class="list" id="audits"></ol>
+<h2>What the Audit Finds</h2>
 <div class="what">
 <div class="g"><b>Stale, not just old</b><span>A page is stale when product commits on its topic landed after its last edit. An old page nobody's code touched is quiet.</span></div>
 <div class="g"><b>Features with no docs</b><span>Every user-facing commit in 120 days is checked against the docs text. A flag or a name no page mentions becomes a card.</span></div>
 <div class="g"><b>Work done for you</b><span>Release notes for the newest tag and product highlights, drafted from commits and pull requests, ready to edit.</span></div>
 </div>
-<h2>Published Audits</h2>
-<p class="sub">Each one is a real repo, audited with <code>firstrun audit</code>.</p>
-<ol class="list" id="audits"></ol>
 </section>
 
 <section id="report" class="hidden" aria-live="polite">
