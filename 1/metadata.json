@@ -1,0 +1,109 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KF485MAXGKZ95VXX0CCHAJ",
+  "session_id": "8145d2ac-ce2b-4c05-98e5-7b8f7c2943cf",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T17:52:47.2596705Z",
+  "branch": "neatlogs/evals",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "src/firstrun/config.py",
+    "src/firstrun/executor.py",
+    "src/firstrun/models.py",
+    "src/firstrun/sandbox.py",
+    "tests/conftest.py",
+    "tests/test_executor.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "turn_id": "3f36318630aa",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 144,
+    "cache_creation_tokens": 218431,
+    "cache_read_tokens": 14325977,
+    "output_tokens": 43435,
+    "api_call_count": 72
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01Fpa8GFFvirTpxnrjCWbmbs",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "3f36318630aa",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 62,
+        "end": 63,
+        "entry_ids": [
+          "40215ec1-2348-4a47-93db-b5eddb6bb1d6"
+        ],
+        "tool_use_id": "toolu_01Fpa8GFFvirTpxnrjCWbmbs"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Fpa8GFFvirTpxnrjCWbmbs"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01SVnuWo38WnSw5iicRWvK5P",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "3f36318630aa",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 356,
+        "end": 357,
+        "entry_ids": [
+          "e20c4c78-bd26-4a2f-af59-18d4b6cea628"
+        ],
+        "tool_use_id": "toolu_01SVnuWo38WnSw5iicRWvK5P"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01SVnuWo38WnSw5iicRWvK5P"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T17:52:47.1371243Z",
+    "agent_lines": 40,
+    "agent_removed": 17,
+    "human_added": 0,
+    "human_modified": 879,
+    "human_removed": 0,
+    "total_committed": 919,
+    "total_lines_changed": 936,
+    "agent_percentage": 6.089743589743589,
+    "metric_version": 2
+  }
+}
