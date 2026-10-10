@@ -8,11 +8,16 @@ extras keys (all optional, a missing one renders as "missing"):
   neatlogs_summary: str          one line, such as "14 vs 6 tool calls"
   cfo_plan_url: str              cfo.ai plan link
   cfo_cost_per_run: float | str  cost per run from the plan
+  trace_ids: {run_id: trace id}  shown when no trace URL is known
+  neatlogs_groups: {tag: {...}}  per-tag stats from evidence/neatlogs_runs.json
+  evidence_files: {key: file}    source file shown in each number's tooltip
+`load_evidence` builds these from evidence/*.json.
 """
 
 from __future__ import annotations
 
 import html
+import json
 from datetime import datetime, timezone
 from importlib import resources
 from pathlib import Path
@@ -169,6 +174,85 @@ def _patches(state: RunState) -> str:
     return "<h3>Patch</h3>" + "".join(out)
 
 
+def _src(value: object, source: str | None, text: str | None = None) -> str:
+    """Wrap a number in a tooltip that names the file it came from (plan/22 rule 1)."""
+    shown = _e(value) if text is None else text
+    return f'<span title="source: {_e(source)}">{shown}</span>' if source else shown
+
+
+def _parse(ts: str | None) -> datetime | None:
+    try:
+        return datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def load_evidence(evidence_dir: Path, runs_dir: Path) -> dict:
+    """Read evidence/*.json into report extras. A missing file leaves its keys out."""
+    evidence_dir = Path(evidence_dir)
+    extras: dict = {}
+    files: dict = {}
+    nl = evidence_dir / "neatlogs_runs.json"
+    if nl.is_file():
+        try:
+            groups = json.loads(nl.read_text(encoding="utf-8")).get("groups") or {}
+        except ValueError:
+            groups = {}
+        if groups:
+            extras["neatlogs_groups"] = groups
+            files["neatlogs"] = "evidence/neatlogs_runs.json"
+            v1, v2 = groups.get("v1"), groups.get("v2")
+            if v1 and v2:
+                extras["neatlogs_summary"] = (
+                    f"{v1['avg_tool_calls']:g} vs {v2['avg_tool_calls']:g} tool calls")
+            # Traces carry no run_id, so match by start time: within 60 s of state.started_at.
+            traces = [(_parse(t.get("startedAt")), t.get("traceId")) for g in groups.values()
+                      for t in g.get("traces", [])]
+            ids: dict = {}
+            loaded, _bad = _load(Path(runs_dir))
+            for state, _rb, _md in loaded:
+                started = _parse(state.started_at)
+                if not started:
+                    continue
+                best = min(((abs((ts - started).total_seconds()), tid) for ts, tid in traces if ts and tid),
+                           default=None)
+                if best and best[0] <= 60:
+                    ids[state.run_id] = best[1]
+            if ids:
+                extras["trace_ids"] = ids
+    en = evidence_dir / "entire.json"
+    if en.is_file():
+        try:
+            data = json.loads(en.read_text(encoding="utf-8"))
+        except ValueError:
+            data = {}
+        if data.get("checkpoints") is not None:
+            extras["entire_checkpoints"] = data["checkpoints"]
+        if data.get("graph_tokens_saved") is not None:
+            extras["graph_stats"] = f"~{data['graph_tokens_saved']:,} tokens saved"
+        files["entire"] = "evidence/entire.json"
+    extras["evidence_files"] = files
+    return extras
+
+
+def _group_table(groups: dict, source: str) -> str:
+    order = [t for t in ("v1", "v2") if t in groups] + sorted(t for t in groups if t not in ("v1", "v2"))
+    rows = []
+    for tag in order:
+        g = groups[tag]
+        cells = [
+            _e(tag), _src(g["count"], source), _src(f"{g['avg_spans']:.1f}", source),
+            _src(f"{g['avg_tool_calls']:.1f}", source), _src(f"${g['avg_cost_usd']:.4f}", source),
+            _src(f"{g['avg_duration_s']:.0f} s", source), _src(g["errors"], source),
+        ]
+        rows.append("<tr>" + "".join(f'<td class="num">{c}</td>' if i else f"<td>{c}</td>"
+                                     for i, c in enumerate(cells)) + "</tr>")
+    return (
+        '<div class="tscroll"><table><thead><tr><th>Tag</th><th>Runs</th><th>Spans</th><th>Tools</th>'
+        "<th>Cost</th><th>Time</th><th>Errors</th></tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
+    )
+
+
 def _run_block(state: RunState, runbook: Runbook | None, report_md: str | None, extras: dict) -> str:
     passed, total = _counts(state, runbook)
     status = state.status.value
@@ -185,6 +269,7 @@ def _run_block(state: RunState, runbook: Runbook | None, report_md: str | None, 
         f"<span>Cost: <b>${state.usage.cost_usd:.4f}</b> list price, not billed</span>"
     )
     trace = (extras.get("trace_urls") or {}).get(state.run_id)
+    trace_id = (extras.get("trace_ids") or {}).get(state.run_id)
     detail = ["<h3>Steps</h3>", _step_rows(state, runbook)]
     err = _error_tail(state)
     if err:
@@ -193,7 +278,7 @@ def _run_block(state: RunState, runbook: Runbook | None, report_md: str | None, 
     detail.append(_patches(state))
     if state.stop_reason:
         detail.append(f"<h3>Stop reason</h3><pre>{_e(state.stop_reason)}</pre>")
-    detail.append(f"<h3>neatlogs trace</h3><p>{_link(trace, 'Open trace')}</p>")
+    detail.append(f"<h3>neatlogs trace</h3><p>{_link(trace, 'Open trace') if trace else (_src(trace_id, 'evidence/neatlogs_runs.json', f'<code>{_e(trace_id)}</code>') if trace_id else _MISSING)}</p>")
     if report_md:
         detail.append(f"<h3>report.md</h3><pre>{_e(report_md.strip())}</pre>")
     return (
@@ -215,14 +300,17 @@ def _val(value: object) -> str:
 
 def _panels(runs: list[RunState], extras: dict) -> str:
     traces = extras.get("trace_urls") or {}
-    linked = sum(1 for r in runs if _safe_url(traces.get(r.run_id)))
+    ids = extras.get("trace_ids") or {}
+    files = extras.get("evidence_files") or {}
+    neat_src, entire_src = files.get("neatlogs"), files.get("entire")
+    linked = sum(1 for r in runs if _safe_url(traces.get(r.run_id)) or r.run_id in ids)
     neat_rows = [
-        ("Trace links", f"{linked} of {len(runs)}" if traces else _MISSING),
-        ("v1 vs v2", _val(extras.get("neatlogs_summary"))),
+        ("Trace links", _src(f"{linked} of {len(runs)}", neat_src) if (traces or ids) else _MISSING),
+        ("v1 vs v2", _src(extras.get("neatlogs_summary"), neat_src) if extras.get("neatlogs_summary") else _MISSING),
     ]
     entire_rows = [
-        ("Checkpoints", _val(extras.get("entire_checkpoints"))),
-        ("Graph stats", _val(extras.get("graph_stats"))),
+        ("Checkpoints", _src(extras.get("entire_checkpoints"), entire_src) if extras.get("entire_checkpoints") is not None else _MISSING),
+        ("Graph stats", _src(extras.get("graph_stats"), entire_src) if extras.get("graph_stats") not in (None, "") else _MISSING),
         ("Latest checkpoint", _link(extras.get("entire_checkpoint_url"), "Open")),
     ]
     cfo_cost = extras.get("cfo_cost_per_run")
@@ -233,14 +321,16 @@ def _panels(runs: list[RunState], extras: dict) -> str:
         ("Plan", _link(extras.get("cfo_plan_url"), "Open plan")),
     ]
     cards = [
-        ("neatlogs", "neatlogs", "Traces every step of every run.", neat_rows),
-        ("entire", "Entire", "Checkpoints the work and graphs the code.", entire_rows),
-        ("cfoai", "cfo.ai", "Prices a run and plans the business.", cfo_rows),
+        ("neatlogs", "neatlogs", "Traces every step of every run.", neat_rows,
+         _group_table(extras["neatlogs_groups"], neat_src or "evidence/neatlogs_runs.json")
+         if extras.get("neatlogs_groups") else ""),
+        ("entire", "Entire", "Checkpoints the work and graphs the code.", entire_rows, ""),
+        ("cfoai", "cfo.ai", "Prices a run and plans the business.", cfo_rows, ""),
     ]
     return "".join(
         f'<article class="card"><div class="logo {cls}" role="img" aria-label="{_e(name)} logo"></div>'
-        f'<h3>{_e(name)}</h3><p class="role">{_e(role)}</p>{_kv(rows)}</article>'
-        for cls, name, role, rows in cards
+        f'<h3>{_e(name)}</h3><p class="role">{_e(role)}</p>{_kv(rows)}{extra}</article>'
+        for cls, name, role, rows, extra in cards
     )
 
 

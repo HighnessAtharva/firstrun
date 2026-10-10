@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -27,13 +28,23 @@ def _verify():
 
     return lambda runbook, state: verify(runbook, state.patches, pins=state_io.load_pins(state.run_id))
 
+def _elapsed_s(state: RunState) -> float:
+    """Wall time of a run from its ISO timestamps. 0 when either is missing."""
+    from datetime import datetime
+
+    try:
+        return (datetime.fromisoformat(state.finished_at) - datetime.fromisoformat(state.started_at)).total_seconds()
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def _first_error_line(state: RunState) -> str:
     for r in reversed(state.results):
         if not r.passed:
             for text in (r.stderr, r.stdout):
                 lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
                 if lines:
-                    return lines[-1][:120]
+                    return re.sub(r"^/tmp/\.fr_step\.sh: line \d+: ", "", lines[-1])[:120]
             return "timed out" if r.timed_out else f"exit {r.exit_code}"
     return state.stop_reason
 
@@ -62,6 +73,35 @@ def exit_code(state: RunState) -> int:
     return 2 if state.stop_reason.startswith(EARLY_STOPS) else 1
 
 
+DOCKER_FIX = "Docker is not running in WSL. Start it: wsl -d Ubuntu-22.04 sudo service docker start"
+AUTH_FIX = "Claude auth is missing or expired. Add CLAUDE_CODE_OAUTH_TOKEN to your .env (run: claude setup-token)"
+
+
+def friendly(reason: str) -> str:
+    """One sentence plus the fix for a setup failure. Any other reason passes through."""
+    low = reason.lower()
+    if low.startswith("docker unavailable"):
+        return DOCKER_FIX
+    if low.startswith("model auth failed"):
+        return AUTH_FIX
+    return reason
+
+
+def _setup_exit(message: str):
+    click.echo(f"✗ {message}")
+    sys.exit(2)
+
+
+def _quiet_logs() -> None:
+    """neatlogs logs at INFO. Show that only when FIRSTRUN_DEBUG=1."""
+    import logging
+
+    if os.environ.get("FIRSTRUN_DEBUG") == "1":
+        return
+    for name in ("neatlogs", "opentelemetry"):
+        logging.getLogger(name).setLevel(logging.WARNING)
+
+
 def _early_stop(url: str, run_id: str, reason: str) -> RunState:
     """Write state.json and report.md for a run that could not start. No container is touched."""
     from datetime import datetime, timezone
@@ -76,8 +116,8 @@ def _early_stop(url: str, run_id: str, reason: str) -> RunState:
     state_io.save_runbook(run_id, runbook)
     state_io.save_state(state)
     report.write_report(state, runbook)
-    click.echo(f"✗ {reason}")
-    click.echo(f"run dir: {state_io.run_dir(run_id)}")
+    click.echo(f"✗ {friendly(reason)}")
+    click.echo(f"report: {state_io.run_dir(run_id) / 'report.md'}")
     return state
 
 
@@ -88,6 +128,7 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     from firstrun.tracing import init_tracing, mark_error, set_io
 
     init_tracing(tags)
+    _quiet_logs()
     run_id = resume or state_io.new_run_id(url)
     source = state_io.load_runbook(resume).source_url if resume else url
     attrs = {
@@ -97,6 +138,7 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
         "tags": list(tags),
     }
     planner.LAST_USAGE.clear()
+    click.echo(f"target: {attrs['target']}")
     # One trace per run: reading the docs, planning, every step and verification.
     with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs) as root:
         set_io(root, input={"url": source, "run_id": run_id, "resume": bool(resume), "tags": list(tags)})
@@ -132,14 +174,26 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     report.write_report(final, runbook)
     written = patch.write_outputs(run_dir, final, runbook)
     commands = {s.id: s.command for s in runbook.steps}
-    for line in _summary(final, commands):
-        click.echo(line)
+    lines = _summary(final, commands)
+    for line in lines:
+        click.echo("✗ " + friendly(line[2:]) if line.startswith("✗ ") else line)
+    if not lines[0].startswith("✓") and final.status == RunStatus.FAILED:
+        click.echo(f"ran {_elapsed_s(final):.0f} s, ${final.usage.cost_usd:.2f} list price")
+    click.echo(f"report: {run_dir / 'report.md'}")
     for path in written:
         click.echo(f"wrote {path}")
-    click.echo(f"run dir: {run_dir}")
     return final
 
-@click.group()
+class _UrlGroup(click.Group):
+    """`firstrun <url>` and `firstrun ./path` mean `firstrun run <url>`."""
+
+    def parse_args(self, ctx, args):
+        if args and args[0] not in self.commands and args[0] not in ("--help", "-h"):
+            args = ["run", *args]
+        return super().parse_args(ctx, args)
+
+
+@click.group(cls=_UrlGroup)
 def cli() -> None:
     """FirstRun: run a quickstart in a fresh container and find the step that breaks."""
     for stream in (sys.stdout, sys.stderr):
@@ -171,6 +225,9 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover) -> No
     from firstrun import state as state_io
     from firstrun.tracing import close_tracing
 
+    config.load_env()
+    if not offline and not resume_id and not os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
+        _setup_exit(AUTH_FIX)
     if resume_id and not (state_io.run_dir(resume_id) / "state.json").exists():
         raise click.ClickException(f"unknown run id: {resume_id}. Nothing to resume, no run was started.")
     worst = 0
@@ -181,6 +238,17 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover) -> No
         for u in urls:
             final = _run_one(u, list(tags), None, not no_verify, not no_recover)
             worst = max(worst, exit_code(final))
+    except Exception as exc:  # noqa: BLE001 - setup failures get one sentence, not a traceback
+        from firstrun import llm, planner
+        from firstrun.sandbox import DockerUnavailable
+
+        if isinstance(exc, DockerUnavailable):
+            _setup_exit(DOCKER_FIX)
+        if isinstance(exc, llm.ModelAuthError):
+            _setup_exit(AUTH_FIX)
+        if isinstance(exc, planner.PlanError):
+            _setup_exit(friendly(exc.reason))
+        raise
     finally:
         close_tracing()
     sys.exit(worst)
@@ -199,7 +267,8 @@ def report_cmd(html) -> None:
             raise click.ClickException("firstrun.report_html is not built yet")
         out = Path("report") / "index.html"
         out.parent.mkdir(exist_ok=True)
-        report_html.write_html(config.RUNS_DIR, out)
+        extras = report_html.load_evidence(Path("evidence"), config.RUNS_DIR)
+        report_html.write_html(config.RUNS_DIR, out, extras)
         click.echo(f"html: {out}")
 
 

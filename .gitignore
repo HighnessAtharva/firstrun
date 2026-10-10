@@ -6,6 +6,5 @@ precedents.json
 __pycache__/
 *.pyc
 secrets.allowlist
-report/index.html
 *.egg-info/
 .pytest_cache/

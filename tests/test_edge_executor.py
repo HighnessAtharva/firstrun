@@ -61,7 +61,8 @@ def test_e1_cli_exit_code_is_2_for_docker_unavailable(tmp_runs_dir, monkeypatch,
     doc.write_text("# D\n\n```bash\necho hi\n```\n", encoding="utf-8")
     result = CliRunner().invoke(cli, ["run", str(doc), "--offline", "--no-verify"])
     assert result.exit_code == 2
-    assert "docker unavailable" in result.output
+    assert "Docker is not running in WSL" in result.output
+    assert "wsl -d Ubuntu-22.04 sudo service docker start" in result.output
 
 
 @pytest.mark.live
