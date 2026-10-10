@@ -54,6 +54,37 @@ No checkpoints found on this branch.
 
 The checkpoint count is 0 because the scaffold commit is the first commit made inside an agent session. Later entries record the count after it.
 
+- **12:55 IST. Entire checkpoints hung on Git 2.33.** The post-commit hook waited 206 s on `git update-ref --stdin` and the checkpoint for the scaffold commit was never written. Upgrading Git for Windows to 2.55.0 fixed it: the next hook took 3 s and the checkpoint landed.
+- **13:00 to 13:35 IST. Six worker agents built FirstRun in parallel** on main, one track each: fixtures, planner, executor, recovery, verify and output, report page. Each track is one commit with its own checkpoint.
+- **13:35 IST. Layer 1 done.** `firstrun run https://docs.neatlogs.com/sdk/python` passed 4 of 4 steps in 70 s and wrote `report.md`. The first live run showed one run split into 3 neatlogs traces, so the CLI now opens one `firstrun.run` trace around reading, planning, every step and verification.
+
+### v1 Runs, Layer 1 Only (Recovery Off), Tag `v1`
+
+| Target | Result | Time | Cost (list price, not billed) |
+|---|---|---|---|
+| neatlogs Python SDK | passed 3/3 | 84 s | $0.036 |
+| Entire CLI install | failed at step 1: `curl: command not found` on python:3.11-slim | n/a | $0.023 |
+| Chroma getting started | passed 3/3 | 250 s | $0.029 |
+| OpenAI v0 README (FIXTURE, Wayback 2023-08-02) | failed at step 6: `openai: command not found`, the documented CLI is gone from today's SDK | n/a | $0.031 |
+
+neatlogs v1 traces, one `firstrun.run` trace per run, cost as neatlogs measured it:
+
+| Target | Trace ID | Spans | Tool spans | LLM calls | neatlogs cost |
+|---|---|---|---|---|---|
+| neatlogs | `fccdbad9a9c6177b90112911fe485bd6` | 9 | 4 | 1 | $0.0397 |
+| Entire | `10c44df9626c19f5ac801f1c6d84610e` | 7 | 2 | 1 | $0.0170 |
+| Chroma | `66ec093b00333fa221fade5d2fc5f55f` | 9 | 4 | 1 | $0.0217 |
+| OpenAI v0 FIXTURE | `b98b419e286acf436083febdb5217cf9` | 12 | 7 | 1 | $0.0266 |
+
+Six mistakes the agent itself made in v1. These are the "before" story:
+
+1. **The plan changes between runs.** The same neatlogs page gave 4 steps at 13:35 and 3 steps at 13:40.
+2. **The planner invents steps.** It added `command -v entire`, `command -v git-remote-entire` and `test -f first_trace.py`, which are not in the docs.
+3. **The planner writes placeholder steps.** Chroma step 2 is `true`, a no-op standing in for "create the file".
+4. **A fake secret passes as a step.** The OpenAI step `export OPENAI_API_KEY='sk-...'` exits 0, so it counts as a pass while proving nothing.
+5. **The planner skips the step that matters.** It dropped the OpenAI `openai.ChatCompletion.create` example and the neatlogs "run your app" step because they need a key. Those are the steps most likely to break.
+6. **Most expected results check only the exit code.** 9 of 16 steps have no output check, so a command that prints an error and exits 0 would pass.
+
 ## Demo
 
 Pending. The 60-second demo shows a red step, the agent's reason, a green verified run, and the drafted PR, then one click into the neatlogs trace.
