@@ -1,0 +1,23 @@
+{
+  "tool_use_id": "toolu_01HH4WzwTTrsyyEphGiJfQpf",
+  "agent_id": "a8950d26f529ecc8d",
+  "subagent_type": "general-purpose",
+  "task_description": "T4 recovery track",
+  "files": [
+    "src/firstrun/budget.py",
+    "src/firstrun/classify.py",
+    "src/firstrun/precedents.py",
+    "src/firstrun/recovery.py",
+    "tests/test_classify.py",
+    "tests/test_recovery.py"
+  ],
+  "token_usage": {
+    "input_tokens": 38,
+    "cache_creation_tokens": 94839,
+    "cache_read_tokens": 1983160,
+    "output_tokens": 32601,
+    "api_call_count": 19
+  },
+  "started_at": "2026-10-10T13:00:51.2613093+05:30",
+  "completed_at": "2026-10-10T13:05:07.4685654+05:30"
+}

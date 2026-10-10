@@ -1,0 +1,92 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JBSRV0V6DYKZY5VRXFEH7A",
+  "session_id": "ae05fb29-0c85-4558-9980-42419f08ca9c",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T07:35:23.6070938Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "src/firstrun/budget.py",
+    "src/firstrun/classify.py",
+    "src/firstrun/precedents.py",
+    "src/firstrun/recovery.py",
+    "tests/test_classify.py",
+    "tests/test_recovery.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "turn_id": "609c3b0492f9",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 132,
+    "cache_creation_tokens": 231013,
+    "cache_read_tokens": 13386847,
+    "output_tokens": 51779,
+    "api_call_count": 65
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NCjejWTAvQvZiXjV9ZAHHp",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-api"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "628474303796",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 167,
+        "end": 168,
+        "entry_ids": [
+          "2abe8732-2235-4b1c-b9a0-afe8b93376ab"
+        ],
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-api",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T07:35:23.4417043Z",
+    "agent_lines": 187,
+    "agent_removed": 10,
+    "human_added": 609,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 796,
+    "total_lines_changed": 806,
+    "agent_percentage": 24.441687344913152,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 363,
+      "user_lines_removed": 0,
+      "agent_lines_added": 433,
+      "agent_lines_removed": 10,
+      "user_added_per_file": {
+        "src/firstrun/llm.py": 117,
+        "tests/test_classify.py": 75,
+        "tests/test_recovery.py": 171
+      }
+    }
+  ]
+}
