@@ -1027,3 +1027,34 @@ i'm going away please work until completion as per previous messages which were 
 <status>completed</status>
 <summary>Background command "Correct Dagster claims, add what-broke entries, commit" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+<task-notification>
+<task-id>ab58111e9f07260ad</task-id>
+<tool-use-id>toolu_01EKmN6vm9tMZ3vnkippV9vo</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\ab58111e9f07260ad.output</output-file>
+<status>completed</status>
+<summary>Agent "U2 Prerequisite Proof engine" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Files: `src/firstrun/prereqs.py` (new), a `prereqs` command in `cli.py` (U1's `bisect` block is still there), `tests/test_prereqs.py` (new), and an add-only `prereqs` block in the `share.py` payload. Share encodes it only when `runs/&lt;id&gt;/prereqs.json` exists, so U3 can show it with no format bump.
+
+Tests: 17 new tests, all offline. The full suite is green (247 passed, 36 skipped, 1 xfailed).
+
+Live results (the dbt Not proven below is the fault of docs step 10, not of the block; the other three are Proven):
+
+| Run | Derived prerequisites | Proof |
+|---|---|---|
+| AccuKnox | curl, ca-certificates, gnupg, sudo | Proven, 5/5 steps, python:3.11-slim, 3m45 |
+| MkDocs | curl | Proven, 9/9 steps, 1m11 |
+| Entire | curl, git, `$HOME/.local/bin` on PATH | Proven, 4/4 steps, 2 rounds, about 4 min |
+| dbt | Python 3.12 or newer, git | Not proven: steps 1 to 9 pass on python:3.12-slim, then step 10 fails |
+
+- **Entire:** git was not in the original run. The current install script needs it, and round 2 found it from `exec: "git": executable file not found`.
+- **dbt:** step 10 is `jafgen --years 6`, which fails with "No such option: --years". The output says "step 10 is a docs bug FirstRun patched. A prerequisite cannot fix it." The Not proven line is honest. This is the bug the bisect demo targets. dbt took about 5 minutes, so I did not skip it.
+
+Re-run notes: the Entire and dbt `prereqs.md` files were written before my last two small fixes to the error-line picker. For dbt, the Not proven line printed a box-drawing line instead of "No such option: --years". The Entire block's git evidence says "git: command not found" instead of the Go-style line. Re-run `firstrun prereqs &lt;id&gt;` on both (no model calls) to refresh them, and rewrite the four `prereqs.json` files before U3 reads them for the share block.
+
+Nothing needs wiring beyond that. The command is already registered, and `"prereqs"` is not treated as a URL. The container name is `firstrun-prereq-&lt;pid&gt;-&lt;hex&gt;`, so the stale-container cleaner still recognises it. I did not touch `sandbox.py`, `executor.py`, `recovery.py`, `planner.py` or any file under `runs/` other than the four finished runs' `prereqs.json` and `prereqs.md`.</result>
+<usage><subagent_tokens>151576</subagent_tokens><tool_uses>37</tool_uses><duration_ms>1548305</duration_ms></usage>
+</task-notification>
