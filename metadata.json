@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KC41S974WY44TZ3CJ63TY1",
+  "strategy": "manual-commit",
+  "branch": "site/run-log-and-audit",
+  "checkpoints_count": 18,
+  "files_touched": [
+    "README.md",
+    "docs/audits/audit-20261010-163257-fastapi-typer.json",
+    "docs/index.html",
+    "examples/github-action/firstrun-audit.yml",
+    "src/firstrun/cli.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 422,
+    "cache_creation_tokens": 565508,
+    "cache_read_tokens": 49157466,
+    "output_tokens": 163350,
+    "api_call_count": 202
+  }
+}
