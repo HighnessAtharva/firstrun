@@ -76,7 +76,8 @@ def _error_line(state: RunState, step_id: int) -> str:
         if r.step_id == step_id and not r.passed:
             text = (r.stderr or r.stdout).strip().splitlines()
             if text:
-                return text[-1].strip()
+                # Drop the runner's own script name, which means nothing to a docs maintainer.
+                return re.sub(r"^/tmp/\.fr_step\.sh: line \d+: ", "", text[-1].strip())
     return ""
 
 

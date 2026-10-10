@@ -60,6 +60,8 @@ Run it on a quickstart URL:
 firstrun https://docs.example.com/quickstart
 ```
 
+A URL tested in the last 24 hours returns the cached result. Add --fresh to run it again.
+
 Read the result in `runs/<run-id>/report.md`. Build the HTML report with:
 
 ```bash

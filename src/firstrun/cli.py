@@ -219,7 +219,8 @@ def cli() -> None:
 @click.option("--offline", is_flag=True, help="Plan without a model.")
 @click.option("--no-verify", is_flag=True, help="Skip the verification re-run.")
 @click.option("--no-recover", is_flag=True, help="Layer 1 only: stop at the first failed step.")
-def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover) -> None:
+@click.option("--fresh", is_flag=True, help="Ignore a cached result and run again.")
+def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh) -> None:
     if offline:
         os.environ["FIRSTRUN_OFFLINE"] = "1"
     if not (url or targets or resume_id):
@@ -236,6 +237,21 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover) -> No
     from firstrun.tracing import close_tracing
 
     config.load_env()
+    if not fresh and not resume_id:
+        from firstrun import cache
+
+        todo = []
+        for u in urls:
+            hit = cache.find_recent(u)
+            if hit:
+                click.echo(cache.describe(hit))
+                click.echo(f"report: {state_io.run_dir(hit) / 'report.md'}")
+                _echo_share(state_io.run_dir(hit))
+            else:
+                todo.append(u)
+        urls = todo
+        if not urls:
+            sys.exit(0)
     if not offline and not resume_id and not os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
         _setup_exit(AUTH_FIX)
     if resume_id and not (state_io.run_dir(resume_id) / "state.json").exists():
