@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-import asyncio
 import html
 import json
 import os
 import re
 import shutil
 import subprocess
-import tempfile
 from pathlib import Path
 from typing import Callable
 from urllib.parse import unquote, urlparse
@@ -18,7 +16,6 @@ from urllib.request import url2pathname
 import neatlogs
 from pydantic import ValidationError
 
-from firstrun.config import EFFORT, MODEL, load_env
 from firstrun.models import Expected, Runbook, Step
 
 KEYS_SCRIPT = r"D:\Atharva\NOTES\SCRIPTS\keys\keys.py"
@@ -101,39 +98,18 @@ def read_docs(url: str) -> str:
 # --- model call -----------------------------------------------------------
 
 
+# Usage of the planner's model calls since the last reset. The CLI adds it to the run's usage.
+LAST_USAGE: dict = {}
+
+
 def ask_claude(prompt: str, system: str) -> tuple[str, dict]:
     """One Claude Agent SDK turn, no tools. Returns (text, usage). Runs outside the repo."""
-    load_env()
-    import claude_agent_sdk
+    from firstrun import llm
 
-    sdk = neatlogs.wrap(claude_agent_sdk)
-    # Blank these so the CLI does not refuse to nest inside a Claude Code session.
-    env = {"CLAUDECODE": "", "CLAUDE_CODE_ENTRYPOINT": ""}
-    workdir = tempfile.mkdtemp(prefix="firstrun-llm-")
-
-    async def _go() -> tuple[str, dict]:
-        options = claude_agent_sdk.ClaudeAgentOptions(
-            model=MODEL, effort=EFFORT, allowed_tools=[], max_turns=1,
-            setting_sources=[], cwd=workdir, system_prompt=system, env=env,
-        )
-        text, usage = "", {}
-        async for msg in sdk.query(prompt=prompt, options=options):
-            if isinstance(msg, claude_agent_sdk.ResultMessage):
-                if getattr(msg, "result", None):
-                    text = msg.result
-                raw = getattr(msg, "usage", None) or {}
-                usage = {
-                    "input_tokens": int(raw.get("input_tokens", 0) or 0)
-                    + int(raw.get("cache_read_input_tokens", 0) or 0)
-                    + int(raw.get("cache_creation_input_tokens", 0) or 0),
-                    "output_tokens": int(raw.get("output_tokens", 0) or 0),
-                }
-        return text, usage
-
-    try:
-        return asyncio.run(_go())
-    finally:
-        shutil.rmtree(workdir, ignore_errors=True)
+    text, usage = llm.ask(prompt, system)
+    for key, value in usage.items():
+        LAST_USAGE[key] = LAST_USAGE.get(key, 0) + value
+    return text, usage
 
 
 def _extract_json(text: str) -> dict:

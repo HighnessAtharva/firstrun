@@ -11,6 +11,7 @@ EFFORT = "medium"
 # Sonnet 5.5 list price per million tokens, used for "list price, not billed" cost.
 PRICE_INPUT_PER_MTOK = 2.00
 PRICE_OUTPUT_PER_MTOK = 10.00
+PRICE_CACHE_READ_PER_MTOK = 0.20
 
 ENV_FILE = Path(os.environ.get("FIRSTRUN_ENV_FILE", r"D:\Atharva\NOTES\.env"))
 RUNS_DIR = Path(os.environ.get("FIRSTRUN_RUNS_DIR", "runs"))

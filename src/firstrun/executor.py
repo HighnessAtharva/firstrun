@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import shlex
 import time
 from datetime import datetime, timezone
@@ -88,6 +89,8 @@ def run(
     recover: RecoverFn | None = None,
     budget: Budget | None = None,
     container_factory: Callable[..., Container] = Container,
+    verify: Callable[[Runbook, RunState], RunStatus] | None = None,
+    trace: bool = True,
 ) -> RunState:
     """WORKFLOW span `firstrun.run`. Writes runbook.json, state.json after each step, then report.md."""
     budget = budget or Budget()
@@ -117,8 +120,15 @@ def run(
         "tags": list(tags),
     }
     try:
-        with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs):
+        # trace=False when the caller already opened the run trace around planning.
+        ctx = neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs) if trace else contextlib.nullcontext()
+        with ctx:
             _execute(runbook, state, recover, budget, container_factory)
+            if verify is not None and state.status == RunStatus.PASSED:
+                state.status = RunStatus.VERIFYING
+                state_io.save_state(state)
+                state.status = verify(runbook, state)
+                state.finished_at = _now()
     except BaseException as exc:  # save what we know, then let the error out
         if state.status == RunStatus.RUNNING:
             reason = "interrupted" if isinstance(exc, KeyboardInterrupt) else f"error: {exc!r}"

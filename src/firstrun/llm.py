@@ -25,8 +25,14 @@ except Exception:  # wrapping is best effort, the plain SDK still works
 _WORKDIR = os.path.join(tempfile.gettempdir(), "firstrun-llm")
 
 
-def _cost(input_tokens: int, output_tokens: int) -> float:
-    return (input_tokens * config.PRICE_INPUT_PER_MTOK + output_tokens * config.PRICE_OUTPUT_PER_MTOK) / 1_000_000
+def _cost(input_tokens: int, output_tokens: int, cache_write: int = 0, cache_read: int = 0) -> float:
+    """List price, not billed. Cache writes cost 1.25x input, cache reads 0.1x input."""
+    return (
+        input_tokens * config.PRICE_INPUT_PER_MTOK
+        + cache_write * config.PRICE_INPUT_PER_MTOK * 1.25
+        + cache_read * config.PRICE_CACHE_READ_PER_MTOK
+        + output_tokens * config.PRICE_OUTPUT_PER_MTOK
+    ) / 1_000_000
 
 
 def extract_json(text: str) -> dict:
@@ -77,10 +83,12 @@ async def _run(prompt: str, system: str, tools: Sequence[str], max_turns: int) -
                 raise RuntimeError(f"claude query failed: {msg.result or msg.subtype}")
             if msg.result:
                 text = msg.result
-    tin = int(usage.get("input_tokens", 0) or 0) + int(usage.get("cache_creation_input_tokens", 0) or 0) \
-        + int(usage.get("cache_read_input_tokens", 0) or 0)
+    fresh = int(usage.get("input_tokens", 0) or 0)
+    write = int(usage.get("cache_creation_input_tokens", 0) or 0)
+    read = int(usage.get("cache_read_input_tokens", 0) or 0)
     tout = int(usage.get("output_tokens", 0) or 0)
-    return text, {"input_tokens": tin, "output_tokens": tout, "tool_calls": tool_calls, "cost_usd": _cost(tin, tout)}
+    return text, {"input_tokens": fresh + write + read, "output_tokens": tout, "tool_calls": tool_calls,
+                  "cost_usd": _cost(fresh, tout, write, read)}
 
 
 def _run_sync(prompt: str, system: str, tools: Sequence[str], max_turns: int) -> tuple[str, dict]:

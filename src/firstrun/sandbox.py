@@ -40,6 +40,23 @@ def _tail(data: bytes, cap: int = OUTPUT_CAP) -> str:
     return data.decode("utf-8", errors="replace")
 
 
+def _allowlist_env() -> dict[str, str]:
+    """KEY=VALUE lines from config.SECRETS_ALLOWLIST. Missing file means no secrets."""
+    from firstrun import config
+
+    out: dict[str, str] = {}
+    try:
+        text = config.SECRETS_ALLOWLIST.read_text(encoding="utf-8")
+    except OSError:
+        return out
+    for line in text.splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, value = line.split("=", 1)
+            out[key.strip()] = value.strip()
+    return out
+
+
 class Container:
     """A running container. Use as a context manager: the container is removed on exit."""
 
@@ -51,7 +68,8 @@ class Container:
         run: str | None = None,
     ):
         self.image = image
-        self.env = dict(env or {})
+        # Default env: the test keys from the secrets allowlist, nothing else from the host.
+        self.env = dict(env) if env is not None else _allowlist_env()
         label = run or "run"
         self.name = name or f"firstrun-{label}-{os.getpid()}-{secrets.token_hex(3)}"
         self.started = False

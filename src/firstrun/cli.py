@@ -13,14 +13,17 @@ from firstrun.models import RunState, RunStatus
 
 
 def _recover_fn():
-    """TODO(lead): return firstrun.recovery.recover once T4 lands. None means no recovery."""
-    return None
+    """Layer 2 recovery: classify, ask once, search, patch."""
+    from firstrun.recovery import recover
+
+    return recover
 
 
 def _verify():
-    """TODO(lead): return a callable (runbook, state) -> RunStatus using firstrun.verify.verify."""
-    return None
+    """Model-free re-run of the patched runbook in a brand-new container."""
+    from firstrun.verify import verify
 
+    return lambda runbook, state: verify(runbook, state.patches)
 
 def _first_error_line(state: RunState) -> str:
     for r in reversed(state.results):
@@ -44,28 +47,48 @@ def _summary(state: RunState, commands: dict[int, str]) -> list[str]:
     return [f"{mark} {state.status.value} {passed}/{total} steps, {secs:.0f} s, ${state.usage.cost_usd:.2f}"]
 
 
-def _run_one(url: str, tags: list[str], resume: str | None, verify: bool) -> RunState:
-    from firstrun import executor, state as state_io
+def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recover: bool = True) -> RunState:
+    import neatlogs
+
+    from firstrun import executor, patch, planner, state as state_io
     from firstrun.tracing import init_tracing
 
     init_tracing(tags)
-    if resume:
-        runbook = state_io.load_runbook(resume)
-    else:
-        from firstrun import planner  # built by another worker, so import late
+    run_id = resume or state_io.new_run_id(url)
+    source = state_io.load_runbook(resume).source_url if resume else url
+    attrs = {
+        "target": state_io.target_name(source),
+        "run_id": run_id,
+        "variant": tags[0] if tags else "dev",
+        "tags": list(tags),
+    }
+    planner.LAST_USAGE.clear()
+    # One trace per run: reading the docs, planning, every step and verification.
+    with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs):
+        runbook = state_io.load_runbook(resume) if resume else planner.plan(url)
+        final = executor.run(
+            runbook, run_id=run_id, resume=bool(resume), tags=tags,
+            recover=_recover_fn() if recover else None,
+            verify=_verify() if verify else None,
+            trace=False,
+        )
+    if planner.LAST_USAGE:
+        final.usage.input_tokens += int(planner.LAST_USAGE.get("input_tokens", 0))
+        final.usage.output_tokens += int(planner.LAST_USAGE.get("output_tokens", 0))
+        final.usage.cost_usd += float(planner.LAST_USAGE.get("cost_usd", 0.0))
+    state_io.save_state(final)
+    run_dir = state_io.run_dir(final.run_id)
+    from firstrun import report
 
-        runbook = planner.plan(url)
-    final = executor.run(runbook, run_id=resume, resume=bool(resume), tags=tags, recover=_recover_fn())
-    verifier = _verify() if verify else None
-    if verifier is not None and final.status == RunStatus.PASSED:
-        final.status = verifier(runbook, final)
-        state_io.save_state(final)
+    report.write_report(final, runbook)
+    written = patch.write_outputs(run_dir, final, runbook)
     commands = {s.id: s.command for s in runbook.steps}
     for line in _summary(final, commands):
         click.echo(line)
-    click.echo(f"run dir: {state_io.run_dir(final.run_id)}")
+    for path in written:
+        click.echo(f"wrote {path}")
+    click.echo(f"run dir: {run_dir}")
     return final
-
 
 @click.group()
 def cli() -> None:
@@ -82,7 +105,8 @@ def cli() -> None:
 @click.option("--tag", "tags", multiple=True, help="Trace tag. The first one is the variant.")
 @click.option("--offline", is_flag=True, help="Plan without a model.")
 @click.option("--no-verify", is_flag=True, help="Skip the verification re-run.")
-def run_cmd(url, targets, resume_id, tags, offline, no_verify) -> None:
+@click.option("--no-recover", is_flag=True, help="Layer 1 only: stop at the first failed step.")
+def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover) -> None:
     if offline:
         os.environ["FIRSTRUN_OFFLINE"] = "1"
     if not (url or targets or resume_id):
@@ -100,10 +124,10 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify) -> None:
     worst = 0
     try:
         if resume_id:
-            final = _run_one("", list(tags), resume_id, not no_verify)
+            final = _run_one("", list(tags), resume_id, not no_verify, not no_recover)
             worst = 1 if final.status == RunStatus.FAILED else 0
         for u in urls:
-            final = _run_one(u, list(tags), None, not no_verify)
+            final = _run_one(u, list(tags), None, not no_verify, not no_recover)
             if final.status == RunStatus.FAILED:
                 worst = 1
     finally:
@@ -122,7 +146,8 @@ def report_cmd(html) -> None:
             from firstrun import report_html
         except ImportError:
             raise click.ClickException("firstrun.report_html is not built yet")
-        out = Path(config.RUNS_DIR) / "report.html"
+        out = Path("report") / "index.html"
+        out.parent.mkdir(exist_ok=True)
         report_html.write_html(config.RUNS_DIR, out)
         click.echo(f"html: {out}")
 
