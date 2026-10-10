@@ -56,6 +56,71 @@
   "session_metrics": {
     "turn_count": 33
   },
+  "summary": {
+    "intent": "Build FirstRun end to end for the neatHack hackathon: a CLI that runs docs quickstarts in Docker, classifies breaks, patches and verifies the fixes, and opens docs PRs. It also needed a web launcher and replay experience, real-world proof runs, and visible use of neatlogs, Entire and cfo.ai.",
+    "outcome": "Layers 1 and 2 are built and pushed, with 198 tests passing and CI green. The web loop (share codes, replay page, agent launcher, launch page, caches) is built, and three docs PRs were approved. The Entire Trails were moved onto branches so runners score them, and every Trail passes findings. Remaining: Trail approvals, the Dagster and MkDocs real-world runs, the v1/v2 results table, and the site cache index.",
+    "learnings": {
+      "repo": [
+        "Entire hooks add the Entire-Checkpoint trailer on commit, so all commits must be made from this repo with its hooks. Git 2.33 hung the Entire post-commit `update-ref` and lost a checkpoint; Git 2.55 fixed it.",
+        "Branchless Trails (`entire trail create --no-branch`) never get runner scoring (Confidence, Risk, Drift, Security). Trails need a branch and a PR to be scored.",
+        "Entire runners found 2 real bugs (secret-retry patch and Docker default). Findings are resolved by pushing a fix commit.",
+        "The neatlogs API cannot delete traces on this project, and the CLI has read-only scopes. Pytest runs sent junk 'neatlogs-app' traces, so tests now set FIRSTRUN_NO_EXPORT=1 and `neatlogs.init(disable_export=True)`.",
+        "The executor now runs every step with `set -e` and `pipefail`. Before this, `curl | bash` and multi-line steps falsely passed. File checks run from the step's start directory.",
+        "The planner raises PlanError instead of falling back to a heuristic on model failure. The planner prompt forbids invented, no-op and fake-secret steps, and a plan cache keeps the plan stable for the same page.",
+        "Cache tokens are priced at $0.20 per million tokens, not the full $2 rate. Sonnet 5.5 is $2 input and $10 output per million tokens.",
+        "The CLI is run as `.venv\\Scripts\\firstrun.exe`, because `python -m firstrun` has no `__main__`.",
+        "Share codes are the run compressed into a URL fragment (`run.html#r=<code>`), so they never reach a server. A typical code is about 2 KB. The site is static on Netlify at 1run.netlify.app, with `docs/` published and no build.",
+        "Edits via the Edit tool and string replace failed on CRLF files. Python scripts that ignore line endings worked.",
+        "`.gitattributes` keeps LF line endings, which the Docker scripts need. Docker runs in WSL: `wsl -d Ubuntu-22.04 docker`.",
+        "Entire Graph: the repo guide names a `query` command that does not exist. `entire graph search` works and found the CLI wiring and the patch-reason truncation on the first try."
+      ],
+      "code": [
+        {
+          "path": "src/firstrun/recovery.py",
+          "finding": "Recovery must not retry with a secret from the allowlist as a patch. NEEDS_SECRET now raises GaveUp. It also reads the real error instead of pip progress lines, and reclassifies apt-get container fixes as environment fixes so they stay out of the docs diff."
+        },
+        {
+          "path": "src/firstrun/patch.py",
+          "finding": "The patch reason was cut at 300 characters mid-word. It now cuts at a sentence boundary, and error lines are cleaned for the PR body."
+        },
+        {
+          "path": "src/firstrun/sandbox.py",
+          "finding": "Stale-container removal ran its docker format string through bash under WSL, so it never removed anything. Fixed. The container env now defaults to the secret allowlist."
+        }
+      ],
+      "workflow": [
+        "Fan out tracks to Sonnet 5.5 medium subagents with separate file ownership. The lead runs tests and makes one commit per track so each commit carries the Entire trailer.",
+        "Use `entire graph search` first when exploring. The lead's Graph-first rate was 0% when the work started with grep.",
+        "Run long batches in the background and commit on the side. Switching branches mid-batch would swap the code under the running runs.",
+        "Always ask before opening outside PRs. The user said yes to PRs 1, 2 and 3 and the lead opened them under the user's account.",
+        "Run CI-like tests with no .env, because tests that depended on the local key failed in GitHub Actions."
+      ]
+    },
+    "friction": [
+      "The Entire post-commit hook hung about 206 s on Git 2.33 and lost the first checkpoint. Fixed by upgrading Git with winget.",
+      "The user's 'main only' rule conflicted with Trails needing branches. Branchless Trails sat in Planning with no scores.",
+      "The neatlogs Investigate flow needed manual dashboard steps from the user (detections, Create fix) because the CLI is read-only.",
+      "neatlogs refused API deletion of the 82 junk traces.",
+      "Firecrawl credits ran out in the middle of a run and the key needed `keys.py activate`.",
+      "T7's tests sent junk traces to the real neatlogs project.",
+      "The v1 and v2 runs exposed several FirstRun bugs: a false pass on `curl | bash`, a multi-line step hiding a pip failure, and a file check broken by `cd`.",
+      "The CI run did not start on the first push, because the push landed on the wrong branch. The lead cherry-picked the fix onto the trail branch.",
+      "Several Edit calls missed because of CRLF line endings."
+    ],
+    "open_items": [
+      "The user must approve Trails 3 to 6 (human approval), or reply 'approve trails' so the lead runs `entire trail approve`.",
+      "Add the CI workflow to the 3 retro review branches once the real-world batch finishes.",
+      "Finish the Dagster and MkDocs real-world runs, then draft their PR texts. AccuKnox needs no outside PR.",
+      "Fill the v1 vs v2 before and after table. Fill the `<!-- FILL:results -->` and `<!-- FILL:tweets -->` placeholders in docs/index.html.",
+      "Build `docs/examples/index.json` and the `dbt.txt` and `dagster.txt` replay examples so the site cache hits.",
+      "Merge Trail 6 into main, then simplify and clarify the repo.",
+      "Create 2 detections and 1 fix in neatlogs and finish the Investigate flow, then confirm the fix item through the MCP and mark it resolved after v2.",
+      "Confirm the About line, the portrait, and the entire.io and cfo.ai links on the launch page. Add the Oct 11 to 12 posts to the timeline.",
+      "Check the stray neatlogs-app junk traces in the dashboard only if wanted.",
+      "Check the AWS guard: spend is $0 of $25, and any AWS use needs the user's yes.",
+      "Known limits: a recovered run shows ERROR at trace level, and LLM spans leave out cache tokens."
+    ]
+  },
   "prompt_attributions": [
     {
       "checkpoint_number": 2,
