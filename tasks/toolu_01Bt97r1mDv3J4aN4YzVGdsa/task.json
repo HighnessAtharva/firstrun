@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Bt97r1mDv3J4aN4YzVGdsa",
+  "agent_id": "a32d21dca04e78f14",
+  "subagent_type": "general-purpose",
+  "task_description": "Research C15 real-world docs targets",
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 72875,
+    "cache_read_tokens": 1026185,
+    "output_tokens": 8810,
+    "api_call_count": 12
+  },
+  "started_at": "2026-10-10T13:10:15.1215833+05:30",
+  "completed_at": "2026-10-10T13:12:32.1048661+05:30"
+}
