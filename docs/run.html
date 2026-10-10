@@ -131,7 +131,12 @@ main{flex:1}
 .badge.ok{color:var(--ok);background:var(--ok-bg);border-color:transparent}.badge.ok .dot{background:var(--ok)}
 .badge.bad{color:var(--bad);background:var(--bad-bg);border-color:transparent}.badge.bad .dot{background:var(--bad)}
 .badge.warn{color:var(--warn);background:var(--warn-bg);border-color:transparent}.badge.warn .dot{background:var(--warn-dot)}
-.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:22px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--sh)}
+.sumv{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+.vd-t{flex:1 1 420px;font-size:16px;line-height:1.45}.vd-t b{font-weight:650}.vd-t.bad b{color:var(--bad,#C4281C)}.vd-t.ok b{color:var(--ok,#1B8A3A)}
+.vd-d{flex-basis:100%;order:3;margin:0;color:var(--mut);font-size:14px;line-height:1.45}
+.vd-a{flex:none;display:inline-flex;align-items:center;min-height:36px;padding:7px 14px;border-radius:8px;border:0;background:var(--acc);color:#fff;font:600 14px/1 inherit;text-decoration:none;cursor:pointer}
+.vd-a:hover{filter:brightness(1.08)}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--sh)}
 .facts>div{padding:13px 16px;min-width:0}
 .facts>div+div{border-left:1px solid var(--line2)}
 .facts>div:nth-child(5){border-left:0}
@@ -560,7 +565,7 @@ html{scroll-padding-top:170px}
 <nav class="crumbs" aria-label="Breadcrumb"><span class="sl" aria-hidden="true">/</span><a href="run.html" id="crRuns">Runs</a><span class="sl hide" id="crSl" aria-hidden="true">/</span><span class="now hide" id="crNow"></span></nav>
 <div class="sp"></div>
 <div class="acts">
-<a class="b ghost hide-s" href="runs/">All runs</a><a class="b ghost hide-s" href="audit.html">Docs audit</a>
+<a class="b ghost hide-s" href="runs/">Runs</a><a class="b ghost hide-s" href="audit.html">Audit</a>
 <div class="anch"><button type="button" class="b ghost" id="exBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="exPop">Examples<svg class="i" aria-hidden="true"><use href="#i-down"/></svg></button>
 <div class="pop" id="exPop" role="menu" aria-label="Example runs"><div class="ph">Real runs, recorded 2026-10-10</div><div id="exList"></div><hr><button type="button" class="mi" role="menuitem" id="exPaste"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg><span class="mt">Paste a share code</span></button></div></div>
 <a class="b ghost ico hide-s" href="https://github.com/HighnessAtharva/firstrun" aria-label="FirstRun on GitHub" title="GitHub"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg></a>
@@ -614,6 +619,7 @@ html{scroll-padding-top:170px}
 </div></div>
 </div>
 </div>
+<div class="sumv" id="verdict"></div>
 <dl class="facts" id="facts"></dl>
 <div class="links hide" id="links"></div>
 </section>
@@ -1245,14 +1251,11 @@ function renderHead(d){
   var F=$("facts");F.textContent="";
   function add(k,v,small,mono,href){var x=el("div");x.appendChild(el("dt",null,k));var dd=el("dd");if(href)dd.appendChild(ext(href,v,mono?"mono":null));else dd.appendChild(el("span",mono?"mono":null,v));if(small)dd.appendChild(el("small",null,small));x.appendChild(dd);F.appendChild(x)}
   var c=counts(d),v=d.verify,ps=Array.isArray(d.patches)?d.patches:[],db=ps.filter(function(p){return p.failure_class==="docs_bug"}).length;
-  add("Time to first success",d.time_to_first_success_s!=null?fmt(d.time_to_first_success_s):"Not recorded");
   add("Steps",(c.ok+c.fix)+"/"+(d.steps.length-c.skip)+" passed",c.skip?c.skip+" skipped":"");
   add("Fixes",String(ps.length),ps.length?plural(db,"docs bug"):"");
   add("Proof",v&&v.steps_total!=null?v.steps_passed+"/"+v.steps_total:"None",v&&v.status==="verified"?"fresh container":"");
-  add("Container",d.image||"Not recorded","",true);
-  add("Tool calls",d.tool_calls!=null?String(d.tool_calls):"Not recorded");
   add("Cost",d.cost_usd!=null?"$"+(+d.cost_usd).toFixed(2):"Not recorded",d.cost_usd!=null?"list price, not billed":"");
-  if(safeUrl(d.source_url)){var u=new URL(d.source_url);add("Source",u.host+u.pathname,"",false,d.source_url)}else add("Source",d.source_url||"Not recorded","",true);
+  renderVerdict(d);
   var Lk=$("links");Lk.textContent="";var ev=evAll(d).filter(function(e){return e.step_id==null||e.kind==="pr"});
   if(ev.length){Lk.appendChild(el("span","lh","Proof"));ev.forEach(function(e){Lk.appendChild(evChip(e,true))})}
   show("links",ev.length>0);
@@ -1261,6 +1264,30 @@ function renderHead(d){
   $("dlPr").classList.toggle("hide",!(typeof d.pr_body==="string"&&d.pr_body));
   $("runt").textContent="firstrun "+(safeUrl(d.source_url)?d.source_url:"<your quickstart url>");
   document.title="FirstRun: "+(d.title||d.target||"Replay");
+}
+function clip(t,n){t=String(t||"").replace(/\s+/g," ").trim();if(t.length<=n)return t;var c=t.slice(0,n),i=c.lastIndexOf(". ");return (i>60?c.slice(0,i+1):c.replace(/\s+\S*$/,"")+"...")}
+var SUM={};
+function renderVerdict(d){
+  var V=$("verdict");if(!V||!d)return;V.textContent="";
+  var c=counts(d),v=d.verify,ps=Array.isArray(d.patches)?d.patches:[],gu=Array.isArray(d.gave_up)?d.gave_up:[];
+  var db=ps.filter(function(p){return p.failure_class==="docs_bug"}),proven=v&&v.status==="verified";
+  var pr=evAll(d).filter(function(e){return e.kind==="pr"&&e.url&&safeUrl(e.url)});
+  var head,detail="",tone="ok";
+  if(db.length&&pr.length){head=plural(db.length,"docs bug")+" found and fixed.";detail="Step "+db[0].step_id+": "+clip(db[0].reason||db[0].old_command,170);tone="bad"}
+  else if(db.length){head="FirstRun flagged "+plural(db.length,"docs bug")+".";detail="Step "+db[0].step_id+": "+clip(db[0].reason||db[0].old_command,170);tone="bad"}
+  else if(ps.length){head="The steps run once the container has "+plural(ps.length,"setup fix","setup fixes")+".";detail=clip(ps[0].reason,170)}
+  else if(gu.length){head="Step "+(gu[0].step_id!=null?gu[0].step_id:"")+" failed, and FirstRun could not fix it.";var er=String(gu[0].error||gu[0].reason||"");er=er.split(" | ").pop().replace(/\)\s*$/,"");detail=er?"Error: "+clip(er,170):"";tone="bad"}
+  else if(c.bad){head=plural(c.bad,"step")+" failed.";tone="bad"}
+  else if(c.skip){head="Every step FirstRun could run passes.";detail=plural(c.skip,"step")+" skipped and not tested."}
+  else head="The quickstart works as written.";
+  if(S.ex&&SUM[S.ex])detail=SUM[S.ex];
+  var prf=proven?"Proven: "+v.steps_passed+" of "+v.steps_total+" steps pass in a fresh container.":(ps.length?"Not yet proven in a fresh container.":"");
+  var t=el("div","vd-t "+tone);t.appendChild(el("b",null,head));if(prf)t.appendChild(el("span",null," "+prf));V.appendChild(t);
+  if(detail)V.appendChild(el("p","vd-d",detail));
+  var act;
+  if(pr.length){act=ext(pr[0].url,"Review the pull request"+((pr[0].label||"").match(/#\d+/)?" "+pr[0].label.match(/#\d+/)[0]:""),"vd-a")}
+  else if(ps.length||gu.length||c.bad){var to=ps.length?"fix":"run";act=el("button","vd-a",ps.length?"See the fix":"See the failed step");act.type="button";act.addEventListener("click",function(){var i=S.st.findIndex(function(m){return m.id===to});if(i>=0)go(i,true)})}
+  if(act)V.appendChild(act);
 }
 function buildRail(){
   var R=$("rail"),D=$("pgDots");R.textContent="";D.textContent="";
@@ -1416,6 +1443,7 @@ var ORDER=["dbt","dagster","entire","accuknox","mkdocs","fixture"];
 fetch("examples/index.json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
   var runs=(j&&Array.isArray(j.runs)?j.runs:[]).filter(function(r){return r&&/^[a-z0-9_-]+$/.test(r.example||"")});
   runs.sort(function(a,b){var x=ORDER.indexOf(a.example),y=ORDER.indexOf(b.example);return (x<0?99:x)-(y<0?99:y)});buildExamples(runs);
+  runs.forEach(function(r){if(r.summary)SUM[r.example]=String(r.summary)});if(S.d)renderVerdict(S.d);
 }).catch(function(){buildExamples([{example:"dbt",title:"dbt Core with DuckDB",status:"verified"},{example:"dagster",title:"Dagster quickstart",status:"verified"},{example:"fixture",title:"Known-broken test fixture",status:"verified"}])});
 
 /* wiring */

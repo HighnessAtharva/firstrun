@@ -38,8 +38,14 @@ _SERVER_READY = re.compile(
     r"You can now view .* in your browser|Booting worker|started server on")
 
 
+# An install names server packages (pip install uvicorn) without starting one, so it keeps the full timeout.
+_INSTALL = re.compile(r"^\s*(sudo\s+)?(pip3?|python3?\s+-m\s+pip|uv(\s+pip)?|poetry|pipx|conda|npm|pnpm|yarn|bun|"
+                      r"apt(-get)?|brew|gem|cargo|go)\s+(install|add|i)\b")
+
+
 def is_server_command(command: str) -> bool:
-    return bool(_SERVER_CMD.search(command))
+    return any(_SERVER_CMD.search(part) and not _INSTALL.search(part)
+               for part in re.split(r"&&|\|\||;|\||\n", command))
 
 
 def server_ready(result: StepResult) -> bool:
