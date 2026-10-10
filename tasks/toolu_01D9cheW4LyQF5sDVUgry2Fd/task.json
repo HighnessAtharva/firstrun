@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01D9cheW4LyQF5sDVUgry2Fd",
+  "agent_id": "ab0e7bff84bb4ddb9",
+  "subagent_type": "general-purpose",
+  "task_description": "Demo video inspiration sheet",
+  "token_usage": {
+    "input_tokens": 40,
+    "cache_creation_tokens": 176606,
+    "cache_read_tokens": 3077575,
+    "output_tokens": 34134,
+    "api_call_count": 20
+  },
+  "started_at": "2026-10-10T19:35:22.3300158+05:30",
+  "completed_at": "2026-10-10T19:41:21.3130371+05:30"
+}

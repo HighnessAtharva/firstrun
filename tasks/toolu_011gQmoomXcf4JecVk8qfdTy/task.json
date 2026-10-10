@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_011gQmoomXcf4JecVk8qfdTy",
+  "agent_id": "a2fdb487d0ca8f9fa",
+  "subagent_type": "general-purpose",
+  "task_description": "Draft FirstRun Substack article",
+  "token_usage": {
+    "input_tokens": 100,
+    "cache_creation_tokens": 288973,
+    "cache_read_tokens": 10860473,
+    "output_tokens": 47088,
+    "api_call_count": 50
+  },
+  "started_at": "2026-10-10T19:35:03.2977066+05:30",
+  "completed_at": "2026-10-10T19:44:09.4418822+05:30"
+}
