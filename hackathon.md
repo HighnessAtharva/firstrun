@@ -85,6 +85,28 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 5. **The planner skips the step that matters.** It dropped the OpenAI `openai.ChatCompletion.create` example and the neatlogs "run your app" step because they need a key. Those are the steps most likely to break.
 6. **Most expected results check only the exit code.** 9 of 16 steps have no output check, so a command that prints an error and exits 0 would pass.
 
+### Saturday Afternoon: neatlogs Found the Agent's Own Bug, and v2 Fixed It
+
+- **14:10 IST.** Atharva created two neatlogs detections: "docs step broke" (TOOL spans) and "planner invented a step" (the planner span). The second flagged the planner spans of 3 v1 runs.
+- **14:40 IST.** neatlogs Investigate (Deep, workflow `firstrun`) traced the invented steps to the planner prompt and proposed a stricter one ([evidence/neatlogs-investigation.md](evidence/neatlogs-investigation.md)).
+- **14:45 IST.** A headless Claude Code session read the detection and its trend over the neatlogs MCP server and applied the fix with code guards and a plan cache: commit 3ca6f11, checkpoint `01M4JGJ6NTE7YNB9Z0YW5FYVHN`, [Entire commit view](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
+- **15:15 IST. v2 versus v1** on the same 4 targets: quickstarts finished 2 to 3 of 4, failed steps recovered 0 to 3, cost per run $0.0262 to $0.0200 (neatlogs). The v2 and real-world runs exposed 5 agent bugs, all fixed: a pipe that hid a missing `curl`, a multi-line step that hid a failing `pip`, pip noise that hid the real error, container fixes counted as docs bugs, and a file check after `cd`.
+
+### Saturday Evening: Real Docs, Upstream PRs, and Entire Reviewing Every Layer
+
+- **Real quickstarts:** dbt + DuckDB, AccuKnox knoxctl, Dagster, MkDocs and the Entire install all reached `verified` in a fresh container.
+- **Upstream PRs, each from a verified run and a duplicate search:** [dbt-labs/docs.getdbt.com#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149) (`jafgen --years` removed), [#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150) (Python 3.12 floor), [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) (Linux PATH after `install.sh`), [accuknox/help#671](https://github.com/accuknox/help/pull/671) (knoxctl page named 0.9.0 while the installer fetched 0.9.58).
+- **No PR where the docs were right:** Dagster's page already covers both gaps FirstRun hit, so FirstRun opened nothing there. MkDocs needed only `curl` in the container.
+- **Trails:** branch-backed Trails 3 to 8 cover every commit since kickoff. Entire runners raised 3 real bugs, all fixed and resolved with the commit SHA: a secret retry loop, a Windows-only Docker default, and a `cd` guard that was written but never called.
+- **CI:** GitHub Actions runs the offline suite on every push. It caught 3 tests that passed only with a local Claude token.
+
+### Saturday Night: Two New Answers From the Same Engine
+
+- **Docs Bisect** (`firstrun bisect`): on the dbt guide, `jafgen --years 6` passes on jafgen 0.3.1 (2023-01-17) and fails on 0.4.6 (2024-04-07), and PyPI has no release between them. The guide merged on 2025-03-14, 11 months later. 5 probes, $0 in model calls. The evidence is a [comment on #10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074).
+- **Prerequisite Proof** (`firstrun prereqs`): proven blocks for AccuKnox (curl, ca-certificates, gnupg, sudo, 5/5 steps), MkDocs (curl, 9/9 steps) and Entire (curl, git, `~/.local/bin` on PATH, 4/4 steps).
+- **Website:** [1run.netlify.app](https://1run.netlify.app) takes a docs URL and writes a prompt for the visitor's own coding agent. A tested URL shows its cached run first. Every run prints a share link that replays read, plan, run, fix, prove, plus the bisect timeline and the assumptions card.
+- **Jury self-test:** the Entire judge plugin ranked the repo with no excluded work, 3.93 of 5 ([evidence/jury-selftest.txt](evidence/jury-selftest.txt)).
+
 ## Demo
 
 Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).
@@ -101,7 +123,7 @@ Confirmed requirements from https://neatlogs.com/hackathon:
 
 - [ ] Uses neatlogs, Entire and cfo.ai, with a clear role for each.
 - [ ] Demo video of 3 minutes or less covering all three tools.
-- [ ] Public repo with setup and run instructions.
-- [ ] Entire checkpoint link plus its ID.
+- [x] Public repo with setup and run instructions.
+- [x] Entire checkpoint link plus its ID: [01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
 - [ ] cfo.ai business plan with pricing, costs, revenue and runway.
 - [ ] Quote post on X between 7:00 and 11:55 PM IST on Mon 2026-10-12.
