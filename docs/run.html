@@ -67,6 +67,8 @@ kbd{font:500 11.5px/1 var(--mono);color:var(--mut);background:var(--panel);borde
 .crumbs .now{color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top .sp{flex:1}
 .top .acts{display:flex;align-items:center;gap:8px;flex:none}
+.top .site{display:flex;gap:2px}
+@media(max-width:1100px){.top .site{display:none}}
 .anch{position:relative}
 
 /* popovers */
@@ -562,10 +564,10 @@ html{scroll-padding-top:170px}
 <header class="top">
 <div class="top-in">
 <a class="brand" href="index.html" aria-label="FirstRun home"><svg aria-hidden="true"><use href="#lg"/></svg>FirstRun</a>
-<nav class="crumbs" aria-label="Breadcrumb"><span class="sl" aria-hidden="true">/</span><a href="run.html" id="crRuns">Runs</a><span class="sl hide" id="crSl" aria-hidden="true">/</span><span class="now hide" id="crNow"></span></nav>
+<nav class="crumbs" aria-label="Breadcrumb"><span class="sl" aria-hidden="true">/</span><a href="run.html" id="crRuns">Replay</a><span class="sl hide" id="crSl" aria-hidden="true">/</span><span class="now hide" id="crNow"></span></nav>
 <div class="sp"></div>
 <div class="acts">
-<a class="b ghost hide-s" href="runs/">Runs</a><a class="b ghost hide-s" href="audit.html">Audit</a>
+<nav class="site" aria-label="Site"><a class="b ghost" href="./#steps">How it works</a><a class="b ghost" href="./#proof">Proof</a><a class="b ghost" href="./#tools">Tools</a><a class="b ghost" href="./#plan">Plan</a><a class="b ghost" href="runs/">Runs</a><a class="b ghost" href="audit.html">Audit</a></nav>
 <div class="anch"><button type="button" class="b ghost" id="exBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="exPop">Examples<svg class="i" aria-hidden="true"><use href="#i-down"/></svg></button>
 <div class="pop" id="exPop" role="menu" aria-label="Example runs"><div class="ph">Real runs, recorded 2026-10-10</div><div id="exList"></div><hr><button type="button" class="mi" role="menuitem" id="exPaste"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg><span class="mt">Paste a share code</span></button></div></div>
 <a class="b ghost ico hide-s" href="https://github.com/HighnessAtharva/firstrun" aria-label="FirstRun on GitHub" title="GitHub"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg></a>
