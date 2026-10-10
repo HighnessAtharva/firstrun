@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -16,29 +17,35 @@ from urllib.request import url2pathname
 import neatlogs
 from pydantic import ValidationError
 
+from firstrun import config
 from firstrun.models import Expected, Runbook, Step
 
 KEYS_SCRIPT = r"D:\Atharva\NOTES\SCRIPTS\keys\keys.py"
 MAX_STEPS = 10
 SHELL_TAGS = {"bash", "sh", "shell", "console", "zsh", "terminal", "cmd"}
 
+PROMPT_VERSION = "2"
 SYSTEM_PROMPT = """You turn a developer tool's quickstart page into a runbook of shell steps.
 Reply with one JSON object only, no prose:
 {"title": str, "image": str, "steps": [{"id": int, "intent": str, "command": str,
  "files": [{"path": str, "content": str}],
  "expected": {"exit_code": 0, "output_contains": str|null, "file_exists": str|null},
- "source_line": str}]}
+ "source_line": str, "skipped_out_of_scope": bool, "skip_reason": str}]}
 Rules:
-- Copy each command EXACTLY as the docs show it. Never fix, update or improve a command.
-- source_line is the exact docs line the command came from.
-- files holds any file the docs tell the reader to create, with its exact content.
-  Put the command that runs it in a later step.
-- image is python:3.11-slim unless the quickstart clearly needs another (for example node:22-slim).
-- Ignore web archive banners and site chrome (Wayback toolbar, captures, cookie text). Keep only the docs.
-- A step that needs a paid account, a video, a screenshot, a browser, a GUI or a sign-up stays in the list
-  with "skipped_out_of_scope": true and "skip_reason": one plain sentence. Skip pure explanation.
-- Add an env var export step only if the docs show it.
-- Number ids from 1. Each step runs in a fresh shell in the same container."""
+1. Copy commands only. Every command must be written in the docs. Copy it EXACTLY. Never fix, update or improve it.
+2. Never invent a step. No verification such as `command -v`, `which`, `test -f`, `test -e` or `ls`
+   unless the docs show that exact command. Never use a placeholder such as `true` or `:`.
+3. The same page must always give the same steps, in the same order.
+4. source_line is the exact docs line the command came from.
+5. When the docs show code to save and run, put the code in files (path and exact content).
+   Set command to the run command, for example `python quickstart.py`.
+6. Never write a fake secret such as `sk-...`, `xxx` or `your-key`. If the docs set an env var,
+   write `export NAME="${NAME}"`. Keep every step that needs an API key. Never skip it.
+7. image is python:3.11-slim unless the quickstart clearly needs another (for example node:22-slim).
+8. Ignore web archive banners and site chrome (Wayback toolbar, captures, cookie text). Keep only the docs.
+9. A step that needs a paid account, a video, a screenshot, a browser, a GUI or a sign-up stays in the list
+   with "skipped_out_of_scope": true and "skip_reason": one plain sentence. Skip pure explanation.
+10. Number ids from 1. Use at most 10 steps. Each step runs in a fresh shell in the same container."""
 
 
 class PlanError(Exception):
@@ -189,20 +196,149 @@ def _build(data: dict, markdown: str, source_url: str) -> Runbook:
     return runbook
 
 
+# --- guards: a prompt alone cannot stop a model from slipping -------------------
+
+_NOOPS = {"", "true", ":"}
+_CHECK = re.compile(r"^(command\s+-v|which|test\s+-[fe]|ls)(\s|$)")
+_FAKE_VALUE = re.compile(r"^(sk-|pk-|key-)|xxx|your[-_ ]|<.*>|\.\.\.|changeme|placeholder", re.I)
+_EXPORT = re.compile(r"^export\s+([A-Za-z_]\w*)=(.*)$", re.S)
+_RUNNERS = {"python", "python3", "node", "bash"}
+
+
+def _norm(text: str) -> str:
+    text = posix_paths(text).replace("\\\n", " ")
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _norm_path(path: str) -> str:
+    path = path.replace("\\", "/")
+    for prefix in ("/work/", "./"):
+        if path.startswith(prefix):
+            path = path[len(prefix):]
+    return path
+
+
+def _runs_own_file(step: Step) -> bool:
+    parts = step.command.split()
+    if len(parts) < 2 or parts[0] not in _RUNNERS:
+        return False
+    return _norm_path(parts[1]) in {_norm_path(f.path) for f in step.files}
+
+
+def _in_docs(command: str, docs: str) -> bool:
+    cmd = _norm(command)
+    if cmd in docs:
+        return True
+    parts = [p for p in re.split(r"\s*&&\s*", cmd) if p]
+    return len(parts) > 1 and all(p in docs for p in parts)
+
+
+def _judge(step: Step, docs: str, raw_docs: str) -> tuple[str, str]:
+    """Return ("keep" | "drop" | "rewrite", why) for one step."""
+    cmd = step.command.strip()
+    if cmd in _NOOPS:
+        return "drop", "no-op command"
+    m = _EXPORT.match(cmd)
+    if m and _FAKE_VALUE.search(m.group(2).strip().strip("\"'")):
+        if re.search(rf"export\s+{re.escape(m.group(1))}=", raw_docs):
+            return "rewrite", "fake secret value"
+        return "drop", "fake secret export not shown in the docs"
+    if _in_docs(cmd, docs):
+        return "keep", ""
+    if _CHECK.match(cmd):
+        return "drop", "invented check"
+    if _runs_own_file(step):
+        return "keep", ""
+    return "drop", "command not in the docs"
+
+
+def apply_guards(runbook: Runbook, markdown: str) -> Runbook:
+    """Drop or rewrite steps the model invented. Logs each one and counts the drops on the span."""
+    docs = _norm(markdown)
+    kept: list[Step] = []
+    carry: list = []  # files of a dropped step move to the next kept step, so a later run still finds them
+    dropped = rewritten = 0
+    for step in runbook.steps:
+        step.files = carry + step.files
+        carry = []
+        verdict, why = ("keep", "") if step.skipped_out_of_scope else _judge(step, docs, markdown)
+        if verdict == "drop":
+            dropped += 1
+            carry = step.files
+            neatlogs.log("planner guard dropped step: {command} ({why})", command=step.command, why=why)
+            continue
+        if verdict == "rewrite":
+            rewritten += 1
+            name = _EXPORT.match(step.command.strip()).group(1)  # type: ignore[union-attr]
+            neatlogs.log("planner guard rewrote step: {command} ({why})", command=step.command, why=why)
+            step.command = f'export {name}="${{{name}}}"'
+        kept.append(step)
+    for i, step in enumerate(kept, 1):
+        step.id = i
+    runbook.steps = kept
+    try:
+        from opentelemetry import trace
+
+        span = trace.get_current_span()
+        span.set_attribute("neatlogs.planner.guard_dropped", dropped)
+        span.set_attribute("neatlogs.planner.guard_rewritten", rewritten)
+    except Exception:  # noqa: BLE001
+        pass
+    return runbook
+
+
+# --- plan cache: the same page gives the same plan -------------------------------
+
+
+def _cache_file(markdown: str) -> Path:
+    key = hashlib.sha256((markdown + "\0" + PROMPT_VERSION).encode("utf-8")).hexdigest()
+    return Path(config.RUNS_DIR) / ".plan_cache" / f"{key}.json"
+
+
+def _cache_load(markdown: str, source_url: str) -> Runbook | None:
+    if os.environ.get("FIRSTRUN_REPLAN") == "1":
+        return None
+    try:
+        data = json.loads(_cache_file(markdown).read_text(encoding="utf-8"))
+        data["source_url"], data["docs_markdown"] = source_url, markdown
+        return Runbook.model_validate(data)
+    except (OSError, ValueError):  # ValidationError is a ValueError
+        return None
+
+
+def _cache_store(markdown: str, runbook: Runbook) -> None:
+    try:
+        path = _cache_file(markdown)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(runbook.model_dump_json(exclude={"docs_markdown"}), encoding="utf-8")
+    except OSError:
+        pass
+
+
 @neatlogs.span(kind="AGENT", name="planner")
 def plan_from_markdown(
     markdown: str, source_url: str, llm: Callable[[str], str] | None = None
 ) -> Runbook:
     """AGENT span `planner`. Claude turns the markdown into a Runbook. Commands are copied exactly."""
+    cacheable = llm is None  # an injected llm is a test or a replay, so it never reads or writes the cache
+    if cacheable:
+        cached = _cache_load(markdown, source_url)
+        if cached is not None:
+            neatlogs.log("planner cache hit")
+            return cached
     ask = llm or (lambda p: ask_claude(p, SYSTEM_PROMPT)[0])
     prompt = f"Source URL: {source_url}\n\nQuickstart page (markdown):\n\n{strip_archive_banner(markdown)}"
     error = ""
     for _ in range(2):
         text = ask(prompt if not error else f"{prompt}\n\nYour last reply was invalid: {error}\nReturn corrected JSON only.")
         try:
-            return _build(_extract_json(text), markdown, source_url)
+            runbook = apply_guards(_build(_extract_json(text), markdown, source_url), markdown)
         except (ValueError, ValidationError) as exc:  # JSONDecodeError is a ValueError
             error = str(exc)[:800]
+            continue
+        if cacheable and runbook.steps:
+            _cache_store(markdown, runbook)
+        return runbook
     raise ValueError(f"planner output invalid after retry: {error}")
 
 

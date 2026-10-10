@@ -106,6 +106,9 @@ def test_p4_ten_steps_is_allowed(tmp_path, monkeypatch):
 
 # --- P5 ------------------------------------------------------------------------
 
+SKIP_DOC = "# Doc\n\n```bash\npip install x\n```\n"
+
+
 def _skipped_plan():
     skipped = {"id": 2, "intent": "create a paid account", "command": "open https://example.com/pricing",
                "skipped_out_of_scope": True, "skip_reason": "needs a paid account"}
@@ -113,14 +116,14 @@ def _skipped_plan():
 
 
 def test_p5_paid_account_step_is_marked_skipped_with_a_reason(fake_llm):
-    rb = planner.plan_from_markdown("# Doc", "u", llm=fake_llm([json.dumps(_skipped_plan())]))
+    rb = planner.plan_from_markdown(SKIP_DOC, "u", llm=fake_llm([json.dumps(_skipped_plan())]))
     assert rb.steps[1].skipped_out_of_scope is True
     assert rb.steps[1].skip_reason == "needs a paid account"
     assert rb.steps[0].skipped_out_of_scope is False
 
 
 def test_p5_executor_never_runs_a_skipped_step(tmp_runs_dir, fake_llm):
-    rb = planner.plan_from_markdown("# Doc", "u", llm=fake_llm([json.dumps(_skipped_plan())]))
+    rb = planner.plan_from_markdown(SKIP_DOC, "u", llm=fake_llm([json.dumps(_skipped_plan())]))
     fake = FakeContainer()
     state = executor.run(rb, run_id="p5", container_factory=factory_for(fake))
     assert state.status == RunStatus.PASSED
@@ -198,7 +201,8 @@ def test_e9_windows_paths_become_linux_paths_and_nothing_else_changes():
 
 def test_e9_planner_rewrites_commands_before_the_container_sees_them(fake_llm):
     step = dict(GOOD_STEP, command=r"python C:\proj\run.py")
-    rb = planner.plan_from_markdown("# D", "u", llm=fake_llm([json.dumps({"title": "t", "steps": [step]})]))
+    doc = "# D\n\n```bash\npython C:\\proj\\run.py\n```\n"
+    rb = planner.plan_from_markdown(doc, "u", llm=fake_llm([json.dumps({"title": "t", "steps": [step]})]))
     assert rb.steps[0].command == "python /work/proj/run.py"
     assert rb.steps[0].source_line == "pip install x"          # the docs line is not rewritten
 
