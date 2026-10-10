@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01Bk6oMbF49k8nZMuFXEYfj3",
+  "agent_id": "a1604c451b889ed82",
+  "subagent_type": "general-purpose",
+  "task_description": "Landing page worker",
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 100713,
+    "cache_read_tokens": 889186,
+    "output_tokens": 12039,
+    "api_call_count": 11
+  },
+  "started_at": "2026-10-10T14:07:37.9582695+05:30",
+  "completed_at": "2026-10-10T14:09:03.8072108+05:30"
+}

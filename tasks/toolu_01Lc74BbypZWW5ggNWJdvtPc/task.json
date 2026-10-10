@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01Lc74BbypZWW5ggNWJdvtPc",
+  "agent_id": "a3d891224918ec66f",
+  "subagent_type": "general-purpose",
+  "task_description": "README draft worker",
+  "files": [
+    "README.md",
+    "docs/architecture.md"
+  ],
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 86999,
+    "cache_read_tokens": 996889,
+    "output_tokens": 8139,
+    "api_call_count": 10
+  },
+  "started_at": "2026-10-10T14:08:16.7527645+05:30",
+  "completed_at": "2026-10-10T14:09:21.5337235+05:30"
+}
