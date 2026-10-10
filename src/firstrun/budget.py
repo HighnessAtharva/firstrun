@@ -19,7 +19,7 @@ def _trip_reason(state: RunState, budget: Budget, step_id: int | None) -> str | 
     if state.usage.tool_calls >= budget.tool_calls_per_run:
         return f"tool call budget spent: {state.usage.tool_calls} of {budget.tool_calls_per_run} calls"
     if state.usage.cost_usd >= budget.cost_usd_per_run:
-        return f"cost budget spent: ${state.usage.cost_usd:.2f} of ${budget.cost_usd_per_run:.2f}"
+        return f"cost budget spent: ${state.usage.cost_usd:.4f} of ${budget.cost_usd_per_run:.4f}"
     return None
 
 

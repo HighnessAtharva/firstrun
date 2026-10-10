@@ -12,7 +12,7 @@ from firstrun.models import RunState, RunStatus
 def _stub_run(monkeypatch):
     seen = {}
 
-    def fake(url, tags, resume, verify, recover=True):
+    def fake(url, tags, resume, verify, recover=True, budget=None):
         seen["url"] = url
         return RunState(run_id="r", source_url=url, status=RunStatus.PASSED)
 

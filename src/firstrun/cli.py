@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -13,11 +14,13 @@ from firstrun import config
 from firstrun.models import RunState, RunStatus
 
 
-def _recover_fn():
+def _recover_fn(budget=None):
     """Layer 2 recovery: classify, ask once, search, patch."""
+    from functools import partial
+
     from firstrun.recovery import recover
 
-    return recover
+    return partial(recover, budget=budget) if budget else recover
 
 
 def _verify():
@@ -132,7 +135,8 @@ def _echo_share(run_dir) -> None:
         pass
 
 
-def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recover: bool = True) -> RunState:
+def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recover: bool = True,
+             budget=None) -> RunState:
     import neatlogs
 
     from firstrun import executor, patch, planner, state as state_io
@@ -162,8 +166,9 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
             return _early_stop(url, run_id, exc.reason)
         final = executor.run(
             runbook, run_id=run_id, resume=bool(resume), tags=tags,
-            recover=_recover_fn() if recover else None,
+            recover=_recover_fn(budget) if recover else None,
             verify=_verify() if verify else None,
+            budget=budget,
             trace=False,
         )
         set_io(root, output={
@@ -222,11 +227,21 @@ def cli() -> None:
 @click.option("--no-verify", is_flag=True, help="Skip the verification re-run.")
 @click.option("--no-recover", is_flag=True, help="Layer 1 only: stop at the first failed step.")
 @click.option("--fresh", is_flag=True, help="Ignore a cached result and run again.")
-def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh) -> None:
+@click.option("--tier", help="Cap spend per run at this plan tier's cap from business/unit_economics.json.")
+def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh, tier) -> None:
     if offline:
         os.environ["FIRSTRUN_OFFLINE"] = "1"
     if not (url or targets or resume_id):
         raise click.UsageError("give a URL, --targets FILE or --resume RUN_ID")
+    budget = None
+    if tier:
+        from firstrun import econ
+
+        try:
+            budget = econ.budget_for_tier(tier)
+        except econ.EconError as exc:
+            raise click.ClickException(str(exc))
+        click.echo(f"tier: {tier}, cost cap ${budget.cost_usd_per_run:.4f} per run")
     urls: list[str] = []
     if url:
         urls.append(url)
@@ -261,10 +276,10 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh
     worst = 0
     try:
         if resume_id:
-            final = _run_one("", list(tags), resume_id, not no_verify, not no_recover)
+            final = _run_one("", list(tags), resume_id, not no_verify, not no_recover, budget)
             worst = exit_code(final)
         for u in urls:
-            final = _run_one(u, list(tags), None, not no_verify, not no_recover)
+            final = _run_one(u, list(tags), None, not no_verify, not no_recover, budget)
             worst = max(worst, exit_code(final))
     except Exception as exc:  # noqa: BLE001 - setup failures get one sentence, not a traceback
         from firstrun import llm, planner
@@ -436,6 +451,36 @@ def prereqs_cmd(run_id, no_prove, rounds) -> None:
         raise
     finally:
         close_tracing()
+
+
+@cli.command("econ")
+@click.option("--traces", "traces_file", type=click.Path(exists=True, dir_okay=False),
+              help="A saved `neatlogs traces list --json` payload. Default: read neatlogs now.")
+@click.option("--since", default="2026-10-10T00:00:00Z", show_default=True, help="Earliest trace to read.")
+@click.option("--margin-floor", default=0.70, show_default=True, type=float, help="Gross margin each tier must keep.")
+def econ_cmd(traces_file, since, margin_floor) -> None:
+    """Measure cost per run from neatlogs, write drivers.csv for cfo.ai and the per-tier cost caps."""
+    from firstrun import econ
+
+    if not 0 <= margin_floor < 1:
+        raise click.BadParameter("must be at least 0 and below 1", param_hint="--margin-floor")
+    config.load_env()
+    inputs = json.loads((econ.BUSINESS / "inputs.json").read_text(encoding="utf-8"))
+    try:
+        raw = Path(traces_file).read_text(encoding="utf-8") if traces_file else econ.fetch_traces(since)
+        result = econ.build(raw, inputs, margin_floor)
+    except econ.EconError as exc:
+        raise click.ClickException(str(exc))
+    d = result["drivers"]
+    click.echo(f"{d['traces']} runs: mean ${d['cost_mean']:.4f}, p95 ${d['cost_p95']['usd']:.4f}, "
+               f"max ${d['cost_max']['usd']:.4f} per run")
+    for name, t in result["tiers"].items():
+        line = f"{name}: cap ${t['cap_usd_per_run']:.4f} per run, {t['measured_runs_over_cap_pct']}% of runs over it"
+        if "margin_at_p95_pct" in t:
+            line += f", margin {t['margin_at_mean_pct']}% at mean, {t['margin_at_p95_pct']}% at p95"
+        click.echo(line)
+    for path in econ.write(result):
+        click.echo(f"wrote {path}")
 
 
 def main() -> None:
