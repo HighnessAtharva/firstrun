@@ -211,11 +211,119 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 .ea-loop i{font-style:normal;color:var(--muted);font-weight:400}
 .ea-note{color:var(--muted);font-size:15px;margin-top:18px}
 @media(max-width:860px){.ea{grid-template-columns:minmax(0,1fr)}}
+
+/* comparison */
+.cmp{margin-top:22px;border-radius:28px;background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift);overflow:hidden}
+.cmp-s{overflow-x:auto}
+.cmp table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px;font-size:13.5px;line-height:1.4}
+.cmp th,.cmp td{padding:12px 14px;text-align:left;vertical-align:top;box-shadow:0 -1px 0 var(--hair)}
+.cmp thead th{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:-.01em;box-shadow:none;position:sticky;top:0;white-space:nowrap}
+.cmp thead th.me{color:var(--accent);display:flex;align-items:center;gap:7px;border-radius:0}
+.cmp thead th.me img{border-radius:5px}
+.cmp tbody th{font-weight:600;color:var(--ink);width:17%}
+.cmp tbody th em{display:block;width:max-content;margin-top:5px;font:600 10.5px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;font-style:normal;color:#fff;background:linear-gradient(180deg,#2B86F0,#0A66D6);border-radius:99px;padding:4px 9px}
+.cmp td{color:var(--muted)}
+.cmp td.me,.cmp th.me{background:rgba(10,102,214,.07)}
+.cmp td.me{color:var(--ink);font-weight:500}
+.cmp tr.hl td.me{background:rgba(10,102,214,.13)}
+.fill{font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;color:var(--accent);background:rgba(10,102,214,.07);box-shadow:inset 0 0 0 1px rgba(10,102,214,.25);border-radius:7px;padding:1px 6px;font-style:normal}
+.vp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,32px);margin-top:26px}
+.vp p{color:var(--muted);font-size:15px;line-height:1.5}
+.vp code{font-size:13px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair);border-radius:7px;padding:1px 6px}
+@media(max-width:860px){.vp{grid-template-columns:1fr}}
+
+/* tools: proof button and modal */
+.plus{margin-top:14px;display:inline-flex;align-items:center;gap:9px;padding:6px 16px 6px 7px;min-height:38px;font-size:14px;color:var(--ink);background:var(--gl);box-shadow:var(--edge),0 4px 14px -6px rgba(30,50,110,.2)}
+.plus i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#2B86F0,#0A66D6);color:#fff;font:600 18px/1 Geist,system-ui,sans-serif;font-style:normal;transition:transform .35s var(--ease)}
+.plus:hover{filter:none;color:var(--accent);transform:translateY(-2px)}
+.plus:hover i{transform:rotate(90deg)}
+.tool figure{cursor:zoom-in}
+.tm{border:0;padding:0;background:transparent;color:var(--ink);width:min(1080px,calc(100vw - 24px));max-height:calc(100vh - 24px);margin:auto;overflow:visible}
+.tm::backdrop{background:rgba(24,30,52,.38);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.tm[open]{animation:pop .45s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.tm-in{max-height:calc(100vh - 24px);overflow:auto;border-radius:32px;padding:clamp(18px,3vw,28px);background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(255,255,255,.62));-webkit-backdrop-filter:blur(40px) saturate(1.9);backdrop-filter:blur(40px) saturate(1.9);box-shadow:var(--edge),0 40px 90px -30px rgba(20,30,70,.5)}
+html:has(dialog[open]){overflow:hidden}
+.tm-h{display:flex;align-items:center;gap:14px}
+.tm-h img{width:40px;height:40px;border-radius:11px;box-shadow:0 4px 12px -2px rgba(0,0,0,.25)}
+.tm-h h3{font-size:22px;letter-spacing:-.03em}
+.tm-h p{color:var(--muted);font-size:14px}
+.tm-x{margin-left:auto;width:38px;height:38px;min-height:0;padding:0;border-radius:50%;font-size:24px;line-height:1;color:var(--ink);background:rgba(255,255,255,.8);box-shadow:var(--edge)}
+.tm-xyz{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 16px}
+.tm-xyz>div{background:rgba(255,255,255,.62);box-shadow:var(--edge);border-radius:18px;padding:12px 14px}
+.tm-xyz dt{font:600 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.tm-xyz dd{margin-top:6px;font-size:14px;line-height:1.35}
+.ph-t{color:var(--muted);font-style:italic}
+.tm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sh{position:relative;display:flex;flex-direction:column;text-align:left;font:inherit;font-weight:400;color:var(--ink);background:rgba(255,255,255,.66);box-shadow:var(--edge),0 8px 20px -10px rgba(30,50,110,.25);border-radius:20px;padding:8px 8px 12px;min-height:0;white-space:normal;align-items:stretch;justify-content:flex-start;cursor:zoom-in;transition:transform .35s var(--ease)}
+.sh:hover{filter:none;transform:translateY(-3px)}
+.sh .im{aspect-ratio:16/10;border-radius:13px;overflow:hidden;background:#EEF0F5;display:grid;place-items:center}
+.sh .im img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+.sh.empty{cursor:default}.sh.empty:hover{transform:none}
+.sh.empty .im{background:repeating-linear-gradient(135deg,rgba(10,102,214,.06) 0 10px,rgba(10,102,214,.02) 10px 20px);box-shadow:inset 0 0 0 1.5px rgba(10,102,214,.3);border-radius:13px;flex-direction:column;gap:6px;color:var(--accent);font-size:13px;font-weight:600}
+.sh.empty .im svg{width:26px;height:26px}
+.sh b{display:block;font-size:14px;margin:9px 4px 2px;letter-spacing:-.01em}
+.sh .c{font-size:12.5px;line-height:1.4;color:var(--muted);margin:0 4px}
+.sh .c u{text-decoration:none;color:var(--ink);font-weight:600}
+.tm-v figure{margin:14px 0 0;border-radius:18px;overflow:hidden;background:#fff;box-shadow:var(--edge)}
+.tm-v figure img{display:block;width:100%;max-height:62vh;object-fit:contain;background:#fff}
+.tm-v figcaption{padding:12px 16px;font-size:14px;color:var(--muted);line-height:1.45}
+.tm-v figcaption u{text-decoration:none;color:var(--ink);font-weight:600}
+.tm-b{margin-top:6px;min-height:36px;padding:4px 16px;font-size:14px;color:var(--ink);background:rgba(255,255,255,.8);box-shadow:var(--edge)}
+.tm-n{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.tm-n button{width:42px;height:42px;min-height:0;padding:0;font-size:24px;line-height:1;color:var(--ink);background:rgba(255,255,255,.8);box-shadow:var(--edge)}
+@media(max-width:820px){.tm-xyz{grid-template-columns:1fr}.tm-g{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.tm-g{grid-template-columns:1fr}}
+/* numbers: one visual row, PRs first */
+.nrow{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr 1fr;gap:12px;margin-top:26px}
+.nt{background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift);border-radius:26px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative}
+.nt b{display:block;font-size:clamp(30px,3.2vw,40px);letter-spacing:-.04em;line-height:1.05}
+.nt span{color:var(--muted);font-size:13.5px;line-height:1.35}
+.nt em{font-style:normal;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:auto;padding-top:8px;font-weight:600}
+.nt em a{text-decoration:none}.nt em a:hover{text-decoration:underline}
+.nt-pr{background:linear-gradient(150deg,rgba(255,255,255,.85),rgba(222,236,255,.6));}
+.nt-pr b{font-size:clamp(54px,6vw,76px);color:var(--accent);line-height:.95}
+.nt .ico{display:flex;gap:4px;color:#1B8A3A;margin-bottom:2px}
+.nt .ico svg{width:20px;height:20px}
+.nt .ring{width:46px;height:46px;transform:rotate(-90deg)}
+.nt .ring circle{fill:none;stroke:rgba(29,29,31,.1);stroke-width:5}
+.nt .ring .v{stroke:#1B8A3A;stroke-linecap:round}
+.nt .dots{display:flex;gap:7px;height:46px;align-items:center}
+.nt .dots i{width:16px;height:16px;border-radius:50%;background:rgba(29,29,31,.12)}
+.nt .dots i.on{background:#1B8A3A}.nt .dots i.new{background:var(--accent);box-shadow:0 0 0 4px rgba(10,102,214,.2)}
+.nt .dots i.ck{width:24px;height:24px;background:#1B8A3A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/70% no-repeat}
+.nt .coin{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 20px/1 Geist,system-ui,sans-serif;color:#7A5A00;background:radial-gradient(circle at 30% 25%,#FFE9A3,#F2C14B);box-shadow:inset 0 -3px 6px rgba(150,100,0,.25),0 6px 12px -4px rgba(150,100,0,.4);margin:3px 0}
+@media(max-width:860px){.nrow{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(220px,70%);overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 20px 14px;scroll-padding:0 20px;margin:22px -20px 0;scrollbar-width:none}.nrow::-webkit-scrollbar{display:none}.nt{scroll-snap-align:start}}
+/* PR record */
+.prs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
+.pr{border-radius:28px;padding:10px 10px 18px;display:flex;flex-direction:column;gap:6px;position:relative}
+.pr .shot{display:block;border-radius:19px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(20,30,60,.07),0 8px 22px -10px rgba(30,50,110,.3);aspect-ratio:1200/668;transition:transform .5s var(--ease)}
+.pr .shot:hover{transform:scale(1.015)}
+.pr .shot img{display:block;width:100%;height:100%;object-fit:cover}
+.pm{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 8px 0}
+.repo{font:500 12.5px/1.2 "Geist Mono",ui-monospace,monospace;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{font-weight:600;font-size:12.5px;border-radius:99px;padding:3px 11px 3px 9px;background:rgba(27,138,58,.14);color:#1B8A3A;display:inline-flex;align-items:center;gap:6px;flex:none}
+.st:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.merged{background:rgba(130,80,223,.14);color:#8250DF}
+.st.closed{background:rgba(196,40,28,.12);color:#C4281C}
+.pr h3{font-size:17px;letter-spacing:-.02em;line-height:1.25;margin:2px 8px 0}
+.pr h3 small{font:500 13px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
+.pr p{margin:0 8px;font-size:14px;line-height:1.4;color:var(--muted)}
+.pr p b{color:var(--ink)}
+.pr code{font-size:12.5px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair);border-radius:7px;padding:1px 6px}
+.fx{list-style:none;padding:0;margin:auto 8px 0;padding-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.fx li{font-size:12.5px;font-weight:600;border-radius:99px;padding:4px 11px;background:rgba(255,255,255,.7);box-shadow:var(--edge);color:var(--ink)}
+.nopr{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px}
+.nopr .lb{font:600 12px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chip{font-size:13.5px;border-radius:99px;padding:6px 14px;background:var(--gl);box-shadow:var(--edge),0 4px 12px -6px rgba(30,50,110,.2);color:var(--muted)}
+.chip b{color:var(--ink);margin-right:4px}
+@media(max-width:960px){.prs{grid-template-columns:1fr}.pr{padding-bottom:20px}}
+#steps .rrp{margin-top:0}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="0 0 64 64"><defs><linearGradient id="lgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46A6FF"/><stop offset="1" stop-color="#0060DF"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgg)"/><path d="M2 17C2 8.7 8.7 2 17 2h30c8.3 0 15 6.7 15 15v5C46 30 18 30 2 22z" fill="#fff" opacity=".24"/><rect x="2.5" y="2.5" width="59" height="59" rx="14.5" fill="none" stroke="#fff" stroke-opacity=".38"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></symbol></svg>
-<nav class="nav" aria-label="Sections"><a class="wm" href="#hero" aria-label="FirstRun home"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><div class="nl"><a href="#film">Film</a><a href="#steps">How it works</a><a href="#tools">Tools</a><a href="#built">Build log</a><a href="#about">About</a></div><a class="btn sm" href="#hero" id="try">Try it</a></nav>
+<nav class="nav" aria-label="Sections"><a class="wm" href="#hero" aria-label="FirstRun home"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><div class="nl"><a href="#film">Film</a><a href="#steps">How it works</a><a href="#tools">Tools</a><a href="#prs">PRs</a><a href="#compare">Compare</a><a href="#built">Build log</a><a href="#about">About</a></div><a class="btn sm" href="#hero" id="try">Try it</a></nav>
 <main>
 <section id="hero">
 <svg class="icon" viewBox="0 0 64 64" role="img" aria-label="FirstRun logo"><use href="#lg"/></svg>
@@ -268,11 +376,9 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 </video>
 <div class="ctl"><button type="button" id="pp">Pause</button><button type="button" id="mu">Sound on</button></div>
 </div>
-<p class="dl"><a href="assets/firstrun-launch.mp4">Download the film (MP4, 6 MB)</a></p>
 </section>
 
-<section id="steps">
-<h2>Read. Run. Prove.</h2>
+<section id="steps" aria-label="How it works">
 <div class="rrp">
 <div><figure><span class="bdg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0A66D6" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></span><img src="assets/step-run.webp" alt="A terminal command, firstrun run with a docs URL, above six numbered quickstart steps in a clean container" width="910" height="510" loading="lazy"></figure><h3>Read</h3><p>FirstRun reads the page and plans one step per command.</p></div>
 <div><figure><span class="bdg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#0A66D6"><path d="M7 4.5v15a1 1 0 001.5.86l12-7.5a1 1 0 000-1.72l-12-7.5A1 1 0 007 4.5z"/></svg></span><img src="assets/step-3.webp" alt="Six quickstart steps. The first two pass and step 3, run demo, fails for a new developer" width="1060" height="420" loading="lazy"></figure><h3>Run</h3><p>Every step runs in a clean container, like a new developer. The first failure stops the run.</p></div>
@@ -298,25 +404,25 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 <section id="tools">
 <h2>Three Tools. One Job Each.</h2>
 <div class="tools">
-<article class="tool"><div class="txt">
+<article class="tool rv"><div class="txt">
 <header><img class="lg2" src="assets/logo-neatlogs.webp" alt="neatlogs logo" width="44" height="44"><h3>neatlogs</h3></header>
 <p class="job">Traces every run.</p>
 <p>The planner, executor and verifier show up as spans, so a bad run has a cause you can read.</p>
-<a class="more" href="https://neatlogs.com">neatlogs.com</a></div>
+<a class="more" href="https://neatlogs.com">neatlogs.com</a><button type="button" class="plus" data-tool="neatlogs" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
 <figure><img src="assets/shot-neatlogs.webp" alt="neatlogs trace of the FirstRun planner: 3 steps in 12 seconds, with the runbook JSON it produced" loading="lazy" width="1300" height="572"><figcaption>The first FirstRun trace, Sat Oct 10.</figcaption></figure>
 </article>
-<article class="tool"><div class="txt">
+<article class="tool rv"><div class="txt">
 <header><img class="lg2" src="assets/logo-entire.webp" alt="Entire logo" width="44" height="44"><h3>Entire</h3></header>
 <p class="job">Records every session.</p>
 <p>Each commit carries the Claude Code session that wrote it, so any line traces to a prompt.</p>
-<a class="more" href="https://entire.io">entire.io</a></div>
+<a class="more" href="https://entire.io">entire.io</a><button type="button" class="plus" data-tool="entire" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
 <figure><img src="assets/shot-entire.webp" alt="Entire trails view for the firstrun repository with trail number 1 in Planning" loading="lazy" width="1300" height="484"><figcaption>Trail #1 for the firstrun repo.</figcaption></figure>
 </article>
-<article class="tool"><div class="txt">
+<article class="tool rv"><div class="txt">
 <header><img class="lg2" src="assets/logo-cfoai.webp" alt="cfo.ai logo" width="44" height="44"><h3>cfo.ai</h3></header>
 <p class="job">Turns cost into a plan.</p>
 <p>The measured cost per run from neatlogs goes to Ari, the cfo.ai agent, which models the pricing.</p>
-<a class="more" href="https://cfo.ai">cfo.ai</a></div>
+<a class="more" href="https://cfo.ai">cfo.ai</a><button type="button" class="plus" data-tool="cfoai" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
 <figure><img src="assets/shot-cfoai.webp" alt="cfo.ai chat where Ari, the AI CFO, greets Atharva" loading="lazy" width="1100" height="469"><figcaption>Ari, the cfo.ai agent, on day one.</figcaption></figure>
 </article>
 </div>
@@ -356,13 +462,70 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 
 <section id="proof">
 <h2>The Numbers Come From Real Runs.</h2>
-<p class="proof">Same four quickstarts, before and after the fix neatlogs found. Real open-source docs after that.</p>
-<div class="nums">
-  <div><b>2 &rarr; 3</b><span>of 4 quickstarts finish, v1 to v2</span></div>
-  <div><b>0 &rarr; 3</b><span>failed steps recovered</span></div>
-  <div><b>4 of 5</b><span>real open-source quickstarts verified in a fresh container</span></div>
-  <div><b>3</b><span>upstream docs PRs opened: <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">dbt #10149</a>, <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150">dbt #10150</a>, <a href="https://github.com/entireio/cli/pull/2724">Entire #2724</a></span></div>
-  <div><b>$0.02</b><span>model cost per run, measured by neatlogs (list price, not billed)</span></div>
+<div class="nrow" role="list">
+<div class="nt nt-pr" role="listitem"><div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg></div><b>4</b><span>upstream docs PRs opened on 3 doc sites. Each fixes a step a new developer hits.</span><em><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">dbt #10149</a> <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150">dbt #10150</a> <a href="https://github.com/entireio/cli/pull/2724">Entire #2724</a> <a href="https://github.com/accuknox/help/pull/671">AccuKnox #671</a></em></div>
+<div class="nt" role="listitem"><svg class="ring" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" pathLength="100"/><circle class="v" cx="22" cy="22" r="18" pathLength="100" stroke-dasharray="100 100"/></svg><b>5 of 5</b><span>open-source quickstarts verified in a fresh container</span></div>
+<div class="nt" role="listitem"><div class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="new"></i><i></i></div><b>2 &rarr; 3</b><span>of 4 quickstarts finish, v1 to v2</span></div>
+<div class="nt" role="listitem"><div class="dots" aria-hidden="true"><i class="ck"></i><i class="ck"></i><i class="ck"></i></div><b>0 &rarr; 3</b><span>failed steps recovered</span></div>
+<div class="nt" role="listitem"><div class="coin" aria-hidden="true">$</div><b>$0.02</b><span>model cost per run, measured by neatlogs (list price, not billed)</span></div>
+</div>
+</section>
+
+<section id="prs">
+<h2>Every PR, in Public.</h2>
+<p class="proof">Opened upstream on real doc sites. Status and stars read live from GitHub.</p>
+<div class="prs">
+<article class="pr gl rv" data-repo="dbt-labs/docs.getdbt.com" data-n="10149">
+<a class="shot" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149" target="_blank" rel="noopener"><img src="assets/pr-10149.webp" alt="Screenshot of pull request 10149 on dbt-labs/docs.getdbt.com: Fix the jafgen command in the DuckDB quickstart, status Open" width="1200" height="668" loading="lazy"></a>
+<div class="pm"><span class="repo">dbt-labs/docs.getdbt.com</span><span class="st">Open</span></div>
+<h3>Fix the jafgen command in the DuckDB quickstart <small>#10149</small></h3>
+<p><b>Broke:</b> <code>jafgen --years 6</code> fails with <code>No such option: --years</code>.</p>
+<p><b>Fixed:</b> <code>years</code> is now positional, so both mentions change.</p>
+<ul class="fx"><li>+2 &minus;2 in 1 file</li><li class="stars"><span>218</span> repo stars</li><li>Opened Oct 10, 2026</li></ul>
+</article>
+<article class="pr gl rv" data-repo="dbt-labs/docs.getdbt.com" data-n="10150">
+<a class="shot" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150" target="_blank" rel="noopener"><img src="assets/pr-10150.webp" alt="Screenshot of pull request 10150 on dbt-labs/docs.getdbt.com: State the Python version the DuckDB quickstart needs, status Open" width="1200" height="668" loading="lazy"></a>
+<div class="pm"><span class="repo">dbt-labs/docs.getdbt.com</span><span class="st">Open</span></div>
+<h3>State the Python version the DuckDB quickstart needs <small>#10150</small></h3>
+<p><b>Broke:</b> the cloned repo pins <code>networkx==3.7</code>, which needs Python 3.12.</p>
+<p><b>Fixed:</b> the guide now names the Python version.</p>
+<ul class="fx"><li>+1 &minus;0 in 1 file</li><li class="stars"><span>218</span> repo stars</li><li>Opened Oct 10, 2026</li></ul>
+</article>
+<article class="pr gl rv" data-repo="entireio/cli" data-n="2724">
+<a class="shot" href="https://github.com/entireio/cli/pull/2724" target="_blank" rel="noopener"><img src="assets/pr-2724.webp" alt="Screenshot of pull request 2724 on entireio/cli: Say where install.sh puts entire on Linux, status Open" width="1200" height="668" loading="lazy"></a>
+<div class="pm"><span class="repo">entireio/cli</span><span class="st">Open</span></div>
+<h3>Say where install.sh puts entire on Linux <small>#2724</small></h3>
+<p><b>Broke:</b> after a good install, <code>entire version</code> fails with <code>command not found</code>.</p>
+<p><b>Fixed:</b> the docs say the binaries land in <code>~/.local/bin</code>, which a clean shell lacks on <code>PATH</code>.</p>
+<ul class="fx"><li>+2 &minus;0 in 1 file</li><li class="stars"><span>5,169</span> repo stars</li><li>Opened Oct 10, 2026</li></ul>
+</article>
+</div>
+<div class="nopr">
+<span class="lb">Also run, no PR needed</span>
+<span class="chip"><b>AccuKnox knoxctl</b> verified 5/5</span>
+<span class="chip"><b>MkDocs</b> verified 9/10</span>
+<span class="chip"><b>Dagster</b> verified, no docs PR after a source check</span>
+</div>
+</section>
+
+<section id="compare">
+<h2>How FirstRun Compares.</h2>
+<div class="cmp rv"><div class="cmp-s"><table>
+<thead><tr><th scope="col">Feature</th><th scope="col" class="me"><img src="assets/logo.svg" alt="" width="18" height="18">FirstRun</th><th scope="col">Claude Code</th><th scope="col">GitHub Actions</th><th scope="col">GitHub Agents</th><th scope="col">Custom workflow</th></tr></thead>
+<tbody>
+<tr><th scope="row">Runs the quickstart as a new developer</th><td class="me">Yes. Every step runs in a fresh Docker container</td><td>Runs on your machine unless you set up a sandbox <span class="fill">[FILL: sandbox setup]</span></td><td>Yes. A fresh runner per job, but you script each step</td><td><span class="fill">[FILL: execution environment]</span></td><td>Depends on the build <span class="fill">[FILL: environment]</span></td></tr>
+<tr><th scope="row">Plans steps from a docs URL</th><td class="me">Yes. The planner writes one step per command</td><td>Yes, when you prompt it</td><td>No. You write each step</td><td><span class="fill">[FILL: input it accepts]</span></td><td>You write the parser</td></tr>
+<tr class="hl"><th scope="row">Improvises when a step fails<em>Stands out</em></th><td class="me">Yes. It classifies the failure, patches, and retries up to 3 times per step</td><td>Yes, inside one session</td><td>No. The job fails and stops</td><td><span class="fill">[FILL: retry behavior]</span></td><td>Only what you code</td></tr>
+<tr><th scope="row">Proves the fix</th><td class="me">Yes. A second clean container must pass the whole quickstart</td><td>Only if you ask</td><td>Only if you script it</td><td><span class="fill">[FILL: verification step]</span></td><td>Only if you code it</td></tr>
+<tr class="hl"><th scope="row">Telemetry per run<em>Stands out</em></th><td class="me">Yes. neatlogs spans for planner, executor and verifier. Measured cost of $0.02 per run</td><td><span class="fill">[FILL: telemetry setup]</span></td><td>Logs and run history. No agent traces</td><td><span class="fill">[FILL: telemetry]</span></td><td>You build it</td></tr>
+<tr><th scope="row">Opens the docs PR</th><td class="me">Yes, after you approve once</td><td>Yes, when you ask</td><td>Only if you script it</td><td><span class="fill">[FILL: PR behavior]</span></td><td>Only if you code it</td></tr>
+<tr class="hl"><th scope="row">Ease of use<em>Stands out</em></th><td class="me">Paste a docs URL, then paste the prompt into your coding agent</td><td>One prompt, no failure classes</td><td>A YAML file per quickstart</td><td><span class="fill">[FILL: setup steps]</span></td><td>Highest effort</td></tr>
+<tr><th scope="row">Proof in public repos</th><td class="me">3 upstream PRs, all open (see the record above)</td><td><span class="fill">[FILL: examples]</span></td><td><span class="fill">[FILL: examples]</span></td><td><span class="fill">[FILL: examples]</span></td><td><span class="fill">[FILL: examples]</span></td></tr>
+</tbody></table></div></div>
+<div class="vp">
+<p>FirstRun reads a docs quickstart and runs every step in a clean container, the way a new developer would. It stops at the first failure and classifies it. It tries a fix up to 3 times, then proves the fix with a second clean run. It asks once before it opens a PR.</p>
+<p>FirstRun opened 4 upstream docs PRs, and all are open today. The dbt DuckDB quickstart had a broken <code>jafgen</code> command (#10149) and no stated Python version (#10150). The Entire CLI installer put <code>entire</code> on a path that a clean shell lacks (entireio/cli#2724). The AccuKnox <code>knoxctl</code> page named 0.9.0 as the latest release while its installer fetched 0.9.58, and its APT steps assume <code>curl</code>, <code>gnupg</code> and <code>sudo</code> (accuknox/help#671). MkDocs and Dagster passed with no docs change, so a run also shows when docs hold up.</p>
+<p>Every run is a neatlogs trace, so a bad run has a readable cause. A docs bug surfaces in a run instead of in a reader who leaves without filing an issue. <span class="fill">[FILL: merge status after the maintainers respond]</span></p>
 </div>
 </section>
 
@@ -401,6 +564,14 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 </section>
 </main>
 <footer><a class="wm" href="#hero"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><span>Made for neatHack 2026 by neatlogs</span><nav><a href="https://neatlogs.com/hackathon">neatHack</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://x.com/cultist_dev">X</a></nav></footer>
+<dialog id="tm" class="tm" aria-labelledby="tm-t">
+<div class="tm-in">
+<header class="tm-h"><img id="tm-logo" alt="" width="40" height="40"><div><h3 id="tm-t"></h3><p id="tm-s"></p></div><button type="button" class="tm-x" id="tm-x" aria-label="Close">&times;</button></header>
+<dl class="tm-xyz" id="tm-xyz"></dl>
+<div class="tm-g" id="tm-g"></div>
+<div class="tm-v" id="tm-v" hidden><button type="button" class="tm-b" id="tm-back">&larr; All 6</button><figure><img id="tm-img" alt=""><figcaption id="tm-cap"></figcaption></figure><div class="tm-n"><button type="button" id="tm-prev" aria-label="Previous">&lsaquo;</button><button type="button" id="tm-next" aria-label="Next">&rsaquo;</button></div></div>
+</div>
+</dialog>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)};
@@ -532,7 +703,7 @@ if("IntersectionObserver" in window){
 
 /* reveal on scroll */
 var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
-var rv=document.querySelectorAll("#film .reel,#steps>*,#watch>*,#tools>*,.tool,.rrp>div,#proof>*,#built>*:not(.tlw),#about .about>*");
+var rv=document.querySelectorAll("#film .reel,#steps>*,#watch>*,#tools>*,.tool,.pr,.cmp,.rrp>div,#proof>*,#prs>h2,#prs>.proof,.nopr,#built>*:not(.tlw),#about .about>*");
 Array.prototype.forEach.call(rv,function(el){el.classList.add("rv")});
 if("IntersectionObserver" in window){
  var ro=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px",threshold:.05});
@@ -614,6 +785,76 @@ if("ResizeObserver" in window)new ResizeObserver(function(){track()}).observe(tl
 addEventListener("load",track);addEventListener("resize",track);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(track);
 track();
+
+/* tool proof modals */
+var TL={
+neatlogs:{n:"neatlogs",logo:"assets/logo-neatlogs.webp",s:"Traces every run",
+ xyz:["Every run: planner, executor, verifier","A trace per run, and the v1 to v2 fix it found","A bad run has a cause you can read"],
+ sh:[
+ {t:"First trace",img:"assets/t-neatlogs-trace.webp",x:"Sat Oct 10, day one",y:"The first agent trace: planner, 3 steps, 12 s",z:"The run is readable, not a black box"},
+ {t:"Span tree per run"},{t:"Detections"},{t:"Investigate"},{t:"Fix pulled over MCP"},
+ {t:"Before and after",y:"2 of 4 quickstarts finish in v1, 3 of 4 in v2"}]},
+entire:{n:"Entire",logo:"assets/logo-entire.webp",s:"Records every session",
+ xyz:["Every commit, from the first one","A session record behind each commit, plus review gates","Any line traces back to a prompt"],
+ sh:[
+ {t:"Trail board",img:"assets/t-entire-board.webp",x:"Build start",y:"Trail #1 created before the first commit",z:"Every change hangs off a trail"},
+ {t:"Analytics",img:"assets/t-entire-analytics.webp",x:"Day one",y:"1 checkpoint and 24.9k tokens recorded",z:"Token spend per checkpoint is on record"},
+ {t:"Merge gate",img:"assets/t-entire-gate.webp",x:"Layer 1 review, trail #3",y:"Merge blocked while a high finding stays open",z:"A gate stops a risky merge"},
+ {t:"Review findings",img:"assets/t-entire-findings.webp",x:"Layer 1 review",y:"A secret retry loop and a Windows-only Docker default",z:"Two real bugs caught before merge"},
+ {t:"Inline review",img:"assets/t-entire-review.webp",x:"Layer 1 review",y:"The finding sits on the line in src/firstrun/recovery.py",z:"The fix starts at the exact line"},
+ {t:"Checkpoint on a commit"}]},
+cfoai:{n:"cfo.ai",logo:"assets/logo-cfoai.webp",s:"Turns cost into a plan",
+ xyz:["Pricing, after the cost per run is measured",null,null],
+ sh:[
+ {t:"Ari on day one",img:"assets/t-cfo-ari.webp",x:"Sat Oct 10, day one",y:"Ari read the public profile and asked if it was me",z:"The agent starts from facts, not a form"},
+ {t:"Cost per run in"},{t:"Scenario model"},{t:"Pricing tiers"},{t:"Margin check"},{t:"Share link and sheet"}]}};
+var XYZ=["Used at","Delivered","Why it matters"],PH=["[X: phase]","[Y: what it delivered]","[Z: why it is great]"];
+function ph(v,i){return v?'<span>'+v+'</span>':'<span class="ph-t">'+PH[i]+'</span>'}
+var tm=$("tm"),cur=null,idx=0,list=[];
+function cap(s){return '<u>Used at</u> '+(s.x||PH[0])+'. <u>Delivered</u> '+(s.y||PH[1])+'. <u>Why it matters</u> '+(s.z||PH[2])+'.'}
+function openTool(k){
+ cur=TL[k];list=cur.sh;
+ $("tm-logo").src=cur.logo;$("tm-t").textContent=cur.n;$("tm-s").textContent=cur.s+" · 6 screenshots";
+ $("tm-xyz").innerHTML=cur.xyz.map(function(v,i){return '<div><dt>'+XYZ[i]+'</dt><dd>'+ph(v,i)+'</dd></div>'}).join("");
+ $("tm-g").innerHTML=list.map(function(s,i){
+  var im=s.img?'<img src="'+s.img+'" alt="'+cur.n+': '+s.t+'" loading="lazy">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 012-2h1.5l1.2-1.6A1 1 0 019.5 4h5a1 1 0 01.8.4L16.5 6H18a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg>Add screenshot';
+  return '<button type="button" class="sh'+(s.img?'':' empty')+'" data-i="'+i+'"'+(s.img?'':' tabindex="-1" aria-disabled="true"')+'><span class="im">'+im+'</span><b>'+(i+1)+'. '+s.t+'</b><span class="c">'+cap(s)+'</span></button>'}).join("");
+ $("tm-g").hidden=false;$("tm-xyz").hidden=false;$("tm-v").hidden=true;
+ if(!tm.open)tm.showModal();$("tm-x").focus();
+}
+function view(i){
+ var s=list[i];if(!s||!s.img)return;idx=i;
+ $("tm-img").src=s.img;$("tm-img").alt=cur.n+": "+s.t;
+ $("tm-cap").innerHTML='<u>'+(i+1)+'. '+s.t+'</u><br>'+cap(s);
+ $("tm-g").hidden=true;$("tm-xyz").hidden=true;$("tm-v").hidden=false;
+}
+function step(d){var n=idx,k;for(k=0;k<list.length;k++){n=(n+d+list.length)%list.length;if(list[n].img){view(n);return}}}
+document.addEventListener("click",function(e){
+ var b=e.target.closest&&e.target.closest(".plus,.tool figure");
+ if(b){var t=b.getAttribute("data-tool")||b.closest(".tool").querySelector(".plus").getAttribute("data-tool");openTool(t);return}
+ var s=e.target.closest&&e.target.closest(".sh");if(s&&!s.classList.contains("empty")){view(+s.getAttribute("data-i"));return}
+ if(e.target===tm)tm.close();
+});
+$("tm-x").addEventListener("click",function(){tm.close()});
+$("tm-back").addEventListener("click",function(){$("tm-g").hidden=false;$("tm-xyz").hidden=false;$("tm-v").hidden=true});
+$("tm-prev").addEventListener("click",function(){step(-1)});
+$("tm-next").addEventListener("click",function(){step(1)});
+tm.addEventListener("keydown",function(e){if(!$("tm-v").hidden){if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1)}});
+/* PR record: live status and stars from GitHub, static text stays if the call fails */
+Array.prototype.forEach.call(document.querySelectorAll(".pr"),function(c){
+ var r=c.getAttribute("data-repo"),n=c.getAttribute("data-n");
+ function get(u,k,cb){
+  try{var s=sessionStorage.getItem(k);if(s){var o=JSON.parse(s);if(Date.now()-o.t<6e5){cb(o.d);return}}}catch(e){}
+  fetch(u,{headers:{Accept:"application/vnd.github+json"}}).then(function(x){return x.ok?x.json():null}).then(function(d){if(!d)return;try{sessionStorage.setItem(k,JSON.stringify({t:Date.now(),d:d}))}catch(e){}cb(d)}).catch(function(){});
+ }
+ get("https://api.github.com/repos/"+r+"/pulls/"+n,"pr"+r+n,function(d){
+  var st=c.querySelector(".st"),m=!!d.merged_at,s=m?"merged":d.state;
+  st.textContent=s.charAt(0).toUpperCase()+s.slice(1);st.className="st"+(s==="open"?"":" "+s);
+ });
+ get("https://api.github.com/repos/"+r,"rp"+r,function(d){
+  var e=c.querySelector(".stars span");if(e&&d.stargazers_count!=null)e.textContent=d.stargazers_count.toLocaleString("en-US");
+ });
+});
 })();
 </script>
 </body>

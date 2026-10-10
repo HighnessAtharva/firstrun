@@ -181,7 +181,7 @@ The six mistakes the agent made in v1:
 5. The planner skips the steps that matter, because they need a key.
 6. 9 of 16 steps check only the exit code.
 
-## FirstRun Found 3 Real Docs Bugs and Opened 3 Upstream PRs
+## FirstRun Found 4 Real Docs Bugs and Opened 4 Upstream PRs
 
 FirstRun ran five open-source quickstarts whose docs live in public repos. Every finding below came from a verified run, where a second clean container passed with the fix.
 
@@ -190,9 +190,11 @@ FirstRun ran five open-source quickstarts whose docs live in public repos. Every
 | [dbt Core with DuckDB](https://docs.getdbt.com/guides/duckdb) | verified 9/10 | `jafgen --years 6` fails because `years` is now positional | [dbt-labs/docs.getdbt.com#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149) |
 | same guide | verified | the cloned repo pins `networkx==3.7`, which needs Python 3.12, and the guide names no version | [dbt-labs/docs.getdbt.com#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150) |
 | [Entire CLI install](https://docs.entire.io/installation) | verified 4/4 | `install.sh` puts `entire` in `~/.local/bin`, which a clean shell lacks on `PATH` | [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) |
-| [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the docs commands work, the container needed `curl` and `gnupg` | none needed |
+| [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the page names 0.9.0 as latest while the installer fetches 0.9.58, and the APT steps need `curl`, `gnupg` and `sudo` | [accuknox/help#671](https://github.com/accuknox/help/pull/671) |
 | [MkDocs getting started](https://www.mkdocs.org/getting-started/) | verified 9/10 | the docs commands work, the container needed `curl` | none needed |
 | [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | verified 10/10 | the docs already cover both gaps FirstRun hit: install `create-dagster` first, and pip 25.1 for `--group` | none needed |
+
+On #10149, a bisect comment shows jafgen 0.4.6 dropped `--years` 11 months before the guide shipped.
 
 Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app).
 
