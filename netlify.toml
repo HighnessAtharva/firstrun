@@ -1,0 +1,5 @@
+# Netlify serves the landing page from docs/. No build step.
+[build]
+  publish = "docs"
+  command = ""
+
