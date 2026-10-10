@@ -476,3 +476,33 @@ What are the next steps, do we have a front-end for it, what are the next steps 
 - **Wording to check:** I wrote that the Brain holds "7 facts, and 6 decision facts were added after that", taken from `plan/32` and `plan/20`. Check it against `entire brain` output before you commit.</result>
 <usage><subagent_tokens>123316</subagent_tokens><tool_uses>12</tool_uses><duration_ms>65267</duration_ms></usage>
 </task-notification>
+
+---
+
+<task-notification>
+<task-id>a9c48da8d10f105ae</task-id>
+<tool-use-id>toolu_01Cb5dsdPZononykmu2X7w5b</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\a9c48da8d10f105ae.output</output-file>
+<status>completed</status>
+<summary>Agent "CLI polish and evidence collector" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>All seven tasks are done and the full suite passes (158 passed, 24 skipped, 1 xfailed). I never ran a live `firstrun &lt;url&gt;` end to end; the routing is covered only by tests with `_run_one` stubbed.
+
+1. **One command:** `firstrun &lt;url&gt;` and `firstrun ./path` now route to `run`. `firstrun report` and every existing flag still work.
+2. **Errors:** Docker down, a missing `CLAUDE_CODE_OAUTH_TOKEN` and `PlanError` each print one sentence plus the fix and exit 2. I fixed the Docker test you flagged in `tests/test_edge_executor.py` (it now asserts the new message). A missing `NEATLOGS_API_KEY` keeps its existing one-line warning and the run continues.
+3. **Output:** a run prints the target, the verdict, time and cost (on failures), `report: &lt;path&gt;` and any `wrote` lines. I set the `neatlogs` and `opentelemetry` loggers to WARNING unless `FIRSTRUN_DEBUG=1`, but I did not run a real run to confirm they no longer print INFO.
+4. **Evidence:** `scripts/collect_evidence.py` runs and writes `neatlogs_runs.json`, `neatlogs_analytics_&lt;tag&gt;.json`, `entire.json` and `graph.ndjson` (2.2 MB) into `evidence/`. The neatlogs CLI worked with the key set, so I did not need to strip it. Counts per tag:
+   - **v1:** 4 runs, 0 errors.
+   - **v2:** no traces exist yet.
+   - **check:** 4 runs, 3 errors.
+   - **dev:** 24 runs, 12 errors.
+   - **Entire:** 15 checkpoints, 19,315 tokens saved by the graph.
+5. **Report page:** `firstrun report --html` reads `evidence/*.json` through the new `report_html.load_evidence`. It adds the per-tag table to the neatlogs card (v1 and v2 first) and the checkpoint and graph numbers to the Entire card. Every number carries a `title="source: evidence/&lt;file&gt;"` tooltip. I rendered it once to `report/index.html`.
+6. **Trace links:** neatlogs traces have no `run_id` metadata and the CLI gives no URL, so I matched each run to the nearest trace started within 60 s. The page shows the trace id instead of a link; 11 ids appear in the render.
+7. **Tests:** new `tests/test_cli.py` and `tests/test_collect_evidence.py` cover routing, the friendly exits, the parsers and the extras loading.
+
+Files are in `D:\Atharva\firstrun`: `src/firstrun/cli.py`, `src/firstrun/report_html.py`, `scripts/collect_evidence.py`, `tests/test_cli.py`, `tests/test_collect_evidence.py`, `tests/test_edge_executor.py` and `evidence/`.
+
+Decision for you: `evidence/` is untracked and not in `.gitignore`. You may not want to commit `graph.ndjson`.</result>
+<usage><subagent_tokens>147444</subagent_tokens><tool_uses>22</tool_uses><duration_ms>268404</duration_ms></usage>
+</task-notification>
