@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from firstrun import cli, recovery, sandbox
 from firstrun.models import GaveUp, RunState, RunStatus, StepResult, StepStatus
 from firstrun.planner import SYSTEM_PROMPT
@@ -16,18 +18,15 @@ def test_leading_cd_is_guarded_for_execution_only():
     assert sandbox.guard_leading_cd("cd a/b && ls") == "cd a/b && ls"
 
 
-def test_guarded_cd_runs_in_bash_when_already_inside(tmp_path):
-    import shutil
-    import subprocess
+@pytest.mark.live
+def test_guarded_cd_runs_in_a_container_when_already_inside():
+    """In a real container, a step that starts with cd <dir> works from inside <dir>."""
+    from firstrun.sandbox import Container
 
-    bash = shutil.which("bash")
-    if not bash:
-        return
-    d = tmp_path / "proj"
-    d.mkdir()
-    cmd = sandbox.guard_leading_cd("cd proj && echo ok")
-    done = subprocess.run([bash, "-c", f"cd '{d.as_posix()}' && set -e; {cmd}"], capture_output=True, text=True)
-    assert "ok" in done.stdout
+    with Container(name="firstrun-t7-cdguard-test") as c:
+        assert c.exec("mkdir -p proj && cd proj").exit_code == 0
+        r = c.exec("cd proj && echo ok")
+        assert r.exit_code == 0 and "ok" in r.stdout
 
 
 def test_prefix_maps_sigpipe_exit_to_zero():
