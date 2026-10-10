@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FirstRun: Replay a run</title>
+<meta name="description" content="Replay a FirstRun share code in the browser: read, plan, run, fix, prove. Nothing leaves your machine.">
+<meta name="robots" content="noindex">
+<style>
+:root{--page:#F5F5F7;--surface:#FBFBFD;--ink:#1D1D1F;--muted:#6E6E73;--accent:#0066CC;--pass:#1F8A3B;--fail:#D70015;--warn:#8A5A00;--hair:rgba(29,29,31,.07);--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0}
+html{background:var(--page);color:var(--ink);font-family:Geist,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+body{line-height:1.5;font-size:17px;overflow-x:hidden}
+code,pre,.mono{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px}
+main{max-width:860px;margin:0 auto;padding:32px 24px 24px}
+.wm{font-weight:700;font-size:15px;letter-spacing:-.01em;margin-bottom:40px;display:flex;justify-content:space-between;gap:12px}
+.wm a{color:var(--muted);text-decoration:none}
+.wm a:hover{color:var(--ink)}
+h1{font-size:clamp(30px,6vw,52px);line-height:1.05;letter-spacing:-.035em;font-weight:700;overflow-wrap:anywhere}
+h2{font-size:22px;letter-spacing:-.02em;font-weight:700;margin-bottom:14px}
+.lede{font-size:19px;color:var(--muted);max-width:34em;margin-top:12px}
+button{font:inherit;font-weight:600;font-size:16px;background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 20px;cursor:pointer;min-height:44px}
+button:hover{background:#0058b0}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--hair);background:var(--surface)}
+button.ghost:hover{background:#fff}
+.hide{display:none!important}
+.surf{background:var(--surface);border:1px solid var(--hair);border-radius:20px;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+/* input */
+#input textarea{width:100%;min-height:120px;margin-top:24px;padding:16px 20px;font:15px/1.5 "Geist Mono",ui-monospace,Consolas,monospace;color:var(--ink);resize:vertical}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.err{color:var(--fail);margin-top:16px;font-size:16px;overflow-wrap:anywhere}
+.ex{margin-top:40px;color:var(--muted);font-size:15px}
+.ex .row{margin-top:10px}
+/* stages */
+.stages{display:flex;list-style:none;padding:0;margin:32px 0 40px}
+.stages li{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;font-size:14px;font-weight:600;color:var(--muted);transition:color .4s var(--ease)}
+.stages li::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--page);border:2px solid #C7C7CC;z-index:1;transition:all .4s var(--ease)}
+.stages li::after{content:"";position:absolute;top:7px;left:calc(50% + 10px);right:calc(-50% + 10px);height:2px;background:#C7C7CC;transition:background .4s var(--ease)}
+.stages li:last-child::after{display:none}
+.stages li.on{color:var(--ink)}
+.stages li.on::before{background:var(--accent);border-color:var(--accent)}
+.stages li.on::after{background:var(--accent)}
+.stages li.cur::before{box-shadow:0 0 0 5px rgba(0,102,204,.18)}
+.stages li.bad::before{background:var(--fail);border-color:var(--fail)}
+.stages li.ok::before{background:var(--pass);border-color:var(--pass)}
+.stages li.skip{color:var(--muted)}
+/* header */
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:20px;color:var(--muted);font-size:15px}
+.meta b{color:var(--ink);font-weight:600}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.pill{display:inline-block;font-size:13px;font-weight:600;border-radius:99px;padding:3px 12px;border:1px solid var(--hair);color:var(--muted)}
+.pill.verified,.pill.passed{color:var(--pass);background:rgba(31,138,59,.1);border-color:transparent}
+.pill.failed{color:var(--fail);background:rgba(215,0,21,.08);border-color:transparent}
+.pill.unverified{color:var(--warn);background:rgba(176,110,0,.12);border-color:transparent}
+.pill.pop{animation:rise .5s var(--ease) both}
+.src{margin-top:12px;font-size:15px;overflow-wrap:anywhere}
+/* sections */
+.blk{margin-top:48px;animation:rise .4s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.steps{list-style:none;padding:0;overflow:hidden}
+.steps li{border-top:1px solid var(--hair)}
+.steps li:first-child{border-top:0}
+.sr{display:grid;grid-template-columns:24px 1fr auto;gap:4px 12px;padding:14px 20px;align-items:start;list-style:none}
+summary.sr{cursor:pointer}
+summary.sr::-webkit-details-marker{display:none}
+.ic{font-weight:700;text-align:center;color:#AEAEB2;font-family:"Geist Mono",ui-monospace,Consolas,monospace}
+.ok .ic{color:var(--pass)}.no .ic{color:var(--fail)}.sk .ic{color:var(--muted)}
+.cmd{font-size:15px;overflow-wrap:anywhere;min-width:0}
+.cmd::before{content:"$ ";color:var(--muted)}
+.int{font-size:14px;color:var(--muted);grid-column:2}
+.pend .cmd{display:none}.pend .int{color:var(--ink);font-size:16px;grid-column:2}
+.pend .mt{display:none}
+.mt{font-size:13px;color:var(--muted);text-align:right;white-space:nowrap}
+.mt b{color:var(--warn);font-weight:600}
+.tail{margin:0 20px 16px 56px;padding:12px 16px;background:rgba(215,0,21,.06);border-radius:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.live .ic{color:var(--accent)}
+/* fix */
+.fx{padding:24px;margin-bottom:16px}
+.fx h3{font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;margin:16px 0;align-items:center;font-size:13px}
+.bars .k{color:var(--muted)}.bars .k.top{color:var(--ink);font-weight:600}
+.trk{height:8px;border-radius:99px;background:rgba(29,29,31,.08);overflow:hidden}
+.trk i{display:block;height:100%;width:0;background:#B7B7BC;border-radius:99px;transition:width .6s var(--ease)}
+.trk i.top{background:var(--accent)}
+.src2{font-size:13px;color:var(--muted);margin-bottom:8px}
+.ba{font-size:14px;line-height:1.6}
+.ba div{padding:6px 12px;border-radius:8px;overflow-wrap:anywhere;margin-top:6px}
+.ba .o{background:rgba(215,0,21,.07);color:var(--fail)}
+.ba .n{background:rgba(31,138,59,.09);color:var(--pass)}
+.why{margin-top:14px;font-size:16px}
+.why a,.why span{font-size:14px;color:var(--muted)}
+.why a{color:var(--accent)}
+.note{color:var(--muted);font-size:16px}
+/* prove */
+.prove{padding:24px;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.prove.ok{color:var(--pass)}.prove.bad{color:var(--fail)}.prove.warn{color:var(--warn)}
+.prove small{display:block;font-weight:400;font-size:15px;color:var(--muted);margin-top:4px;letter-spacing:0}
+/* diff */
+.diff{padding:16px 0;overflow-x:auto;font-size:13px;line-height:1.6}
+.diff div{white-space:pre;padding:0 20px;min-width:max-content}
+.diff .a{background:rgba(31,138,59,.1);color:var(--pass)}.diff .d{background:rgba(215,0,21,.07);color:var(--fail)}.diff .h{color:var(--muted)}
+details.pr{margin-top:16px;padding:0}
+details.pr>summary{padding:16px 20px;cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px}
+details.pr>summary::-webkit-details-marker{display:none}
+details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.6}
+/* footer */
+.cmdbox{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 12px 12px 20px;max-width:640px}
+.cmdbox code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font-size:15px;padding:6px 0}
+.cmdbox .p{color:var(--muted)}
+.foot{margin-top:56px;padding-top:24px;border-top:1px solid var(--hair)}
+.foot p{color:var(--muted);font-size:15px;margin-top:20px}
+@media(max-width:720px){main{padding:24px 16px 16px}.wm{margin-bottom:28px}.stages li{font-size:12px}.cmdbox{flex-wrap:wrap}.cmdbox button{width:100%}.sr{padding:12px 14px;grid-template-columns:22px 1fr}.mt{grid-column:2;text-align:left}.tail{margin:0 14px 14px 14px}.fx{padding:18px}.pend .mt{display:none}}
+@media(prefers-reduced-motion:reduce){.blk,.pill.pop{animation:none}.trk i{transition:none}.stages li,.stages li::before,.stages li::after{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<div class="wm"><a href="index.html">FirstRun</a><a href="index.html">Back to the landing page</a></div>
+
+<section id="input" class="hide">
+<h1>Replay a run.</h1>
+<p class="lede">Paste the share code your terminal printed. The code decodes in this tab and never leaves it.</p>
+<label for="code" class="hide">Share code</label>
+<textarea id="code" class="surf" spellcheck="false" autocomplete="off" placeholder="H4sIAAAAAAAC..."></textarea>
+<div class="row"><button id="dec" type="button">Decode</button></div>
+<p id="err" class="err hide" role="alert"></p>
+<div class="ex" id="ex"><span>No code yet? See a real run.</span><div class="row" id="exb"></div></div>
+</section>
+
+<section id="view" class="hide">
+<ol class="stages" id="stages" aria-label="The loop">
+<li>Read</li><li>Plan</li><li>Run</li><li>Fix</li><li>Prove</li>
+</ol>
+<div id="head" class="hide">
+<h1 id="ttl"></h1>
+<div class="pills" id="pills"></div>
+<div class="meta" id="meta"></div>
+<p class="src" id="src"></p>
+</div>
+<div id="runb" class="blk hide"><h2 id="runh">Run</h2><ul class="steps surf" id="steps"></ul></div>
+<div id="fixb" class="blk hide"><h2>Fix</h2><div id="fixes"></div></div>
+<div id="provb" class="blk hide"><h2>Prove</h2><div id="prove" class="surf prove"></div></div>
+<div id="prb" class="blk hide"><h2>Pull request</h2><div id="diff" class="surf diff mono"></div><details class="pr surf" id="prd"><summary><span>PR description</span><button type="button" class="ghost" id="cpb">Copy</button></summary><pre id="prt"></pre></details></div>
+<div class="foot hide" id="foot">
+<div class="row"><button type="button" id="rep">Replay</button><button type="button" class="ghost" id="newc">Paste another code</button></div>
+<p>Run it yourself:</p>
+<div class="cmdbox surf"><code id="runc"><span class="p">$ </span><span id="runt"></span></code><button type="button" id="cpc" aria-label="Copy the command">Copy</button></div>
+<p><a href="index.html">What is FirstRun?</a></p>
+</div>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i)};
+var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+var STEP=RM?0:350,PAUSE=RM?0:500,tok=0,data=null;
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function show(i,on){$(i).classList.toggle("hide",!on)}
+function sleep(ms){return new Promise(function(r){ms?setTimeout(r,ms):r()})}
+function fmt(s){s=Math.round(+s||0);if(s<60)return s+"s";return Math.floor(s/60)+"m "+(s%60)+"s"}
+function dur(s){s=+s||0;return s<10?s.toFixed(1)+"s":fmt(s)}
+function copy(btn,text){var o=btn.textContent;(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){btn.textContent="Copied"},function(){btn.textContent="Press Ctrl+C"});setTimeout(function(){btn.textContent=o},2000)}
+function safeUrl(u){return typeof u==="string"&&/^https?:\/\//i.test(u)}
+
+/* decode */
+function b64u(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+function decode(raw){
+  var c=String(raw||"").trim(),m=c.indexOf("#r=");if(m>=0)c=c.slice(m+3);c=c.replace(/\s+/g,"");
+  if(!c)return Promise.reject(new Error("Paste a share code first."));
+  if(typeof DecompressionStream==="undefined")return Promise.reject(new Error("This browser cannot decompress the code. Use a current Chrome, Safari or Firefox."));
+  var bytes;try{bytes=b64u(c)}catch(e){return Promise.reject(new Error("That is not a share code. It has characters a code never holds."))}
+  return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"))).text().then(function(t){
+    var o;try{o=JSON.parse(t)}catch(e){throw new Error("The code decoded but its content is not a run.")}
+    if(!o||typeof o!=="object"||!Array.isArray(o.steps))throw new Error("The code decoded but holds no steps.");
+    return o;
+  },function(){throw new Error("The code is damaged or cut short. Copy it again from your terminal.")});
+}
+
+/* stages */
+var SN=["Read","Plan","Run","Fix","Prove"];
+function stage(i,state){var li=$("stages").children[i];li.className="on"+(state?" "+state:"")}
+function stageReset(){for(var i=0;i<5;i++)$("stages").children[i].className=""}
+function cur(i){for(var j=0;j<5;j++)$("stages").children[j].classList.remove("cur");if(i>=0)$("stages").children[i].classList.add("cur")}
+
+/* render pieces */
+function pill(t,c,pop){var p=el("span","pill "+c+(pop?" pop":""),t);return p}
+var SL={verified:"Verified",passed:"Passed",unverified:"Unverified",failed:"Failed"};
+function renderHead(d){
+  $("ttl").textContent=d.title||d.target||"Untitled run";
+  var P=$("pills");P.textContent="";
+  var st=SL[d.status]?d.status:"unverified";
+  P.appendChild(pill(SL[st],st,true));
+  if(d.fixture)P.appendChild(pill("known-broken test fixture","",false));
+  var M=$("meta");M.textContent="";
+  function add(l,v){var s=el("span");s.appendChild(document.createTextNode(l+" "));s.appendChild(el("b",null,v));M.appendChild(s)}
+  if(d.target)add("Target",d.target);
+  if(d.time_to_first_success_s!=null)add("Time to first success",fmt(d.time_to_first_success_s));
+  if(d.tool_calls!=null)add("Tool calls",String(d.tool_calls));
+  if(d.cost_usd!=null)add("Cost","$"+(+d.cost_usd).toFixed(2)+" list price, not billed");
+  var S=$("src");S.textContent="";
+  if(safeUrl(d.source_url)){var a=el("a",null,d.source_url);a.href=d.source_url;a.rel="noopener noreferrer";S.appendChild(a)}
+}
+function buildSteps(d){
+  var U=$("steps");U.textContent="";var rows=[];
+  d.steps.forEach(function(s){
+    var li=el("li","pend"),tail=typeof s.error_tail==="string"&&s.error_tail?s.error_tail:"";
+    var row=el(tail?"summary":"div","sr");
+    row.appendChild(el("span","ic","·"));
+    row.appendChild(el("span","cmd mono",s.command||""));
+    row.appendChild(el("span","mt"));
+    row.appendChild(el("span","int",s.intent||(s.command||"")));
+    var host=li;
+    if(tail){host=el("details");li.appendChild(host);host.appendChild(row);host.appendChild(el("pre","tail mono",tail))}else li.appendChild(row);
+    U.appendChild(li);rows.push({li:li,s:s,d:host,row:row});
+  });
+  return rows;
+}
+function fillRow(r){
+  var s=r.s,st=s.status||"pending",ic=r.row.children[0],mt=r.row.children[2];
+  r.li.className=st==="passed"?"ok":st==="skipped"?"sk":st==="pending"?"pend":"no";
+  ic.textContent=st==="passed"?"✓":st==="skipped"?"-":st==="pending"?"·":"✗";
+  mt.textContent="";
+  if(st==="skipped"){mt.textContent=s.skip_reason||"skipped"}
+  else{
+    if(s.attempts>1){mt.appendChild(el("b",null,s.attempts+" attempts"));mt.appendChild(document.createTextNode(" · "))}
+    mt.appendChild(document.createTextNode(dur(s.duration_s)));
+  }
+  if(r.d.tagName==="DETAILS"&&st!=="passed")r.d.open=true;
+}
+function renderFixes(d){
+  var F=$("fixes");F.textContent="";
+  var ps=Array.isArray(d.patches)?d.patches:[];
+  ps.forEach(function(p){
+    var c=el("div","fx surf");
+    c.appendChild(el("h3",null,"Step "+p.step_id+(p.failure_class?": "+String(p.failure_class).replace("_"," "):"")));
+    var cl=d.classifications&&d.classifications[String(p.step_id)];
+    if(cl&&cl.probabilities){
+      var B=el("div","bars"),keys=["docs_bug","environment","product_bug","needs_secret"],top=keys[0];
+      keys.forEach(function(k){if((cl.probabilities[k]||0)>(cl.probabilities[top]||0))top=k});
+      keys.forEach(function(k){
+        var v=+cl.probabilities[k]||0,t=el("div","trk"),i=el("i",k===top?"top":"");i.dataset.w=Math.round(v*100);t.appendChild(i);
+        B.appendChild(el("span","k mono"+(k===top?" top":""),k));B.appendChild(t);B.appendChild(el("span","mono",Math.round(v*100)+"%"));
+      });
+      c.appendChild(B);c.appendChild(el("div","src2","Classified by "+(cl.source||"unknown")));
+    }
+    var ba=el("div","ba mono");ba.appendChild(el("div","o","- "+(p.old_command||"")));ba.appendChild(el("div","n","+ "+(p.new_command||"")));c.appendChild(ba);
+    var w=el("p","why");if(p.reason)w.appendChild(document.createTextNode(p.reason+" "));
+    if(p.source){if(safeUrl(p.source)){var a=el("a",null,"Source");a.href=p.source;a.rel="noopener noreferrer";w.appendChild(a)}else w.appendChild(el("span",null,"Source: "+p.source))}
+    c.appendChild(w);F.appendChild(c);
+  });
+  (Array.isArray(d.gave_up)?d.gave_up:[]).forEach(function(g){
+    var t=typeof g==="object"&&g?(g.step_id!=null?"step "+g.step_id:"a step")+(g.reason?": "+g.reason:""):"step "+g;
+    F.appendChild(el("p","note","FirstRun gave up on "+t+"."));
+  });
+  return ps.length+(d.gave_up||[]).length;
+}
+function growBars(){var b=document.querySelectorAll(".trk i");for(var i=0;i<b.length;i++)b[i].style.width=b[i].dataset.w+"%"}
+function renderProve(d){
+  var v=d.verify,P=$("prove");P.textContent="";P.className="surf prove";
+  if(v&&v.status==="verified"){P.classList.add("ok");P.appendChild(document.createTextNode("A fresh container ran "+v.steps_passed+"/"+v.steps_total+" steps with the patch. No model calls."));return "ok"}
+  if(v&&v.steps_total!=null){P.classList.add(v.status==="failed"?"bad":"warn");P.appendChild(document.createTextNode("Not proven. A fresh container passed "+v.steps_passed+" of "+v.steps_total+" steps."));P.appendChild(el("small",null,"Status: "+(v.status||"unverified")+". FirstRun reports a fix as proven only when the fresh run passes."));return v.status==="failed"?"bad":"warn"}
+  P.classList.add("warn");P.appendChild(document.createTextNode("No fresh-container run is on record for this code."));return "warn";
+}
+function renderPR(d){
+  var D=$("diff");D.textContent="";var has=false;
+  if(typeof d.diff==="string"&&d.diff){has=true;d.diff.split("\n").forEach(function(l){
+    var c=/^(\+\+\+|---|@@)/.test(l)?"h":l[0]==="+"?"a":l[0]==="-"?"d":"";D.appendChild(el("div",c,l||" "))})}
+  else D.appendChild(el("div","h","No diff in this run."));
+  var b=typeof d.pr_body==="string"?d.pr_body:"";
+  show("prd",!!b);$("prt").textContent=b;
+  return has||!!b;
+}
+
+/* replay */
+function resetView(){
+  stageReset();["head","runb","fixb","provb","prb","foot"].forEach(function(i){show(i,false)});
+  $("steps").textContent="";$("fixes").textContent="";window.scrollTo(0,0);
+}
+async function play(d){
+  var my=++tok;function dead(){return my!==tok}
+  resetView();show("input",false);show("view",true);
+  renderHead(d);var rows=buildSteps(d);var nfix=renderFixes(d);var pst=renderProve(d);var hasPR=renderPR(d);
+  var N=d.steps.length;
+  $("runh").textContent="Run";
+  $("runt").textContent="firstrun "+(safeUrl(d.source_url)?d.source_url:"<your quickstart url>");
+  cur(0);stage(0,"cur");show("head",true);await sleep(PAUSE);if(dead())return;
+  stage(0);cur(1);stage(1,"cur");show("runb",true);$("runh").textContent="Plan: "+N+" step"+(N===1?"":"s");await sleep(PAUSE);if(dead())return;
+  stage(1);cur(2);stage(2,"cur");$("runh").textContent="Run";
+  var bad=false;
+  for(var i=0;i<rows.length;i++){
+    rows[i].li.classList.add("live");await sleep(STEP);if(dead())return;
+    rows[i].li.classList.remove("live");fillRow(rows[i]);
+    if(rows[i].s.status==="failed"||rows[i].s.status==="gave_up"||rows[i].s.status==="needs_human")bad=true;
+  }
+  var anyPatch=(d.patches||[]).length>0;
+  stage(2,bad&&!anyPatch?"bad":"");
+  await sleep(PAUSE/2);if(dead())return;
+  cur(3);stage(3,"cur");
+  if(nfix){show("fixb",true);growBars();await sleep(PAUSE*2);if(dead())return;stage(3,"")}
+  else{$("stages").children[3].className="skip";await sleep(PAUSE/2);if(dead())return}
+  cur(4);stage(4,"cur");show("provb",true);await sleep(PAUSE);if(dead())return;
+  cur(-1);stage(4,pst);
+  if(hasPR){show("prb",true)}
+  show("foot",true);
+  document.title="FirstRun: "+(d.title||d.target||"Replay");
+}
+
+/* input flow */
+function showInput(msg){
+  tok++;show("view",false);show("input",true);
+  var e=$("err");e.textContent=msg||"";e.classList.toggle("hide",!msg);
+  history.replaceState(null,"",location.pathname+location.search);
+}
+function go(raw){
+  decode(raw).then(function(d){data=d;play(d)},function(e){showInput(e.message);$("code").value=String(raw||"")});
+}
+function fromHash(){
+  var h=location.hash,m=/^#r=(.*)$/.exec(h);
+  var e=/^#ex=([a-z0-9_-]+)$/.exec(h);
+  if(m&&m[1]){go(m[1])}
+  else if(e){fetch("examples/"+e[1]+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var k=t.indexOf("#r=");go(k>=0?t.slice(k+3):t)}).catch(function(){showInput("That example is not available yet.")})}
+  else showInput("");
+}
+$("dec").addEventListener("click",function(){
+  var raw=$("code").value;
+  decode(raw).then(function(d){
+    var c=String(raw).trim();var k=c.indexOf("#r=");if(k>=0)c=c.slice(k+3);c=c.replace(/\s+/g,"");
+    data=d;history.replaceState(null,"","#r="+c);play(d);
+  },function(e){var x=$("err");x.textContent=e.message;x.classList.remove("hide")});
+});
+$("rep").addEventListener("click",function(){if(data)play(data)});
+$("newc").addEventListener("click",function(){$("code").value="";showInput("")});
+$("cpc").addEventListener("click",function(){copy(this,$("runt").textContent)});
+$("cpb").addEventListener("click",function(e){e.preventDefault();e.stopPropagation();copy(this,$("prt").textContent)});
+window.addEventListener("hashchange",fromHash);
+
+/* examples */
+var EX=[["dbt","dbt"],["dagster","Dagster"],["fixture","Broken fixture"]];
+$("ex").classList.add("hide");
+EX.forEach(function(x){
+  fetch("examples/"+x[0]+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+    t=t.trim();var k=t.indexOf("#r=");if(k>=0)t=t.slice(k+3);if(!t||/\s/.test(t)||/^</.test(t))throw 0;
+    var b=el("button","ghost","See a real run: "+x[1]);b.type="button";
+    b.addEventListener("click",function(){$("code").value="";location.hash="r="+t;if(location.hash!=="#r="+t)go(t)});
+    $("exb").appendChild(b);$("ex").classList.remove("hide");
+  }).catch(function(){});
+});
+fromHash();
+})();
+</script>
+</body>
+</html>
