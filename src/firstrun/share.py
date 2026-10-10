@@ -135,6 +135,13 @@ def build_payload(run_dir) -> dict:
                 "path": d.get("path", []), "secrets": d.get("secrets", []), "tools": d.get("tools", []),
                 "proven": bool(proof.get("proven")), "image": proof.get("image", ""),
                 "rounds": proof.get("rounds", 0),
+                "steps_passed": proof.get("steps_passed"), "steps_total": proof.get("steps_total"),
+                "failed_step": proof.get("failed_step"), "note": proof.get("note") or proof.get("error", ""),
+                # The reason behind each item, kept short so the share code stays small.
+                "evidence": [{"item": e.get("item", ""), "step_id": e.get("step_id"),
+                              "error_line": str(e.get("error_line", ""))[:160]}
+                             for e in (d.get("evidence") or [])[:12]],
+                "markdown": (_read(run_dir / "prereqs.md") or "")[:2000],
             }
         except ValueError:
             pass

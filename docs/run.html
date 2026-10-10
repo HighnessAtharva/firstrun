@@ -113,6 +113,39 @@ details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;f
 .foot p{color:var(--muted);font-size:15px;margin-top:20px}
 @media(max-width:720px){main{padding:24px 16px 16px}.wm{margin-bottom:28px}.stages li{font-size:12px}.cmdbox{flex-wrap:wrap}.cmdbox button{width:100%}.sr{padding:12px 14px;grid-template-columns:22px 1fr}.mt{grid-column:2;text-align:left}.tail{margin:0 14px 14px 14px}.fx{padding:18px}.pend .mt{display:none}}
 @media(prefers-reduced-motion:reduce){.blk,.pill.pop{animation:none}.trk i{transition:none}.stages li,.stages li::before,.stages li::after{transition:none}}
+/* bisect + prereqs */
+.stages li{text-align:center}
+.tl2{padding:24px 20px 20px;overflow-x:auto}
+.tlr{display:flex;justify-content:space-between;gap:8px;position:relative;min-width:max-content;margin:0 auto}
+.tlr::before{content:"";position:absolute;left:30px;right:30px;top:23px;height:2px;background:#D8D8DC}
+.rel{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:64px;flex:1;font-size:12px;color:var(--muted);opacity:.35;transition:opacity .4s var(--ease)}
+.rel i{width:18px;height:18px;border-radius:50%;background:#C7C7CC;box-shadow:0 0 0 4px var(--surface);transition:background .4s var(--ease),transform .4s var(--ease);transform:scale(.7)}
+.rel.on{opacity:1;color:var(--ink)}
+.rel.on i{transform:none}
+.rel.p.on i{background:var(--pass)}.rel.f.on i{background:var(--fail)}
+.rel.first.on{color:var(--fail);font-weight:700}
+.rel.first.on i{box-shadow:0 0 0 4px var(--surface),0 0 0 7px rgba(215,0,21,.22)}
+.rel b{font-weight:600;font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:12px}
+.rel small{font-size:11px;color:var(--muted);font-weight:400}
+.rel .tg{font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--fail);min-height:14px}
+.nt-row{margin-top:14px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.nt-row i{width:9px;height:9px;border-radius:50%;background:#C7C7CC;display:inline-block}
+.verdict{padding:20px 24px;font-size:18px;font-weight:600;letter-spacing:-.01em;margin-top:14px}
+.verdict small{display:block;font-weight:400;font-size:14px;color:var(--muted);margin-top:4px;letter-spacing:0}
+.asm{padding:8px 0}
+.asm ul{list-style:none;padding:0}
+.asm li{padding:12px 24px;border-top:1px solid var(--hair);display:grid;grid-template-columns:minmax(0,auto) 1fr;gap:2px 14px;align-items:baseline}
+.asm li:first-child{border-top:0}
+.asm li b{font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.asm li .k{font-size:12px;color:var(--muted);font-weight:600;margin-left:8px;font-family:Geist,-apple-system,"Segoe UI",sans-serif}
+.asm li span.r{font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.asm .none{padding:12px 24px;color:var(--muted)}
+.pf{padding:16px 24px;border-top:1px solid var(--hair);font-size:16px;font-weight:600}
+.pf.ok{color:var(--pass)}.pf.bad{color:var(--warn)}
+.pf small{display:block;font-weight:400;font-size:14px;color:var(--muted);margin-top:2px}
+.pfa{padding:0 24px 20px}
+@media(max-width:720px){.asm li{grid-template-columns:1fr}.tl2{padding:20px 12px 16px}.rel{min-width:56px}.asm li,.pf{padding-left:16px;padding-right:16px}.pfa{padding:0 16px 16px}.verdict{padding:16px}}
+@media(prefers-reduced-motion:reduce){.rel,.rel i{transition:none}}
 </style>
 </head>
 <body>
@@ -142,6 +175,8 @@ details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;f
 <div id="runb" class="blk hide"><h2 id="runh">Run</h2><ul class="steps surf" id="steps"></ul></div>
 <div id="fixb" class="blk hide"><h2>Fix</h2><div id="fixes"></div></div>
 <div id="provb" class="blk hide"><h2>Prove</h2><div id="prove" class="surf prove"></div></div>
+<div id="bsb" class="blk hide"><h2>When did it break?</h2><div id="tl2" class="surf tl2"></div><div id="verd" class="surf verdict"></div></div>
+<div id="asb" class="blk hide"><h2>What the docs assume</h2><div class="surf asm" id="asm"></div></div>
 <div id="prb" class="blk hide"><h2>Pull request</h2><div id="diff" class="surf diff mono"></div><details class="pr surf" id="prd"><summary><span>PR description</span><button type="button" class="ghost" id="cpb">Copy</button></summary><pre id="prt"></pre></details></div>
 <div class="foot hide" id="foot">
 <div class="row"><button type="button" id="rep">Replay</button><button type="button" class="ghost" id="newc">Paste another code</button></div>
@@ -182,8 +217,8 @@ function decode(raw){
 /* stages */
 var SN=["Read","Plan","Run","Fix","Prove"];
 function stage(i,state){var li=$("stages").children[i];li.className="on"+(state?" "+state:"")}
-function stageReset(){for(var i=0;i<5;i++)$("stages").children[i].className=""}
-function cur(i){for(var j=0;j<5;j++)$("stages").children[j].classList.remove("cur");if(i>=0)$("stages").children[i].classList.add("cur")}
+function stageReset(){var S=$("stages");while(S.children.length>5)S.removeChild(S.lastChild);for(var i=0;i<5;i++)S.children[i].className=""}
+function cur(i){for(var j=0;j<$("stages").children.length;j++)$("stages").children[j].classList.remove("cur");if(i>=0)$("stages").children[i].classList.add("cur")}
 
 /* render pieces */
 function pill(t,c,pop){var p=el("span","pill "+c+(pop?" pop":""),t);return p}
@@ -274,15 +309,89 @@ function renderPR(d){
   return has||!!b;
 }
 
+
+/* bisect */
+var REL=null;
+function renderBisect(d){
+  var b=d.bisect,T=$("tl2"),V=$("verd");T.textContent="";V.textContent="";REL=[];
+  if(!b||typeof b!=="object"||!Array.isArray(b.releases_tested)||!b.releases_tested.length)return false;
+  var rs=b.releases_tested.map(function(r,i){return{r:r||{},o:i}});
+  rs.sort(function(a,c){return String(a.r.date||"").localeCompare(String(c.r.date||""))});
+  var row=el("div","tlr");
+  rs.forEach(function(x){
+    var r=x.r,first=b.first_bad&&String(r.version)===String(b.first_bad);
+    var n=el("div","rel "+(r.passed?"p":"f")+(first?" first":""));
+    n.appendChild(el("div","tg",first?"First bad":""));
+    n.appendChild(el("i"));n.appendChild(el("b",null,String(r.version||"?")));
+    n.appendChild(el("small",null,String(r.date||"")));
+    n.title=(r.passed?"Passed":"Failed")+(r.error?": "+r.error:"");
+    row.appendChild(n);REL.push({n:n,o:x.o});
+  });
+  REL.sort(function(a,c){return a.o-c.o});
+  T.appendChild(row);
+  var tot=+b.releases_available||0,nt=tot-rs.length;
+  if(nt>0){var q=el("div","nt-row");for(var i=0;i<Math.min(nt,12);i++)q.appendChild(el("i"));q.appendChild(document.createTextNode(" "+nt+" other release"+(nt===1?"":"s")+" not tested"));T.appendChild(q)}
+  var cmd=b.command?" ("+b.command+")":"";
+  if(b.first_bad){
+    V.appendChild(document.createTextNode((b.package||"The package")+" "+(b.last_good?"worked on "+b.last_good+" and ":"")+"first failed on "+b.first_bad+(b.first_bad_date?" ("+b.first_bad_date+")":"")+". Step "+(b.step_id!=null?b.step_id:"")+cmd+" broke there."));
+  }else V.appendChild(document.createTextNode(String(b.verdict||"No breaking release found.")));
+  V.appendChild(el("small",null,(b.probes!=null?b.probes+" probes":"Probes")+" in fresh containers"+(b.image?" on "+b.image:"")+". No model calls, so $0."));
+  return true;
+}
+
+/* prereqs */
+function prMarkdown(a){
+  if(typeof a.markdown==="string"&&a.markdown)return a.markdown;
+  var L=["## Prerequisites","","Set these up before you follow the steps.",""];
+  (a.system_packages||[]).forEach(function(x){L.push("- `"+x+"`")});
+  if(a.python)L.push("- Python "+a.python);
+  (a.path||[]).forEach(function(x){L.push("- `"+x+"` on your PATH")});
+  (a.secrets||[]).forEach(function(x){L.push("- `"+x+"` (a secret you supply)")});
+  return L.join("\n")+"\n";
+}
+function renderPrereqs(d){
+  var a=d.prereqs,A=$("asm");A.textContent="";
+  if(!a||typeof a!=="object")return false;
+  var ev=Array.isArray(a.evidence)?a.evidence:[],byItem={};
+  ev.forEach(function(e){if(e&&e.item!=null&&!byItem[e.item])byItem[e.item]=e});
+  var items=[],seen={};
+  function add(name,kind,key){key=key||name;seen[key]=1;items.push({name:name,kind:kind,e:byItem[key]})}
+  (Array.isArray(a.system_packages)?a.system_packages:[]).forEach(function(x){add(String(x),"system package")});
+  if(a.python)add("Python "+a.python,"Python version","python");
+  (Array.isArray(a.path)?a.path:[]).forEach(function(x){add(String(x),"on your PATH","PATH:"+x)});
+  (Array.isArray(a.secrets)?a.secrets:[]).forEach(function(x){add(String(x),"secret")});
+  ev.forEach(function(e){if(e&&e.item!=null&&!seen[e.item]&&!/^PATH:/.test(e.item)&&(a.tools||[]).indexOf(e.item)>=0)add(String(e.item),"tool")});
+  var ul=el("ul");
+  items.forEach(function(it){
+    var li=el("li"),h=el("b",null,it.name);h.appendChild(el("span","k",it.kind));li.appendChild(h);
+    var why="";
+    if(it.e)why=(it.e.step_id!=null?"Step "+it.e.step_id+": ":"")+(it.e.error_line||"");
+    li.appendChild(el("span","r",why||"Needed by the docs commands."));
+    ul.appendChild(li);
+  });
+  if(items.length)A.appendChild(ul);else A.appendChild(el("p","none","The docs assume nothing beyond the base image."));
+  var ok=!!a.proven,pf=el("div","pf "+(ok?"ok":"bad"));
+  var sp=a.steps_passed!=null&&a.steps_total!=null?a.steps_passed+"/"+a.steps_total+" steps":"";
+  pf.appendChild(document.createTextNode(ok?"Proven"+(sp?": a fresh container with only these prerequisites ran "+sp+" as written.":": a fresh container with only these prerequisites ran the steps as written."):"Not proven"+(sp?": the fresh container passed "+sp+".":".")));
+  var bits=[];if(a.image)bits.push("Image "+a.image);if(a.rounds)bits.push(a.rounds+" round"+(a.rounds===1?"":"s"));
+  if(typeof a.note==="string"&&a.note)bits.push(a.note.replace(/\.$/,""));
+  if(bits.length)pf.appendChild(el("small",null,bits.join(". ")+"."));
+  A.appendChild(pf);
+  var w=el("div","pfa"),cb=el("button","ghost","Copy the Prerequisites block");cb.type="button";
+  var md=prMarkdown(a);cb.addEventListener("click",function(){copy(this,md)});
+  w.appendChild(cb);A.appendChild(w);
+  return true;
+}
+
 /* replay */
 function resetView(){
-  stageReset();["head","runb","fixb","provb","prb","foot"].forEach(function(i){show(i,false)});
+  stageReset();["head","runb","fixb","provb","bsb","asb","prb","foot"].forEach(function(i){show(i,false)});
   $("steps").textContent="";$("fixes").textContent="";window.scrollTo(0,0);
 }
 async function play(d){
   var my=++tok;function dead(){return my!==tok}
   resetView();show("input",false);show("view",true);
-  renderHead(d);var rows=buildSteps(d);var nfix=renderFixes(d);var pst=renderProve(d);var hasPR=renderPR(d);
+  renderHead(d);var rows=buildSteps(d);var nfix=renderFixes(d);var pst=renderProve(d);var hasPR=renderPR(d);var hasBis=renderBisect(d),hasAs=renderPrereqs(d);
   var N=d.steps.length;
   $("runh").textContent="Run";
   $("runt").textContent="firstrun "+(safeUrl(d.source_url)?d.source_url:"<your quickstart url>");
@@ -302,7 +411,16 @@ async function play(d){
   if(nfix){show("fixb",true);growBars();await sleep(PAUSE*2);if(dead())return;stage(3,"")}
   else{$("stages").children[3].className="skip";await sleep(PAUSE/2);if(dead())return}
   cur(4);stage(4,"cur");show("provb",true);await sleep(PAUSE);if(dead())return;
-  cur(-1);stage(4,pst);
+  stage(4,pst);
+  if(hasBis){
+    var S=$("stages"),li=el("li",null,"When did it break?");S.appendChild(li);
+    cur(5);li.className="on cur";show("bsb",true);
+    for(var k=0;k<REL.length;k++){await sleep(STEP+100);if(dead())return;REL[k].n.classList.add("on")}
+    await sleep(PAUSE);if(dead())return;
+    li.className="on"+(d.bisect.first_bad?" bad":" ok");
+  }
+  cur(-1);
+  if(hasAs)show("asb",true);
   if(hasPR){show("prb",true)}
   show("foot",true);
   document.title="FirstRun: "+(d.title||d.target||"Replay");
