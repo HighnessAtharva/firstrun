@@ -1,0 +1,142 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KEYH71XPHMDNNHNRY4QJ9X",
+  "session_id": "ae05fb29-0c85-4558-9980-42419f08ca9c",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T17:49:43.6793682Z",
+  "branch": "site/homepage-distill",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    "docs/index.html"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "turn_id": "741593ae457e",
+  "checkpoint_transcript_start": 3493,
+  "transcript_lines_at_start": 3493,
+  "compact_transcript_start": 634,
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 768806,
+    "cache_read_tokens": 858861,
+    "output_tokens": 1171,
+    "api_call_count": 2,
+    "subagent_tokens": {
+      "input_tokens": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "api_call_count": 0
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NCjejWTAvQvZiXjV9ZAHHp",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-api"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "628474303796",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 167,
+        "end": 168,
+        "entry_ids": [
+          "2abe8732-2235-4b1c-b9a0-afe8b93376ab"
+        ],
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-api",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 52
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T17:49:43.0122082Z",
+    "agent_lines": 0,
+    "agent_removed": 48,
+    "human_added": 0,
+    "human_modified": 115,
+    "human_removed": 283,
+    "total_committed": 280,
+    "total_lines_changed": 446,
+    "agent_percentage": 10.762331838565023,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 4558,
+      "user_lines_removed": 1366,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        "docs/runs/20261010-172110-docs-sqlalchemy-org.txt": 1,
+        "docs/runs/20261010-172110-fla[REDACTED].txt": 1,
+        "docs/runs/20261010-172129-go-dev.txt": 1,
+        "docs/runs/20261010-172208-fla[REDACTED].txt": 1,
+        "docs/runs/20261010-172306-dlthub-com.txt": 1,
+        "docs/runs/20261010-172328-docs-djangoproject-com.txt": 1,
+        "docs/runs/20261010-172525-docs-peewee-orm-com.txt": 1,
+        "docs/runs/20261010-172527-tortoise-github-io.txt": 1,
+        "docs/runs/20261010-172624-duckdb-org.txt": 1,
+        "docs/runs/20261010-172724-docs-litestar-dev.txt": 1,
+        "docs/runs/20261010-172745-hypothesis-readthedocs-io.txt": 1,
+        "docs/runs/20261010-173117-docs-peewee-orm-com.txt": 1,
+        "docs/runs/index.json": 1024,
+        "radar-lane0.txt": 6,
+        "radar-lane1.txt": 6,
+        "radar-lane2.txt": 6,
+        "radar.json": 794,
+        "scripts/radar.py": 126,
+        "spans_raw_optimized.log": 5,
+        "src/firstrun/audit.py": 958,
+        "src/firstrun/bisect.py": 274,
+        "src/firstrun/cli.py": 591,
+        "src/firstrun/config.py": 23,
+        "src/firstrun/executor.py": 304,
+        "src/firstrun/models.py": 142,
+        "src/firstrun/tracing.py": 93,
+        "targets-radar.txt": 19,
+        "tests/conftest.py": 105,
+        "tests/test_executor.py": 17
+      },
+      "user_removed_per_file": {
+        "src/firstrun/bisect.py": 271,
+        "src/firstrun/cli.py": 491,
+        "src/firstrun/config.py": 2,
+        "src/firstrun/executor.py": 275,
+        "src/firstrun/models.py": 141,
+        "src/firstrun/tracing.py": 86,
+        "tests/conftest.py": 100
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 4507,
+      "agent_lines_removed": 3218,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    }
+  ]
+}

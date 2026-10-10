@@ -3,8 +3,10 @@
   "checkpoint_id": "01M4KEYH71XPHMDNNHNRY4QJ9X",
   "strategy": "manual-commit",
   "branch": "site/homepage-distill",
-  "checkpoints_count": 5,
-  "files_touched": null,
+  "checkpoints_count": 7,
+  "files_touched": [
+    "docs/index.html"
+  ],
   "sessions": [
     {
       "metadata": "/0/metadata.json",
@@ -19,14 +21,21 @@
       "compact_transcript": "/1/transcript.jsonl",
       "content_hash": "/1/content_hash.txt",
       "prompt": "/1/prompt.txt"
+    },
+    {
+      "metadata": "/2/metadata.json",
+      "transcript": "/2/full.jsonl",
+      "compact_transcript": "/2/transcript.jsonl",
+      "content_hash": "/2/content_hash.txt",
+      "prompt": "/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 410,
-    "cache_creation_tokens": 393713,
-    "cache_read_tokens": 81169893,
-    "output_tokens": 123841,
-    "api_call_count": 204,
+    "input_tokens": 414,
+    "cache_creation_tokens": 1162519,
+    "cache_read_tokens": 82028754,
+    "output_tokens": 125012,
+    "api_call_count": 206,
     "subagent_tokens": {
       "input_tokens": 72,
       "cache_creation_tokens": 201678,
