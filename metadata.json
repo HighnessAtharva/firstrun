@@ -1,0 +1,45 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JKN4855VK39SYVN2ZAMBBW",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/assets/atharva.webp",
+    "docs/assets/firstrun-launch.mp4",
+    "docs/assets/launch-poster.jpg",
+    "docs/assets/logo-cfoai.webp",
+    "docs/assets/logo-entire.webp",
+    "docs/assets/logo-neatlogs.webp",
+    "docs/assets/shot-cfoai.webp",
+    "docs/assets/shot-entire.webp",
+    "docs/assets/shot-neatlogs.webp",
+    "docs/assets/step-3.webp",
+    "docs/assets/step-prove.webp",
+    "docs/assets/step-run.webp",
+    "docs/index.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 530,
+    "cache_creation_tokens": 453282,
+    "cache_read_tokens": 86233567,
+    "output_tokens": 172892,
+    "api_call_count": 253,
+    "subagent_tokens": {
+      "input_tokens": 124,
+      "cache_creation_tokens": 376047,
+      "cache_read_tokens": 6916531,
+      "output_tokens": 61736,
+      "api_call_count": 62
+    }
+  }
+}
