@@ -12,6 +12,11 @@ Every claim in the README has a file here or a public link. Nothing in this fold
 | The Entire judge ranks the repo with no excluded work | [jury-selftest.txt](jury-selftest.txt) |
 | FirstRun found real docs bugs and opened upstream PRs | [dbt #10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149), [dbt #10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150), [entireio/cli #2724](https://github.com/entireio/cli/pull/2724), [accuknox/help #671](https://github.com/accuknox/help/pull/671) |
 | The jafgen release that broke the dbt guide | [comment on dbt #10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074) |
-| Cost per run comes from neatlogs | [../business/BUSINESS_PLAN.md](../business/BUSINESS_PLAN.md), [../business/inputs.json](../business/inputs.json) |
+| Cost per run comes from neatlogs, one trace per row | [../business/drivers.csv](../business/drivers.csv), [../business/BUSINESS_PLAN.md](../business/BUSINESS_PLAN.md) |
+| cfo.ai modeled 18 months from the traces, and the old cap runs out of cash in month 14 | [public cfo.ai model](https://cfo.ai/s/_u5lbrHIl9KX_JQE), [../docs/data/cfo-model.json](../docs/data/cfo-model.json) |
+| The plan sets the agent's cost cap, and a live run stopped at it | PR [#15](https://github.com/HighnessAtharva/firstrun/pull/15), neatlogs trace `7060f5bd8dbb8cdc6c1dec3830ba7bab` |
+| neatlogs alerts and an AI evaluator watch the runs | [neatlogs.md](neatlogs.md) |
+| The session that built and ran FirstRun is public | [Entire session](https://entire.io/gh/HighnessAtharva/firstrun/session/ae05fb29-0c85-4558-9980-42419f08ca9c) |
+| Every upstream PR carries a public replay of its run | the proof comments on [#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6097945132), [#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150#issuecomment-6097945350), [#2724](https://github.com/entireio/cli/pull/2724#issuecomment-6097945657), [#671](https://github.com/accuknox/help/pull/671#issuecomment-6097945911) |
 
 Refresh the generated files with `python scripts/collect_evidence.py`.
