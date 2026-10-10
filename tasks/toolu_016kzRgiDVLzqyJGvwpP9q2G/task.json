@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_016kzRgiDVLzqyJGvwpP9q2G",
+  "agent_id": "a2597cd038f45f9b5",
+  "subagent_type": "general-purpose",
+  "task_description": "S4 CLI run cache",
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 53891,
+    "cache_read_tokens": 445356,
+    "output_tokens": 4790,
+    "api_call_count": 6
+  },
+  "started_at": "2026-10-10T15:15:43.7928204+05:30",
+  "completed_at": "2026-10-10T15:16:42.2150986+05:30"
+}
