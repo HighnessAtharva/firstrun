@@ -266,7 +266,7 @@ The business plan sets the agent's spending limit. `firstrun econ` reads 64 neat
 | Team | $49 a month | 10, nightly | $0.0471 | 7.8% |
 | Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | $0.0280 | 25.0% |
 
-The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over. The plan, the Scale fix and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md).
+The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over. The plan, the Scale fix and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md). The cfo.ai model is public at [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE). Under the old cap, cash goes negative in month 14.
 
 </td>
 </tr>

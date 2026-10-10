@@ -4,9 +4,7 @@ FirstRun runs a dev tool's quickstart in a clean container every night, finds th
 
 The business plan sets the agent's spending limit. `firstrun econ` reads every neatlogs trace, cfo.ai turns the costs into a per-tier cap, and `firstrun run --tier` stops any run that spends past it.
 
-cfo.ai model: <!-- FILL:cfo_share_link -->
-
-cfo.ai spreadsheet: <!-- FILL:cfo_xlsx -->
+cfo.ai model, public and read-only: [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE)
 
 ## Three Tiers Price by Quickstarts Covered
 
