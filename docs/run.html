@@ -146,6 +146,81 @@ details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;f
 .pfa{padding:0 24px 20px}
 @media(max-width:720px){.asm li{grid-template-columns:1fr}.tl2{padding:20px 12px 16px}.rel{min-width:56px}.asm li,.pf{padding-left:16px;padding-right:16px}.pfa{padding:0 16px 16px}.verdict{padding:16px}}
 @media(prefers-reduced-motion:reduce){.rel,.rel i{transition:none}}
+/* docs execution graph */
+#grb{--gw:min(1160px,calc(100vw - 48px));width:var(--gw);margin-left:calc((100% - var(--gw))/2)}
+.gtop{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 20px;flex-wrap:wrap;margin-bottom:16px}
+.gtop h2{margin-bottom:0}
+.seg{display:inline-flex;padding:3px;border-radius:12px;background:rgba(29,29,31,.06)}
+.seg button{background:transparent;color:var(--muted);border-radius:9px;padding:6px 14px;min-height:36px;font-size:14px}
+.seg button:hover{background:transparent;color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.gwrap{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.gwrap.wide{grid-template-columns:minmax(0,1fr)}
+.gwrap.wide .gpan{display:none}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:0 0 14px}
+.gkey span{display:inline-flex;align-items:center;gap:6px}
+.gkey i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.graph{list-style:none;padding:20px 16px 20px 20px;position:relative}
+.graph>li{position:relative;padding-left:34px}
+.graph>li::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:#DCDCE0}
+.graph>li:first-child::before{top:22px}
+.graph>li:last-child::before{bottom:auto;height:22px}
+.gb{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;width:100%;padding:10px 12px;border-radius:12px;cursor:pointer;position:relative;min-height:44px}
+.gb:hover{background:rgba(29,29,31,.04)}
+.gb[aria-pressed="true"]{background:rgba(0,102,204,.07);box-shadow:inset 0 0 0 1px rgba(0,102,204,.25)}
+.gb:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.gd{position:absolute;left:-34px;top:13px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:700 11px/1 "Geist Mono",ui-monospace,Consolas,monospace;color:#fff;background:#C7C7CC;box-shadow:0 0 0 4px var(--surface)}
+.gs{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.01em}
+.gc{grid-column:1;font-size:13.5px;overflow-wrap:anywhere;white-space:pre-wrap;color:var(--ink)}
+.gr{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:4px}
+.gl{text-align:right;font-size:13px;font-weight:600;white-space:nowrap}
+.gt{display:inline-block;font-size:12px;font-weight:600;border-radius:99px;padding:1px 9px;white-space:nowrap}
+.n-pass .gd{background:var(--pass)}.n-pass .gl{color:var(--pass)}
+.n-docs .gd,.n-fail .gd{background:var(--fail)}.n-docs .gl,.n-fail .gl{color:var(--fail)}
+.n-env .gd{background:#B26B00}.n-env .gl{color:var(--warn)}
+.n-block .gd{background:var(--surface);box-shadow:0 0 0 4px var(--surface),inset 0 0 0 2px var(--warn);color:var(--warn)}.n-block .gl{color:var(--warn)}
+.n-none .gd,.n-skip .gd{background:var(--surface);box-shadow:0 0 0 4px var(--surface),inset 0 0 0 2px #C7C7CC;color:var(--muted)}.n-none .gl,.n-skip .gl{color:var(--muted)}
+.n-root .gd{background:var(--accent)}.n-end .gd{background:var(--pass)}.n-end .gl{color:var(--pass)}.n-end.bad .gl{color:var(--warn)}
+.n-end.bad .gd{background:var(--warn)}
+.k-docs{color:var(--fail);background:rgba(215,0,21,.08)}
+.k-env{color:var(--warn);background:rgba(176,110,0,.12)}
+.k-other{color:var(--muted);background:rgba(29,29,31,.06)}
+.br{list-style:none;padding:2px 0 10px 12px;margin:0 0 4px 12px;font-size:13px}
+.br li{position:relative;padding:5px 0 5px 22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 10px;align-items:baseline}
+.br li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1.5px;background:#DCDCE0}
+.br li:last-child::before{bottom:50%}
+.br li::after{content:"";position:absolute;left:0;top:50%;width:14px;height:1.5px;background:#DCDCE0}
+.br .bk{color:var(--muted);font-weight:600;white-space:nowrap}
+.br .bv{overflow-wrap:anywhere;min-width:0}
+.br .bv.mono{font-size:12.5px}
+.br .ok{color:var(--pass);font-weight:600}.br .bad{color:var(--fail);font-weight:600}
+.gpan{position:sticky;top:20px;padding:20px;font-size:15px;max-height:calc(100vh - 40px);overflow:auto}
+.gpan h3{font-size:17px;font-weight:700;letter-spacing:-.01em;overflow-wrap:anywhere}
+.gpan .pk{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:18px 0 6px}
+.gpan blockquote{font-size:15px;line-height:1.55;padding:10px 14px;border-radius:10px;background:rgba(29,29,31,.04);overflow-wrap:anywhere}
+.gpan pre{font-size:12.5px;line-height:1.55;padding:10px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;background:rgba(29,29,31,.04);max-height:220px;overflow:auto}
+.gpan pre.er{background:rgba(215,0,21,.06)}
+.gpan .cmd{display:block;font-size:13px}
+.gpan ol{padding-left:20px;font-size:14px}
+.gpan ol li{margin-top:4px;overflow-wrap:anywhere}
+.gpan .mut{color:var(--muted);font-size:14px}
+.evl{list-style:none;padding:0;font-size:14px}
+.evl li{margin-top:8px;overflow-wrap:anywhere}
+.lg{display:inline-block;margin-left:6px;font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--hair);border-radius:99px;padding:0 7px;vertical-align:1px}
+.evp{list-style:none;padding:20px 16px 20px 20px}
+.evp>li{position:relative;padding:0 0 18px 34px}
+.evp>li::before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:#DCDCE0}
+.evp>li:first-child::before{top:10px}
+.evp>li:last-child::before{bottom:auto;height:10px}
+.evp>li:last-child{padding-bottom:0}
+.evp .gd{left:0;top:2px;background:var(--accent)}
+.evp .ek{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.evp .ev{font-size:15px;overflow-wrap:anywhere}
+.evp .es{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.gn-in{animation:rise .35s var(--ease) both}
+@media(max-width:820px){.gwrap{grid-template-columns:minmax(0,1fr)}.gpan{position:static;max-height:none}}
+@media(max-width:720px){#grb{--gw:100%}.br{margin-left:4px;padding-left:6px}.br li{grid-template-columns:minmax(0,1fr);padding-left:18px}.br li::after{top:14px;width:10px}.graph,.evp{padding:16px 12px 16px 14px}.gb{grid-template-columns:minmax(0,1fr)}.gr{grid-column:1;grid-row:auto;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start}.gl{text-align:left}.gtop{align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){.gn-in{animation:none}}
 </style>
 </head>
 <body>
@@ -175,6 +250,11 @@ details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;f
 <div id="runb" class="blk hide"><h2 id="runh">Run</h2><ul class="steps surf" id="steps"></ul></div>
 <div id="fixb" class="blk hide"><h2>Fix</h2><div id="fixes"></div></div>
 <div id="provb" class="blk hide"><h2>Prove</h2><div id="prove" class="surf prove"></div></div>
+<div id="grb" class="blk hide">
+<div class="gtop"><h2 id="grh">From the docs to the result</h2><div class="seg" role="group" aria-label="Graph view"><button type="button" id="gvd" aria-pressed="true">Docs path</button><button type="button" id="gve" aria-pressed="false">Evidence path</button></div></div>
+<div class="gkey" id="gkey"><span><i style="background:var(--pass)"></i>Passed</span><span><i style="background:var(--fail)"></i>Docs are wrong</span><span><i style="background:#B26B00"></i>Missing prerequisite</span><span><i style="box-shadow:inset 0 0 0 2px var(--warn)"></i>Blocked</span><span><i style="box-shadow:inset 0 0 0 2px #C7C7CC"></i>Not run</span></div>
+<div class="gwrap" id="gwrap"><div class="surf" id="gbox"></div><aside class="surf gpan" id="gpan" aria-live="polite" aria-label="Step details"></aside></div>
+</div>
 <div id="bsb" class="blk hide"><h2>When did it break?</h2><div id="tl2" class="surf tl2"></div><div id="verd" class="surf verdict"></div></div>
 <div id="asb" class="blk hide"><h2>What the docs assume</h2><div class="surf asm" id="asm"></div></div>
 <div id="prb" class="blk hide"><h2>Pull request</h2><div id="diff" class="surf diff mono"></div><details class="pr surf" id="prd"><summary><span>PR description</span><button type="button" class="ghost" id="cpb">Copy</button></summary><pre id="prt"></pre></details></div>
@@ -383,9 +463,157 @@ function renderPrereqs(d){
   return true;
 }
 
+/* docs execution graph */
+var KIND={docs_bug:["Docs are wrong","k-docs","n-docs"],environment:["Missing prerequisite","k-env","n-env"],product_bug:["Product bug","k-other","n-fail"],needs_secret:["Needs a secret","k-other","n-block"]};
+var EVK={trace:"neatlogs trace",checkpoint:"Entire checkpoint",session:"Entire session",trail:"Entire Trail",pr:"Pull request",comment:"Evidence comment"};
+var G=null;
+function errLine(t){
+  var L=String(t||"").split("\n").map(function(x){return x.replace(/[─-╿]+/g,"").trim()}).filter(Boolean);
+  for(var i=L.length-1;i>=0;i--)if(/^(error|fatal)|error:|not found|no such|denied|cannot|unable|no matching/i.test(L[i]))return L[i];
+  for(i=L.length-1;i>=0;i--)if(/error|failed/i.test(L[i]))return L[i];
+  return L.length?L[L.length-1]:"";
+}
+function stepKind(d,s){
+  var p=(d.patches||[]).filter(function(x){return x.step_id===s.id});
+  if(p.length)return p[p.length-1].failure_class;
+  var g=(d.gave_up||[]).filter(function(x){return x&&x.step_id===s.id&&x.failure_class});
+  if(g.length)return g[0].failure_class;
+  var c=d.classifications&&d.classifications[String(s.id)];
+  if(c&&c.probabilities){var top=null;Object.keys(c.probabilities).forEach(function(k){if(top===null||c.probabilities[k]>c.probabilities[top])top=k});return top}
+  return null;
+}
+function tries(s){
+  if(Array.isArray(s.tries)&&s.tries.length)return s.tries;
+  if(s.exit_code==null)return [];
+  return [{command:s.command,exit_code:s.exit_code,passed:s.status==="passed"}];
+}
+function nodeOf(d,s){
+  var t=tries(s),failedOnce=t.some(function(x){return !x.passed})||(s.attempts>1),k=stepKind(d,s),K=KIND[k]||null;
+  var n={s:s,kind:k,K:K,tries:t,patches:(d.patches||[]).filter(function(x){return x.step_id===s.id})};
+  var st=s.status||"pending";
+  if(st==="skipped"){n.cls="n-skip";n.label="Not run: out of scope";n.glyph="-"}
+  else if(st==="pending"){n.cls="n-none";n.label="Not run";n.glyph=""}
+  else if(st==="needs_human"||k==="needs_secret"&&st!=="passed"){n.cls="n-block";n.label="Blocked";n.glyph="!"}
+  else if(st==="passed"&&!failedOnce){n.cls="n-pass";n.label="Passed";n.glyph="✓"}
+  else if(st==="passed"){n.cls=K?K[2]:"n-fail";n.label="Failed as written";n.glyph="✗";n.fixed=true}
+  else{n.cls=K?K[2]:"n-fail";n.label=st==="gave_up"?"Failed, gave up":"Failed";n.glyph="✗"}
+  return n;
+}
+function evFor(d,id){return (d.evidence||[]).filter(function(e){return e&&e.step_id===id})}
+function linkTo(e,text){
+  if(e.url&&safeUrl(e.url)){var a=el("a",null,text||e.label||EVK[e.kind]||e.url);a.href=e.url;a.target="_blank";a.rel="noopener noreferrer";return a}
+  return el("span",null,text||e.label||EVK[e.kind]||"");
+}
+function gate(e){return e.public===false?el("span","lg",e.kind==="trace"?"neatlogs login":"login needed"):null}
+function branch(d,n){
+  var ul=el("ul","br"),s=n.s,first=null;
+  n.tries.some(function(x){if(!x.passed){first=x;return true}return false});
+  function row(k,v,c){var li=el("li");li.appendChild(el("span","bk",k));var b=el("span","bv"+(c?" "+c:""));if(v&&v.nodeType)b.appendChild(v);else b.textContent=v;li.appendChild(b);ul.appendChild(li)}
+  if(first||s.error_tail){var line=errLine(s.error_tail)||("exit "+(first?first.exit_code:s.exit_code));row("Container output",line,"mono")}
+  var p=n.patches[n.patches.length-1];
+  if(p){var rs=p.reason||p.new_command||"";row(n.kind==="environment"?"Prerequisite added":n.kind==="docs_bug"?"Proposed docs fix":"Proposed change",rs.length>140?rs.slice(0,rs.lastIndexOf(" ",137)>80?rs.lastIndexOf(" ",137):137)+"…":rs)}
+  var last=n.tries[n.tries.length-1];
+  if(n.tries.length>1&&last){var r=el("span",last.passed?"ok":"bad",(last.passed?"Passed":"Failed")+", exit "+last.exit_code);var w=document.createDocumentFragment();w.appendChild(r);w.appendChild(document.createTextNode(" on attempt "+n.tries.length));row("Rerun",w)}
+  var ev=evFor(d,s.id);
+  if(ev.length){var f=document.createDocumentFragment();ev.forEach(function(e,i){if(i)f.appendChild(document.createTextNode(", "));f.appendChild(linkTo(e,EVK[e.kind]+(e.kind==="pr"&&/#\d+/.test(e.label)?" "+e.label.match(/#\d+/)[0]:"")));var g=gate(e);if(g)f.appendChild(g)});row("Evidence",f)}
+  return ul.children.length?ul:null;
+}
+function gNode(cls,glyph,small,code,label,tag){
+  var li=el("li",cls+" gn-in"),b=el("button","gb");b.type="button";b.setAttribute("aria-pressed","false");
+  b.appendChild(el("i","gd",glyph||""));b.appendChild(el("span","gs",small));
+  b.appendChild(el("span","gc"+(code&&code.mono?" mono":""),code?code.text:""));
+  var r=el("span","gr");r.appendChild(el("span","gl",label||""));if(tag)r.appendChild(el("span","gt "+tag[1],tag[0]));b.appendChild(r);
+  li.appendChild(b);return {li:li,b:b};
+}
+function panelStep(d,n){
+  var P=$("gpan"),s=n.s;P.textContent="";
+  var h=el("h3",null,"Step "+s.id+": "+n.label);P.appendChild(h);
+  if(n.K)P.appendChild(el("span","gt "+n.K[1],n.K[0]));
+  P.appendChild(el("p","pk","The docs say"));
+  P.appendChild(s.quote?el("blockquote",null,s.quote):el("p","mut","No quote was recorded for this step. Intent: "+(s.intent||"unknown")+"."));
+  P.appendChild(el("p","pk","Command run"));P.appendChild(el("code","cmd mono",(n.tries[0]&&n.tries[0].command)||s.command||""));
+  if(s.error_tail){P.appendChild(el("p","pk","Container output"));P.appendChild(el("pre","er mono",s.error_tail))}
+  if(n.patches.length){
+    var p=n.patches[n.patches.length-1];
+    P.appendChild(el("p","pk",n.kind==="environment"?"Prerequisite added, the docs are not wrong":n.kind==="docs_bug"?"Proposed docs change":"Proposed change"));
+    var ba=el("div","ba mono");ba.appendChild(el("div","o","- "+(p.old_command||"")));ba.appendChild(el("div","n","+ "+(p.new_command||"")));P.appendChild(ba);
+    if(p.reason)P.appendChild(el("p","why",p.reason));
+  }
+  if(n.tries.length){
+    P.appendChild(el("p","pk","Before and after"));var ol=el("ol");
+    n.tries.forEach(function(x,i){var li=el("li");li.appendChild(el("span",x.passed?"ok":"bad",(x.passed?"Passed":"Failed")+", exit "+x.exit_code));if(i&&x.command!==n.tries[0].command)li.appendChild(el("code","cmd mono",x.command));ol.appendChild(li)});
+    P.appendChild(ol);
+    var v=d.verify;if(n.fixed&&v&&v.steps_total!=null)P.appendChild(el("p","mut",v.status==="verified"?"A fresh container then ran "+v.steps_passed+"/"+v.steps_total+" steps with every patch, with no model calls.":"The fresh-container proof passed "+v.steps_passed+" of "+v.steps_total+" steps, so this fix is not proven."));
+  }else if(s.status==="skipped")P.appendChild(el("p","mut",s.skip_reason||"FirstRun kept this step but did not run it."));
+  else if(s.status==="pending")P.appendChild(el("p","mut","The run stopped before this step, so it has no result."));
+  var ev=evFor(d,s.id).concat((d.evidence||[]).filter(function(e){return e&&e.step_id==null&&(e.kind==="session"||e.kind==="checkpoint")}));
+  P.appendChild(el("p","pk","Inspect evidence"));
+  if(ev.length){var ul=el("ul","evl");ev.forEach(function(e){var li=el("li");li.appendChild(linkTo(e));var g=gate(e);if(g)li.appendChild(g);ul.appendChild(li)});P.appendChild(ul)}
+  else P.appendChild(el("p","mut","This share code carries no evidence links."));
+}
+function panelRoot(d){
+  var P=$("gpan");P.textContent="";P.appendChild(el("h3",null,"The docs page"));
+  P.appendChild(el("p","pk","Source"));var s=el("p");if(safeUrl(d.source_url)){var a=el("a",null,d.source_url);a.href=d.source_url;a.target="_blank";a.rel="noopener noreferrer";s.appendChild(a)}P.appendChild(s);
+  P.appendChild(el("p","pk","Plan"));P.appendChild(el("p","mut",d.steps.length+" steps copied from the page, run in "+(d.image||"a fresh container")+"."));
+}
+function panelEnd(d){
+  var P=$("gpan"),v=d.verify||{};P.textContent="";P.appendChild(el("h3",null,"Fresh-container proof"));
+  P.appendChild(el("p","mut",v.status==="verified"?"A brand-new container ran the patched steps from the start: "+v.steps_passed+"/"+v.steps_total+" passed. No model calls.":"Not proven. A fresh container passed "+(v.steps_passed!=null?v.steps_passed:"?")+" of "+(v.steps_total!=null?v.steps_total:"?")+" steps."));
+}
+function select(i){
+  if(!G)return;G.nodes.forEach(function(x,j){x.b.setAttribute("aria-pressed",j===i?"true":"false")});G.sel=i;
+  var x=G.nodes[i];x.show();
+  if(window.matchMedia&&matchMedia("(max-width:820px)").matches&&G.user)$("gpan").scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"});
+}
+function buildDocsGraph(d){
+  var box=$("gbox");box.textContent="";var ol=el("ol","graph");ol.setAttribute("aria-label","Docs execution graph");box.appendChild(ol);
+  G={nodes:[],sel:0,user:false};
+  function add(o,fn,extra){ol.appendChild(o.li);if(extra)o.li.appendChild(extra);G.nodes.push({b:o.b,show:fn});var i=G.nodes.length-1;o.b.addEventListener("click",function(){G.user=true;select(i)})}
+  add(gNode("n-root","↓","Docs page",{text:d.title||d.target||"Quickstart"},d.target||""),function(){panelRoot(d)});
+  var firstBad=-1;
+  d.steps.forEach(function(s){
+    var n=nodeOf(d,s),o=gNode(n.cls,n.glyph,"Step "+s.id,{text:s.command||s.intent||"",mono:true},n.label,n.K&&n.cls!=="n-pass"?n.K:null);
+    var br=n.cls==="n-pass"||n.cls==="n-skip"||n.cls==="n-none"?null:branch(d,n);
+    add(o,function(){panelStep(d,n)},br);
+    if(firstBad<0&&(n.fixed||/n-(docs|env|fail|block)/.test(n.cls)))firstBad=G.nodes.length-1;
+  });
+  var v=d.verify||{};
+  add(gNode("n-end"+(v.status==="verified"?"":" bad"),v.status==="verified"?"✓":"!","Fresh container",{text:v.steps_total!=null?v.steps_passed+"/"+v.steps_total+" steps passed":"No proof on record"},v.status==="verified"?"Verified":"Not proven"),function(){panelEnd(d)});
+  ol.addEventListener("keydown",function(e){
+    if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;
+    var i=G.nodes.findIndex(function(x){return x.b===document.activeElement});if(i<0)return;
+    e.preventDefault();var j=Math.max(0,Math.min(G.nodes.length-1,i+(e.key==="ArrowDown"?1:-1)));G.nodes[j].b.focus();G.user=true;select(j);
+  });
+  select(firstBad>=0?firstBad:0);
+}
+function buildEvidence(d){
+  var box=$("gbox");box.textContent="";var ev=(d.evidence||[]).slice(),tid=d.trace_id;
+  if(tid&&!ev.some(function(e){return e.kind==="trace"}))ev.unshift({kind:"trace",label:"neatlogs trace "+tid,url:"",public:false});
+  if(!ev.length){box.appendChild(el("p","asm none","This share code carries no evidence links. A run folder with an evidence.json adds them."));return}
+  var order=["trace","checkpoint","session","trail","pr","comment"];
+  ev.sort(function(a,b){return order.indexOf(a.kind)-order.indexOf(b.kind)});
+  var ol=el("ol","evp");ol.setAttribute("aria-label","Evidence path");
+  ev.forEach(function(e){
+    var li=el("li","gn-in");li.appendChild(el("i","gd",""));li.appendChild(el("span","ek",EVK[e.kind]||e.kind));
+    var v=el("span","ev");v.appendChild(linkTo(e));var g=gate(e);if(g)v.appendChild(g);li.appendChild(v);
+    var bits=[];if(e.step_id!=null)bits.push("Step "+e.step_id);if(!e.url)bits.push("ID only, open it inside neatlogs");
+    if(bits.length)li.appendChild(el("span","es",bits.join(". ")+"."));
+    ol.appendChild(li);
+  });
+  box.appendChild(ol);
+}
+function graphView(d,which){
+  var docs=which!=="evidence";
+  $("gvd").setAttribute("aria-pressed",docs?"true":"false");$("gve").setAttribute("aria-pressed",docs?"false":"true");
+  $("gwrap").classList.toggle("wide",!docs);show("gkey",docs);
+  if(docs)buildDocsGraph(d);else buildEvidence(d);
+}
+$("gvd").addEventListener("click",function(){if(data)graphView(data,"docs")});
+$("gve").addEventListener("click",function(){if(data)graphView(data,"evidence")});
+
 /* replay */
 function resetView(){
-  stageReset();["head","runb","fixb","provb","bsb","asb","prb","foot"].forEach(function(i){show(i,false)});
+  stageReset();["head","runb","fixb","provb","grb","bsb","asb","prb","foot"].forEach(function(i){show(i,false)});
   $("steps").textContent="";$("fixes").textContent="";window.scrollTo(0,0);
 }
 async function play(d){
@@ -412,6 +640,7 @@ async function play(d){
   else{$("stages").children[3].className="skip";await sleep(PAUSE/2);if(dead())return}
   cur(4);stage(4,"cur");show("provb",true);await sleep(PAUSE);if(dead())return;
   stage(4,pst);
+  graphView(d,"docs");show("grb",true);
   if(hasBis){
     var S=$("stages"),li=el("li",null,"When did it break?");S.appendChild(li);
     cur(5);li.className="on cur";show("bsb",true);

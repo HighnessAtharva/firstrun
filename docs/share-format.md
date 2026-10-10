@@ -60,8 +60,25 @@ The browser decodes with `atob` after mapping `-`→`+` and `_`→`/`, then `Dec
 
 ## Limits Keep a Code Short
 
-- `error_tail` holds at most the last 600 characters of the last failed attempt of that step, after secret redaction.
+- `error_tail` holds at most the last 600 characters of the last failed attempt of that step, after secret redaction. stdout comes first and stderr last, so a long install log cannot push the error out.
 - `diff` holds at most 4,000 characters and `pr_body` at most 3,000.
 - `status` per step is one of `passed`, `failed`, `gave_up`, `skipped`, `pending`, `needs_human`.
 - A run status is one of `passed`, `failed`, `verified`, `unverified`.
 - Unknown fields are ignored by the viewer, so later versions can add fields.
+
+## Three Fields Feed the Docs Execution Graph
+
+The viewer draws a graph from the docs page to the fresh-container proof. Codes without these fields still render, with less detail.
+
+- `steps[].quote` is the docs sentence the planner copied the command from, at most 240 characters.
+- `steps[].tries` lists the last 5 attempts of the step in order, each as `{"command", "exit_code", "passed"}`. A step that failed and then passed shows as "Failed as written" with its rerun.
+- `evidence` lists links from `evidence.json` in the run folder. Each item is `{"kind", "label", "url", "public", "step_id"}`. `kind` is one of `trace`, `checkpoint`, `session`, `trail`, `pr`, `comment`. The encoder drops any URL that does not start with `https://`. `public: false` makes the viewer label the link as needing a login. A `step_id` ties a PR or comment to the step it fixes.
+
+```json
+[
+  {"kind": "checkpoint", "label": "Entire checkpoint 01M4JMXVN32G62ZTSB7X5SMV1T", "url": "https://entire.io/gh/HighnessAtharva/firstrun/commit/f227fc3...", "public": true},
+  {"kind": "trail", "label": "Trail 6", "url": "https://entire.io/gh/HighnessAtharva/firstrun/trails/6", "public": false},
+  {"kind": "pr", "label": "dbt-labs/docs.getdbt.com#10149", "url": "https://github.com/dbt-labs/docs.getdbt.com/pull/10149", "step_id": 10}
+]
+```
+

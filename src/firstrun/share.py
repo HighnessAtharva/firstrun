@@ -16,6 +16,10 @@ DEFAULT_BASE = "https://1run.netlify.app/run.html"
 ERROR_TAIL_MAX = 600
 DIFF_MAX = 4000
 PR_BODY_MAX = 3000
+QUOTE_MAX = 240
+TRY_COMMAND_MAX = 300
+TRIES_MAX = 5
+EVIDENCE_KINDS = ("checkpoint", "session", "trail", "pr", "trace", "comment")
 
 
 def _cap(text: str, limit: int) -> str:
@@ -56,7 +60,8 @@ def _steps(state: RunState, runbook: Runbook) -> list[dict]:
         last = results[-1] if results else None
         tail = ""
         if failed:
-            tail = redact(failed[-1].stderr + failed[-1].stdout)[-ERROR_TAIL_MAX:]
+            # stderr goes last so a long stdout (pip download noise) cannot push the error out.
+            tail = redact(failed[-1].stdout + "\n" + failed[-1].stderr).strip()[-ERROR_TAIL_MAX:]
         out.append({
             "id": step.id,
             "intent": step.intent,
@@ -68,8 +73,31 @@ def _steps(state: RunState, runbook: Runbook) -> list[dict]:
             "skipped": step.skipped_out_of_scope,
             "skip_reason": step.skip_reason,
             "error_tail": tail,
+            # What the docs said, and every attempt in order, for the docs execution graph.
+            "quote": redact(step.source_line)[:QUOTE_MAX],
+            "tries": [{"command": redact(r.command)[:TRY_COMMAND_MAX], "exit_code": r.exit_code,
+                       "passed": r.passed} for r in results[-TRIES_MAX:]],
         })
     return out
+
+
+def _evidence(run_dir: Path) -> list[dict]:
+    """Links from run_dir/evidence.json, kept only when the kind is known and the URL is https."""
+    try:
+        items = json.loads(_read(run_dir / "evidence.json") or "[]")
+    except ValueError:
+        return []
+    out = []
+    for e in items if isinstance(items, list) else []:
+        if not isinstance(e, dict) or e.get("kind") not in EVIDENCE_KINDS:
+            continue
+        url = str(e.get("url") or "")
+        if url and not url.startswith("https://"):
+            continue
+        out.append({"kind": e["kind"], "label": str(e.get("label") or "")[:120], "url": url,
+                    "public": bool(e.get("public", True)),
+                    "step_id": e.get("step_id") if isinstance(e.get("step_id"), int) else None})
+    return out[:12]
 
 
 def build_payload(run_dir) -> dict:
@@ -118,6 +146,7 @@ def build_payload(run_dir) -> dict:
         "diff": _cap(_read(run_dir / "patch.diff"), DIFF_MAX),
         "pr_body": _cap(_read(run_dir / "pr_body.md"), PR_BODY_MAX),
         "trace_id": trace,
+        "evidence": _evidence(run_dir),
     }
     bisect_doc = _read(run_dir / "bisect.json")
     if bisect_doc:

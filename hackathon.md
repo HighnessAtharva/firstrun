@@ -120,6 +120,15 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 - **Known gap: two cost counters.** On 43 runs matched by start time, FirstRun's own count totals $1.5253 and neatlogs totals $1.0989, so FirstRun counts 39% higher. The gap holds after the traces finalized, so ingestion lag does not explain it. The cap checks FirstRun's count, so it stops a run early and never late. Unifying the two counters is next.
 - **Planned:** build the cfo.ai model from `drivers.csv` with Ari over the `cfoai` MCP server, inside an Entire-captured session, with the 4 Scenarios in the plan.
 
+### 2026-10-10, 18:30 to 19:30 IST: The Docs Execution Graph
+
+- **Done:** `run.html` draws a graph from the docs page, through every step, to the fresh-container proof. A failed step branches into its container output, its proposed fix, its rerun and its evidence. Clicking a node opens a side panel with the quoted docs sentence, the command, the output, the change, and every attempt before and after.
+- **Honest labels:** nodes read Passed, Failed as written, Blocked, Not run, or Not run: out of scope. Red means the docs are wrong. Amber means the container lacked a prerequisite and the docs were fine.
+- **Evidence path:** a toggle shows neatlogs trace, Entire checkpoint, Entire session, Trail and PRs in order. The checkpoint and session pages open without a login. The Trail and the neatlogs trace need one, and the page says so. Entire Graph is not used, because it maps code, not docs steps.
+- **Example:** the dbt replay links step 3 to [#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150) and step 10 to [#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149) and its bisect comment.
+- **Fixes found while building it:** the share tail kept pip download lines and dropped the real error, so stderr now goes last. `report.md` called the step that ended a run its "First Failed Step" even after recovery fixed an earlier failure. It now names both steps, and the root span carries `reported_failed_step` for the neatlogs eval.
+- **Checked:** desktop at 1280 px and phone at 375 px with no sideways scroll, the dbt, Dagster and fixture codes, and no console errors. Offline suite: 260 passed, 2 skipped.
+
 ## Demo
 
 Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).

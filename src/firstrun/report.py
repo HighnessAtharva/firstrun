@@ -81,8 +81,16 @@ def write_report(state: RunState, runbook: Runbook) -> Path:
     if fid is not None:
         failed = _last_failed(state, fid)
         first_fail = next((r for r in state.results if r.step_id == fid and not r.passed), failed)
-        out += ["", "## First Failed Step", ""]
-        out.append(f"Step {fid} of {total}: `{commands.get(fid, '')}`")
+        first = state.first_failed_step
+        if first is None or first == fid:
+            out += ["", "## First Failed Step", ""]
+            out.append(f"Step {fid} of {total}: `{commands.get(fid, '')}`")
+        else:
+            # The run recovered from an earlier failure and stopped later, so name both steps.
+            out += ["", "## The Step That Ended the Run", ""]
+            out.append(f"Step {fid} of {total}: `{commands.get(fid, '')}`")
+            out.append("")
+            out.append(f"The first failure was step {first}: `{commands.get(first, '')}`. Recovery fixed it.")
         if first_fail:
             out.append("")
             out.append(f"Exit code: {first_fail.exit_code}" + (" (timed out)" if first_fail.timed_out else ""))
