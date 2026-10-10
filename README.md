@@ -6,6 +6,8 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 firstrun https://docs.example.com/quickstart
 ```
 
+Site: https://1run.netlify.app
+
 <!-- FILL:demo_gif -->
 
 - **neatlogs** records one trace per run. Every step, model call and recovery is a span you can open.

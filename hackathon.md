@@ -87,7 +87,9 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 
 ## Demo
 
-Pending. The 60-second demo shows a red step, the agent's reason, a green verified run, and the drafted PR, then one click into the neatlogs trace.
+Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).
+
+Video pending. The 60-second demo shows a red step, the agent's reason, a green verified run, and the drafted PR, then one click into the neatlogs trace.
 
 ## Known Limitations and Next Steps
 
