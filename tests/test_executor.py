@@ -268,3 +268,15 @@ def test_dev_server_step_passes_once_it_is_listening():
     hung = StepResult(step_id=1, command="flask run", exit_code=124, timed_out=True, stderr="Traceback")
     hung.server_ready = executor.server_ready(hung)
     assert not hung.server_ready and not executor.check_expected(Step(id=1, intent="run", command="flask run"), hung)
+
+
+def test_install_step_naming_a_server_package_keeps_the_full_timeout():
+    from firstrun import executor
+
+    # The server name is a package here, so the 90 s server window must not cap a slow install.
+    assert not executor.is_server_command("pip install fastapi uvicorn")
+    assert not executor.is_server_command("pip install gunicorn")
+    assert not executor.is_server_command("npm install vite --save-dev")
+    assert not executor.is_server_command("uv add 'uvicorn[standard]'")
+    assert executor.is_server_command("pip install uvicorn && uvicorn main:app")
+    assert executor.is_server_command("npm install; npm run dev")
