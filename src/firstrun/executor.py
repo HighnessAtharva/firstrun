@@ -2,20 +2,202 @@
 
 from __future__ import annotations
 
-from firstrun.models import Runbook, RunState, Step, StepResult
+import shlex
+import time
+from datetime import datetime, timezone
+from typing import Callable
+
+import neatlogs
+
+from firstrun import report, state as state_io
+from firstrun.models import (
+    Budget, GaveUp, Patch, Runbook, RunState, RunStatus, Step, StepResult, StepStatus,
+)
 from firstrun.sandbox import Container
 
-
-def check_expected(step: Step, result: StepResult) -> bool:
-    """True when the result meets step.expected."""
-    raise NotImplementedError
+# recover(step, result, state, docs_markdown) -> Patch | GaveUp
+RecoverFn = Callable[[Step, StepResult, RunState, str], "Patch | GaveUp"]
 
 
-def run_step(container: Container, step: Step) -> StepResult:
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def check_expected(step: Step, result: StepResult, container: Container | None = None) -> bool:
+    """True when the result meets step.expected. file_exists needs the container."""
+    exp = step.expected
+    if result.timed_out or result.exit_code != exp.exit_code:
+        return False
+    if exp.output_contains is not None and exp.output_contains not in (result.stdout + result.stderr):
+        return False
+    if exp.file_exists:
+        if container is None:
+            return False
+        probe = container.exec(f"test -e {shlex.quote(exp.file_exists)}", timeout_s=30)
+        if probe.exit_code != 0:
+            return False
+    return True
+
+
+def run_step(container: Container, step: Step, timeout_s: int | None = None) -> StepResult:
     """TOOL span `step.<id>`. Writes the step's files, runs its command, checks `expected`."""
-    raise NotImplementedError
+    timeout_s = timeout_s or Budget().seconds_per_step
+    with neatlogs.trace(f"step.{step.id}", kind="TOOL") as span:
+        started = time.monotonic()
+        if step.files:
+            container.write_files(step.files)
+        result = container.exec(step.command, timeout_s=timeout_s)
+        result.step_id = step.id
+        result.command = step.command
+        result.passed = check_expected(step, result, container)
+        result.duration_s = round(time.monotonic() - started, 3)
+        span.set_attribute("neatlogs.step.command", step.command)
+        span.set_attribute("neatlogs.step.exit_code", result.exit_code)
+        span.set_attribute("neatlogs.step.duration", result.duration_s)
+        span.set_attribute("neatlogs.step.passed", result.passed)
+    return result
 
 
-def run(runbook: Runbook, run_id: str | None = None, resume: bool = False, tags: list[str] | None = None) -> RunState:
+def _effective_command(state: RunState, step: Step) -> Step:
+    """The step with the latest patch applied, so a resume replays the fixed command."""
+    for patch in reversed(state.patches):
+        if patch.step_id == step.id:
+            return step.model_copy(update={"command": patch.new_command})
+    return step
+
+
+def _elapsed(state: RunState) -> float:
+    try:
+        return (datetime.now(timezone.utc) - datetime.fromisoformat(state.started_at)).total_seconds()
+    except ValueError:
+        return 0.0
+
+
+def _stop(state: RunState, status: RunStatus, reason: str = "") -> None:
+    state.status = status
+    if reason:
+        state.stop_reason = reason
+    state.finished_at = _now()
+
+
+def run(
+    runbook: Runbook,
+    run_id: str | None = None,
+    resume: bool = False,
+    tags: list[str] | None = None,
+    recover: RecoverFn | None = None,
+    budget: Budget | None = None,
+    container_factory: Callable[..., Container] = Container,
+) -> RunState:
     """WORKFLOW span `firstrun.run`. Writes runbook.json, state.json after each step, then report.md."""
-    raise NotImplementedError
+    budget = budget or Budget()
+    if resume:
+        if not run_id:
+            raise ValueError("resume needs a run_id")
+        state = state_io.load_state(run_id)
+        runbook = state_io.load_runbook(run_id)
+        state.status = RunStatus.RUNNING
+        state.stop_reason = ""
+        state.finished_at = ""
+    else:
+        run_id = run_id or state_io.new_run_id(runbook.source_url)
+        state = RunState(
+            run_id=run_id, source_url=runbook.source_url, started_at=_now(),
+            tags=list(tags or []),
+            step_status={s.id: StepStatus.PENDING for s in runbook.steps},
+        )
+        state_io.save_runbook(run_id, runbook)
+    tags = state.tags
+    state_io.save_state(state)
+
+    attrs = {
+        "target": state_io.target_name(runbook.source_url),
+        "run_id": state.run_id,
+        "variant": tags[0] if tags else "dev",
+        "tags": list(tags),
+    }
+    try:
+        with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs):
+            _execute(runbook, state, recover, budget, container_factory)
+    except BaseException as exc:  # save what we know, then let the error out
+        if state.status == RunStatus.RUNNING:
+            reason = "interrupted" if isinstance(exc, KeyboardInterrupt) else f"error: {exc!r}"
+            _stop(state, RunStatus.FAILED, reason)
+        state_io.save_state(state)
+        _safe_report(state, runbook)
+        raise
+    state_io.save_state(state)
+    report.write_report(state, runbook)
+    return state
+
+
+def _safe_report(state: RunState, runbook: Runbook) -> None:
+    try:
+        report.write_report(state, runbook)
+    except Exception:
+        pass
+
+
+def _execute(runbook, state, recover, budget, container_factory) -> None:
+    with container_factory(runbook.image) as container:
+        # Rebuild the environment of a resumed run. Replays are not recorded as results.
+        for step in runbook.steps:
+            if step.id > state.last_good_step:
+                break
+            eff = _effective_command(state, step)
+            res = run_step(container, eff, budget.seconds_per_step)
+            neatlogs.log("replayed step {id}", id=step.id)
+            if not res.passed:
+                state.step_status[step.id] = StepStatus.FAILED
+                state.first_failed_step = state.first_failed_step or step.id
+                _stop(state, RunStatus.FAILED, f"replay of step {step.id} failed")
+                state_io.save_state(state)
+                return
+
+        for step in runbook.steps:
+            if step.id <= state.last_good_step:
+                continue
+            if not _run_with_recovery(container, step, state, recover, budget, runbook):
+                state_io.save_state(state)
+                return
+            state_io.save_state(state)
+
+    state.time_to_first_success_s = round(_elapsed(state), 1)
+    _stop(state, RunStatus.PASSED)
+
+
+def _run_with_recovery(container, step: Step, state: RunState, recover, budget: Budget, runbook: Runbook) -> bool:
+    """Run one step until it passes, a patch budget runs out, or recovery gives up."""
+    current = _effective_command(state, step)
+    while True:
+        state.attempts[step.id] = state.attempts.get(step.id, 0) + 1
+        state.step_status[step.id] = StepStatus.RUNNING
+        result = run_step(container, current, budget.seconds_per_step)
+        state.results.append(result)
+        if result.passed:
+            state.step_status[step.id] = StepStatus.PASSED
+            state.last_good_step = step.id
+            return True
+
+        state.step_status[step.id] = StepStatus.FAILED
+        if state.first_failed_step is None:
+            state.first_failed_step = step.id
+        state_io.save_state(state)
+        if recover is None:
+            _stop(state, RunStatus.FAILED, f"step {step.id} failed")
+            return False
+        if state.attempts[step.id] >= budget.attempts_per_step:
+            state.step_status[step.id] = StepStatus.GAVE_UP
+            state.gave_up.append(GaveUp(step_id=step.id, reason=f"{budget.attempts_per_step} attempts used"))
+            _stop(state, RunStatus.FAILED, f"step {step.id} gave up")
+            return False
+
+        state.step_status[step.id] = StepStatus.RECOVERING
+        decision = recover(current, result, state, runbook.docs_markdown)
+        if isinstance(decision, GaveUp):
+            state.step_status[step.id] = StepStatus.GAVE_UP
+            state.gave_up.append(decision)
+            _stop(state, RunStatus.FAILED, f"step {step.id} gave up")
+            return False
+        state.patches.append(decision)
+        current = current.model_copy(update={"command": decision.new_command})

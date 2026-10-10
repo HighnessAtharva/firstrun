@@ -2,30 +2,56 @@
 
 from __future__ import annotations
 
+import re
+from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
+from firstrun import config
 from firstrun.models import Runbook, RunState
 
 
+def target_name(source_url: str) -> str:
+    """The tool name for a URL: the host without www, or the file stem for a local path."""
+    parsed = urlparse(source_url)
+    if parsed.scheme in ("", "file") or not parsed.netloc:
+        return Path(parsed.path or source_url).stem or "local"
+    host = parsed.netloc.split(":")[0].lower()
+    return host[4:] if host.startswith("www.") else host
+
+
+def _slug(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "run"
+
+
 def run_dir(run_id: str) -> Path:
-    raise NotImplementedError
+    return Path(config.RUNS_DIR) / run_id
 
 
 def new_run_id(source_url: str) -> str:
-    raise NotImplementedError
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    return f"{stamp}-{_slug(target_name(source_url))}"
+
+
+def _write(path: Path, text: str) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)  # atomic, so a crash never leaves half a file
+    return path
 
 
 def save_state(state: RunState) -> Path:
-    raise NotImplementedError
+    return _write(run_dir(state.run_id) / "state.json", state.model_dump_json(indent=2))
 
 
 def load_state(run_id: str) -> RunState:
-    raise NotImplementedError
+    return RunState.model_validate_json((run_dir(run_id) / "state.json").read_text(encoding="utf-8"))
 
 
 def save_runbook(run_id: str, runbook: Runbook) -> Path:
-    raise NotImplementedError
+    return _write(run_dir(run_id) / "runbook.json", runbook.model_dump_json(indent=2))
 
 
 def load_runbook(run_id: str) -> Runbook:
-    raise NotImplementedError
+    return Runbook.model_validate_json((run_dir(run_id) / "runbook.json").read_text(encoding="utf-8"))
