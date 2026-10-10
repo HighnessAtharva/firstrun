@@ -225,7 +225,7 @@ details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;f
 </head>
 <body>
 <main>
-<div class="wm"><a href="index.html">FirstRun</a><a href="index.html">Back to the landing page</a></div>
+<div class="wm"><a href="index.html">FirstRun</a><span><a href="runs/">All runs</a> &nbsp;&middot;&nbsp; <a href="audit.html">Docs audit</a> &nbsp;&middot;&nbsp; <a href="index.html">Back to the landing page</a></span></div>
 
 <section id="input" class="hide">
 <h1>Replay a run.</h1>
@@ -672,7 +672,7 @@ function fromHash(){
   var h=location.hash,m=/^#r=(.*)$/.exec(h);
   var e=/^#ex=([a-z0-9_-]+)$/.exec(h);
   if(m&&m[1]){go(m[1])}
-  else if(e){fetch("examples/"+e[1]+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var k=t.indexOf("#r=");go(k>=0?t.slice(k+3):t)}).catch(function(){showInput("That example is not available yet.")})}
+  else if(e){var d1=/^\d{8}-/.test(e[1])?"runs/":"examples/",d2=d1==="runs/"?"examples/":"runs/";fetch(d1+e[1]+".txt").then(function(r){if(r.ok)return r.text();return fetch(d2+e[1]+".txt").then(function(r2){if(!r2.ok)throw 0;return r2.text()})}).then(function(t){var k=t.indexOf("#r=");go(k>=0?t.slice(k+3):t)}).catch(function(){showInput("That example is not available yet.")})}
   else showInput("");
 }
 $("dec").addEventListener("click",function(){
