@@ -1,0 +1,20 @@
+Your Steps
+
+1. Merge the PR after you read it: [HighnessAtharva/firstrun#15](https://github.com/HighnessAtharva/firstrun/pull/15). -> YES I HAVE MERGED IT
+2. A2, sign in to cfo.ai. Start the Starter trial at https://cfo.ai/pricing and enter the card yourself. Then run `claude` in a terminal in this folder, type `/mcp`, pick `cfoai` and choose Authenticate. It still shows “Needs authentication”. -> YES IT IS NOW AUTHETNCATED
+3. A1, Trail approvals. On entire.io, open the firstrun repo settings, go to Trails, and set required approvals to 0 -> YES IT IS NOW SET TO 0
+4. A3, neatlogs eval. Make a human eval with the question “Does report.md name the real failed step?” AI evaluators need Starter. -> FOR THIS SEE THE SCREENSHOTS AND TELL ME THE STEPS!
+
+
+
+Also in the PRs that are being raised on github thanks to this app it might be also worthwhile to include the publicly available proof of the test to show it well, either via neatlogs or via entire or both because some reports, etc are public right so i need to instill that confidence both the website and in the github PR!
+
+---
+
+<task-notification>
+<task-id>bq3n2ij29</task-id>
+<tool-use-id>toolu_016VNnkx4e7VPXXmf93eFtpg</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\c94b37e7-70e0-472a-b1d9-6dddb786f269\tasks\bq3n2ij29.output</output-file>
+<status>completed</status>
+<summary>Background command "Build the cfo.ai model with headless Claude" completed (exit code 0)</summary>
+</task-notification>
