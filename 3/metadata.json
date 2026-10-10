@@ -1,0 +1,164 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JY41XZVQ3GACV5Z02NZ51B",
+  "session_id": "dd681316-d485-471c-90a0-1d267919f032",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T12:55:49.7938618Z",
+  "branch": "plan/tier-cap",
+  "checkpoints_count": 3,
+  "save_step_count": 3,
+  "files_touched": [
+    "README.md",
+    "business/BUSINESS_PLAN.md",
+    "business/drivers.csv",
+    "business/unit_economics.json",
+    "hackathon.md",
+    "src/firstrun/budget.py",
+    "src/firstrun/cli.py",
+    "src/firstrun/econ.py",
+    "tests/test_cli.py",
+    "tests/test_econ.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "1ae0ac815c3b",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 52,
+    "cache_creation_tokens": 134824,
+    "cache_read_tokens": 3827627,
+    "output_tokens": 15165,
+    "api_call_count": 26
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01M1vCbnGdbDpcqeGZjun2qA",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "gtm-toolbelt"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "1ae0ac815c3b",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 33,
+        "end": 34,
+        "entry_ids": [
+          "44811266-8dc9-4456-af19-adbed3b4e8ac"
+        ],
+        "tool_use_id": "toolu_01M1vCbnGdbDpcqeGZjun2qA"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01M1vCbnGdbDpcqeGZjun2qA"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: gtm-toolbelt",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_0177eHVqzbzFEn2cx1GgoCMf",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "social-cards"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "1ae0ac815c3b",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 136,
+        "end": 137,
+        "entry_ids": [
+          "de56615f-a263-4d99-b923-123d2f3926a0"
+        ],
+        "tool_use_id": "toolu_0177eHVqzbzFEn2cx1GgoCMf"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_0177eHVqzbzFEn2cx1GgoCMf"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: social-cards",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T12:55:49.6575343Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 1025,
+    "human_removed": 681,
+    "total_committed": 0,
+    "total_lines_changed": 1706,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1142,
+      "user_lines_removed": 681,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 6,
+        "README.md": 7,
+        "business/BUSINESS_PLAN.md": 132,
+        "business/drivers.csv": 23,
+        "business/unit_economics.json": 61,
+        "hackathon.md": 142,
+        "src/firstrun/budget.py": 1,
+        "src/firstrun/cli.py": 491,
+        "src/firstrun/econ.py": 176,
+        "targets-wide.txt": 9,
+        "tests/test_cli.py": 1,
+        "tests/test_econ.py": 93
+      },
+      "user_removed_per_file": {
+        "README.md": 7,
+        "business/BUSINESS_PLAN.md": 97,
+        "hackathon.md": 129,
+        "src/firstrun/budget.py": 1,
+        "src/firstrun/cli.py": 446,
+        "tests/test_cli.py": 1
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 6,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1136,
+      "agent_lines_removed": 681,
+      "user_added_per_file": {
+        ".claude/launch.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 6,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1136,
+      "agent_lines_removed": 681,
+      "user_added_per_file": {
+        ".claude/launch.json": 6
+      }
+    }
+  ]
+}
