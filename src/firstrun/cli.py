@@ -164,7 +164,10 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     planner.LAST_USAGE.clear()
     click.echo(f"target: {attrs['target']}")
     # One trace per run: reading the docs, planning, every step and verification.
-    with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs) as root:
+    from firstrun.tracing import session_attrs
+
+    with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs,
+                        **session_attrs(attrs["target"], "run", variant=attrs["variant"])) as root:
         set_io(root, input={"url": source, "run_id": run_id, "resume": bool(resume), "tags": list(tags)})
         try:
             runbook = state_io.load_runbook(resume) if resume else planner.plan(url)
@@ -526,7 +529,10 @@ def prereqs_cmd(run_id, no_prove, rounds) -> None:
     _quiet_logs()
     try:
         runbook = state_io.load_runbook(run_id)
-        with neatlogs.trace("firstrun.prereqs", kind="WORKFLOW", run_id=run_id, tags=["prereqs"]):
+        from firstrun.tracing import session_attrs
+
+        with neatlogs.trace("firstrun.prereqs", kind="WORKFLOW", run_id=run_id, tags=["prereqs"],
+                            **session_attrs(state_io.target_name(runbook.source_url), "prereqs")):
             if no_prove:
                 result = prereqs.derive(state_io.load_state(run_id), runbook)
             else:

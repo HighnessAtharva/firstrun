@@ -36,6 +36,27 @@ Created over the neatlogs CLI on 2026-10-10. Each alert passed a dry-run test wi
 
 The AI evaluator "report names the real failed step" (`a6aa683e`) is an agent judge with neatlogs MCP access, a $0.10 budget and 12 tool calls. It checks that the reported failed step matches the first failed TOOL span, that the failure class fits the container output, and that every patch has a passing verify run. Ad-hoc runs return `NOT_FOUND_OR_OPERATION_DISABLED`, so it scores through a scheduled evaluation.
 
+## Evaluations, Sessions and a Second Evaluator Cover Runs and Audits
+
+Set up over the neatlogs CLI on 2026-10-10, after the hackathon lifted plan limits.
+
+**Sessions.** Every trace about one docs site shares the session `docs:<site>` and names the site as its end user, with the command (run, bisect, prereqs, audit) in the end-user metadata. One session shows a site's runs, bisects and audits together, and an evaluation can filter by site.
+
+**A second evaluator.** "audit cards are backed by evidence" (`d1f7c5bb`) is an agent judge with neatlogs MCP access, a $0.10 budget and 12 tool calls. It reads a `firstrun.audit` trace and checks that the root summary matches the span outputs, that each card cites a commit or PR, and that each stale page cites commits on its topic. The audit root span now carries its cards and stale pages in `output.value` for this judge.
+
+**Four evaluations.**
+
+| Evaluation | Traces | Schedule | ID |
+|---|---|---|---|
+| FirstRun run review: backlog | every `firstrun.run` from 2026-10-10 | one pass | `0363e302` |
+| FirstRun run review: every 6 hours | new `firstrun.run` traces | batch every 6 h | `57b7ff3f` |
+| FirstRun audit review: backlog | every `firstrun.audit` from 2026-10-10 | one pass | `e16dd7cd` |
+| FirstRun audit review: daily | new `firstrun.audit` traces | daily batch | `3122a1d3` |
+
+The Public API cannot assign an AI evaluator to a form question, so each form and its evaluator are set in the dashboard before launch.
+
+**A radar batch for the evaluations to judge.** `scripts/radar.py` ranked 70 Exa results with Jev, and FirstRun ran the top 18 official quickstarts in 3 parallel lanes, tagged `radar`, under the Team cost cap. Two runs exposed a FirstRun bug: a dev server step (`flask --app hello run`, `litestar run`) never exits, so it timed out. The fix passes a server step once its output says it listens. The `radar-v2` rerun took Flask from 0 of 4 steps to verified 4 of 4.
+
 ## The Integration Check Passed the Organizer's Gates
 
 The organizers' setup prompt ran against this repo. Gates 1, 2, 3 and 5 pass and gate 4 is partial: [docs/neatlogs-integration.md](../docs/neatlogs-integration.md).
