@@ -271,7 +271,9 @@ details.pr pre{padding:0 20px 20px;white-space:pre-wrap;overflow-wrap:anywhere;f
 "use strict";
 var $=function(i){return document.getElementById(i)};
 var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-var STEP=RM?0:350,PAUSE=RM?0:500,tok=0,data=null;
+// ?s=<step id> opens the graph on that step, so a PR can link straight to its proof.
+var DEEP=parseInt(new URLSearchParams(location.search).get("s"),10)||0;
+var STEP=RM||DEEP?0:350,PAUSE=RM||DEEP?0:500,tok=0,data=null;
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function show(i,on){$(i).classList.toggle("hide",!on)}
 function sleep(ms){return new Promise(function(r){ms?setTimeout(r,ms):r()})}
@@ -641,6 +643,7 @@ async function play(d){
   cur(4);stage(4,"cur");show("provb",true);await sleep(PAUSE);if(dead())return;
   stage(4,pst);
   graphView(d,"docs");show("grb",true);
+  var di=DEEP?d.steps.findIndex(function(s){return s.id===DEEP}):-1;if(di>=0)select(di+1);
   if(hasBis){
     var S=$("stages"),li=el("li",null,"When did it break?");S.appendChild(li);
     cur(5);li.className="on cur";show("bsb",true);
@@ -653,6 +656,7 @@ async function play(d){
   if(hasPR){show("prb",true)}
   show("foot",true);
   document.title="FirstRun: "+(d.title||d.target||"Replay");
+  if(di>=0)setTimeout(function(){var b=G.nodes[di+1].b;b.focus({preventScroll:true});b.scrollIntoView({block:"center"})},0);
 }
 
 /* input flow */

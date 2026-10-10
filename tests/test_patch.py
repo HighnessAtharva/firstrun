@@ -83,3 +83,22 @@ def test_write_outputs_nothing_when_unverified_or_no_docs_patch(tmp_path):
     assert write_outputs(tmp_path, make_state(RunStatus.UNVERIFIED), rb) == []
     assert write_outputs(tmp_path, make_state(patches=[ENV_PATCH]), rb) == []
     assert list(tmp_path.iterdir()) == []
+
+
+def test_pr_body_proof_links_are_public_only():
+    ev = [
+        {"kind": "session", "label": "Entire session", "url": "https://entire.io/s/1", "public": True},
+        {"kind": "trail", "label": "Trail 6", "url": "https://entire.io/t/6", "public": False},
+        {"kind": "trace", "label": "neatlogs trace", "url": "", "public": False},
+        {"kind": "pr", "label": "this PR", "url": "https://github.com/a/b/pull/1", "public": True},
+    ]
+    body = make_pr_body(make_state(), [DOCS_PATCH], replay_url="https://1run.netlify.app/run.html#r=abc", evidence=ev)
+    assert "[Replay this run step by step](https://1run.netlify.app/run.html#r=abc)" in body
+    assert "[Entire session](https://entire.io/s/1)" in body
+    assert "Trail 6" not in body and "neatlogs trace" not in body and "pull/1" not in body
+    assert body.index("Replay this run") > body.index("## Proof")
+
+
+def test_pr_body_without_proof_links_is_unchanged_in_shape():
+    body = make_pr_body(make_state(), [DOCS_PATCH])
+    assert "Replay this run" not in body

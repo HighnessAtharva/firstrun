@@ -81,7 +81,8 @@ def _error_line(state: RunState, step_id: int) -> str:
     return ""
 
 
-def make_pr_body(state: RunState, patches: list[Patch], trace_url: str = "", checkpoint_url: str = "") -> str:
+def make_pr_body(state: RunState, patches: list[Patch], trace_url: str = "", checkpoint_url: str = "",
+                 replay_url: str = "", evidence: list[dict] | None = None) -> str:
     docs_patches = [p for p in patches if p.failure_class != FailureClass.ENVIRONMENT] or patches
     first = docs_patches[0] if docs_patches else None
     verified = state.status == RunStatus.VERIFIED
@@ -110,6 +111,18 @@ def make_pr_body(state: RunState, patches: list[Patch], trace_url: str = "", che
         lines.append("Not verified. The patched runbook did not pass in a fresh container, so treat this fix as a suggestion.")
     if state.time_to_first_success_s is not None:
         lines.append(f"Time to first success: {state.time_to_first_success_s:.0f} seconds.")
+    # Public proof a maintainer can open without an account. Links that need a login stay out.
+    proof = []
+    if replay_url:
+        proof.append(f"- [Replay this run step by step]({replay_url}): the failing output, the fix and the clean rerun. "
+                     "The link decodes in your browser, and nothing is uploaded.")
+    for e in evidence or []:
+        if e.get("public") and str(e.get("url", "")).startswith("https://") and e.get("kind") != "pr":
+            proof.append(f"- [{e.get('label') or e.get('kind')}]({e['url']})")
+    if state.source_url:
+        proof.append(f"- Rerun it yourself: `firstrun {state.source_url}`")
+    if proof:
+        lines += [""] + proof
     links = []
     if trace_url:
         links.append(f"- Trace: {trace_url}")
@@ -138,5 +151,14 @@ def write_outputs(run_dir: Path, state: RunState, runbook: Runbook, trace_url: s
     diff_path = run_dir / "patch.diff"
     body_path = run_dir / "pr_body.md"
     diff_path.write_text(diff, encoding="utf-8")
-    body_path.write_text(make_pr_body(state, state.patches, trace_url), encoding="utf-8")
+    replay, evidence = "", []
+    try:  # the replay link is a convenience, so a share failure never blocks the PR body
+        from firstrun import share
+
+        replay = share.link_for_run(run_dir)[0]
+        evidence = share.build_payload(run_dir).get("evidence", [])
+    except Exception:  # noqa: BLE001
+        pass
+    body_path.write_text(make_pr_body(state, state.patches, trace_url, replay_url=replay, evidence=evidence),
+                         encoding="utf-8")
     return [diff_path, body_path]
