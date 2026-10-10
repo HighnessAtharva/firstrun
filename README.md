@@ -182,6 +182,23 @@ The site hands you a prompt for Claude Code, Cursor or Codex. The agent installs
 
 </details>
 
+## Radar Picks the Quickstarts Worth a Run, and the Run Log Picks the Buyers
+
+FirstRun spends model money on every run, so it should only run where a break is likely and someone will read the fix.
+
+1. **Find.** Exa search returns candidate quickstart pages at no cost.
+2. **Rank.** `scripts/radar.py` asks Jev 4 typed questions per page in one call: can it run unattended in a container, is a step likely to break, how many developers read it, and is it the official docs. Code multiplies the answers into one priority. No model reads the pages one by one.
+3. **Run.** `firstrun run --targets targets-radar.txt --tag radar --tier team` runs the top pages in 3 parallel lanes under the plan-set cost cap. Every run is logged on the [runs page](https://1run.netlify.app/runs/).
+4. **Sell.** `scripts/buyers.py` maps each docs site FirstRun ran on or audited to its company, enriches it through treg at $0.0018 a lookup, and asks Jev whether the company fits the $49 to $299 plan. The result is [business/buyers.md](business/buyers.md): companies FirstRun already has proof for, each linked to its replay. It holds company data only, with no people and no emails.
+
+```bash
+python scripts/radar.py --from-exa exa_results/*.txt --top 20
+```
+
+```bash
+python scripts/buyers.py
+```
+
 ## FirstRun Found 4 Real Docs Bugs and Opened 4 Upstream PRs
 
 FirstRun ran five open-source quickstarts whose docs live in public repos. Every finding came from a verified run, where a second clean container passed with the fix.
