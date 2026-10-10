@@ -37,7 +37,9 @@ class FakeContainer:
         if command == self.crash_on:
             raise KeyboardInterrupt()
         if command.startswith("test -e "):
-            return StepResult(step_id=0, command=command, exit_code=0 if command.split()[-1].strip("'") in self.files else 1)
+            # The real check tries several folders; the fake only needs the path itself.
+            path = command.split()[2].strip("'")
+            return StepResult(step_id=0, command=command, exit_code=0 if path in self.files else 1)
         code, out, err = self.script.get(command, (0, "", ""))
         return StepResult(step_id=0, command=command, exit_code=code, stdout=out, stderr=err, duration_s=0.01)
 

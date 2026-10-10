@@ -94,6 +94,27 @@ flowchart TD
 
 A `budget` GUARDRAIL span runs before every recovery. The root span `firstrun.run` is a WORKFLOW span that holds the whole tree. [docs/architecture.md](docs/architecture.md) lists the states, the failure classes, the budgets and every span.
 
+## One Engine Answers Three Questions About a Quickstart
+
+| Question | Command | What it does |
+|---|---|---|
+| Does my quickstart work today? | `firstrun <url>` | Runs every step in a clean container, fixes the first break, proves the fix in a second clean container |
+| Which release broke it, and when? | `firstrun bisect <run> --package <pkg>` | Binary-searches the package's releases, one fresh container per probe, version pinned with `PIP_CONSTRAINT` |
+| What does it silently assume? | `firstrun prereqs <run>` | Turns the run's container fixes into a Prerequisites block, then proves it: a fresh container with only those items runs the docs as written |
+
+Bisect and Prerequisite Proof replay stored commands, so they make no model calls.
+
+**Bisect found that the dbt DuckDB guide never worked in a clean environment.** Its step `jafgen --years 6` passes on jafgen 0.3.1 (2023-01-17) and fails on 0.4.6 (2024-04-07), and PyPI has no release between them. The guide merged on 2025-03-14, 11 months after `--years` was gone. 5 probes found it.
+
+**Prerequisite Proof found what four quickstarts assume and proved three of them.**
+
+| Quickstart | The docs assume | Proof in a clean `python:3.11-slim` |
+|---|---|---|
+| AccuKnox knoxctl | curl, ca-certificates, gnupg, sudo | proven, 5/5 steps |
+| MkDocs | curl | proven, 9/9 steps |
+| Entire install | curl, git, `~/.local/bin` on `PATH` | proven, 4/4 steps, git found in round 2 |
+| dbt + DuckDB | Python 3.12 or later, git | steps 1 to 9 pass on `python:3.12-slim`; step 10 is the jafgen docs bug |
+
 ## Each of the 8 Focus Areas Has a Feature You Can Open
 
 | Focus area | Feature | Where you see it |
@@ -162,7 +183,7 @@ The six mistakes the agent made in v1:
 
 ## FirstRun Found 3 Real Docs Bugs and Opened 3 Upstream PRs
 
-FirstRun ran four open-source quickstarts whose docs live in public repos. Every finding below came from a verified run, where a second clean container passed with the fix.
+FirstRun ran five open-source quickstarts whose docs live in public repos. Every finding below came from a verified run, where a second clean container passed with the fix.
 
 | Quickstart | Result | What FirstRun found | Upstream |
 |---|---|---|---|
@@ -171,7 +192,7 @@ FirstRun ran four open-source quickstarts whose docs live in public repos. Every
 | [Entire CLI install](https://docs.entire.io/installation) | verified 4/4 | `install.sh` puts `entire` in `~/.local/bin`, which a clean shell lacks on `PATH` | [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) |
 | [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the docs commands work, the container needed `curl` and `gnupg` | none needed |
 | [MkDocs getting started](https://www.mkdocs.org/getting-started/) | verified 9/10 | the docs commands work, the container needed `curl` | none needed |
-| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | see below | the pip path never installs `create-dagster`, and `--group dev` needs pip 25.1 | draft |
+| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | verified 10/10 | the docs already cover both gaps FirstRun hit: install `create-dagster` first, and pip 25.1 for `--group` | none needed |
 
 Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app).
 
@@ -181,14 +202,19 @@ Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app
 - **One run split into 3 traces.** The first live run on the neatlogs docs produced 3 traces. The CLI now opens one `firstrun.run` trace around reading, planning, every step and verification.
 - **Ask-once crashed background runs.** The prompt raised `EOFError` with no terminal. It now returns nothing, and recovery uses the top class.
 - **Tests exported junk traces.** Each `pytest` run created about 50 empty `neatlogs-app` traces. The test fixture now sets an empty key, and a run after the fix created 0 traces.
+- **A docs note looked like a docs bug.** On Dagster, FirstRun labeled two gaps as docs bugs. A check of the source showed the page already covers both, in a prerequisite line and a note the planner skipped. FirstRun now opens no PR on Dagster. Every PR draft gets a source check before it ships.
+- **A cd broke steps three ways.** A leading cd, a cd inside a patched chain, and a file check after cd each failed a step that worked. The container now treats a cd into the folder it is already in as a no-op, and file checks also look from the run root.
 - **The Entire Brain watcher does not run on Windows.** Brain runs with `--no-daemon` and is refreshed by hand.
 
 ## Known Limits Are Listed With the Edge Case That Found Them
 
 [docs/known-limits.md](docs/known-limits.md) lists what FirstRun does not do yet. Examples: a hung step is not retried, and version pinning covers pip only.
 
-## Six Worker Agents Built It in Parallel on One Branch
+## Parallel Agents Built It and Entire Reviewed Every Layer
 
-Six worker agents each built one track on `main`, and the lead made one commit per track. All agents ran on Sonnet 5.5.
+- **Build:** a lead session planned the work and ran worker agents in parallel, one track each: fixtures, planner, executor, recovery, verification, report page, then edge cases. All agents ran on Sonnet 5.5 at medium effort.
+- **Review:** each layer is an Entire Trail, so Entire runners reviewed every commit since kickoff. They found 3 real bugs, all fixed: a secret retry loop, a Windows-only Docker default, and a cd guard that was written but never called.
+- **CI:** GitHub Actions runs the 246 offline tests on every push and pull request.
+- **Jury self-test:** the Entire judge plugin, run on this repo with the real start time, ranked it with no excluded work: 3.93 of 5, authenticity 4.5, integrity 5.0. The report is [evidence/jury-selftest.txt](evidence/jury-selftest.txt).
 
 Planning happened before the event in a private repo. No FirstRun code existed before kickoff on 2026-10-10 at 12:30 PM IST. The build log is [hackathon.md](hackathon.md).

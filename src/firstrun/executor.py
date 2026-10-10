@@ -42,6 +42,8 @@ def check_expected(step: Step, result: StepResult, container: Container | None =
         # A relative path counts from where the step started, since the step may cd away.
         path = shlex.quote(exp.file_exists)
         check = f"test -e {path}" + (f" || (cd {shlex.quote(start_dir)} && test -e {path})" if start_dir else "")
+        # Planners write paths from the run root, /work, even when a retry starts in a subfolder.
+        check += f" || (cd /work && test -e {path})"
         probe = container.exec(check, timeout_s=30)
         if probe.exit_code != 0:
             return False
