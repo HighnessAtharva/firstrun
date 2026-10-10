@@ -8,3 +8,4 @@ __pycache__/
 secrets.allowlist
 *.egg-info/
 .pytest_cache/
+!docs/runs/

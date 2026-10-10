@@ -560,6 +560,7 @@ html{scroll-padding-top:170px}
 <nav class="crumbs" aria-label="Breadcrumb"><span class="sl" aria-hidden="true">/</span><a href="run.html" id="crRuns">Runs</a><span class="sl hide" id="crSl" aria-hidden="true">/</span><span class="now hide" id="crNow"></span></nav>
 <div class="sp"></div>
 <div class="acts">
+<a class="b ghost hide-s" href="runs/">All runs</a><a class="b ghost hide-s" href="audit.html">Docs audit</a>
 <div class="anch"><button type="button" class="b ghost" id="exBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="exPop">Examples<svg class="i" aria-hidden="true"><use href="#i-down"/></svg></button>
 <div class="pop" id="exPop" role="menu" aria-label="Example runs"><div class="ph">Real runs, recorded 2026-10-10</div><div id="exList"></div><hr><button type="button" class="mi" role="menuitem" id="exPaste"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg><span class="mt">Paste a share code</span></button></div></div>
 <a class="b ghost ico hide-s" href="https://github.com/HighnessAtharva/firstrun" aria-label="FirstRun on GitHub" title="GitHub"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg></a>
@@ -1385,7 +1386,7 @@ function parseHash(){
   return o;
 }
 var CACHE={};
-function fetchEx(name){if(CACHE[name])return Promise.resolve(CACHE[name]);return fetch("examples/"+name+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){t=t.trim();var k=t.indexOf("#r=");var c=clean(k>=0?t.slice(k+3):t);if(!c||/^</.test(c))throw 0;CACHE[name]=c;return c})}
+function fetchEx(name){if(CACHE[name])return Promise.resolve(CACHE[name]);return fetch((/^\d{8}-/.test(name)?"runs/":"examples/")+name+".txt").then(function(r){if(r.ok)return r.text();return fetch((/^\d{8}-/.test(name)?"examples/":"runs/")+name+".txt").then(function(r2){if(!r2.ok)throw 0;return r2.text()})}).then(function(t){t=t.trim();var k=t.indexOf("#r=");var c=clean(k>=0?t.slice(k+3):t);if(!c||/^</.test(c))throw 0;CACHE[name]=c;return c})}
 function fromHash(){
   var o=parseHash();
   if(S.d&&((o.ex&&o.ex===S.ex)||(o.r&&!S.ex&&clean(o.r)===S.code))){if((o.view==="report")!==(S.mode==="report"))setMode(o.view==="report"?"report":"walk");if(o.stage)go2(o.stage);return}

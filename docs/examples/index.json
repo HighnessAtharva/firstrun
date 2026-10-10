@@ -1,6 +1,16 @@
 {
  "runs": [
   {
+   "fixes": 0,
+   "example": "altimate-code",
+   "status": "passed",
+   "url": "https://help.altimate.ai/code/getting-started/quickstart/",
+   "title": "Altimate Code quickstart",
+   "name": "altimate-code",
+   "summary": "The install step passes in a clean container, and a probe shows the CLI starts and has the analyst agent and the --agent flag. The other 5 steps need a browser sign-in, the TUI or a Snowflake account, so FirstRun skips them.",
+   "date": "2026-10-10"
+  },
+  {
    "fixes": 3,
    "example": "dbt",
    "status": "verified",

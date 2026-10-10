@@ -60,7 +60,7 @@ Time to first success: 195 s
 
 FirstRun writes `report.md`, `patch.diff` and `pr_body.md` into the run folder. The patch is one line.
 
-## Six Teams Get a Different Job Out of the Same Engine
+## Seven Teams Get a Different Job Out of the Same Engine
 
 | # | You are | The problem | Run this | You get |
 |---|---|---|---|---|
@@ -70,6 +70,34 @@ FirstRun writes `report.md`, `patch.diff` and `pr_body.md` into the run folder. 
 | **4** | An open-source contributor | You want a first PR that a maintainer merges | `firstrun pr <run>` | The `gh` commands for the docs PR, source check included |
 | **5** | An engineer picking a tool | You want to know if the vendor's quickstart works before you commit | `firstrun <url>` | A time to first success and the first step that breaks |
 | **6** | A coding agent | You need a loop that checks its own docs work | `firstrun run --resume <id>` | State after every step and a model-free verify |
+| **7** | A head of docs | Hundreds of pages, and the code moved under some of them | `firstrun audit owner/repo` | Stale pages with the commits behind them, features with no docs, proposal cards and drafted release notes |
+
+<details open>
+<summary><b>7. Which docs did the product outgrow?</b> Audit the whole docs set from the git history.</summary>
+
+```bash
+firstrun audit fastapi/typer
+```
+
+```bash
+firstrun audit dbt-labs/dbt-core --docs-repo dbt-labs/docs.getdbt.com
+```
+
+One blobless clone gives the whole history. The audit then works offline and costs $0 in model calls. Jev sorts commits with no conventional prefix when `TYPESAFE_API_KEY` is set, and every audit is one neatlogs trace.
+
+- **Oldest first.** Every page, ranked by the date of its last edit.
+- **Stale or quiet.** A page is stale when product commits on its topic landed after its last edit, and the report names those commits. An old page that nothing changed under is quiet, so the team can leave it alone.
+- **Features with no docs.** Each user-facing commit in 120 days is checked against the docs text. A flag or name that no page mentions becomes a "Document this" card.
+- **Proposal cards.** Document this, refresh this page, feature this, create content around a feature with 3 or more commits, and automate the release notes.
+- **Drafts.** Release notes for the newest stable tag and up to 3 product highlights, written from commit subjects and pull request numbers.
+
+`firstrun audit-issue` turns the newest audit into `issue.md`, one checkbox per card, and prints the `gh issue create` command. It opens nothing on its own.
+
+To audit every week, copy [`examples/github-action/firstrun-audit.yml`](examples/github-action/firstrun-audit.yml) into `.github/workflows/`. Each Monday it audits the repo and updates one issue labeled `firstrun-audit`, so the docs team gets a fresh work list without anyone running a command.
+
+`--docs-repo` reads the docs from a second repo when the docs site lives apart from the code. Inside this repo, each audit is published to `docs/audits/` and opens at [audit.html](https://1run.netlify.app/audit.html).
+
+</details>
 
 <details open>
 <summary><b>1. Does my quickstart work today?</b> Run it every night.</summary>
@@ -362,6 +390,12 @@ Read the result in `runs/<run-id>/report.md`. Build the HTML report with:
 
 ```bash
 firstrun report --html
+```
+
+Run it inside a clone of this repo and every run is logged for the public site. FirstRun writes the replay to `docs/runs/` and adds a row to `docs/runs/index.json`. Commit those files and the run appears on the [runs page](https://1run.netlify.app/runs/). Rebuild the log from the `runs/` folder with:
+
+```bash
+firstrun publish --all
 ```
 
 The offline test suite needs no network, Docker or keys. The tests ship with the repo, not with the pip package, so clone it first:

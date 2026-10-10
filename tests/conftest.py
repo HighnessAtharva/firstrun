@@ -10,6 +10,9 @@ if os.environ.get("FIRSTRUN_EXPORT_TESTS") != "1":
     # neatlogs.wrap boots its own exporter and sends hundreds of empty "neatlogs-app" traces.
     os.environ["NEATLOGS_API_KEY"] = ""
 
+# Tests never write the public site log in docs/runs or docs/audits. A missing folder turns publishing off.
+os.environ["FIRSTRUN_SITE_DIR"] = str(Path(__file__).parent / "_no_site" / "runs")
+
 from firstrun import config  # noqa: E402
 from firstrun.models import Runbook  # noqa: E402
 

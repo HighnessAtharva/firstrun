@@ -133,6 +133,14 @@ def _echo_share(run_dir) -> None:
         click.echo(f"share: {share.link_for_run(run_dir)[0]}")
     except Exception:  # noqa: BLE001 - a share failure never breaks a run
         pass
+    try:
+        from firstrun import publish
+
+        out = publish.publish_run(run_dir)
+        if out:
+            click.echo(f"site log: {out} (commit docs/runs to show it on the site)")
+    except Exception:  # noqa: BLE001 - a publish failure never breaks a run
+        pass
 
 
 def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recover: bool = True,
@@ -335,6 +343,90 @@ def share_cmd(run_id) -> None:
     click.echo(link)
     click.echo(f"code: {code}")
     click.echo(f"code length: {len(code)}")
+
+
+@cli.command("audit")
+@click.argument("target")
+@click.option("--days", "stale_days", default=180, show_default=True, help="A page older than this is stale or quiet.")
+@click.option("--no-jev", is_flag=True, help="Sort commits by their subject line only. No model call.")
+@click.option("--no-publish", is_flag=True, help="Do not write docs/audits for the site.")
+@click.option("--docs-repo", help="A second repo that holds the docs, when they do not live next to the code.")
+def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo) -> None:
+    """Audit a repo's docs: stale pages, features with no docs, and proposal cards. TARGET is owner/repo, a GitHub URL, a git folder, or a docs site with a sitemap."""
+    from firstrun import audit as audit_mod, tracing
+
+    tracing.init_tracing(tags=["audit"])
+    try:
+        if re.match(r"^(https?://)?[\w.-]+\.[a-z]{2,}(/|$)", target) and "github.com" not in target:
+            result = audit_mod.audit_sitemap(target, stale_days)
+        else:
+            click.echo(f"auditing {target}: cloning history, no checkout")
+            result = audit_mod.audit(target, stale_days, use_jev=not no_jev, docs_repo=docs_repo)
+    except (RuntimeError, ValueError) as e:
+        tracing.close_tracing()
+        raise click.ClickException(str(e)) from e
+    out_dir = Path(config.RUNS_DIR) / result["id"]
+    md = audit_mod.save(result, out_dir)
+    s = result["summary"]
+    click.echo(f"{s['pages']} pages: {s['stale']} stale, {s['quiet']} quiet, {s['aging']} aging, {s['fresh']} fresh"
+               + (f", {s['unchecked']} unchecked" if s.get("unchecked") else "") + f". Oldest {s['oldest_days']} days.")
+    click.echo(f"{s['features']} recent features, {s['uncovered']} with no docs. {s['cards']} proposal cards.")
+    click.echo(f"report: {md}")
+    click.echo(f"issue: firstrun audit-issue {result['id']}")
+    if not no_publish:
+        site = audit_mod.find_audit_site()
+        if site:
+            click.echo(f"site log: {audit_mod.publish(result, site)} (commit docs/audits to show it on the site)")
+    tracing.close_tracing()
+
+
+@cli.command("audit-issue")
+@click.argument("audit_id", required=False)
+@click.option("--json", "as_json", is_flag=True, help="Print repo, title, body and commands as JSON.")
+def audit_issue_cmd(audit_id, as_json) -> None:
+    """Write issue.md for the docs team from an audit and print the gh command. Opens nothing."""
+    from firstrun import audit as audit_mod
+
+    dirs = sorted(d for d in Path(config.RUNS_DIR).glob("audit-*") if (d / "audit.json").exists())
+    if audit_id:
+        dirs = [d for d in dirs if d.name == audit_id]
+    if not dirs:
+        raise click.ClickException("no audit found. Run firstrun audit owner/repo first.")
+    d = dirs[-1]
+    data = audit_mod.issue(json.loads((d / "audit.json").read_text(encoding="utf-8")))
+    (d / "issue.md").write_text(data["body"], encoding="utf-8")
+    data["body_file"] = str(d / "issue.md")
+    if as_json:
+        click.echo(json.dumps(data, indent=1))
+        return
+    click.echo(f"title: {data['title']}")
+    click.echo(f"body: {d / 'issue.md'}")
+    for c in data["commands"]:
+        click.echo(f"run from {d}: {c}")
+
+
+@cli.command("publish")
+@click.argument("run_id", required=False)
+@click.option("--all", "everything", is_flag=True, help="Publish every run folder, not only the newest.")
+def publish_cmd(run_id, everything) -> None:
+    """Write a run to docs/runs so the public site lists it. Run it inside the firstrun checkout."""
+    from firstrun import publish, state as state_io
+
+    site = publish.find_site_dir()
+    if site is None:
+        raise click.ClickException("docs/runs not found. Run this inside the firstrun checkout or set FIRSTRUN_SITE_DIR.")
+    if everything:
+        click.echo(f"published {publish.publish_all(config.RUNS_DIR, site)} runs to {site}")
+        return
+    if not run_id:
+        dirs = sorted(d.name for d in Path(config.RUNS_DIR).glob("*") if (d / "state.json").exists())
+        if not dirs:
+            raise click.ClickException("no runs found")
+        run_id = dirs[-1]
+    run_dir = state_io.run_dir(run_id)
+    if not (run_dir / "state.json").exists():
+        raise click.ClickException(f"unknown run id: {run_id}")
+    click.echo(f"published: {publish.publish_run(run_dir, site)}")
 
 
 @cli.command("bisect")
