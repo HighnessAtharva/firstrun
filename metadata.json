@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4KF485MAXGKZ95VXX0CCHAJ",
   "strategy": "manual-commit",
   "branch": "neatlogs/evals",
-  "checkpoints_count": 3,
+  "checkpoints_count": 5,
   "files_touched": [
     "src/firstrun/config.py",
     "src/firstrun/executor.py",
@@ -26,6 +26,13 @@
       "compact_transcript": "/1/transcript.jsonl",
       "content_hash": "/1/content_hash.txt",
       "prompt": "/1/prompt.txt"
+    },
+    {
+      "metadata": "/2/metadata.json",
+      "transcript": "/2/full.jsonl",
+      "compact_transcript": "/2/transcript.jsonl",
+      "content_hash": "/2/content_hash.txt",
+      "prompt": "/2/prompt.txt"
     }
   ],
   "token_usage": {
