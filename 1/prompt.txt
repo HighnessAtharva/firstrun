@@ -1,0 +1,11 @@
+<pasted_content id="d317">
+in the blogs and the video we definitely have to emphasize showing how the incidents and investigations were used from the neatlogs side and ofc in the app please make sure the frontend user joruney is seamless it shows value clearly without confusing the user.
+
+HOmepage got a lot of additions recently so those need to be kinda broguht under control, streamlined the website fully and then ofc we need to take care of the below feedback as well
+
+**The core takeaway:** Build for measurable user impact, not just a working demo. For the vulnerability agent, show that it can identify a real vulnerability across commit snapshots, present the finding clearly, and give the user an actionable next step. The idea was seen as promising, but its value depends on demonstrating that it works.
+</pasted_content id="d317">
+
+---
+
+ofc be in sync with the NOTES plan as well D:\Atharva\Notes > projects > neathack don't stray!! and refer other sessions or recent memory

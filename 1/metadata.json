@@ -1,0 +1,165 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KEYH71XPHMDNNHNRY4QJ9X",
+  "session_id": "8145d2ac-ce2b-4c05-98e5-7b8f7c2943cf",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T17:49:42.5361574Z",
+  "branch": "site/homepage-distill",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "turn_id": "3f36318630aa",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 128,
+    "cache_creation_tokens": 213455,
+    "cache_read_tokens": 12251648,
+    "output_tokens": 40534,
+    "api_call_count": 64
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01Fpa8GFFvirTpxnrjCWbmbs",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "3f36318630aa",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 62,
+        "end": 63,
+        "entry_ids": [
+          "40215ec1-2348-4a47-93db-b5eddb6bb1d6"
+        ],
+        "tool_use_id": "toolu_01Fpa8GFFvirTpxnrjCWbmbs"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Fpa8GFFvirTpxnrjCWbmbs"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01SVnuWo38WnSw5iicRWvK5P",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "3f36318630aa",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 356,
+        "end": 357,
+        "entry_ids": [
+          "e20c4c78-bd26-4a2f-af59-18d4b6cea628"
+        ],
+        "tool_use_id": "toolu_01SVnuWo38WnSw5iicRWvK5P"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01SVnuWo38WnSw5iicRWvK5P"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 4492,
+      "user_lines_removed": 3218,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 41,
+        "docs/runs/20261010-172110-docs-sqlalchemy-org.txt": 1,
+        "docs/runs/20261010-172110-fla[REDACTED].txt": 1,
+        "docs/runs/20261010-172129-go-dev.txt": 1,
+        "docs/runs/20261010-172208-fla[REDACTED].txt": 1,
+        "docs/runs/20261010-172306-dlthub-com.txt": 1,
+        "docs/runs/20261010-172328-docs-djangoproject-com.txt": 1,
+        "docs/runs/20261010-172527-tortoise-github-io.txt": 1,
+        "docs/runs/20261010-172624-duckdb-org.txt": 1,
+        "docs/runs/20261010-172745-hypothesis-readthedocs-io.txt": 1,
+        "docs/runs/index.json": 973,
+        "radar-lane0.txt": 6,
+        "radar-lane1.txt": 6,
+        "radar-lane2.txt": 6,
+        "radar.json": 794,
+        "scripts/radar.py": 126,
+        "spans_raw_optimized.log": 5,
+        "src/firstrun/audit.py": 958,
+        "src/firstrun/bisect.py": 274,
+        "src/firstrun/cli.py": 591,
+        "src/firstrun/config.py": 23,
+        "src/firstrun/executor.py": 304,
+        "src/firstrun/models.py": 142,
+        "src/firstrun/tracing.py": 93,
+        "targets-radar.txt": 19,
+        "tests/conftest.py": 105,
+        "tests/test_executor.py": 17
+      },
+      "user_removed_per_file": {
+        "docs/runs/index.json": 820,
+        "src/firstrun/audit.py": 935,
+        "src/firstrun/bisect.py": 271,
+        "src/firstrun/cli.py": 585,
+        "src/firstrun/config.py": 2,
+        "src/firstrun/executor.py": 275,
+        "src/firstrun/models.py": 141,
+        "src/firstrun/tracing.py": 86,
+        "tests/conftest.py": 103
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1079,
+      "user_lines_removed": 17,
+      "agent_lines_added": 4253,
+      "agent_lines_removed": 3724,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        "business/buyers.csv": 24,
+        "business/buyers.md": 31,
+        "docs/audit.html": 13,
+        "docs/index.html": 1,
+        "docs/runs/20261010-172923-framesurge-sh.txt": 1,
+        "docs/runs/20261010-173419-beam-apache-org.txt": 1,
+        "docs/runs/index.html": 13,
+        "evidence/radar.json": 794,
+        "scripts/buyers.py": 146,
+        "scripts/radar.py": 2
+      },
+      "user_removed_per_file": {
+        "docs/audit.html": 7,
+        "docs/index.html": 1,
+        "docs/runs/index.html": 7,
+        "scripts/radar.py": 2
+      }
+    }
+  ]
+}
