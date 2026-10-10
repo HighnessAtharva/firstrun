@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01S3F79E9zZ1p5vB1zTSeF8x",
+  "agent_id": "a47d1f3b3e9b47e8d",
+  "subagent_type": "general-purpose",
+  "task_description": "T3 fixtures track",
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 85955,
+    "cache_read_tokens": 237508,
+    "output_tokens": 4453,
+    "api_call_count": 4
+  },
+  "started_at": "2026-10-10T12:59:41.5480036+05:30",
+  "completed_at": "2026-10-10T13:00:29.7359358+05:30"
+}
