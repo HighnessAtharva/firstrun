@@ -221,8 +221,11 @@ def run(run_id: str, package: str, step_id: int | None = None, max_probes: int =
         "verdict": "", "probes": 0, "started_at": _now(), "finished_at": "",
     }
 
-    with neatlogs.trace("firstrun.bisect", kind="WORKFLOW", run_id=run_id, package=package,
-                        step_id=step_id) as root, config.block_model_calls():
+    from firstrun.tracing import session_attrs
+
+    with neatlogs.trace("firstrun.bisect", kind="WORKFLOW", run_id=run_id, package=package, step_id=step_id,
+                        **session_attrs(state_io.target_name(runbook.source_url), "bisect", package=package)
+                        ) as root, config.block_model_calls():
         set_io(root, input={"run_id": run_id, "package": package, "step_id": step_id, "max_probes": max_probes})
         rels = release_list if release_list is not None else releases(package, python)
         doc["releases_available"] = len(rels)

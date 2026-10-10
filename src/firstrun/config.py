@@ -40,6 +40,25 @@ DEFAULT_IMAGE = "python:3.11-slim"
 KEYS = ("NEATLOGS_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "TYPESAFE_API_KEY", "FIRECRAWL_API_KEY_1")
 
 
+_KEYS_SCRIPT = _AUTHOR_ENV.parent / "SCRIPTS" / "keys" / "keys.py"
+
+
+def _healthy_firecrawl_key() -> str | None:
+    """The first Firecrawl slot with credits left, from the author's key rotator. None anywhere else.
+    Slots burn in order, so slot 1 alone goes dead after a busy day."""
+    if not _KEYS_SCRIPT.exists():
+        return None
+    import subprocess
+    import sys
+
+    try:
+        p = subprocess.run([sys.executable, str(_KEYS_SCRIPT), "firecrawl"], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    key = p.stdout.strip().splitlines()[-1].strip() if p.returncode == 0 and p.stdout.strip() else ""
+    return key if key.startswith("fc-") else None
+
+
 def load_env(path: Path | None = None) -> None:
     """Load KEY=VALUE lines into os.environ at run time. Never overwrites a set value."""
     path = path or ENV_FILE
@@ -54,8 +73,10 @@ def load_env(path: Path | None = None) -> None:
         value = value.strip().strip('"').strip("'")
         if key and value and key not in os.environ:
             os.environ[key] = value
-    if "FIRECRAWL_API_KEY" not in os.environ and os.environ.get("FIRECRAWL_API_KEY_1"):
-        os.environ["FIRECRAWL_API_KEY"] = os.environ["FIRECRAWL_API_KEY_1"]
+    if "FIRECRAWL_API_KEY" not in os.environ:
+        key = _healthy_firecrawl_key() or os.environ.get("FIRECRAWL_API_KEY_1")
+        if key:
+            os.environ["FIRECRAWL_API_KEY"] = key
     # The Agent SDK must use the subscription token, never an API key.
     os.environ.pop("ANTHROPIC_API_KEY", None)
 

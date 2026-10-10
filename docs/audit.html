@@ -13,7 +13,6 @@
 :root{--page:#F4F5F9;--ink:#1D1D1F;--muted:#65656B;--accent:#0A66D6;--tint:#E6F0FC;--pass:#1B8A3A;--passbg:#E4F4E8;--bad:#C4281C;--badbg:#FBE7E5;--warn:#8A5A00;--warnbg:#FFF1D6;--violet:#6B3FD4;--violetbg:#EFE8FD;--hair:rgba(29,29,31,.08);
 --gl:linear-gradient(145deg,rgba(255,255,255,.84),rgba(255,255,255,.52));--edge:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.55),0 0 0 .5px rgba(20,30,60,.07);
 --lift:0 1px 2px rgba(20,30,60,.05),0 12px 32px -8px rgba(30,50,110,.14)}
-@media(prefers-color-scheme:dark){:root{--page:#0F1116;--ink:#F2F3F5;--muted:#9AA0AB;--accent:#5AA2FF;--tint:#16243A;--pass:#5FD17E;--passbg:#14301D;--bad:#FF8B80;--badbg:#3A1815;--warn:#F2C36B;--warnbg:#33290F;--violet:#B79BFF;--violetbg:#261D3D;--hair:rgba(255,255,255,.1);--gl:linear-gradient(145deg,rgba(40,44,54,.85),rgba(30,33,41,.65));--edge:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 .5px rgba(255,255,255,.08);--lift:0 12px 32px -8px rgba(0,0,0,.5)}}
 *{box-sizing:border-box;margin:0}
 html{background:var(--page);color:var(--ink);font-family:Geist,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
 body{line-height:1.45;font-size:16px;-webkit-font-smoothing:antialiased;min-height:100vh}
@@ -21,11 +20,6 @@ a{color:var(--accent);text-underline-offset:3px}
 code,pre,.mono{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:10px}
 .g{background:var(--gl);box-shadow:var(--edge),var(--lift);-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7)}
-.nav{position:sticky;top:12px;z-index:30;height:54px;width:min(1040px,calc(100% - 24px));margin:12px auto 0;border-radius:99px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 9px 0 16px}
-.wm{font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
-.nl{display:flex;gap:4px;font-size:13.5px}
-.nl a{color:var(--muted);text-decoration:none;padding:7px 13px;border-radius:99px}
-.nl a:hover,.nl a[aria-current]{color:var(--ink);background:var(--tint)}
 .pillbtn{font:inherit;font-weight:600;font-size:14px;border:0;border-radius:99px;padding:9px 18px;min-height:40px;background:linear-gradient(180deg,#2B86F0,#0A66D6);color:#fff;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .pillbtn.ghost{background:var(--tint);color:var(--accent)}
 main{max-width:1040px;margin:0 auto;padding:40px 20px 72px}
@@ -97,10 +91,22 @@ td.path small{display:block;color:var(--muted);font-size:12.5px}
 .note{font-size:13.5px;color:var(--muted);margin-top:14px}
 footer{max-width:1040px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:14px}
 @media(max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}.cards,.drafts,.what{grid-template-columns:1fr}.nl{display:none}.hide-sm{display:none}td.path{max-width:none}}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(52vw 44vw at 10% 6%,rgba(10,122,255,.20),transparent 62%),radial-gradient(44vw 38vw at 92% 20%,rgba(168,108,255,.17),transparent 62%),radial-gradient(50vw 42vw at 72% 96%,rgba(36,200,168,.17),transparent 62%),radial-gradient(38vw 32vw at 4% 74%,rgba(255,158,92,.13),transparent 62%)}
+body{position:relative}
+/* nav: the landing page's floating glass pill, shared by every page */
+.nav{position:sticky;top:12px;z-index:30;height:54px;width:min(980px,calc(100% - 24px));margin:12px auto 0;border-radius:99px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 9px 0 16px;background:var(--gl);-webkit-backdrop-filter:blur(24px) saturate(1.9);backdrop-filter:blur(24px) saturate(1.9);box-shadow:var(--edge),var(--lift)}
+.nav .wm{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;letter-spacing:-.025em}
+.nav .lg{width:28px;height:28px;display:block;filter:drop-shadow(0 3px 6px rgba(10,102,214,.35))}
+.nl{display:flex;gap:4px;font-size:13.5px}
+.nl a{color:var(--muted);text-decoration:none;padding:7px 13px;border-radius:99px;transition:color .2s,background .25s}
+.nl a:hover{color:var(--ink);background:rgba(255,255,255,.65)}
+.nl a[aria-current]{color:var(--ink);background:rgba(255,255,255,.85);box-shadow:0 0 0 1px var(--hair)}
+@media(max-width:860px){.nl{display:none}}
 </style>
 </head>
 <body>
-<nav class="nav g" aria-label="Site"><a class="wm" href="./">FirstRun</a><div class="nl"><a href="./#steps">How it works</a><a href="runs/">Runs</a><a href="audit.html" aria-current="page">Docs audit</a><a href="./#plan">Plan</a></div><a href="./" class="pillbtn ghost">Test a quickstart</a></nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="0 0 64 64"><defs><linearGradient id="lgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46A6FF"/><stop offset="1" stop-color="#0060DF"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgg)"/><path d="M2 17C2 8.7 8.7 2 17 2h30c8.3 0 15 6.7 15 15v5C46 30 18 30 2 22z" fill="#fff" opacity=".24"/><rect x="2.5" y="2.5" width="59" height="59" rx="14.5" fill="none" stroke="#fff" stroke-opacity=".38"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></symbol></svg>
+<nav class="nav" aria-label="Sections"><a class="wm" href="./" aria-label="FirstRun home"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><div class="nl"><a href="./#steps">How it works</a><a href="./#proof">Proof</a><a href="./#tools">Tools</a><a href="./#plan">Plan</a><a href="./runs/">Runs</a><a href="./audit.html" aria-current="page">Audit</a></div></nav>
 <main>
 
 <section id="start">

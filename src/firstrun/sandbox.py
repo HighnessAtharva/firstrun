@@ -25,6 +25,9 @@ exec bash /tmp/.fr_step.sh < /dev/null
 
 # Restore env and cwd, run the command, save env and cwd, keep the exit code.
 _PREFIX = """if [ -f /tmp/.fr_env ]; then . /tmp/.fr_env; fi
+# A developer's terminal is a tty, so Python prints each line as it goes. Match that, or a dev server's
+# "Serving on" line sits in a buffer until the process dies.
+export PYTHONUNBUFFERED=1
 cd "$(cat /tmp/.fr_cwd 2>/dev/null || echo /work)" 2>/dev/null || cd /work
 # Trade-off: exit 141 (SIGPIPE) maps to 0, as in `yes | tool`, where the producer dies after the
 # consumer finishes. A real command that exits 141 by itself is also hidden. PIPESTATUS is not reliable here.
@@ -237,8 +240,11 @@ class Container:
             if done.returncode != 0:
                 raise RuntimeError(f"write_files {f.path} failed: {_tail(done.stderr, 500)}")
 
-    def exec(self, command: str, timeout_s: int = 300) -> StepResult:
-        """Run one shell command in the container workdir. Never raises on a non-zero exit."""
+    def exec(self, command: str, timeout_s: int = 300, ready=None) -> StepResult:
+        """Run one shell command in the container workdir. Never raises on a non-zero exit.
+
+        ready: a compiled regex. When the output matches it (a dev server saying it listens), the command is
+        stopped 2 s later and reported as timed out, so the caller can tell "came up" from "hung"."""
         # The rewrite is execution-only: callers keep the original command for reports.
         script = _PREFIX + guard_leading_cd(command) + "\n"
         start = time.monotonic()
@@ -247,18 +253,10 @@ class Container:
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
         timed_out = False
-        try:
-            out, err = proc.communicate(script.encode("utf-8"), timeout=timeout_s)
-            code = proc.returncode
-        except subprocess.TimeoutExpired:
-            timed_out = True
-            proc.kill()
-            try:
-                self._sh(_KILL_ALL, timeout=30)
-            except Exception:
-                pass
-            out, err = proc.communicate()
-            code = 124
+        if ready is not None:
+            out, err, code, timed_out = self._exec_until_ready(proc, script, timeout_s, ready)
+        else:
+            out, err, code, timed_out = self._exec_plain(proc, script, timeout_s)
         from firstrun.redact import redact
 
         return StepResult(
@@ -270,3 +268,55 @@ class Container:
             duration_s=round(time.monotonic() - start, 3),
             timed_out=timed_out,
         )
+
+    def _stop(self, proc) -> None:
+        proc.kill()
+        try:
+            self._sh(_KILL_ALL, timeout=30)
+        except Exception:
+            pass
+
+    def _exec_until_ready(self, proc, script: str, timeout_s: int, ready):
+        import threading
+
+        bufs = {"out": bytearray(), "err": bytearray()}
+
+        def pump(stream, key):
+            for chunk in iter(lambda: stream.read1(4096), b""):
+                bufs[key].extend(chunk)
+
+        threads = [threading.Thread(target=pump, args=(proc.stdout, "out"), daemon=True),
+                   threading.Thread(target=pump, args=(proc.stderr, "err"), daemon=True)]
+        for t in threads:
+            t.start()
+        try:
+            proc.stdin.write(script.encode("utf-8"))
+            proc.stdin.close()
+        except OSError:
+            pass
+        deadline, seen_at = time.monotonic() + timeout_s, None
+        while proc.poll() is None and time.monotonic() < deadline:
+            if seen_at is None and ready.search((bufs["out"] + b"\n" + bufs["err"]).decode("utf-8", "replace")):
+                seen_at = time.monotonic()
+            if seen_at is not None and time.monotonic() - seen_at >= 2:  # a server that crashes on boot dies first
+                break
+            time.sleep(0.25)
+        timed_out = proc.poll() is None
+        if timed_out:
+            self._stop(proc)
+        for t in threads:
+            t.join(timeout=5)
+        code = 124 if timed_out else proc.returncode
+        return bytes(bufs["out"]), bytes(bufs["err"]), code, timed_out
+
+    def _exec_plain(self, proc, script: str, timeout_s: int):
+        timed_out = False
+        try:
+            out, err = proc.communicate(script.encode("utf-8"), timeout=timeout_s)
+            code = proc.returncode
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            self._stop(proc)
+            out, err = proc.communicate()
+            code = 124
+        return out, err, code, timed_out

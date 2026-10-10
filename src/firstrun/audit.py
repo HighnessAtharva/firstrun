@@ -718,9 +718,32 @@ def _summary(pages: list[dict]) -> dict:
             "oldest_days": max(ages) if ages else 0}
 
 
-@neatlogs.span(kind="WORKFLOW", name="firstrun.audit")
+def _trace_output(a: dict) -> dict:
+    """What the audit claimed, compact enough for a neatlogs evaluator to check against the spans."""
+    return {"summary": a["summary"], "release": a["release"],
+            "cards": [{"kind": c["kind"], "title": c["title"], "why": c["why"],
+                       "evidence": [e.get("sha") or e.get("pr") for e in c.get("evidence", [])]} for c in a["cards"]],
+            "stale_pages": [{"path": p["path"], "age_days": p["age_days"], "stale_p": p.get("stale_p"),
+                             "commits": [e["subject"] for e in p["evidence"]]}
+                            for p in a["pages"] if p["status"] == "stale"][:15]}
+
+
 def audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path | None = None,
           docs_repo: str | None = None) -> dict:
+    """WORKFLOW trace `firstrun.audit`, in the docs site's neatlogs session. See _audit."""
+    from firstrun.tracing import session_attrs
+
+    _, name = resolve_target(target)
+    with neatlogs.trace("firstrun.audit", kind="WORKFLOW", repo=name, docs_repo=docs_repo or "",
+                        **session_attrs(name, "audit", docs_repo=docs_repo)) as root:
+        set_io(root, input={"target": target, "docs_repo": docs_repo, "stale_days": stale_days, "jev": use_jev})
+        result = _audit(target, stale_days, use_jev, keep, docs_repo)
+        set_io(root, output=_trace_output(result))
+        return result
+
+
+def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path | None = None,
+           docs_repo: str | None = None) -> dict:
     """docs_repo: a second repo that holds the docs site, when the docs do not live next to the code."""
     now = datetime.now(timezone.utc)
     url, name = resolve_target(target)

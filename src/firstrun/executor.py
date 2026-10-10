@@ -24,6 +24,28 @@ from firstrun.tracing import mark_error, set_io
 RecoverFn = Callable[[Step, StepResult, RunState, str], "Patch | GaveUp"]
 
 
+# A quickstart often ends by starting a dev server, which never exits on its own. Such a step passes when its
+# output says the server is listening, then the server is stopped.
+SERVER_WINDOW_S = 90
+_SERVER_CMD = re.compile(
+    r"\bflask\b.*\brun\b|\buvicorn\b|\bfastapi\s+(dev|run)\b|\bgunicorn\b|\bhypercorn\b|manage\.py\s+runserver|"
+    r"\blitestar\b.*\brun\b|python3?\s+-m\s+http\.server|\bstreamlit\s+run\b|\bmkdocs\s+serve\b|"
+    r"\b(npm|pnpm|yarn)\s+(run\s+)?(dev|start|serve)\b|\bnext\s+dev\b|\bvite\b(?!\s+build)|\bhugo\s+server\b|"
+    r"\bjekyll\s+serve\b|\brails\s+s(erver)?\b|\bphp\s+artisan\s+serve\b|\bpython3?\s+app\.py\b")
+_SERVER_READY = re.compile(
+    r"Running on https?://|Uvicorn running on|Application startup complete|Starting development server at|"
+    r"Serving HTTP on|[Ll]istening on|Local:\s+https?://|ready in \d|Server started|serving at|Serving on|"
+    r"You can now view .* in your browser|Booting worker|started server on")
+
+
+def is_server_command(command: str) -> bool:
+    return bool(_SERVER_CMD.search(command))
+
+
+def server_ready(result: StepResult) -> bool:
+    return result.timed_out and bool(_SERVER_READY.search(result.stdout + "\n" + result.stderr))
+
+
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -32,6 +54,9 @@ def check_expected(step: Step, result: StepResult, container: Container | None =
                    start_dir: str = "") -> bool:
     """True when the result meets step.expected. file_exists needs the container."""
     exp = step.expected
+    if result.server_ready:
+        # The server came up and FirstRun stopped it, so its exit code says nothing about the docs.
+        return exp.output_contains is None or exp.output_contains in (result.stdout + result.stderr)
     if result.timed_out or result.exit_code != exp.exit_code:
         return False
     if exp.output_contains is not None and exp.output_contains not in (result.stdout + result.stderr):
@@ -60,7 +85,15 @@ def run_step(container: Container, step: Step, timeout_s: int | None = None) -> 
         start_dir = ""
         if step.expected.file_exists:
             start_dir = container.exec("pwd", timeout_s=30).stdout.strip()
-        result = container.exec(step.command, timeout_s=timeout_s)
+        serving = is_server_command(step.command)
+        if serving:
+            try:  # stop as soon as the server says it listens, instead of waiting out the window
+                result = container.exec(step.command, timeout_s=min(timeout_s, SERVER_WINDOW_S), ready=_SERVER_READY)
+            except TypeError:  # a container without early stop
+                result = container.exec(step.command, timeout_s=min(timeout_s, SERVER_WINDOW_S))
+        else:
+            result = container.exec(step.command, timeout_s=timeout_s)
+        result.server_ready = serving and server_ready(result)
         result.step_id = step.id
         result.command = step.command
         result.stdout, result.stderr = redact(result.stdout), redact(result.stderr)  # never keep a secret
@@ -70,9 +103,11 @@ def run_step(container: Container, step: Step, timeout_s: int | None = None) -> 
         span.set_attribute("neatlogs.step.exit_code", result.exit_code)
         span.set_attribute("neatlogs.step.duration", result.duration_s)
         span.set_attribute("neatlogs.step.passed", result.passed)
+        span.set_attribute("neatlogs.step.server_ready", result.server_ready)
         set_io(span,
                input={"step_id": step.id, "command": step.command, "files": [f.path for f in step.files]},
                output={"exit_code": result.exit_code, "passed": result.passed, "timed_out": result.timed_out,
+                       "server_ready": result.server_ready,
                        "stdout": result.stdout[-2000:], "stderr": result.stderr[-2000:]})
         if not result.passed:
             mark_error(span, f"step {step.id} failed (exit {result.exit_code})")

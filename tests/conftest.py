@@ -9,6 +9,8 @@ if os.environ.get("FIRSTRUN_EXPORT_TESTS") != "1":
     # An empty value blocks config.load_env from reading the real key out of .env. Without it,
     # neatlogs.wrap boots its own exporter and sends hundreds of empty "neatlogs-app" traces.
     os.environ["NEATLOGS_API_KEY"] = ""
+    # An empty value also keeps config from calling the author's Firecrawl key rotator in every test.
+    os.environ.setdefault("FIRECRAWL_API_KEY", "")
 
 # Tests never write the public site log in docs/runs or docs/audits. A missing folder turns publishing off.
 os.environ["FIRSTRUN_SITE_DIR"] = str(Path(__file__).parent / "_no_site" / "runs")

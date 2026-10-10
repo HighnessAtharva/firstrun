@@ -251,3 +251,20 @@ def test_live_crash_and_resume(runs):
     assert state_io.load_state("live2").last_good_step == 2
     st = executor.run(rb, run_id="live2", resume=True, container_factory=mk("b"))
     assert st.status == RunStatus.PASSED
+
+
+def test_dev_server_step_passes_once_it_is_listening():
+    from firstrun import executor
+    from firstrun.models import Step, StepResult
+
+    assert executor.is_server_command("pip install flask && flask --app hello run")
+    assert executor.is_server_command("uvicorn main:app --reload")
+    assert executor.is_server_command("python manage.py runserver")
+    assert not executor.is_server_command("pip install flask")
+    up = StepResult(step_id=1, command="flask run", exit_code=124, timed_out=True,
+                    stderr=" * Running on http://127.0.0.1:5000\nPress CTRL+C to quit")
+    up.server_ready = executor.server_ready(up)
+    assert up.server_ready and executor.check_expected(Step(id=1, intent="run", command="flask run"), up)
+    hung = StepResult(step_id=1, command="flask run", exit_code=124, timed_out=True, stderr="Traceback")
+    hung.server_ready = executor.server_ready(hung)
+    assert not hung.server_ready and not executor.check_expected(Step(id=1, intent="run", command="flask run"), hung)

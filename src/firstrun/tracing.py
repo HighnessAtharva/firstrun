@@ -50,6 +50,13 @@ def _json(value) -> str:
         return str(value)
 
 
+def session_attrs(target: str, command: str, **meta) -> dict:
+    """neatlogs session and end-user fields: every trace about one docs site lands in one session,
+    and the docs site is the end user, so evals and alerts can filter by site."""
+    return {"session_id": f"docs:{target}", "end_user_id": target,
+            "end_user_metadata": {"command": command, **{k: v for k, v in meta.items() if v not in (None, "")}}}
+
+
 def set_io(span, input=None, output=None) -> None:
     """Record safe input and output on a span opened with `neatlogs.trace`. Never raises."""
     try:

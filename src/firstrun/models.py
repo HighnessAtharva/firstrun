@@ -75,6 +75,7 @@ class StepResult(BaseModel):
     duration_s: float = 0.0
     timed_out: bool = False
     passed: bool = False
+    server_ready: bool = False   # a dev server step that reached "listening" and was then stopped
 
 
 class Classification(BaseModel):
