@@ -202,8 +202,24 @@ def _add_usage(state: RunState, usage: dict) -> None:
     state.usage.cost_usd += float(usage.get("cost_usd", 0.0))
 
 
+_APT = re.compile(r"\b(apt-get|apt|apk|yum|dnf) (-\S+ )*install\b")
+
+_NOISE = re.compile(
+    r"^\s*(\[notice\]|Requirement already satisfied|Collecting |Downloading |Using cached |Installing collected"
+    r"|Successfully (installed|uninstalled)|Uninstalling |Attempting uninstall|Found existing installation"
+    r"|Building wheel|Created wheel|Stored in directory|Preparing metadata|Getting requirements|Installing build)"
+)
+
+
+def _clean(text: str) -> str:
+    """Drop package-manager progress lines, so the real error is what the classifier reads."""
+    return "\n".join(ln for ln in text.splitlines() if ln.strip() and not _NOISE.match(ln))
+
+
 def _error_text(result: StepResult) -> str:
-    text = (result.stderr or "") + ("\n" if result.stderr and result.stdout else "") + (result.stdout or "")
+    """stdout first and stderr last, noise removed, so the tail holds the real error."""
+    out, err = _clean(result.stdout or "")[-800:], _clean(result.stderr or "")[-2200:]
+    text = out + ("\n" if out and err else "") + err
     if result.timed_out:
         text += "\n(command timed out)"
     return text[-3000:]
@@ -243,6 +259,9 @@ def _ask_fix(prompt: str, tools: tuple[str, ...], max_turns: int, state: RunStat
         neatlogs.log("fix search found nothing: {terms}", level="warning", terms=terms, step_id=step.id)
         return GaveUp(step_id=step.id, failure_class=cls,
                       reason=f"no new fix found (searched: {terms})")
+    # A fix that only installs system packages before the original command is a container fix.
+    if cls == FailureClass.DOCS_BUG and _APT.search(new) and old_command.strip() in new:
+        cls = FailureClass.ENVIRONMENT
     return Patch(step_id=step.id, old_command=old_command, new_command=new,
                  reason=_short_reason(str(data.get("reason") or "")), failure_class=cls,
                  source=str(data.get("source") or ""))

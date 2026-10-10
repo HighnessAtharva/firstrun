@@ -196,3 +196,21 @@ def test_short_reason_ends_on_a_sentence():
     out = _short_reason(text)
     assert len(out) <= 400 and out.endswith(".")
     assert _short_reason("Short reason.") == "Short reason."
+
+
+def test_error_text_drops_pip_noise_and_keeps_the_real_error():
+    from firstrun.models import StepResult
+    from firstrun.recovery import _error_text
+
+    noise = "\n".join(f"Collecting pkg{i}" for i in range(400)) + "\nSuccessfully installed openai-0.28.1"
+    r = StepResult(step_id=5, command="python quickstart.py", exit_code=1, stdout=noise,
+                   stderr="Traceback (most recent call last):\nopenai.error.AuthenticationError: No API key provided.")
+    text = _error_text(r)
+    assert "AuthenticationError" in text and "Collecting" not in text
+
+
+def test_apt_only_fix_counts_as_environment():
+    from firstrun.recovery import _APT
+
+    assert _APT.search("apt-get update -qq && apt-get install -y -qq curl && entire version")
+    assert not _APT.search("pip install chromadb")
