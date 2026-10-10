@@ -1,0 +1,89 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JFFYWRN9QDFA09N28DRYW2",
+  "session_id": "ae05fb29-0c85-4558-9980-42419f08ca9c",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T08:39:56.1029345Z",
+  "branch": "main",
+  "checkpoints_count": 6,
+  "save_step_count": 1,
+  "files_touched": [
+    "README.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "turn_id": "8c45b6ed0118",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 320,
+    "cache_creation_tokens": 341312,
+    "cache_read_tokens": 43201161,
+    "output_tokens": 105805,
+    "api_call_count": 156
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NCjejWTAvQvZiXjV9ZAHHp",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-api"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "628474303796",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 167,
+        "end": 168,
+        "entry_ids": [
+          "2abe8732-2235-4b1c-b9a0-afe8b93376ab"
+        ],
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-api",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 14
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T08:39:55.8630497Z",
+    "agent_lines": 154,
+    "agent_removed": 2,
+    "human_added": 72,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 228,
+    "total_lines_changed": 231,
+    "agent_percentage": 67.53246753246754,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 336,
+      "user_lines_removed": 211,
+      "agent_lines_added": 156,
+      "agent_lines_removed": 2,
+      "user_added_per_file": {
+        "docs/architecture.md": 67,
+        "src/firstrun/cli.py": 269
+      },
+      "user_removed_per_file": {
+        "src/firstrun/cli.py": 211
+      }
+    }
+  ]
+}
