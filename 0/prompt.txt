@@ -1,0 +1,91 @@
+See if we can add this to the webview app?!!
+
+Yes—a graph view could be the memorable extra. Make it a documentation execution graph: a visual path from what the docs say to what actually happened, with evidence at every step.
+
+```text
+Public docs URL
+  → Install dependencies ✅
+  → Run setup command ✅
+  → Configure credentials ⚠️
+  → Run example ❌
+       ├─ Container output: exact error
+       ├─ Proposed docs fix: missing configuration step
+       ├─ Rerun: ✅
+       └─ Evidence: Entire session / Trail ↗
+
+```
+
+What a reviewer clicks: a failed node opens a side panel with the quoted docs instruction, command run, relevant container output, proposed change, and before/after result. An “Inspect evidence” link opens the shared Entire session or public-repo Trail. That uses the sharing flow confirmed in the workshop without depending on a Trail embed, which the host said isn’t available.
+Keep the graph honest: label nodes passed, failed, blocked, or not run. Distinguish “the docs are wrong” from “the environment was missing a prerequisite.” Link each proposed fix to the specific failed step and its successful rerun.
+For a hackathon-sized MVP, graph one quickstart with one real failure and fix. If time remains, add a toggle between Docs path (steps and outputs) and Evidence path (checkpoint → session → Trail → PR). I wouldn’t build this on Entire Graph unless you confirm it exposes the data you need: the workshop described that feature as showing code connections and blast radius, not as an API for your documentation-step graph.
+
+
+Also neatlogs side we are not setting alerts + evals i need to set up both please ensure to give me steps or do it in agentic manner but i need to do it well!
+
+---
+
+<task-notification>
+<task-id>b4lcsxf0p</task-id>
+<tool-use-id>toolu_013LcPpJ9EvW8okU9MB9RoKf</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\c94b37e7-70e0-472a-b1d9-6dddb786f269\tasks\b4lcsxf0p.output</output-file>
+<status>failed</status>
+<summary>Background command "Start neatlogs device sign-in with write scopes" failed with exit code 3</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>aee8b70c16fe296b6</task-id>
+<tool-use-id>toolu_01NrdfmtZBqkgwjeAG8SA5Nb</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\c94b37e7-70e0-472a-b1d9-6dddb786f269\tasks\aee8b70c16fe296b6.output</output-file>
+<status>completed</status>
+<summary>Agent "Draft neatlogs alert and eval bodies" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>All the request bodies are drafted, and all 13 pass a strict `jsonschema` check against the spec. Nothing was sent to neatlogs. I made no write calls and did not run `neatlogs auth`.
+
+Running the plan needs two things first:
+- **Write scopes.** The current token has read scopes only (`whoami` shows `project:read`). Atharva has to run `neatlogs auth login` himself to get `configuration:write` and `evaluation:write`.
+- **The server mutation gate.** The server must have `PUBLIC_API_MUTATIONS_ENABLED=true`, or every write is refused.
+
+## Files in `D:\Atharva\firstrun\scratch-neatlogs\`
+
+- **Alerts:**
+  - `alert-cost.json`: p95 run cost above $0.035 over 1440 minutes. That is the $0.028 Scale cap plus 25 %, because the guardrail checks before each step and the last call can cross the cap. The measured overshoot was 6.5 %.
+  - `alert-quality.json`: a compound OR rule. It fires on 25 or more "docs step broke" hits or 2 or more "Verification Error Monitor" hits in 60 minutes. The thresholds come from real hit counts: a peak of 20 per hour and 4 in one hour.
+  - `alert-budget.json`: fires on every "Budget Limit Exceeded Alert" detection.
+  - All three send email only, with a severity and a cooldown set.
+- **AI evaluator:**
+  - `evaluator.json`: an `agent_judge` with access to the neatlogs tools.
+  - `evaluator-llm-judge.json`: the literal `llm_judge` you asked for, with no tools.
+  - `evaluator-preview.json`: tries the definition on one trace without saving it.
+  - `evaluator-run.json`: the request for one trace.
+  - `cohort-trace-ids.txt`: 34 `firstrun.run` traces tagged v1, v2, real, real2 or tiercap.
+- **Human evaluation:** `human-eval.json`, `human-eval-form.json` (3 questions), `human-eval-cohort-preview.json`, `human-eval-cohort-add.json`, `human-eval-launch.json` and `human-eval-activate.json` (reviewer `fbab5d4c-b664-4f96-9e57-0d5d38c2625c`).
+- **Plan and tools:**
+  - `PLAN.md`: the CLI commands in order, the schema path for each body, and where an ID from an earlier step is needed. Those IDs are `EVAL_ID`, `EVALUATION_ID` and the `previewHash`.
+  - `validate.py`: the schema check. It ran with the project `.venv`, which has `jsonschema` 4.26. It also catches three deliberately broken bodies, which shows the check works.
+  - `build.py`: rebuilds every body.
+  - `spec/public-api.json`: a 7 MB copy of the spec. It is untracked.
+
+## Where the Spec Is Unclear
+
+- **Which judge type to use.** The docs say an `llm_judge` is one call with no tools. This rubric must read the individual `step.&lt;id&gt;` spans, so I made the main file an `agent_judge`. The literal `llm_judge` version is there too.
+- **How the quality rule names a detection.** The spec does not say whether `conditions[].detection` holds the display name, the slug or the UUID. I used the display name. A wrong value returns 404 "Detection not found", so a wrong guess fails at once. `PLAN.md` gives the slugs to try next, and a fallback of two ID-based threshold rules.
+- **Form option keys.** The spec gives no keys for multiple-choice options. I guessed `{"choices": [...]}`. `PLAN.md` adds a `form get` check to confirm the choices saved before the cohort steps.
+- **Model choice.** I left `modelProvider` and `modelName` empty, so the server default runs, because neither the docs nor the spec lists a valid value. `answerType` in the evaluator output fields has no listed values either, so I left it out and used `scoreType`.
+- **What `cost` measures.** The spec does not say whether `cost` is per trace or per span. The rule also cannot be limited to the `firstrun` workflow.
+- **First day of the cost alert.** The 24-hour window still holds today's runs from before the cap, so the cost alert fires once on day one.
+
+## What the API Cannot Do
+
+- **Score many traces in one call.** An evaluator run takes one `traceId`, with no filter, tag or workflow. `PLAN.md` loops over the 34 trace IDs.
+- **Recurring AI scoring.** The API cannot attach an AI evaluator to an evaluation, and form replacement is limited to human questions. Assigning the evaluator to a recurring evaluation must happen in the app. After that, `evals schedules update` can change the cadence from the CLI.
+- **Notify the reviewer.** `evals launch --assign-me` sends no email or Slack message. The reviewer finds the items in the app.
+
+## A Bug That Affects the Rubric
+
+`report.md` is not in the trace. Also, its "First Failed Step" is not the first failure. `reported_failed_step()` in `src/firstrun/report.py` returns the last step the run gave up on, or else the highest failed step ID. A run that fails at step 2, recovers, and then gives up at step 5 reports step 5.
+
+The AI judge can only compare the root span's `first_failed_step` with the actual step spans. To let it judge `report.md` itself, add the reported step or the report text to the root span output in `cli._run_one`.</result>
+<usage><subagent_tokens>185653</subagent_tokens><tool_uses>54</tool_uses><duration_ms>568147</duration_ms></usage>
+</task-notification>
