@@ -11,7 +11,7 @@ import pytest
 from _edge_fakes import FakeContainer, factory_for, install_recorder, make_runbook
 from firstrun import classify, config, executor, llm, patch, precedents, recovery, sandbox
 from firstrun import budget as budget_mod
-from firstrun.models import Budget, FailureClass as FC, Patch, RunState, RunStatus, Step, StepResult, StepStatus
+from firstrun.models import GaveUp, Budget, FailureClass as FC, Patch, RunState, RunStatus, Step, StepResult, StepStatus
 from firstrun.redact import MARK, redact
 
 SECRET = "sk-ant-api03-SECRETSECRETSECRET1234"
@@ -242,7 +242,8 @@ def test_r11_a_listed_key_is_used_by_name_and_never_shown(monkeypatch, tmp_path)
     jev(monkeypatch, FC.NEEDS_SECRET, 0.95)
     step, res = _fail("python app.py", "OPENAI_API_KEY is not set")
     out = recovery.recover(step, res, _state(), "")
-    assert isinstance(out, Patch) and out.source == "OPENAI_API_KEY"
+    # The key was already in the container, so FirstRun stops instead of retrying the same command.
+    assert isinstance(out, GaveUp) and "OPENAI_API_KEY" in out.reason
     assert "sk-test-VALUE-1234567" not in out.model_dump_json()
 
 

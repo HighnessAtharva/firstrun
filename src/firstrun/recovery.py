@@ -328,9 +328,10 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
         if name is None:
             return GaveUp(step_id=step.id, reason="needs a secret that is not in the allowlist: "
                           + _error_line(error_text), failure_class=top)
-        # The executor injects the value into the container. The name goes in `source`.
-        return Patch(step_id=step.id, old_command=old_command, new_command=old_command,
-                     reason="secret supplied from allowlist", failure_class=top, source=name)
+        # The container already had this key from the allowlist, so a retry would fail the same way.
+        return GaveUp(step_id=step.id, failure_class=top,
+                      reason=f"{name} is set from the allowlist but the step still fails, so the key is "
+                             f"likely invalid or lacks access: " + _error_line(error_text))
 
     if top == FailureClass.ENVIRONMENT:
         if _NETWORK.search(error_text):  # a dropped network: retry the same command once

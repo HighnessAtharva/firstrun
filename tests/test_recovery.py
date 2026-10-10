@@ -146,8 +146,9 @@ def test_recover_needs_secret_uses_allowlist(tmp_path, tmp_precedents, monkeypat
     monkeypatch.setattr(recovery.config, "SECRETS_ALLOWLIST", allow)
     monkeypatch.setattr(classify, "_jev", lambda e, c: _probs(FC.NEEDS_SECRET))
     out = recovery.recover(_step("tool run"), _result("tool run", "Error: DEMO_API_KEY is not set"), _state())
-    assert isinstance(out, Patch) and out.source == "DEMO_API_KEY"
-    assert out.new_command == "tool run" and "test-value" not in out.model_dump_json()
+    # The key was already in the container, so FirstRun stops instead of retrying the same command.
+    assert isinstance(out, GaveUp) and "DEMO_API_KEY" in out.reason
+    assert "test-value" not in out.model_dump_json()  # the secret value never leaks
     out2 = recovery.recover(_step("tool run"), _result("tool run", "Error: OTHER_API_KEY is not set"), _state())
     assert isinstance(out2, GaveUp)
 

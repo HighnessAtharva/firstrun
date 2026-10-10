@@ -22,7 +22,19 @@ RUNS_DIR = Path(os.environ.get("FIRSTRUN_RUNS_DIR", "runs"))
 PRECEDENTS_FILE = Path(os.environ.get("FIRSTRUN_PRECEDENTS", "precedents.json"))
 SECRETS_ALLOWLIST = Path(os.environ.get("FIRSTRUN_SECRETS", "secrets.allowlist"))
 
-DOCKER_CMD = os.environ.get("FIRSTRUN_DOCKER", "wsl -d Ubuntu-22.04 docker").split()
+def _default_docker() -> str:
+    """Plain docker when it is on PATH. On Windows without it, Docker inside WSL."""
+    import shutil
+    import sys
+
+    if shutil.which("docker"):
+        return "docker"
+    if sys.platform == "win32" and shutil.which("wsl"):
+        return "wsl -d Ubuntu-22.04 docker"
+    return "docker"
+
+
+DOCKER_CMD = (os.environ.get("FIRSTRUN_DOCKER") or _default_docker()).split()
 DEFAULT_IMAGE = "python:3.11-slim"
 
 KEYS = ("NEATLOGS_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "TYPESAFE_API_KEY", "FIRECRAWL_API_KEY_1")
