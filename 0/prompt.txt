@@ -51,3 +51,18 @@ Comment 1 — PR comment, no inline thread
 > _To edit notification comments on pull requests, go to your [Netlify project configuration](https://app.netlify.com/projects/1run/configuration/notifications#deploy-notifications)._
 (End of quoted GitHub text.)
 </ci-monitor-event>
+
+---
+
+<pasted_content id="baa3">
+With the new issue added it has become a bit too verbose. In the sense of unboxing the PRs, it is verbose, which is good. Perhaps for every PR in public, we can go into a carousel because there's so much data on the screen, and people cannot view it properly otherwise. We can go carousel more there.
+
+On the screenshots part, it's good, but use that. We don't need the date. If you say "delivered" and "why it matters" on a new line, it would be more naked, I'm trying to tell you. Currently, the screenshots are visible, but that pop-up at the bottom requires some more work, so you need to work on the website a little bit more.
+
+Now that we have added the data, the objective is to get it to a state of goodness: get it to work properly or something, and show just enough data without losing any data. There is some unnecessary stuff there which you can remove, like what date it was added, etc. That's up to you to decide.
+</pasted_content id="baa3">
+
+ 
+
+
+Also see screenshot this section is coming out blank!
