@@ -1,0 +1,13 @@
+1. this is a good idea, how are you mapping docs context to the actual app commits.
+
+this is assuming - docs live in the app reposiotory itself ?
+2. also, claude/codex can do this - you can get this question a lot. How would you answer this
+
+
+
+
+I got this question how do i answer? Fast on short.
+
+---
+
+make it two lines each

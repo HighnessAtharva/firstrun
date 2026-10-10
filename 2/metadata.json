@@ -1,0 +1,104 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KF40471XQAYJMR43CAEEM9",
+  "session_id": "dba99250-dc59-4ab3-b2dd-f86c589fc02f",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T17:52:42.3116711Z",
+  "branch": "neatlogs/evals",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    "src/firstrun/audit.py",
+    "src/firstrun/bisect.py",
+    "src/firstrun/cli.py",
+    "src/firstrun/tracing.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "330eeb77f55f",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 56058,
+    "cache_read_tokens": 239181,
+    "output_tokens": 1641,
+    "api_call_count": 3
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T17:52:42.2447908Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 1916,
+    "human_removed": 1877,
+    "total_committed": 0,
+    "total_lines_changed": 3793,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 4546,
+      "user_lines_removed": 3218,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 41,
+        "docs/runs/20261010-172110-docs-sqlalchemy-org.txt": 1,
+        "docs/runs/20261010-172110-fla[REDACTED].txt": 1,
+        "docs/runs/20261010-172129-go-dev.txt": 1,
+        "docs/runs/20261010-172208-fla[REDACTED].txt": 1,
+        "docs/runs/20261010-172306-dlthub-com.txt": 1,
+        "docs/runs/20261010-172328-docs-djangoproject-com.txt": 1,
+        "docs/runs/20261010-172525-docs-peewee-orm-com.txt": 1,
+        "docs/runs/20261010-172527-tortoise-github-io.txt": 1,
+        "docs/runs/20261010-172624-duckdb-org.txt": 1,
+        "docs/runs/20261010-172724-docs-litestar-dev.txt": 1,
+        "docs/runs/20261010-172745-hypothesis-readthedocs-io.txt": 1,
+        "docs/runs/20261010-173117-docs-peewee-orm-com.txt": 1,
+        "docs/runs/index.json": 1024,
+        "radar-lane0.txt": 6,
+        "radar-lane1.txt": 6,
+        "radar-lane2.txt": 6,
+        "radar.json": 794,
+        "scripts/radar.py": 126,
+        "spans_raw_optimized.log": 5,
+        "src/firstrun/audit.py": 958,
+        "src/firstrun/bisect.py": 274,
+        "src/firstrun/cli.py": 591,
+        "src/firstrun/config.py": 23,
+        "src/firstrun/executor.py": 304,
+        "src/firstrun/models.py": 142,
+        "src/firstrun/tracing.py": 93,
+        "targets-radar.txt": 19,
+        "tests/conftest.py": 105,
+        "tests/test_executor.py": 17
+      },
+      "user_removed_per_file": {
+        "docs/runs/index.json": 820,
+        "src/firstrun/audit.py": 935,
+        "src/firstrun/bisect.py": 271,
+        "src/firstrun/cli.py": 585,
+        "src/firstrun/config.py": 2,
+        "src/firstrun/executor.py": 275,
+        "src/firstrun/models.py": 141,
+        "src/firstrun/tracing.py": 86,
+        "tests/conftest.py": 103
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 4505,
+      "agent_lines_removed": 3218,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    }
+  ]
+}

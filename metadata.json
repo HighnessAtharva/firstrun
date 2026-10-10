@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4KF40471XQAYJMR43CAEEM9",
   "strategy": "manual-commit",
   "branch": "neatlogs/evals",
-  "checkpoints_count": 3,
+  "checkpoints_count": 5,
   "files_touched": [
     "evidence/neatlogs.md",
     "src/firstrun/audit.py",
@@ -25,14 +25,21 @@
       "compact_transcript": "/1/transcript.jsonl",
       "content_hash": "/1/content_hash.txt",
       "prompt": "/1/prompt.txt"
+    },
+    {
+      "metadata": "/2/metadata.json",
+      "transcript": "/2/full.jsonl",
+      "compact_transcript": "/2/transcript.jsonl",
+      "content_hash": "/2/content_hash.txt",
+      "prompt": "/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 34,
-    "cache_creation_tokens": 10760,
-    "cache_read_tokens": 6175361,
-    "output_tokens": 6292,
-    "api_call_count": 15,
+    "input_tokens": 40,
+    "cache_creation_tokens": 66818,
+    "cache_read_tokens": 6414542,
+    "output_tokens": 7933,
+    "api_call_count": 18,
     "subagent_tokens": {
       "input_tokens": 0,
       "cache_creation_tokens": 0,
