@@ -109,3 +109,34 @@ def test_run_end_share_line(tmp_runs_dir, capsys):
 def test_run_end_share_failure_is_silent(tmp_path, capsys):
     cli_mod._echo_share(tmp_path / "missing")
     assert capsys.readouterr().out == ""
+
+
+def test_steps_carry_docs_quote_and_every_try(tmp_path):
+    step3 = share.build_payload(_copy(tmp_path))["steps"][2]
+    assert isinstance(step3["quote"], str)
+    assert [t["passed"] for t in step3["tries"]] == [False, True]
+    assert step3["tries"][0]["exit_code"] != 0 and step3["tries"][1]["exit_code"] == 0
+
+
+def test_evidence_keeps_known_https_links_only(tmp_path):
+    import json
+
+    run = _copy(tmp_path)
+    (run / "evidence.json").write_text(json.dumps([
+        {"kind": "checkpoint", "label": "Entire checkpoint", "url": "https://entire.io/x"},
+        {"kind": "trail", "label": "Trail 6", "url": "https://entire.io/t/6", "public": False},
+        {"kind": "pr", "label": "PR", "url": "https://github.com/a/b/pull/1", "step_id": 3},
+        {"kind": "trace", "label": "neatlogs trace", "url": "", "public": False},
+        {"kind": "pr", "url": "javascript:alert(1)"},
+        {"kind": "unknown", "url": "https://x.io"},
+    ]), encoding="utf-8")
+    ev = share.build_payload(run)["evidence"]
+    assert [e["kind"] for e in ev] == ["checkpoint", "trail", "pr", "trace"]
+    assert ev[1]["public"] is False and ev[2]["step_id"] == 3
+
+
+def test_evidence_absent_or_broken_is_empty(tmp_path):
+    run = _copy(tmp_path)
+    assert share.build_payload(run)["evidence"] == []
+    (run / "evidence.json").write_text("{not json", encoding="utf-8")
+    assert share.build_payload(run)["evidence"] == []

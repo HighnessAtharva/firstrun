@@ -140,6 +140,7 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     import neatlogs
 
     from firstrun import executor, patch, planner, state as state_io
+    from firstrun.report import reported_failed_step
     from firstrun.tracing import init_tracing, mark_error, set_io
 
     init_tracing(tags)
@@ -175,6 +176,7 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
             "status": final.status.value, "stop_reason": final.stop_reason,
             "steps": len(runbook.steps), "patches": len(final.patches),
             "first_failed_step": final.first_failed_step,
+            "reported_failed_step": reported_failed_step(final),
             "time_to_first_success_s": final.time_to_first_success_s,
         })
         if final.status not in (RunStatus.PASSED, RunStatus.VERIFIED):
