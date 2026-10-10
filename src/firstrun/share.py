@@ -119,6 +119,25 @@ def build_payload(run_dir) -> dict:
         "pr_body": _cap(_read(run_dir / "pr_body.md"), PR_BODY_MAX),
         "trace_id": trace,
     }
+    bisect_doc = _read(run_dir / "bisect.json")
+    if bisect_doc:
+        try:
+            payload["bisect"] = json.loads(bisect_doc)
+        except ValueError:
+            pass
+    pre = _read(run_dir / "prereqs.json")
+    if pre:  # written by `firstrun prereqs`: what the docs assume, and whether a fresh container proved it
+        try:
+            d = json.loads(pre)
+            proof = d.get("proof") or {}
+            payload["prereqs"] = {
+                "system_packages": d.get("system_packages", []), "python": d.get("python"),
+                "path": d.get("path", []), "secrets": d.get("secrets", []), "tools": d.get("tools", []),
+                "proven": bool(proof.get("proven")), "image": proof.get("image", ""),
+                "rounds": proof.get("rounds", 0),
+            }
+        except ValueError:
+            pass
     payload = _scrub(payload)
     for step in payload["steps"]:
         step["error_tail"] = step["error_tail"][-ERROR_TAIL_MAX:]

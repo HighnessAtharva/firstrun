@@ -320,6 +320,50 @@ def share_cmd(run_id) -> None:
     click.echo(f"code length: {len(code)}")
 
 
+@cli.command("bisect")
+@click.argument("run_id", required=False)
+@click.option("--package", required=True, help="PyPI package whose releases to search.")
+@click.option("--step", "step_id", type=int, help="Step to test (default: the run's failed step).")
+@click.option("--max-probes", default=8, show_default=True, type=int, help="Container probes to spend.")
+def bisect_cmd(run_id, package, step_id, max_probes) -> None:
+    """Find the release of PACKAGE that broke a step. Replays stored commands, no model call."""
+    from firstrun import bisect, state as state_io
+    from firstrun.sandbox import DockerUnavailable
+    from firstrun.tracing import close_tracing, init_tracing
+
+    if not run_id:
+        dirs = sorted(d.name for d in Path(config.RUNS_DIR).glob("*") if (d / "state.json").exists())
+        if not dirs:
+            raise click.ClickException("no runs found")
+        run_id = dirs[-1]
+    if not (state_io.run_dir(run_id) / "state.json").exists():
+        raise click.ClickException(f"unknown run id: {run_id}")
+    init_tracing(["bisect"])
+    _quiet_logs()
+
+    def show(entry: dict) -> None:
+        mark = "✓" if entry["passed"] else "✗"
+        line = f"{mark} {entry['version']:<10}{entry['date']}"
+        if not entry["passed"] and entry["error"]:
+            line += f"  {entry['error']}"
+        click.echo(line)
+
+    try:
+        doc = bisect.run(run_id, package, step_id, max_probes, on_probe=show)
+    except DockerUnavailable:
+        _setup_exit(DOCKER_FIX)
+    except ValueError as exc:
+        raise click.ClickException(str(exc))
+    finally:
+        close_tracing()
+    if doc["first_bad"]:
+        click.echo(f"First bad: {package} {doc['first_bad']} ({doc['first_bad_date']}). "
+                   f"Last good: {doc['last_good']}. {doc['probes']} probes, $0 model cost.")
+    else:
+        click.echo(f"{doc['verdict']}. {doc['probes']} probes, $0 model cost.")
+    click.echo(f"saved: {bisect.bisect_path(run_id)}")
+
+
 @cli.command("pr")
 @click.argument("run_id", required=False)
 @click.option("--json", "as_json", is_flag=True, help="Print repo, path, branch, diff, pr_body and commands as JSON.")
@@ -343,6 +387,55 @@ def pr_cmd(run_id, as_json) -> None:
         click.echo(f"✗ {exc}")
         sys.exit(1)
     click.echo(text, nl=as_json)
+
+
+# --- prereqs (Prerequisite Proof) ---------------------------------------------
+
+@cli.command("prereqs")
+@click.argument("run_id", required=False)
+@click.option("--no-prove", is_flag=True, help="Derive and print the block only. Start no container.")
+@click.option("--rounds", default=2, show_default=True, help="Proof rounds. A failure that names a missing tool adds it.")
+def prereqs_cmd(run_id, no_prove, rounds) -> None:
+    """Print the Prerequisites a run revealed and prove them in a fresh container (default: newest verified run)."""
+    import json
+
+    import neatlogs
+
+    from firstrun import prereqs, state as state_io
+    from firstrun.tracing import close_tracing, init_tracing
+
+    if not run_id:
+        found = [d.name for d in sorted(Path(config.RUNS_DIR).glob("*"))
+                 if (d / "state.json").exists() and '"status": "verified"' in (d / "state.json").read_text(encoding="utf-8")]
+        if not found:
+            raise click.ClickException("no verified run found")
+        run_id = found[-1]
+    if not (state_io.run_dir(run_id) / "state.json").exists():
+        raise click.ClickException(f"unknown run id: {run_id}")
+    config.load_env()
+    init_tracing(["prereqs"])
+    _quiet_logs()
+    try:
+        runbook = state_io.load_runbook(run_id)
+        with neatlogs.trace("firstrun.prereqs", kind="WORKFLOW", run_id=run_id, tags=["prereqs"]):
+            if no_prove:
+                result = prereqs.derive(state_io.load_state(run_id), runbook)
+            else:
+                result = prereqs.prove(run_id, rounds=rounds)
+        derived = {k: v for k, v in result.items() if k != "proof"}
+        click.echo(prereqs.to_markdown(derived, runbook.title))
+        if no_prove:
+            return
+        click.echo(prereqs.proof_line(result))
+        click.echo(f"wrote {state_io.run_dir(run_id) / 'prereqs.md'}")
+    except Exception as exc:  # noqa: BLE001
+        from firstrun.sandbox import DockerUnavailable
+
+        if isinstance(exc, DockerUnavailable):
+            _setup_exit(DOCKER_FIX)
+        raise
+    finally:
+        close_tracing()
 
 
 def main() -> None:
