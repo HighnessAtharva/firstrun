@@ -27,8 +27,8 @@ exec bash /tmp/.fr_step.sh < /dev/null
 _PREFIX = """if [ -f /tmp/.fr_env ]; then . /tmp/.fr_env; fi
 cd "$(cat /tmp/.fr_cwd 2>/dev/null || echo /work)" 2>/dev/null || cd /work
 trap '__fr_rc=$?; pwd > /tmp/.fr_cwd; export -p > /tmp/.fr_env; exit $__fr_rc' EXIT
-# A pipe fails when any part fails, so `curl ... | bash` with no curl is not a false pass.
-set -o pipefail
+# Any failing line or pipe part fails the step, as a developer typing the lines would see it.
+set -eo pipefail
 """
 
 # Kill every process except PID 1 (sleep infinity) and this shell.

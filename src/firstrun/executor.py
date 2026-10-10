@@ -28,7 +28,8 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def check_expected(step: Step, result: StepResult, container: Container | None = None) -> bool:
+def check_expected(step: Step, result: StepResult, container: Container | None = None,
+                   start_dir: str = "") -> bool:
     """True when the result meets step.expected. file_exists needs the container."""
     exp = step.expected
     if result.timed_out or result.exit_code != exp.exit_code:
@@ -38,7 +39,10 @@ def check_expected(step: Step, result: StepResult, container: Container | None =
     if exp.file_exists:
         if container is None:
             return False
-        probe = container.exec(f"test -e {shlex.quote(exp.file_exists)}", timeout_s=30)
+        # A relative path counts from where the step started, since the step may cd away.
+        path = shlex.quote(exp.file_exists)
+        check = f"test -e {path}" + (f" || (cd {shlex.quote(start_dir)} && test -e {path})" if start_dir else "")
+        probe = container.exec(check, timeout_s=30)
         if probe.exit_code != 0:
             return False
     return True
@@ -51,11 +55,14 @@ def run_step(container: Container, step: Step, timeout_s: int | None = None) -> 
         started = time.monotonic()
         if step.files:
             container.write_files(step.files)
+        start_dir = ""
+        if step.expected.file_exists:
+            start_dir = container.exec("pwd", timeout_s=30).stdout.strip()
         result = container.exec(step.command, timeout_s=timeout_s)
         result.step_id = step.id
         result.command = step.command
         result.stdout, result.stderr = redact(result.stdout), redact(result.stderr)  # never keep a secret
-        result.passed = check_expected(step, result, container)
+        result.passed = check_expected(step, result, container, start_dir)
         result.duration_s = round(time.monotonic() - started, 3)
         span.set_attribute("neatlogs.step.command", step.command)
         span.set_attribute("neatlogs.step.exit_code", result.exit_code)
