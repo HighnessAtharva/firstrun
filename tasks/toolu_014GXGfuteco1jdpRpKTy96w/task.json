@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_014GXGfuteco1jdpRpKTy96w",
+  "agent_id": "a3812f547df423e3a",
+  "subagent_type": "general-purpose",
+  "task_description": "Audit neatHack plan vs reality",
+  "token_usage": {
+    "input_tokens": 46,
+    "cache_creation_tokens": 159243,
+    "cache_read_tokens": 3379425,
+    "output_tokens": 17001,
+    "api_call_count": 23
+  },
+  "started_at": "2026-10-10T19:41:47.7048349+05:30",
+  "completed_at": "2026-10-10T19:45:16.1311526+05:30"
+}
