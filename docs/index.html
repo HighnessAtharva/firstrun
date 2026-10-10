@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FirstRun: Docs that work (literally)</title>
 <link rel="stylesheet" href="assets/site-nav.css">
-<meta name="description" content="Paste a docs URL. Your coding agent runs the quickstart in a clean container, finds the first step that breaks, fixes it, and proves the fix. Built for neatHack 2026.">
+<meta name="description" content="Two apps for docs. Doc-test runs your quickstart in a clean container and proves the fix. Doc-audit finds pages your code changed underneath.">
 <meta name="color-scheme" content="light">
-<script>document.documentElement.className="js"</script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="FirstRun: Docs that work (literally).">
-<meta property="og:description" content="FirstRun runs your quickstart in a clean container, finds the first step that breaks, and proves the fix with a second clean run.">
+<meta property="og:description" content="Doc-test proves your quickstart works in a clean container. Doc-audit reads git history and finds stale docs pages.">
 <meta property="og:image" content="assets/og-card-1200x630.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
@@ -18,462 +17,333 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
 <style>
-:root{--page:#F4F5F9;--surface:#FBFBFD;--ink:#1D1D1F;--muted:#65656B;--accent:#0A66D6;--accent-d:#0856B5;--tint:#E6F0FC;--pass:#1B8A3A;--bad:#C4281C;--hair:rgba(29,29,31,.08);--road:rgba(29,29,31,.09);--ease:cubic-bezier(.16,1,.3,1);--pad:clamp(40px,5vw,60px);
---gl:var(--surface);--gl-f:none;
---edge:0 0 0 1px var(--hair);
---lift:0 1px 2px rgba(20,30,60,.05),0 8px 24px -12px rgba(30,50,110,.14)}
+:root{
+--bg:oklch(98.2% .004 255);--panel:oklch(99.7% .0015 255);--sunk:oklch(97.1% .005 255);--hover:oklch(96.2% .007 255);
+--line:oklch(91.6% .007 255);--ink:oklch(22% .012 255);--mut:oklch(50% .013 255);
+--test:oklch(55% .19 256);--test-bg:oklch(95.6% .026 256);
+--audit:oklch(52% .2 295);--audit-bg:oklch(95.8% .03 295);
+--ok:oklch(52% .14 150);--ok-bg:oklch(96.4% .032 150);
+--bad:oklch(53% .19 27);
+--sh:0 1px 2px oklch(30% .02 255/.06);
+--mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+--pad:clamp(44px,6vw,72px)}
 *{box-sizing:border-box;margin:0}
-html{background:var(--page);color:var(--ink);font-family:Geist,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
-body{line-height:1.45;font-size:17px;overflow-x:hidden;-webkit-font-smoothing:antialiased;position:relative}
-code,pre,.mono{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible,button:focus-visible,input:focus-visible,[role=tab]:focus-visible,pre:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:12px}
-section{max-width:960px;margin:0 auto;padding:var(--pad) 24px}
-h1{font-size:clamp(38px,7vw,74px);line-height:1.03;letter-spacing:-.045em;font-weight:700}
-h2{font-size:clamp(26px,4vw,40px);line-height:1.08;letter-spacing:-.035em;font-weight:700;margin-bottom:12px}
-.lede{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:31em;margin-top:12px;line-height:1.4}
-/* liquid glass: translucent fill, bright top edge, soft lift, specular corner */
-.gl,.hit,.panel,.tool,.cli,.watch a,.links a,.nav,.box,.chips button,.twitter-tweet{background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift)}
-.hit,.panel,.tool,.box,.cli{position:relative}
-.hit>*,.panel>*,.tool>*,.box>*{position:relative}
-/* motion */
-html.js .rv{opacity:0;transform:translateY(12px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-html.js .rv.in{opacity:1;transform:none}
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* nav: floating glass pill */
-.nav{position:sticky;top:12px;z-index:30;height:54px;width:min(980px,calc(100% - 24px));margin:12px auto 0;border-radius:99px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 9px 0 16px}
-.wm{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:16px;color:var(--ink);text-decoration:none;letter-spacing:-.025em}
-.lg{width:28px;height:28px;display:block;filter:drop-shadow(0 3px 6px rgba(10,102,214,.35))}
-.nl{display:flex;gap:4px;font-size:13.5px}
-.nl a{color:var(--muted);text-decoration:none;padding:7px 13px;border-radius:99px;transition:color .2s,background .25s}
-.nl a:hover{color:var(--ink);background:rgba(255,255,255,.65)}
-.nav .sm{min-height:36px;padding:6px 18px;font-size:14px;border-radius:99px}
+html{background:var(--bg);color:var(--ink);font-family:Geist,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--bg);line-height:1.45;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+code,pre,.mono{font-family:var(--mono)}
+a{color:var(--test);text-decoration:none;text-underline-offset:3px}
+a:hover{text-decoration:underline}
+p a,.flow a,.sub a{text-decoration:underline}
+:focus-visible{outline:2px solid var(--test);outline-offset:2px;border-radius:6px}
+img{max-width:100%}
+section{max-width:1080px;margin:0 auto;padding:var(--pad) 24px 0}
+h1{font-size:clamp(34px,5.2vw,58px);line-height:1.04;letter-spacing:-.04em;font-weight:700}
+h2{font-size:clamp(26px,3.4vw,36px);line-height:1.1;letter-spacing:-.03em;font-weight:700}
+.sub{color:var(--mut);font-size:16px;margin-top:8px;max-width:40em}
+.k{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh)}
+.ic{width:20px;height:20px;flex:none;display:inline-block}
+/* buttons */
+button,.btn{font:inherit;font-weight:600;font-size:15px;background:var(--test);color:#fff;border:1px solid var(--test);border-radius:10px;padding:0 20px;cursor:pointer;min-height:44px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+button:hover,.btn:hover{background:oklch(49% .18 256)}
+.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:var(--sh)}
+.ghost:hover{background:var(--hover)}
+
 /* hero */
-#hero{position:relative;padding-top:clamp(30px,5vw,56px);padding-bottom:clamp(18px,3vw,30px);text-align:center;max-width:1180px}
-#hero>*{animation:rise .8s var(--ease) both}
-#hero>:nth-child(2){animation-delay:.05s}#hero>:nth-child(3){animation-delay:.1s}#hero>:nth-child(4){animation-delay:.15s}#hero>:nth-child(5){animation-delay:.2s}
-.icon{width:clamp(64px,8vw,84px);height:auto;margin:0 auto 22px;display:block;filter:drop-shadow(0 14px 22px rgba(10,102,214,.38));animation:rise .8s var(--ease) both}
-#hero .lede{margin-left:auto;margin-right:auto}
-.box{display:flex;gap:8px;align-items:center;margin:26px auto 0;max-width:640px;border-radius:99px;padding:7px 7px 7px 24px;transition:box-shadow .3s var(--ease)}
-.box:focus-within{box-shadow:var(--edge),0 0 0 3px var(--accent),var(--lift)}
-.box input{flex:1;min-width:0;font:inherit;font-size:18px;border:0;background:none;color:var(--ink);padding:10px 0;outline:0}
-.box input::placeholder{color:#76767c}
-button,.btn{font:inherit;font-weight:600;font-size:15px;background:linear-gradient(180deg,#2B86F0,#0A66D6);color:#fff;border:0;border-radius:99px;padding:10px 22px;cursor:pointer;min-height:46px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 16px -4px rgba(10,102,214,.55);transition:filter .2s,transform .25s var(--ease)}
-button:hover,.btn:hover{filter:brightness(1.07)}
-button:active,.btn:active{transform:scale(.96)}
-.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}
-.chips button{background:var(--gl);color:var(--ink);border-radius:99px;font-weight:500;font-size:14px;padding:4px 16px;min-height:38px;box-shadow:var(--edge),0 4px 14px -6px rgba(30,50,110,.18)}
-.chips button:hover{color:var(--accent);filter:none;transform:translateY(-2px)}
-.chips .lbl{color:var(--muted);font-size:14px;align-self:center}
-.hint{color:var(--muted);font-size:14px;margin-top:12px;min-height:1.45em}
-.hint.cached{color:var(--pass);font-weight:500}
-/* stickers */
-#out{padding-top:8px;padding-bottom:var(--pad)}
-.hit{border-radius:28px;padding:24px 26px;margin-bottom:20px}
+#hero{text-align:center;padding-top:clamp(20px,4vw,44px)}
+#hero h1{max-width:15em;margin:0 auto}
+#hero .sub{margin:12px auto 0;font-size:clamp(16px,1.8vw,19px);max-width:34em}
+.box{display:flex;gap:8px;align-items:center;margin:24px auto 0;max-width:620px;border-radius:14px;padding:6px 6px 6px 18px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--sh)}
+.box:focus-within{border-color:var(--test);box-shadow:0 0 0 3px var(--test-bg)}
+.box input{flex:1;min-width:0;font:inherit;font-size:17px;border:0;background:none;color:var(--ink);padding:10px 0;outline:0}
+.box input::placeholder{color:oklch(60% .01 255)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:12px}
+.chips .lbl{color:var(--mut);font-size:14px;align-self:center;margin-right:2px}
+.chips button{background:var(--panel);color:var(--ink);border:1px solid var(--line);font-weight:500;font-size:14px;min-height:34px;padding:0 13px;border-radius:99px}
+.chips button:hover{background:var(--hover);color:var(--test)}
+.hint{color:var(--mut);font-size:13.5px;margin-top:8px;min-height:1.45em}
+.hint.cached{color:var(--ok);font-weight:500}
+
+/* app tiles */
+.apps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;text-align:left}
+.app{display:flex;flex-direction:column;gap:14px;padding:20px 22px;text-decoration:none;color:var(--ink);transition:border-color .15s}
+.app:hover{border-color:var(--c)}
+.app-t{--c:var(--test);--cb:var(--test-bg)}
+.app-a{--c:var(--audit);--cb:var(--audit-bg)}
+.app-h{display:flex;align-items:center;gap:12px}
+.app-i{width:40px;height:40px;border-radius:11px;background:var(--c);color:#fff;display:grid;place-items:center;flex:none}
+.app-i .ic{width:22px;height:22px}
+.app-h div b{display:block;font-size:20px;letter-spacing:-.025em}
+.app-h div span{display:block;color:var(--mut);font-size:14.5px}
+.app-h .go{margin-left:auto;color:var(--c);font-weight:600;font-size:14px;white-space:nowrap}
+.jr{list-style:none;padding:0;display:flex;align-items:center;gap:4px}
+.jr li{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;font-size:12.5px;font-weight:600;color:var(--ink);min-width:0}
+.jr li i{width:38px;height:38px;border-radius:50%;background:var(--cb);color:var(--c);display:grid;place-items:center}
+.jr li.ar{flex:0 0 auto;color:var(--mut);font-weight:400;font-size:15px;padding-bottom:20px}
+.nums2{display:flex;gap:10px}
+.nums2 div{flex:1;border-radius:12px;background:var(--sunk);padding:10px 14px}
+.nums2 b{display:block;font-size:26px;letter-spacing:-.035em;line-height:1.1}
+.nums2 span{font-size:13px;color:var(--mut)}
+.nums2 .g b{color:var(--ok)}.nums2 .bl b{color:var(--test)}.nums2 .v b{color:var(--audit)}
+
+/* generated prompt */
+#out{padding-top:28px}
+.hit{padding:20px 22px;margin-bottom:16px}
 .hit[hidden],.fresh[hidden]{display:none}
-.hit-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;color:var(--muted);font-size:14px}
-.pill{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;border-radius:99px;padding:3px 11px;background:rgba(27,138,58,.12);color:var(--pass)}
+.hit-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;color:var(--mut);font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;border-radius:99px;padding:3px 11px;background:var(--ok-bg);color:var(--ok)}
 .pill:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.pill.other{background:var(--tint);color:var(--accent)}
-.hit h3{font-size:clamp(22px,3.2vw,30px);letter-spacing:-.03em;line-height:1.15;margin-top:12px}
-.hit p{color:var(--muted);margin-top:6px;max-width:38em}
-.hit-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:18px}
-.hit-act span{color:var(--muted);font-size:14px}
-.fresh{font-size:16px;letter-spacing:-.01em;color:var(--muted);font-weight:600;margin:0 0 10px 6px}
-.panel{border-radius:28px;overflow:hidden}
-.tabs{display:flex;gap:2px;padding:8px 10px 0;box-shadow:0 1px 0 var(--hair);align-items:flex-end}
-.tabs [role=tab]{font:inherit;font-size:14px;font-weight:600;color:var(--muted);background:none;border:0;border-radius:12px 12px 0 0;padding:8px 14px;min-height:42px;cursor:pointer;box-shadow:none}
-.tabs [role=tab]:hover{background:none;color:var(--ink);filter:none}
-.tabs [role=tab][aria-selected=true]{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+.pill.other{background:var(--test-bg);color:var(--test)}
+.hit h3{font-size:24px;letter-spacing:-.03em;line-height:1.15;margin-top:10px}
+.hit p{color:var(--mut);margin-top:6px;max-width:40em}
+.hit-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:16px}
+.hit-act span{color:var(--mut);font-size:14px}
+.fresh{font-size:15px;color:var(--mut);font-weight:600;margin:0 0 8px 4px}
+.panel{overflow:hidden}
+.tabs{display:flex;gap:2px;padding:6px 8px 0;border-bottom:1px solid var(--line);align-items:flex-end}
+.tabs [role=tab]{font-size:14px;font-weight:600;color:var(--mut);background:none;border:0;border-radius:8px 8px 0 0;padding:0 14px;min-height:40px}
+.tabs [role=tab]:hover{color:var(--ink);background:none}
+.tabs [role=tab][aria-selected=true]{color:var(--test);box-shadow:inset 0 -2px 0 var(--test)}
 .tabs .sp{flex:1}
-.tabs .cp{margin:0 4px 6px 0;padding:6px 18px;min-height:36px;font-size:14px;color:#fff}
-.how{padding:12px 22px 0;color:var(--muted);font-size:14px}
-pre{white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.6;padding:10px 22px 22px;max-height:420px;overflow:auto;color:var(--ink)}
-.strip{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px 16px;margin-top:20px;counter-reset:s}
-.strip li{counter-increment:s;font-size:15px;color:var(--ink);line-height:1.35}
-.strip li:before{content:counter(s);display:block;font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:12px;color:var(--accent);font-weight:600;margin-bottom:3px}
-.strip li span{color:var(--muted)}
-/* film: full bleed, no frame, edges melt into the page */
-#film{max-width:none;padding:8px 0 clamp(8px,2vw,24px)}
-.reel{position:relative;max-width:1680px;margin:0 auto;aspect-ratio:2/1}
-.reel video{display:block;width:100%;height:100%;object-fit:cover;background:#F3F3F5;border:0;border-radius:0;box-shadow:none;outline:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 11%,#000 89%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 11%,#000 89%,transparent);mask-composite:intersect;mix-blend-mode:multiply}
-.ctl{position:absolute;right:max(20px,8%);bottom:9%;display:flex;gap:8px}
-.ctl button{min-height:36px;padding:4px 16px;font-size:13px;background:var(--gl);color:var(--ink);box-shadow:var(--edge),0 6px 18px -6px rgba(30,50,110,.25)}
-.dl{text-align:center;font-size:13px;color:var(--muted);margin-top:2px}
-/* steps */
-.rrp{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3.5vw,34px);margin-top:26px}
-.rrp figure{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;background:#F3F3F4;box-shadow:var(--edge),var(--lift)}
-.rrp img{width:100%;height:100%;object-fit:contain;display:block}
-.rrp h3{font-size:24px;letter-spacing:-.03em;margin-top:14px}
-.rrp p{color:var(--muted);font-size:15px;margin-top:4px}
-/* watch */
-.watch{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-.watch a{display:inline-block;text-decoration:none;color:var(--ink);border-radius:20px;padding:12px 18px;font-weight:600;transition:transform .3s var(--ease),color .2s}
-.watch a[hidden]{display:none}
-.rl{margin:26px 0 8px}.rl h3{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:10px}
-.rl ol{list-style:none;padding:0;display:grid;gap:8px;margin-bottom:14px}
-.rl li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border-radius:16px;padding:11px 16px;background:var(--gl);box-shadow:var(--edge),var(--lift);font-size:15px}
-.rl li b{font-weight:600}.rl li span{color:var(--muted);font-size:13.5px}
-.rl .dot{width:10px;height:10px;border-radius:50%;background:var(--pass)}.rl .dot.f{background:var(--bad)}
-.rl a.go{font-weight:600;text-decoration:none;font-size:14px}
-.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:22px 0 6px;padding:0;list-style:none}
-.chain li{flex:1 1 190px;border-radius:16px;padding:14px 16px;background:var(--gl);box-shadow:var(--edge),var(--lift);font-size:15px;position:relative}
-.chain li b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:4px}
-.chain li.hot{box-shadow:var(--edge),0 0 0 2px var(--accent),var(--lift)}
-.why3{margin-top:14px;font-size:15px;color:var(--muted)}
+.tabs .cp{margin:0 2px 6px 0;min-height:34px;font-size:14px;padding:0 14px}
+.how{padding:12px 20px 0;color:var(--mut);font-size:14px}
+pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;padding:8px 20px 20px;max-height:400px;overflow:auto;color:var(--ink)}
+.strip{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.strip li{display:flex;gap:10px;align-items:center;font-size:14px;line-height:1.3;padding:12px 14px}
+.strip li .ic{color:var(--test)}
+.cli{padding:14px 18px;margin-top:10px;font-size:13.5px;line-height:1.8;overflow-x:auto;white-space:pre}
+.cli .p,.cli .c{color:var(--mut)}.cli .p{user-select:none}
 
-.watch a small{display:block;font-weight:400;color:var(--muted);font-size:13px}
-.watch a:hover{color:var(--accent);transform:translateY(-3px)}
-.cli{border-radius:22px;padding:16px 22px;margin-top:14px;font-size:14px;line-height:1.8;overflow-x:auto;white-space:pre}
-.cli .p,.cli .c{color:var(--muted)}
-.cli .p{user-select:none}
-.cap{color:var(--muted);font-size:14px;margin-top:10px}
+/* how it works */
+.row{margin-top:26px}
+.row-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.row-h .app-i{width:30px;height:30px;border-radius:8px}
+.row-h .app-i .ic{width:17px;height:17px}
+.row-h b{font-size:17px;letter-spacing:-.02em}
+.row-h a{margin-left:auto;font-size:14px;font-weight:600}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.shots figure{overflow:hidden}
+.shots .im{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:var(--sunk);border-bottom:1px solid var(--line)}
+.shots img{width:100%;height:100%;object-fit:contain;display:block}
+figcaption{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;font-size:14px;color:var(--mut);line-height:1.35}
+figcaption b{color:var(--ink);display:block}
+.n{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:600 12px/1 var(--mono);color:#fff;background:var(--c,var(--test))}
+.anno{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:14px;align-items:stretch;--c:var(--audit)}
+.anno figure{position:relative;overflow:hidden;padding:12px}
+.anno figure img{display:block;width:100%;height:auto;border-radius:8px}
+.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--audit);color:#fff;display:grid;place-items:center;font:600 13px/1 var(--mono);border:2px solid #fff;box-shadow:var(--sh)}
+.anno ol{list-style:none;padding:0;display:flex;flex-direction:column;gap:10px}
+.anno li{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;font-size:14px;color:var(--mut);line-height:1.35;flex:1}
+.anno li b{display:block;color:var(--ink)}
+.film{margin-top:26px;overflow:hidden}
+.film video{display:block;width:100%;aspect-ratio:2/1;object-fit:cover;background:var(--sunk)}
+.film p{padding:10px 14px;font-size:13.5px;color:var(--mut)}
+
+/* proof */
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:24px}
+.stats div{padding:14px 16px}
+.stats b{display:block;font-size:30px;letter-spacing:-.04em;line-height:1.1}
+.stats span{display:block;font-size:13px;color:var(--mut);margin-top:2px;line-height:1.3}
+.stats .g b{color:var(--ok)}.stats .bl b{color:var(--test)}.stats .v b{color:var(--audit)}
+.grp{margin-top:26px}
+.grp>.k{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.prs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pr{padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pr-top{display:flex;align-items:center;gap:8px;min-width:0}
+.pr-top img{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);flex:none;background:var(--sunk)}
+.pr-top .repo{font:500 12.5px/1.2 var(--mono);color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.st{margin-left:auto;font-weight:600;font-size:12px;border-radius:99px;padding:2px 9px 2px 8px;background:var(--ok-bg);color:var(--ok);display:inline-flex;align-items:center;gap:5px;flex:none}
+.st:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.merged{background:var(--audit-bg);color:var(--audit)}
+.st.closed{background:var(--sunk);color:var(--mut)}
+.pr a.t{font-weight:600;font-size:14.5px;line-height:1.3;color:var(--ink);text-decoration:none}
+.pr a.t:hover{color:var(--test)}
+.pr a.t small{font:500 12.5px var(--mono);color:var(--mut)}
+.pr .rp{margin-top:auto;font-size:13.5px;font-weight:600}
+.chl{display:flex;flex-wrap:wrap;gap:8px}
+.rc{display:inline-flex;align-items:center;gap:8px;padding:8px 13px 8px 10px;font-size:14px;color:var(--ink);text-decoration:none;max-width:100%;border-radius:12px}
+.rc:hover{border-color:var(--c)}
+.rc .ic{width:17px;height:17px;color:var(--c)}
+.rc b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.rc span{color:var(--mut);font-size:13px;white-space:nowrap}
+.rc.g{--c:var(--ok)}.rc.bl{--c:var(--test)}.rc.v{--c:var(--audit)}
+.grp .more{display:inline-block;margin-top:10px;font-size:14px;font-weight:600}
+.lgd{display:inline-flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font:500 13px Geist,sans-serif;color:var(--mut);margin-left:6px}
+.lgd i{width:8px;height:8px;border-radius:50%;display:inline-block}
+
 /* tools */
-.tools{display:grid;gap:14px;margin-top:26px}
-.tool{border-radius:30px;padding:clamp(20px,3vw,28px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:clamp(20px,3.5vw,32px);align-items:center}
-.tool:nth-child(even) .txt{order:2}
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}
+.tool{display:flex;flex-direction:column;overflow:hidden}
+.tool figure{cursor:zoom-in;background:var(--sunk);border-bottom:1px solid var(--line);aspect-ratio:16/9;overflow:hidden}
+.tool figure img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+.tool .bd{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
 .tool header{display:flex;align-items:center;gap:10px}
-.tool img.lg2{width:38px;height:38px;border-radius:10px;display:block;box-shadow:0 4px 12px -2px rgba(0,0,0,.25)}
-.tool h3{font-size:20px;letter-spacing:-.025em}
-.tool .job{color:var(--ink);font-size:clamp(22px,2.8vw,28px);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-top:16px}
-.tool p{color:var(--muted);font-size:15px;margin-top:6px}
-.tool figure{border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(20,30,60,.06),0 10px 28px -10px rgba(30,50,110,.3)}
-.tool figure img{display:block;width:100%;height:auto}
-.tool figcaption{font-size:13px;color:var(--muted);padding:8px 14px;background:rgba(255,255,255,.8);box-shadow:0 -1px 0 var(--hair)}
-.tool .more{display:inline-block;margin-top:12px;font-size:14px;font-weight:600}
-.proof{margin-top:8px;color:var(--muted);max-width:36em}
-.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:28px}
-.nums>div{background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift);border-radius:26px;padding:22px 22px 20px}
-.nums b{display:block;font-size:clamp(30px,3.4vw,38px);letter-spacing:-.035em;line-height:1.1}
-.nums span{display:block;margin-top:6px;color:var(--muted);font-size:14.5px;line-height:1.35}
-.nums a{color:inherit}
-#proof:has(.pending){display:none}
-/* timeline: a race track, two stops a row, hairpin turns at the edges */
-#built{max-width:1120px}
-.tlw{position:relative;margin-top:30px}
-.trk{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.trk .road{fill:none;stroke:var(--road);stroke-width:18;stroke-linecap:round;stroke-linejoin:round}
-.trk .edge{fill:none;stroke:rgba(255,255,255,.7);stroke-width:20;stroke-linecap:round;stroke-linejoin:round}
-.trk .mid{fill:none;stroke:#fff;stroke-width:2.5;stroke-dasharray:1 9;stroke-linecap:round}
-.trk .done{fill:none;stroke:var(--accent);stroke-width:3.5;stroke-linecap:round;filter:drop-shadow(0 0 5px rgba(10,102,214,.55))}
-.trk .pt{fill:#fff;stroke:var(--accent);stroke-width:3}
-.trk .pt.next{fill:#fff;stroke:#9A9AA2}
-.tl{list-style:none;padding:0;margin:0;position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:clamp(20px,3.5vw,44px);row-gap:clamp(24px,3.5vw,40px)}
-.tl li{padding-top:30px;min-width:0}
-.tl .when b{display:block;font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:13px;color:var(--ink);font-weight:600;margin-bottom:10px}
-.tl .when span{display:block;color:var(--muted);font-size:14px;line-height:1.35;margin-bottom:10px}
-.twitter-tweet{border-radius:20px;padding:16px 18px;font-size:15px;line-height:1.5;max-width:550px}
-.twitter-tweet p{margin:0 0 .5em}
-.twitter-tweet a{word-break:break-word}
-.twitter-tweet-rendered{margin:0!important;border-radius:20px;box-shadow:var(--lift)}
-.followx{font-weight:600;font-size:15px}
-/* about */
-.about{display:grid;grid-template-columns:190px minmax(0,1fr);gap:clamp(24px,4vw,44px);align-items:center}
-.ph{position:relative}
-.ph .im{border-radius:30px;aspect-ratio:4/5;overflow:hidden;background:var(--tint);box-shadow:var(--edge),var(--lift)}
-.ph img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-.about p{color:var(--muted);margin-top:10px;max-width:34em}
-.about h2+p{margin-top:0}
-.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.links a{text-decoration:none;color:var(--ink);border-radius:99px;padding:6px 18px;font-weight:600;font-size:14px;min-height:38px;display:inline-flex;align-items:center;transition:color .2s,transform .3s var(--ease)}
-.links a:hover{color:var(--accent);transform:translateY(-2px)}
-footer{max-width:960px;margin:0 auto;padding:28px 24px 48px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;align-items:center}
-footer .wm{font-size:14px}footer .lg{width:22px;height:22px}
-footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
-@media(max-width:860px){.tool{grid-template-columns:1fr}.tool:nth-child(even) .txt{order:0}.rrp{grid-template-columns:1fr}.rrp figure{aspect-ratio:16/9}.nl{display:none}}
-@media(max-width:720px){section{padding-left:20px;padding-right:20px}.strip{grid-template-columns:1fr 1fr}body{font-size:16px}.box{flex-wrap:wrap;padding:8px 8px 8px 18px;border-radius:28px}.box input{flex:1 1 100%;font-size:17px}.box button{width:100%}.tabs{flex-wrap:wrap}.tabs .sp{display:none}.tabs .cp{margin:0 0 6px auto}.hit{padding:20px}.hit-act .btn{width:100%}
- .reel{aspect-ratio:16/9}.ctl{right:20px;bottom:6%}
- .tl{grid-template-columns:minmax(0,1fr);padding:0 0 0 40px}.tl li:nth-child(n){grid-column:auto}
- .about{grid-template-columns:1fr;gap:20px}.ph{max-width:190px}}
-@media(prefers-reduced-motion:reduce){#hero>*,.icon{animation:none}html.js .rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
-@media(prefers-reduced-transparency:reduce){.gl,.hit,.panel,.tool,.cli,.watch a,.links a,.nav,.box,.chips button,.twitter-tweet{-webkit-backdrop-filter:none;backdrop-filter:none;background:#fff}}
-/* one engine, three answers */
-.au{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;margin-top:24px}
-.au-steps{list-style:none;padding:0;display:grid;gap:10px}
-.au-steps li{border-radius:20px;padding:16px 18px}.au-steps b{display:block;font-size:17px;letter-spacing:-.015em}.au-steps span{color:var(--muted);font-size:15px}
-.au-live{border-radius:24px;padding:20px;background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift)}
-.au-live h3{font-size:15px;color:var(--muted);margin-bottom:10px}
-.au-live ul{list-style:none;padding:0;display:grid;gap:10px}
-.au-live li a{display:block;text-decoration:none;color:var(--ink);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.6);box-shadow:0 0 0 1px var(--hair)}
-.au-live li a:hover{box-shadow:0 0 0 2px var(--accent)}
-.au-live li b{display:block;font-size:16px}.au-live li span{font-size:14px;color:var(--muted)}
-.au-act{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
-.au-act code{font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:14px;border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair)}
-@media(max-width:860px){.au{grid-template-columns:1fr}}
-.ea{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:26px}
-.ea-c{border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:10px;position:relative}
-.ea-c h3{font-size:20px;letter-spacing:-.025em;line-height:1.2}
-.ea-c p{color:var(--muted);font-size:15px}
-.ea-c code{font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:13px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair);border-radius:10px;padding:8px 10px;display:block;overflow-x:auto;white-space:nowrap}
-.ea-c .more{font-weight:600;font-size:14px;margin-top:auto;padding-top:4px}
-.ea-v{min-height:76px;display:flex;flex-direction:column;justify-content:center}
-.ea-dots{display:flex;justify-content:space-between;position:relative;padding:0 6px}
-.ea-dots:before{content:"";position:absolute;left:12px;right:12px;top:6px;height:2px;background:var(--road)}
-.ea-dots span{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:11px;color:var(--muted)}
-.ea-dots i{width:14px;height:14px;border-radius:50%;background:var(--pass);box-shadow:0 0 0 3px var(--page)}
-.ea-dots i.x{background:var(--bad)}
-.ea-dots span.first{color:var(--bad);font-weight:600}
-.ea-dots span.first i{box-shadow:0 0 0 3px var(--page),0 0 0 5px rgba(196,40,28,.25)}
-.ea-chips{display:flex;flex-wrap:wrap;gap:6px}
-.ea-chips b{font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:13px;font-weight:500;border-radius:99px;padding:4px 12px;background:var(--tint);color:var(--accent)}
-.ea-chips b.ok{background:rgba(27,138,58,.12);color:var(--pass)}
-.ea-loop{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;flex-wrap:wrap}
-.ea-loop i{font-style:normal;color:var(--muted);font-weight:400}
-.inc{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px;counter-reset:i}
-.inc li{font-size:14.5px;line-height:1.45;padding-left:30px;position:relative}
-.inc li .ic{position:absolute;left:0;top:2px;color:var(--accent)}
-.ic{width:20px;height:20px;flex:none;display:inline-block;vertical-align:-4px;margin-right:8px}
-.ea-c h3 .ic{width:22px;height:22px;color:var(--accent);display:block;margin:0 0 10px}
-.pj .k .ic{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
-.ea-c code{white-space:normal;overflow-wrap:anywhere}
-.aside{font-size:14px;color:var(--muted)}
-.twitter-tweet-rendered{margin:0!important}
-.post{margin:0;border-radius:18px;padding:14px 16px;font-size:15px;line-height:1.5;background:var(--surface);box-shadow:var(--edge)}
-.post p{margin:0 0 .4em}.post a{font-size:14px;font-weight:600}
-.inc li b{display:block;font-size:13px;letter-spacing:.02em;color:var(--ink)}
-.inc code{font-size:13px}
-.sub-h{font-size:17px;font-weight:600;color:var(--muted);margin:40px 0 4px;letter-spacing:-.01em}
-.cmpd{margin-top:18px}.cmpd summary{cursor:pointer;font-weight:600;color:var(--accent);padding:10px 0}
-.ea-note{color:var(--muted);font-size:15px;margin-top:18px}
-@media(max-width:860px){.ea{grid-template-columns:minmax(0,1fr)}}
+.tool header img{width:30px;height:30px;border-radius:8px;border:1px solid var(--line)}
+.tool header h3{font-size:17px;letter-spacing:-.02em}
+.tool header a{margin-left:auto;font-size:13px;font-weight:600}
+.tool .job{font-size:18px;font-weight:700;letter-spacing:-.025em;line-height:1.2}
+.flow{list-style:none;padding:0;display:flex;flex-direction:column;gap:7px}
+.flow li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--mut);line-height:1.35}
+.flow li .ic{width:17px;height:17px;color:var(--test);margin-top:1px}
+.flow li b{color:var(--ink);font-weight:600}
+.plus{margin-top:auto;align-self:flex-start;min-height:34px;font-size:13.5px;padding:0 12px}
 
-/* comparison */
-.cmp{margin-top:22px;border-radius:28px;background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift);overflow:hidden}
-.cmp-s{overflow-x:auto}
-.cmp table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px;font-size:13.5px;line-height:1.4}
-.cmp th,.cmp td{padding:12px 14px;text-align:left;vertical-align:top;box-shadow:0 -1px 0 var(--hair)}
-.cmp thead th{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:-.01em;box-shadow:none;position:sticky;top:0;white-space:nowrap}
-.cmp thead th.me{color:var(--accent);display:flex;align-items:center;gap:7px;border-radius:0}
-.cmp thead th.me img{border-radius:5px}
-.cmp tbody th{font-weight:600;color:var(--ink);width:17%}
-.cmp tbody th em{display:block;width:max-content;margin-top:5px;font:600 10.5px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;font-style:normal;color:#fff;background:linear-gradient(180deg,#2B86F0,#0A66D6);border-radius:99px;padding:4px 9px}
-.cmp td{color:var(--muted)}
-.cmp td.me,.cmp th.me{background:rgba(10,102,214,.07)}
-.cmp td.me{color:var(--ink);font-weight:500}
-.cmp tr.hl td.me{background:rgba(10,102,214,.13)}
-.fill{font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;color:var(--accent);background:rgba(10,102,214,.07);box-shadow:inset 0 0 0 1px rgba(10,102,214,.25);border-radius:7px;padding:1px 6px;font-style:normal}
-.vp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,32px);margin-top:26px}
-.vp p{color:var(--muted);font-size:15px;line-height:1.5}
-.vp code{font-size:13px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair);border-radius:7px;padding:1px 6px}
-@media(max-width:860px){.vp{grid-template-columns:1fr}}
-
-/* tools: proof button and modal */
-.plus{margin-top:14px;display:inline-flex;align-items:center;gap:9px;padding:6px 16px 6px 7px;min-height:38px;font-size:14px;color:var(--ink);background:var(--gl);box-shadow:var(--edge),0 4px 14px -6px rgba(30,50,110,.2)}
-.plus i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#2B86F0,#0A66D6);color:#fff;font:600 18px/1 Geist,system-ui,sans-serif;font-style:normal;transition:transform .35s var(--ease)}
-.plus:hover{filter:none;color:var(--accent);transform:translateY(-2px)}
-.plus:hover i{transform:rotate(90deg)}
-.tool figure{cursor:zoom-in}
-.tm{border:0;padding:0;background:transparent;color:var(--ink);width:min(1080px,calc(100vw - 24px));max-height:calc(100vh - 24px);margin:auto;overflow:visible}
-.tm::backdrop{background:rgba(24,30,52,.38);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.tm[open]{animation:pop .45s var(--ease)}
-@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
-.tm-in{max-height:calc(100vh - 24px);overflow:auto;border-radius:32px;padding:clamp(18px,3vw,28px);background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(255,255,255,.62));-webkit-backdrop-filter:blur(40px) saturate(1.9);backdrop-filter:blur(40px) saturate(1.9);box-shadow:var(--edge),0 40px 90px -30px rgba(20,30,70,.5)}
-html:has(dialog[open]){overflow:hidden}
-.tm-h{display:flex;align-items:center;gap:14px}
-.tm-h img{width:40px;height:40px;border-radius:11px;box-shadow:0 4px 12px -2px rgba(0,0,0,.25)}
-.tm-h h3{font-size:22px;letter-spacing:-.03em}
-.tm-h p{color:var(--muted);font-size:14px}
-.tm-x{margin-left:auto;width:38px;height:38px;min-height:0;padding:0;border-radius:50%;font-size:24px;line-height:1;color:var(--ink);background:rgba(255,255,255,.8);box-shadow:var(--edge)}
-.tm-xyz{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 16px}
-.tm-xyz>div{background:rgba(255,255,255,.62);box-shadow:var(--edge);border-radius:18px;padding:12px 14px}
-.tm-xyz dt{font:600 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
-.tm-xyz dd{margin-top:6px;font-size:14px;line-height:1.35}
-.ph-t{color:var(--muted);font-style:italic}
-.tm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.sh{position:relative;display:flex;flex-direction:column;text-align:left;font:inherit;font-weight:400;color:var(--ink);background:rgba(255,255,255,.66);box-shadow:var(--edge),0 8px 20px -10px rgba(30,50,110,.25);border-radius:20px;padding:8px 8px 12px;min-height:0;white-space:normal;align-items:stretch;justify-content:flex-start;cursor:zoom-in;transition:transform .35s var(--ease)}
-.sh:hover{filter:none;transform:translateY(-3px)}
-.sh .im{aspect-ratio:16/10;border-radius:13px;overflow:hidden;background:#EEF0F5;display:grid;place-items:center}
-.sh .im img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
-.sh.empty{cursor:default}.sh.empty:hover{transform:none}
-.sh.empty .im{background:repeating-linear-gradient(135deg,rgba(10,102,214,.06) 0 10px,rgba(10,102,214,.02) 10px 20px);box-shadow:inset 0 0 0 1.5px rgba(10,102,214,.3);border-radius:13px;flex-direction:column;gap:6px;color:var(--accent);font-size:13px;font-weight:600}
-.sh.empty .im svg{width:26px;height:26px}
-.sh b{display:block;font-size:14px;margin:9px 4px 3px;letter-spacing:-.01em}
-.sh .c{font-size:12.5px;line-height:1.4;color:var(--muted);margin:0 4px}
-.sh .c u{text-decoration:none;color:var(--ink);font-weight:600}
-.tm-v figure{margin:14px 0 0;border-radius:18px;overflow:hidden;background:#fff;box-shadow:var(--edge)}
-.tm-v figure img{display:block;width:100%;max-height:62vh;object-fit:contain;background:#fff}
-.tm-v figcaption{padding:12px 16px;font-size:14px;color:var(--muted);line-height:1.45}
-.tm-v figcaption u{text-decoration:none;color:var(--ink);font-weight:600}
-.tm-b{margin-top:6px;min-height:36px;padding:4px 16px;font-size:14px;color:var(--ink);background:rgba(255,255,255,.8);box-shadow:var(--edge)}
-.tm-n{display:flex;gap:8px;justify-content:center;margin-top:12px}
-.tm-n button{width:42px;height:42px;min-height:0;padding:0;font-size:24px;line-height:1;color:var(--ink);background:rgba(255,255,255,.8);box-shadow:var(--edge)}
-@media(max-width:820px){.tm-xyz{grid-template-columns:1fr}.tm-g{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.tm-g{grid-template-columns:1fr}}
-/* numbers: one visual row, PRs first */
-.nrow{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr 1fr;gap:12px;margin-top:26px}
-.nt{background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift);border-radius:26px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative}
-.nt b{display:block;font-size:clamp(30px,3.2vw,40px);letter-spacing:-.04em;line-height:1.05}
-.nt span{color:var(--muted);font-size:13.5px;line-height:1.35}
-.nt em{font-style:normal;font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:auto;padding-top:8px;font-weight:600}
-.nt em a{text-decoration:none}.nt em a:hover{text-decoration:underline}
-.nt-pr{background:linear-gradient(150deg,rgba(255,255,255,.85),rgba(222,236,255,.6));}
-.nt-pr b{font-size:clamp(54px,6vw,76px);color:var(--accent);line-height:.95}
-.nt .ico{display:flex;gap:4px;color:#1B8A3A;margin-bottom:2px}
-.nt .ico svg{width:20px;height:20px}
-.nt .ring{width:46px;height:46px;transform:rotate(-90deg)}
-.nt .ring circle{fill:none;stroke:rgba(29,29,31,.1);stroke-width:5}
-.nt .ring .v{stroke:#1B8A3A;stroke-linecap:round}
-.nt .dots{display:flex;gap:7px;height:46px;align-items:center}
-.nt .dots i{width:16px;height:16px;border-radius:50%;background:rgba(29,29,31,.12)}
-.nt .dots i.on{background:#1B8A3A}.nt .dots i.new{background:var(--accent);box-shadow:0 0 0 4px rgba(10,102,214,.2)}
-.nt .dots i.ck{width:24px;height:24px;background:#1B8A3A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/70% no-repeat}
-.nt .coin{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 20px/1 Geist,system-ui,sans-serif;color:#7A5A00;background:radial-gradient(circle at 30% 25%,#FFE9A3,#F2C14B);box-shadow:inset 0 -3px 6px rgba(150,100,0,.25),0 6px 12px -4px rgba(150,100,0,.4);margin:3px 0}
-@media(max-width:860px){.nrow{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(220px,70%);overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 20px 14px;scroll-padding:0 20px;margin:22px -20px 0;scrollbar-width:none}.nrow::-webkit-scrollbar{display:none}.nt{scroll-snap-align:start}}
-/* PR record */
-.prs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
-.pr{border-radius:28px;padding:10px 10px 18px;display:flex;flex-direction:column;gap:6px;position:relative}
-.pr .shot{display:block;border-radius:19px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(20,30,60,.07),0 8px 22px -10px rgba(30,50,110,.3);aspect-ratio:1200/668;transition:transform .5s var(--ease)}
-.pr .shot:hover{transform:scale(1.015)}
-.pr .shot img{display:block;width:100%;height:100%;object-fit:cover}
-.pm{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 8px 0}
-.repo{font:500 12.5px/1.2 "Geist Mono",ui-monospace,monospace;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.st{font-weight:600;font-size:12.5px;border-radius:99px;padding:3px 11px 3px 9px;background:rgba(27,138,58,.14);color:#1B8A3A;display:inline-flex;align-items:center;gap:6px;flex:none}
-.st:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
-.st.merged{background:rgba(130,80,223,.14);color:#8250DF}
-.st.closed{background:rgba(196,40,28,.12);color:#C4281C}
-.pr h3{font-size:17px;letter-spacing:-.02em;line-height:1.25;margin:2px 8px 0}
-.pr h3 small{font:500 13px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
-.pr p{margin:0 8px;font-size:14px;line-height:1.4;color:var(--muted)}
-.pr p b{color:var(--ink)}
-.pr code{font-size:12.5px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair);border-radius:7px;padding:1px 6px}
-.fx{list-style:none;padding:0;margin:auto 8px 0;padding-top:8px;display:flex;flex-wrap:wrap;gap:6px}
-.fx li{font-size:12.5px;font-weight:600;border-radius:99px;padding:4px 11px;background:rgba(255,255,255,.7);box-shadow:var(--edge);color:var(--ink)}
-.nopr{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px}
-.nopr .lb{font:600 12px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
-.chip{font-size:13.5px;border-radius:99px;padding:6px 14px;background:var(--gl);box-shadow:var(--edge),0 4px 12px -6px rgba(30,50,110,.2);color:var(--muted)}
-.chip b{color:var(--ink);margin-right:4px}
-@media(max-width:960px){.prs{grid-template-columns:1fr}.pr{padding-bottom:20px}}
-#steps .rrp{margin-top:0}
-
-/* PR carousel */
-.pc{margin-top:22px;position:relative}
-.pc-t{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px 16px 34px;margin:0 -16px;scroll-padding:0 16px;outline:0}
-.pc-t::-webkit-scrollbar{display:none}
-.pc-t:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:30px}
-.pr.slide{flex:0 0 100%;scroll-snap-align:center;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(18px,3vw,34px);align-items:center;padding:14px;border-radius:32px;background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift)}
-.pr.slide .shot{border-radius:20px}
-.pr .tx{display:flex;flex-direction:column;gap:10px;padding:6px 14px 6px 0;min-width:0}
-.pr .tx .pm{margin:0}
-.pr .tx h3{font-size:clamp(19px,2.2vw,24px);margin:0;letter-spacing:-.03em;line-height:1.2}
-.pr .tx p{margin:0;font-size:14.5px;line-height:1.45}
-.pr .tx p b{display:block;font:600 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
-.pr .tx .fx{margin:4px 0 0;padding:0}
-.prf{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-size:14px}
-.prf b{width:100%;font:600 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
-.prf a{font-weight:600;text-underline-offset:3px}
-.gh{align-self:flex-start;margin-top:4px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:14px;color:var(--ink);background:var(--gl);box-shadow:var(--edge),0 4px 14px -6px rgba(30,50,110,.2);border-radius:99px;padding:8px 16px;transition:transform .3s var(--ease),color .2s}
-.gh:hover{color:var(--accent);transform:translateY(-2px)}
-.gh i{font-style:normal;transition:transform .3s var(--ease)}.gh:hover i{transform:translateX(3px)}
-.pc-n{display:flex;align-items:center;justify-content:center;gap:10px}
-.pc-a{width:42px;height:42px;min-height:0;padding:0;border-radius:50%;font-size:26px;line-height:1;color:var(--ink);background:var(--gl);box-shadow:var(--edge),0 4px 14px -6px rgba(30,50,110,.2)}
-.pc-a[disabled]{opacity:.35;cursor:default;transform:none;filter:none}
-.pc-tabs{display:flex;gap:6px;padding:5px;border-radius:99px;background:rgba(255,255,255,.55);box-shadow:var(--edge);overflow-x:auto;scrollbar-width:none;max-width:100%}
-.pc-tabs::-webkit-scrollbar{display:none}
-.pc-b{min-height:34px;padding:4px 14px;font-size:13.5px;font-weight:600;border-radius:99px;color:var(--muted);background:transparent;box-shadow:none;transition:color .2s,background .3s var(--ease)}
-.pc-b:hover{filter:none;color:var(--ink)}
-.pc-b[aria-selected=true]{color:#fff;background:linear-gradient(180deg,#2B86F0,#0A66D6);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 4px 12px -4px rgba(10,102,214,.5)}
-@media(max-width:860px){.pr.slide{grid-template-columns:1fr}.pr .tx{padding:0 6px 8px}}
-@media(max-width:520px){.pc-a{display:none}}
-.tm-g[hidden],.tm-xyz[hidden],.tm-v[hidden]{display:none}
-/* modal captions: one line per fact */
-.kv{display:block;margin-top:3px}
-.kv u{display:block;font:600 10.5px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--accent);margin-bottom:2px}
-.sh .c{margin:0 4px;font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sh .im{aspect-ratio:16/9}
-.tm-v{position:relative}
-.tm-v figure{margin:10px 0 0}
-.tm-v figcaption{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:14px 18px}
-.tm-v figcaption .kv{margin:0}
-.tm-v .tm-h2{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.tm-v .tm-h2 span{font-size:14px;color:var(--muted);font-weight:600}
-.tm-v .tm-n{position:absolute;left:0;right:0;top:calc(50% - 60px);margin:0;justify-content:space-between;padding:0 10px;pointer-events:none}
-.tm-v .tm-n button{pointer-events:auto;box-shadow:var(--edge),0 8px 20px -6px rgba(20,30,70,.4)}
-@media(max-width:700px){.tm-v figcaption{grid-template-columns:1fr}}
-
-/* prism: untested docs in, proven docs out */
-
-/* comparison: wider, with icons */
-#compare{max-width:1240px}
-.cmp table{min-width:1020px;font-size:14px}
-.cmp th,.cmp td{padding:14px 16px}
-.cmp thead th{display:table-cell;white-space:nowrap;vertical-align:middle}
-.cmp thead th .ci{width:22px;height:22px;vertical-align:-6px;margin-right:8px;color:var(--ink)}
-.cmp thead th.me .ci{filter:drop-shadow(0 3px 6px rgba(10,102,214,.35))}
-.cmp thead th.me{display:table-cell}
-.cmp thead th.f1{width:19%}
-.cmp tbody th{width:19%}
-.rh{display:flex;gap:12px;align-items:flex-start}
-.rh i{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:rgba(10,102,214,.09);color:var(--accent)}
-.rh i svg{width:18px;height:18px}
-.rh>span{display:block;line-height:1.3}
-.cell{display:flex;gap:9px;align-items:flex-start}
-.cell>span{display:block}
-.mk{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.mk.y{stroke:#1B8A3A}.mk.y circle{fill:rgba(27,138,58,.14);stroke:none}
-.mk.n{stroke:#C4281C}.mk.n circle{fill:rgba(196,40,28,.1);stroke:none}
-.mk.n path{stroke-width:2}
-.mk.p circle{fill:rgba(255,159,10,.12);stroke:#E08A00;stroke-width:1.8}.mk.p .f{fill:#E08A00;stroke:none}
-.lgd{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:6px;font-size:13px;color:var(--muted)}
-.lgd span{display:inline-flex;align-items:center;gap:7px}
-.lgd .mk{margin:0}
-.cmp td.me .cell>span{color:var(--ink);font-weight:500}
-/* plan: the business plan found a bug in the agent */
+/* plan */
 #plan{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a}
-.pj{list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:pj}
-.pj li{counter-increment:pj;border-radius:20px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
-.pj .k{font:600 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
-
-.pj b{font-size:17px;letter-spacing:-.02em;line-height:1.25}
-.pj p{font-size:14px;line-height:1.45;color:var(--muted);margin:0}
-.pj p code{font-size:12.5px}
-.pj a{margin-top:auto;padding-top:4px;font-size:14px;font-weight:600}
+.pj{list-style:none;padding:0;margin:24px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pj li{padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pj .k{display:flex;align-items:center;gap:6px;color:var(--test)}
+.pj .k .ic{width:15px;height:15px}
+.pj b{font-size:16px;letter-spacing:-.02em;line-height:1.25}
+.pj p{font-size:13.5px;line-height:1.45;color:var(--mut)}
+.pj a{margin-top:auto;padding-top:4px;font-size:13.5px;font-weight:600}
 .pj li.hot b{color:var(--bad)}
-.pc2{margin-top:16px;border-radius:24px;padding:22px 22px 16px}
-.pc2 h3{font-size:17px;letter-spacing:-.02em}
-.pc2 .sub{font-size:13.5px;color:var(--muted);margin-top:2px}
-.lgd2{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 4px;font-size:13.5px;color:var(--ink)}
+.pc2{margin-top:12px;padding:20px 20px 14px}
+.pc2 h3{font-size:16px;letter-spacing:-.02em}
+.pc2 .sb{font-size:13.5px;color:var(--mut);margin-top:2px}
+.lgd2{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 4px;font-size:13px}
 .lgd2 span{display:inline-flex;align-items:center;gap:7px}
 .lgd2 i{width:16px;height:2px;border-radius:2px;display:inline-block}
 .cw{position:relative}
 .cw svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
-.cw .gr{stroke:rgba(29,29,31,.08);stroke-width:1}
-.cw .z{stroke:rgba(29,29,31,.35);stroke-width:1}
-.cw .ax{font:11.5px "Geist Mono",ui-monospace,monospace;fill:var(--muted)}
+.cw .gr{stroke:oklch(22% .012 255/.08);stroke-width:1}
+.cw .z{stroke:oklch(22% .012 255/.35);stroke-width:1}
+.cw .ax{font:11.5px var(--mono);fill:var(--mut)}
 .cw .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .cw .el,.cw .an{font:600 12px Geist,-apple-system,"Segoe UI",sans-serif;fill:var(--ink)}
-.cw .ch{stroke:rgba(29,29,31,.25);stroke-width:1}
-.cw .tip{position:absolute;top:0;pointer-events:none;background:#fff;border-radius:12px;box-shadow:0 0 0 1px var(--hair),0 8px 24px -8px rgba(30,50,110,.25);padding:10px 12px;font-size:13px;line-height:1.5;min-width:200px;opacity:0;transition:opacity .15s}
-.cw .tip b{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.cw .rc{stroke:oklch(22% .012 255/.25);stroke-width:1}
+.cw .tip{position:absolute;top:0;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--sh);padding:10px 12px;font-size:13px;line-height:1.5;min-width:200px;opacity:0;transition:opacity .15s}
+.cw .tip b{display:block;font-size:12px;color:var(--mut);font-weight:600}
 .cw .tip div{display:flex;align-items:center;gap:12px;justify-content:space-between}
 .cw .tip em{font-style:normal}
 .cw .tip i{width:10px;height:2px;display:inline-block;margin-right:6px;vertical-align:middle}
-.cw .tip span{font-family:"Geist Mono",ui-monospace,monospace}
-.pc2 details{margin-top:8px;font-size:13.5px}
-.pc2 summary{cursor:pointer;font-weight:600;color:var(--accent);min-height:36px;display:flex;align-items:center}
+.cw .tip span{font-family:var(--mono)}
+details summary{cursor:pointer;font-weight:600;color:var(--test);min-height:36px;display:flex;align-items:center;font-size:14px}
 .pc2 table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
-.pc2 th,.pc2 td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pc2 th,.pc2 td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
 .pc2 th:first-child,.pc2 td:first-child{text-align:left}
-.pc2 .tw{overflow-x:auto}
-.fx2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
-.fx2 div{border-radius:20px;padding:16px 18px}
-.fx2 b{display:block;font-size:16px;letter-spacing:-.02em}
-.fx2 span{font-size:14px;color:var(--muted)}
-.pl-note{margin-top:12px;font-size:13px;color:var(--muted)}
-@media(max-width:820px){.pj{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){.pj,.fx2{grid-template-columns:minmax(0,1fr)}.pc2{padding:18px 14px 12px}}
+.tw{overflow-x:auto}
+.pl-note{margin-top:10px;font-size:13px;color:var(--mut)}
+
+/* comparison, collapsed */
+.cmpd{margin-top:16px;padding:6px 18px}
+.cmp-s{overflow-x:auto;margin:6px 0 14px}
+.cmp table{border-collapse:collapse;width:100%;min-width:980px;font-size:13.5px;line-height:1.4}
+.cmp th,.cmp td{padding:12px 14px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+.cmp thead th{font-size:13px;font-weight:700;color:var(--mut);border-top:0;white-space:nowrap;vertical-align:middle}
+.cmp thead th .ci{width:20px;height:20px;vertical-align:-5px;margin-right:7px;color:var(--ink)}
+.cmp thead th.me{color:var(--test)}
+.cmp tbody th{font-weight:600;color:var(--ink);width:19%}
+.cmp tbody th em{display:block;width:max-content;margin-top:5px;font:600 10.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;font-style:normal;color:var(--test);background:var(--test-bg);border-radius:99px;padding:4px 8px}
+.cmp td{color:var(--mut)}
+.cmp td.me,.cmp th.me{background:var(--test-bg)}
+.cmp td.me{color:var(--ink);font-weight:500}
+.rh{display:flex;gap:10px;align-items:flex-start}
+.rh i{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--test-bg);color:var(--test)}
+.rh i svg{width:17px;height:17px}
+.cell{display:flex;gap:8px;align-items:flex-start}
+.mk{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.mk.y{stroke:var(--ok)}.mk.y circle{fill:var(--ok-bg);stroke:none}
+.mk.n{stroke:var(--mut)}.mk.n circle{fill:var(--sunk);stroke:none}
+.mk.p circle{fill:oklch(96.2% .045 85);stroke:oklch(60% .13 70);stroke-width:1.8}.mk.p .f{fill:oklch(60% .13 70);stroke:none}
+.lgd3{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--mut)}
+.lgd3 span{display:inline-flex;align-items:center;gap:6px}
+
+/* build log */
+.posts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px;align-items:start}
+.posts>div{min-width:0}
+.posts time{display:block;font:600 12.5px var(--mono);color:var(--mut);margin-bottom:6px}
+.post{margin:0;padding:14px 16px;font-size:14.5px;line-height:1.5;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.post p{margin:0 0 .4em}.post a{font-size:13.5px;font-weight:600}
+.twitter-tweet-rendered{margin:0!important}
+/* about */
+.about{display:grid;grid-template-columns:120px minmax(0,1fr);gap:22px;align-items:center;padding:20px}
+.about img{width:120px;height:150px;object-fit:cover;object-position:top;border-radius:12px;display:block}
+.about h2{font-size:24px}
+.about p{color:var(--mut);margin-top:6px;font-size:15px;max-width:40em}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.links a{text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:0 14px;font-weight:600;font-size:13.5px;min-height:34px;display:inline-flex;align-items:center;background:var(--panel)}
+.links a:hover{color:var(--test)}
+footer{max-width:1080px;margin:var(--pad) auto 0;padding:24px 24px 44px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;align-items:center}
+footer .wm{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none}
+footer .wm svg{width:22px;height:22px}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
+
+/* tool modal */
+.tm{border:0;padding:0;background:transparent;color:var(--ink);width:min(1080px,calc(100vw - 24px));max-height:calc(100vh - 24px);margin:auto;overflow:visible}
+.tm::backdrop{background:oklch(22% .012 255/.45)}
+html:has(dialog[open]){overflow:hidden}
+.tm-in{max-height:calc(100vh - 24px);overflow:auto;border-radius:18px;padding:clamp(16px,3vw,24px);background:var(--panel);border:1px solid var(--line)}
+.tm-h{display:flex;align-items:center;gap:12px}
+.tm-h img{width:38px;height:38px;border-radius:9px;border:1px solid var(--line)}
+.tm-h h3{font-size:20px;letter-spacing:-.03em}
+.tm-h p{color:var(--mut);font-size:14px}
+.tm-x{margin-left:auto;width:38px;height:38px;min-height:0;padding:0;border-radius:50%;font-size:22px;line-height:1;color:var(--ink);background:var(--sunk);border:1px solid var(--line)}
+.tm-x:hover{background:var(--hover)}
+.tm-xyz{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 14px}
+.tm-xyz>div{background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tm-xyz dt{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--test)}
+.tm-xyz dd{margin-top:6px;font-size:14px;line-height:1.35}
+.tm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sh{display:flex;flex-direction:column;text-align:left;font-weight:400;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 8px 12px;min-height:0;white-space:normal;align-items:stretch;justify-content:flex-start;cursor:zoom-in}
+.sh:hover{background:var(--hover)}
+.sh .im{aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:var(--sunk);display:grid;place-items:center}
+.sh .im img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+.sh b{display:block;font-size:14px;margin:9px 4px 3px}
+.sh .c{margin:0 4px;font-size:13px;line-height:1.4;color:var(--mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tm-g[hidden],.tm-xyz[hidden],.tm-v[hidden]{display:none}
+.tm-v{position:relative}
+.tm-v figure{margin:10px 0 0;border-radius:12px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.tm-v figure img{display:block;width:100%;max-height:62vh;object-fit:contain;background:#fff}
+.tm-v figcaption{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:14px 18px}
+.kv{display:block}
+.kv u{display:block;font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--test);margin-bottom:3px}
+.tm-h2{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tm-h2 span{font-size:14px;color:var(--mut);font-weight:600}
+.tm-b{min-height:34px;padding:0 14px;font-size:14px;color:var(--ink);background:var(--sunk);border:1px solid var(--line)}
+.tm-b:hover{background:var(--hover)}
+.tm-n{position:absolute;left:0;right:0;top:calc(50% - 60px);display:flex;justify-content:space-between;padding:0 10px;pointer-events:none}
+.tm-n button{pointer-events:auto;width:40px;height:40px;min-height:0;padding:0;font-size:22px;line-height:1;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:50%}
+.tm-n button:hover{background:var(--hover)}
+
+@media(max-width:960px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.prs{grid-template-columns:repeat(2,minmax(0,1fr))}.tools{grid-template-columns:1fr}.tool{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.tool figure{border-bottom:0;border-right:1px solid var(--line);aspect-ratio:auto}.pj{grid-template-columns:repeat(2,minmax(0,1fr))}.posts{grid-template-columns:repeat(2,minmax(0,1fr))}.anno{grid-template-columns:1fr}.anno ol{flex-direction:row}.tm-xyz{grid-template-columns:1fr}.tm-g{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){section{padding-left:16px;padding-right:16px}footer{padding-left:16px;padding-right:16px}
+ .apps{grid-template-columns:1fr}.shots{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}
+ .box{flex-wrap:wrap;padding:8px}.box input{flex:1 1 100%;padding:8px 10px}.box button{width:100%}
+ .tabs{flex-wrap:wrap}.tabs .sp{display:none}.tabs .cp{margin:0 0 6px auto}.hit-act .btn{width:100%}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}.prs{grid-template-columns:1fr}
+ .tool{display:flex}.tool figure{border-right:0;border-bottom:1px solid var(--line);aspect-ratio:16/9}
+ .pj,.posts{grid-template-columns:minmax(0,1fr)}.anno ol{flex-direction:column}
+ .about{grid-template-columns:1fr}.tm-v figcaption,.tm-g{grid-template-columns:1fr}
+ .film video{aspect-ratio:16/9}.pin{width:22px;height:22px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="0 0 64 64"><defs><linearGradient id="lgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46A6FF"/><stop offset="1" stop-color="#0060DF"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgg)"/><path d="M2 17C2 8.7 8.7 2 17 2h30c8.3 0 15 6.7 15 15v5C46 30 18 30 2 22z" fill="#fff" opacity=".24"/><rect x="2.5" y="2.5" width="59" height="59" rx="14.5" fill="none" stroke="#fff" stroke-opacity=".38"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></symbol></svg>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7v10M18 10c0 4-6 3-11 7"/></symbol><symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></symbol><symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></symbol><symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></symbol><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></symbol><symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5 5L3.5 17.5a1.8 1.8 0 0 0 2.6 2.6l6.2-6.2a4 4 0 0 0 5-5l-2.4 2.4-2-.5-.5-2z"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></symbol><symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 18 4-5"/></symbol><symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><path d="m7 15 4-4 3 3 5-6"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="lg" viewBox="0 0 64 64"><rect x="2" y="2" width="60" height="60" rx="15" fill="#0A66D6"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></symbol>
+<symbol id="i-term" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m7.5 9.5 3 2.5-3 2.5M12.5 15h4"/></symbol>
+<symbol id="i-audit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v6"/><path d="M6 3v18h7"/><circle cx="16.5" cy="16.5" r="3"/><path d="m21 21-2.3-2.3"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h4"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5 5L3.5 17.5a1.8 1.8 0 0 0 2.6 2.6l6.2-6.2a4 4 0 0 0 5-5l-2.4 2.4-2-.5-.5-2z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></symbol>
+<symbol id="i-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7v10M18 10c0 4-6 3-11 7"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1 1 2-2M3.5 12l1 1 2-2M3.5 18l1 1 2-2"/></symbol>
+<symbol id="i-pr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M6 8.2v7.6M18 15.8V10a3 3 0 0 0-3-3h-3.5"/><path d="M13.5 4.5 11 7l2.5 2.5"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 18 4-5"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><path d="m7 15 4-4 3 3 5-6"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></symbol>
+</svg>
 <div id="sitenav"></div>
 <script src="assets/site-nav.js" data-cur="home" defer></script>
 <main>
 <section id="hero">
-<svg class="icon" viewBox="0 0 64 64" role="img" aria-label="FirstRun logo"><use href="#lg"/></svg>
-<h1>Docs that work (literally).</h1>
-<p class="lede">Paste a docs URL. Your coding agent runs the quickstart in a clean container, finds the step that breaks, fixes it, and proves the fix.</p>
+<h1>Test your docs. Audit them against your code.</h1>
+<p class="sub">Doc-test runs your quickstart and proves each fix. Doc-audit finds the pages your code changed underneath.</p>
 <form class="box" id="f" autocomplete="off">
 <input id="u" type="text" inputmode="url" spellcheck="false" placeholder="Paste your docs URL" aria-label="Docs URL, or the name of a tool">
 <button type="submit">Generate</button>
@@ -483,17 +353,38 @@ html:has(dialog[open]){overflow:hidden}
 <button type="button" data-u="https://docs.dagster.io/getting-started/quickstart">Dagster</button>
 <button type="button" data-u="https://www.mkdocs.org/getting-started/">MkDocs</button></div>
 <p class="hint" id="hint" data-d="A partial URL works. So does a tool name. Nothing leaves your browser.">A partial URL works. So does a tool name. Nothing leaves your browser.</p>
+<div class="apps">
+<a class="app app-t card" href="doc-test/">
+<div class="app-h"><span class="app-i"><svg class="ic" aria-hidden="true"><use href="#i-term"/></svg></span><div><b>Doc-test</b><span>Runs the quickstart. Proves the fix.</span></div><span class="go">Open &rarr;</span></div>
+<ol class="jr" aria-label="Doc-test journey: read, run, fix, prove">
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg></i>Read</li><li class="ar" aria-hidden="true">&rarr;</li>
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg></i>Run</li><li class="ar" aria-hidden="true">&rarr;</li>
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-wrench"/></svg></i>Fix</li><li class="ar" aria-hidden="true">&rarr;</li>
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></i>Prove</li>
+</ol>
+<div class="nums2"><div class="g"><b id="n-fix">16</b><span>pages with a fix proven</span></div><div class="bl"><b id="n-ok">8</b><span>docs that work as written</span></div></div>
+</a>
+<a class="app app-a card" href="doc-audit/">
+<div class="app-h"><span class="app-i"><svg class="ic" aria-hidden="true"><use href="#i-audit"/></svg></span><div><b>Doc-audit</b><span>Reads git history. Lists stale pages.</span></div><span class="go">Open &rarr;</span></div>
+<ol class="jr" aria-label="Doc-audit journey: clone, read history, ship list">
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-branch"/></svg></i>Clone</li><li class="ar" aria-hidden="true">&rarr;</li>
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg></i>Read history</li><li class="ar" aria-hidden="true">&rarr;</li>
+<li><i><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg></i>Ship list</li>
+</ol>
+<div class="nums2"><div class="v"><b id="n-rep">4</b><span>repos audited</span></div><div class="v"><b id="n-stale">15</b><span>stale pages found</span></div></div>
+</a>
+</div>
 </section>
 
 <section id="out" hidden>
-<div class="hit" id="hit" hidden>
+<div class="hit card" id="hit" hidden>
 <div class="hit-top"><span class="pill" id="hit-p">Verified</span><span id="hit-m"></span></div>
 <h3 id="hit-t"></h3>
 <p id="hit-s"></p>
 <div class="hit-act"><a class="btn" id="hit-a" href="doc-test/">Watch the replay</a><span>A saved run. Nothing to install.</span></div>
 </div>
 <h3 class="fresh" id="fresh" hidden>Run it fresh with your agent</h3>
-<div class="panel">
+<div class="panel card">
 <div class="tabs" role="tablist" aria-label="Your coding agent">
 <button type="button" role="tab" id="t0" aria-selected="true" aria-controls="pre" data-i="0">Claude Code</button>
 <button type="button" role="tab" id="t1" aria-selected="false" aria-controls="pre" data-i="1" tabindex="-1">Cursor</button>
@@ -504,204 +395,149 @@ html:has(dialog[open]){overflow:hidden}
 <pre id="pre" role="tabpanel" tabindex="0"></pre>
 </div>
 <ol class="strip">
-<li>Your agent installs FirstRun <span>and checks Docker</span></li>
-<li>Runs your quickstart <span>in a clean container</span></li>
-<li>Fixes and proves it <span>in a second clean run</span></li>
-<li>Opens the PR <span>when you say yes</span></li>
+<li class="card"><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg>Your agent installs FirstRun</li>
+<li class="card"><svg class="ic" aria-hidden="true"><use href="#i-term"/></svg>Runs your quickstart clean</li>
+<li class="card"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Proves the fix in a second run</li>
+<li class="card"><svg class="ic" aria-hidden="true"><use href="#i-pr"/></svg>Opens the PR after your yes</li>
 </ol>
-</section>
-
-<section id="film" class="film" aria-label="Launch film">
-<div class="reel rv">
-<video id="reel" muted loop playsinline preload="metadata" poster="assets/launch-poster.jpg" aria-label="FirstRun launch film, 44 seconds, plays silently on a loop">
-<source src="assets/firstrun-launch.mp4" type="video/mp4">
-</video>
-<div class="ctl"><button type="button" id="pp">Pause</button><button type="button" id="mu">Sound on</button></div>
-</div>
-</section>
-
-<section id="steps" aria-label="How it works">
-<div class="rrp">
-<div><figure><img src="assets/step-run.webp" alt="A terminal command, firstrun run with a docs URL, above six numbered quickstart steps in a clean container" width="910" height="510" loading="lazy"></figure><h3>Read</h3><p>FirstRun reads the page and plans one step per command.</p></div>
-<div><figure><img src="assets/step-3.webp" alt="Six quickstart steps. The first two pass and step 3, run demo, fails for a new developer" width="1060" height="420" loading="lazy"></figure><h3>Run</h3><p>Every step runs in a clean container, like a new developer. The first failure stops the run.</p></div>
-<div><figure><img src="assets/step-prove.webp" alt="Break, Fix, Prove: step 3 of 6 fails, the docs fix is applied, a second clean container passes 6 of 6 steps" width="980" height="330" loading="lazy"></figure><h3>Prove</h3><p>A fix is not done until a second clean container passes the whole quickstart.</p></div>
-</div>
-</section>
-
-<section id="watch">
-<h2>Watch a Real Run.</h2>
-<p class="lede">Every run ends with a replay you can step through.</p>
-<div class="rl" id="rl" hidden>
-<h3>Latest runs</h3>
-<ol id="rll"></ol>
-<a class="btn" id="rla" href="doc-test/">Open doc-test</a>
-</div>
-<div class="cli mono" id="cli"><span class="p">$ </span>pip install git+https://github.com/HighnessAtharva/firstrun
+<div class="cli mono card"><span class="p">$ </span>pip install git+https://github.com/HighnessAtharva/firstrun
 <span class="p">$ </span>firstrun https://docs.getdbt.com/guides/duckdb
-<span class="p">$ </span>firstrun pr &lt;run&gt;   <span class="c"># prints the gh commands for the docs PR</span></div>
-<p class="cap">Prefer the terminal? You need Docker and a Claude token from <code>claude setup-token</code>.</p>
+<span class="p">$ </span>firstrun audit owner/repo   <span class="c"># Doc-audit from the terminal</span></div>
 </section>
 
-<section id="proof">
-<h2>The Numbers Come From Real Runs.</h2>
-<div class="nrow" role="list">
-<div class="nt nt-pr" role="listitem"><div class="ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg></div><b>4</b><span>upstream docs PRs, each for a step a new developer hits</span></div>
-<div class="nt" role="listitem"><svg class="ring" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" pathLength="100"/><circle class="v" cx="22" cy="22" r="18" pathLength="100" stroke-dasharray="100 100"/></svg><b>5 of 5</b><span>open-source quickstarts verified in a fresh container</span></div>
-<div class="nt" role="listitem"><div class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="new"></i><i></i></div><b>2 &rarr; 3</b><span>of 4 quickstarts finish, v1 to v2</span></div>
-<div class="nt" role="listitem"><div class="dots" aria-hidden="true"><i class="ck"></i><i class="ck"></i><i class="ck"></i></div><b>0 &rarr; 3</b><span>failed steps recovered</span></div>
-<div class="nt" role="listitem"><div class="coin" aria-hidden="true">$</div><b>$0.02</b><span>model cost per run, measured by neatlogs (list price, not billed)</span></div>
+<section id="steps" aria-labelledby="steps-h">
+<h2 id="steps-h">Paste a URL or a Repo and Get Proof Back</h2>
+<div class="row">
+<div class="row-h"><span class="app-i" style="background:var(--test)"><svg class="ic" aria-hidden="true"><use href="#i-term"/></svg></span><b>Doc-test</b><a href="doc-test/">See every run</a></div>
+<div class="shots">
+<figure class="card"><div class="im"><img src="assets/step-run.webp" alt="A terminal command, firstrun run with a docs URL, above six numbered quickstart steps in a clean container" width="910" height="510" loading="lazy"></div><figcaption><span class="n">1</span><span><b>Read</b>One step per command on the page.</span></figcaption></figure>
+<figure class="card"><div class="im"><img src="assets/step-3.webp" alt="Six quickstart steps. The first two pass and step 3, run demo, fails for a new developer" width="1060" height="420" loading="lazy"></div><figcaption><span class="n">2</span><span><b>Run</b>A clean container finds the step that breaks.</span></figcaption></figure>
+<figure class="card"><div class="im"><img src="assets/step-prove.webp" alt="Break, Fix, Prove: step 3 of 6 fails, the docs fix is applied, a second clean container passes 6 of 6 steps" width="980" height="330" loading="lazy"></div><figcaption><span class="n">3</span><span><b>Fix and prove</b>A second clean container must pass every step.</span></figcaption></figure>
 </div>
-<h3 class="sub-h" id="prs">The 4 PRs</h3>
-<div class="pc rv" id="pc" role="region" aria-roledescription="carousel" aria-label="Pull requests opened upstream">
-<div class="pc-t" id="pcT" tabindex="0">
-<article class="pr slide" id="pr-10149" data-repo="dbt-labs/docs.getdbt.com" data-n="10149" role="group" aria-roledescription="slide" aria-label="1 of 4">
-<a class="shot" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149" target="_blank" rel="noopener"><img src="assets/pr-10149.webp" alt="Screenshot of pull request 10149 on dbt-labs/docs.getdbt.com: Fixing the jafgen command in the DuckDB quickstart, status Open" width="1200" height="668" loading="lazy"></a>
-<div class="tx">
-<div class="pm"><span class="repo">dbt-labs/docs.getdbt.com</span><span class="st">Open</span></div>
-<h3>Fix the jafgen command in the DuckDB quickstart <small>#10149</small></h3>
-<p><b>Broke</b><code>jafgen --years 6</code> fails with <code>No such option: --years</code>.</p>
-<p><b>Fixed</b><code>years</code> is now positional, so both mentions change.</p>
-<ul class="fx"><li>+2 &minus;2 in 1 file</li><li class="stars"><span>218</span> repo stars</li></ul>
-<p class="prf"><b>Public proof</b><a href="doc-test/?s=10#ex=dbt">Replay step 10: the failure, the fix, the clean rerun</a><a href="https://entire.io/gh/HighnessAtharva/firstrun/session/ae05fb29-0c85-4558-9980-42419f08ca9c" target="_blank" rel="noopener">Entire session that ran it</a></p>
-<a class="gh" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149" target="_blank" rel="noopener">View on GitHub <i aria-hidden="true">&rarr;</i></a>
 </div>
-</article>
-<article class="pr slide" id="pr-10150" data-repo="dbt-labs/docs.getdbt.com" data-n="10150" role="group" aria-roledescription="slide" aria-label="2 of 4">
-<a class="shot" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150" target="_blank" rel="noopener"><img src="assets/pr-10150.webp" alt="Screenshot of pull request 10150 on dbt-labs/docs.getdbt.com: Stating the Python version the DuckDB quickstart needs, status Open" width="1200" height="668" loading="lazy"></a>
-<div class="tx">
-<div class="pm"><span class="repo">dbt-labs/docs.getdbt.com</span><span class="st">Open</span></div>
-<h3>State the Python version the DuckDB quickstart needs <small>#10150</small></h3>
-<p><b>Broke</b>the cloned repo pins <code>networkx==3.7</code>, which needs Python 3.12.</p>
-<p><b>Fixed</b>the guide now names the Python version.</p>
-<ul class="fx"><li>+1 &minus;0 in 1 file</li><li class="stars"><span>218</span> repo stars</li></ul>
-<p class="prf"><b>Public proof</b><a href="doc-test/?s=3#ex=dbt">Replay step 3: the failure, the fix, the clean rerun</a><a href="https://entire.io/gh/HighnessAtharva/firstrun/session/ae05fb29-0c85-4558-9980-42419f08ca9c" target="_blank" rel="noopener">Entire session that ran it</a></p>
-<a class="gh" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150" target="_blank" rel="noopener">View on GitHub <i aria-hidden="true">&rarr;</i></a>
+<div class="row">
+<div class="row-h"><span class="app-i" style="background:var(--audit)"><svg class="ic" aria-hidden="true"><use href="#i-audit"/></svg></span><b>Doc-audit</b><a href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core" style="color:var(--audit)">Open the dbt-core audit</a></div>
+<div class="anno">
+<figure class="card"><img src="assets/app-doc-audit.webp" alt="Doc-audit board for dbt-labs/dbt-core: 1405 pages, 15 stale, 72 features with no docs, and four columns of cards to ship next" width="2400" height="1126" loading="lazy">
+<span class="pin" style="left:16.5%;top:15%">1</span><span class="pin" style="left:22%;top:45%">2</span><span class="pin" style="left:47%;top:45%">3</span></figure>
+<ol>
+<li class="card"><span class="n">1</span><span><b>Stale pages</b>The code moved after the page did.</span></li>
+<li class="card"><span class="n">2</span><span><b>Features with no docs</b>Shipped commits that no page explains.</span></li>
+<li class="card"><span class="n">3</span><span><b>Ship list</b>One board. Pick a card to see its commits.</span></li>
+</ol>
 </div>
-</article>
-<article class="pr slide" id="pr-2724" data-repo="entireio/cli" data-n="2724" role="group" aria-roledescription="slide" aria-label="3 of 4">
-<a class="shot" href="https://github.com/entireio/cli/pull/2724" target="_blank" rel="noopener"><img src="assets/pr-2724.webp" alt="Screenshot of pull request 2724 on entireio/cli: Saying where install.sh puts entire on Linux, status Open" width="1200" height="668" loading="lazy"></a>
-<div class="tx">
-<div class="pm"><span class="repo">entireio/cli</span><span class="st">Open</span></div>
-<h3>Say where install.sh puts entire on Linux <small>#2724</small></h3>
-<p><b>Broke</b>after a good install, <code>entire version</code> fails with <code>command not found</code>.</p>
-<p><b>Fixed</b>the docs say the binaries land in <code>~/.local/bin</code>, which a clean shell lacks on <code>PATH</code>.</p>
-<ul class="fx"><li>+2 &minus;0 in 1 file</li><li class="stars"><span>5,169</span> repo stars</li></ul>
-<p class="prf"><b>Public proof</b><a href="doc-test/?s=2#ex=entire">Replay step 2: the failure, the fix, the clean rerun</a><a href="https://entire.io/gh/HighnessAtharva/firstrun/session/ae05fb29-0c85-4558-9980-42419f08ca9c" target="_blank" rel="noopener">Entire session that ran it</a></p>
-<a class="gh" href="https://github.com/entireio/cli/pull/2724" target="_blank" rel="noopener">View on GitHub <i aria-hidden="true">&rarr;</i></a>
 </div>
-</article>
-<article class="pr slide" id="pr-671" data-repo="accuknox/help" data-n="671" role="group" aria-roledescription="slide" aria-label="4 of 4">
-<a class="shot" href="https://github.com/accuknox/help/pull/671" target="_blank" rel="noopener"><img src="assets/pr-671.webp" alt="Screenshot of pull request 671 on accuknox/help: Pointing knoxctl install at the latest release and listing APT prerequisites, status Open" width="1200" height="668" loading="lazy"></a>
-<div class="tx">
-<div class="pm"><span class="repo">accuknox/help</span><span class="st">Open</span></div>
-<h3>knoxctl install: point at the latest release and list APT prerequisites <small>#671</small></h3>
-<p><b>Broke</b>the page names knoxctl 0.9.0 as latest, but the installer already fetches 0.9.58.</p>
-<p><b>Fixed</b>the version line and four download links move to 0.9.58, and the APT steps list <code>curl</code>, <code>gnupg</code> and <code>sudo</code>.</p>
-<ul class="fx"><li>+7 &minus;5 in 1 file</li></ul>
-<p class="prf"><b>Public proof</b><a href="doc-test/?s=2#ex=accuknox">Replay step 2: the failure, the fix, the clean rerun</a><a href="https://entire.io/gh/HighnessAtharva/firstrun/session/ae05fb29-0c85-4558-9980-42419f08ca9c" target="_blank" rel="noopener">Entire session that ran it</a></p>
-<a class="gh" href="https://github.com/accuknox/help/pull/671" target="_blank" rel="noopener">View on GitHub <i aria-hidden="true">&rarr;</i></a>
+<figure class="film card" id="film"><video id="reel" controls playsinline preload="none" poster="assets/launch-poster.jpg" aria-label="FirstRun launch film, 44 seconds"><source src="assets/firstrun-launch.mp4" type="video/mp4"></video><p>The 44-second launch film. Press play.</p></figure>
+</section>
+
+<section id="proof" aria-labelledby="proof-h">
+<h2 id="proof-h">Every Number Comes From a Real Run</h2>
+<div class="stats">
+<div class="card g"><b id="s-fix">16</b><span>pages with a fix proven</span></div>
+<div class="card bl"><b id="s-ok">8</b><span>docs that work as written</span></div>
+<div class="card"><b>4</b><span>upstream docs PRs</span></div>
+<div class="card v"><b id="s-rep">4</b><span>repos audited</span></div>
+<div class="card v"><b id="s-stale">15</b><span>stale pages found</span></div>
+<div class="card"><b>$0.02</b><span>model cost per run, by neatlogs</span></div>
 </div>
-</article>
+
+<div class="grp" id="prs">
+<p class="k"><svg class="ic" aria-hidden="true" style="width:15px;height:15px"><use href="#i-pr"/></svg>Upstream PRs</p>
+<div class="prs">
+<article class="pr card" data-repo="dbt-labs/docs.getdbt.com" data-n="10149"><div class="pr-top"><img src="https://github.com/dbt-labs.png?size=52" alt="" width="26" height="26" loading="lazy"><span class="repo">dbt-labs/docs.getdbt.com</span><span class="st">Open</span></div><a class="t" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149" target="_blank" rel="noopener">Fix the jafgen command <small>#10149</small></a><a class="rp" href="doc-test/?s=10#ex=dbt">Replay the fix</a></article>
+<article class="pr card" data-repo="dbt-labs/docs.getdbt.com" data-n="10150"><div class="pr-top"><img src="https://github.com/dbt-labs.png?size=52" alt="" width="26" height="26" loading="lazy"><span class="repo">dbt-labs/docs.getdbt.com</span><span class="st">Open</span></div><a class="t" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150" target="_blank" rel="noopener">State the Python version <small>#10150</small></a><a class="rp" href="doc-test/?s=3#ex=dbt">Replay the fix</a></article>
+<article class="pr card" data-repo="entireio/cli" data-n="2724"><div class="pr-top"><img src="https://github.com/entireio.png?size=52" alt="" width="26" height="26" loading="lazy"><span class="repo">entireio/cli</span><span class="st">Open</span></div><a class="t" href="https://github.com/entireio/cli/pull/2724" target="_blank" rel="noopener">Say where install.sh puts entire <small>#2724</small></a><a class="rp" href="doc-test/?s=2#ex=entire">Replay the fix</a></article>
+<article class="pr card" data-repo="accuknox/help" data-n="671"><div class="pr-top"><img src="https://github.com/accuknox.png?size=52" alt="" width="26" height="26" loading="lazy"><span class="repo">accuknox/help</span><span class="st">Open</span></div><a class="t" href="https://github.com/accuknox/help/pull/671" target="_blank" rel="noopener">Point knoxctl at the latest release <small>#671</small></a><a class="rp" href="doc-test/?s=2#ex=accuknox">Replay the fix</a></article>
 </div>
-<div class="pc-n"><button type="button" class="pc-a" id="pcP" aria-label="Previous pull request">&lsaquo;</button><div class="pc-tabs" role="tablist" aria-label="Choose a pull request"><button type="button" role="tab" class="pc-b" data-s="0" aria-selected="true">dbt #10149</button><button type="button" role="tab" class="pc-b" data-s="1" aria-selected="false">dbt #10150</button><button type="button" role="tab" class="pc-b" data-s="2" aria-selected="false">Entire #2724</button><button type="button" role="tab" class="pc-b" data-s="3" aria-selected="false">AccuKnox #671</button></div><button type="button" class="pc-a" id="pcN" aria-label="Next pull request">&rsaquo;</button></div>
+<a class="more" href="https://entire.io/gh/HighnessAtharva/firstrun/session/ae05fb29-0c85-4558-9980-42419f08ca9c" target="_blank" rel="noopener">See the Entire session that ran all four</a>
 </div>
-<div class="nopr">
-<span class="lb">Also run, no PR needed</span>
-<span class="chip"><b>MkDocs</b> verified 9/10</span>
-<span class="chip"><b>Dagster</b> verified, no docs PR after a source check</span>
+
+<div class="grp">
+<p class="k"><svg class="ic" aria-hidden="true" style="width:15px;height:15px;color:var(--test)"><use href="#i-term"/></svg>Doc-test replays<span class="lgd"><i style="background:var(--ok)"></i>Fix proven</span><span class="lgd"><i style="background:var(--test)"></i>Docs work</span></p>
+<div class="chl" id="replays">
+<a class="rc card g" href="doc-test/#ex=dbt"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><b>dbt + DuckDB quickstart</b><span>fix proven</span></a>
+<a class="rc card g" href="doc-test/#ex=entire"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><b>Entire CLI install</b><span>fix proven</span></a>
+</div>
+<a class="more" href="doc-test/">Open Doc-test</a>
+</div>
+
+<div class="grp">
+<p class="k"><svg class="ic" aria-hidden="true" style="width:15px;height:15px;color:var(--audit)"><use href="#i-audit"/></svg>Doc-audit reports</p>
+<div class="chl" id="audits">
+<a class="rc card v" href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg><b>dbt-labs/dbt-core</b><span>15 stale of 1405</span></a>
+</div>
+<a class="more" href="doc-audit/" style="color:var(--audit)">Open Doc-audit</a>
 </div>
 </section>
 
-<section id="engine">
-<h2>Three More Answers, $0 in Model Calls</h2>
-<p class="proof">They replay stored commands or read git, so no model runs.</p>
-<div class="ea">
-  <article class="ea-c gl rv">
-    <h3><svg class="ic" aria-hidden="true"><use href="#i-branch"/></svg>Which release broke it?</h3>
-    <div class="ea-v"><div class="ea-dots" role="img" aria-label="jafgen releases: 0.2.1 and 0.3.1 pass, 0.4.6, 0.4.10 and 0.4.14 fail">
-      <span><i></i>0.2.1</span><span><i></i>0.3.1</span><span class="first"><i class="x"></i>0.4.6</span><span><i class="x"></i>0.4.10</span><span><i class="x"></i>0.4.14</span>
-    </div></div>
-    <p><b>Finding.</b> The dbt guide step <b>jafgen --years 6</b> broke in jafgen 0.4.6, 11 months before the guide shipped.</p>
-    <p><b>Next step.</b> <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">dbt #10149</a> changes the command. The bisect table is on the PR.</p>
-    <code>firstrun bisect &lt;run&gt; --package jafgen</code>
-    <a class="more" href="doc-test/#ex=dbt">Replay the dbt bisect</a>
-  </article>
-  <article class="ea-c gl rv">
-    <h3><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg>What does the page assume?</h3>
-    <div class="ea-v"><div class="ea-chips"><b>curl</b><b>ca-certificates</b><b>gnupg</b><b>sudo</b><b class="ok">proven 5/5</b></div></div>
-    <p>The AccuKnox install steps need four packages the docs never name. A fresh container proved the list.</p>
-    <code>firstrun prereqs &lt;run&gt;</code>
-    <a class="more" href="doc-test/#ex=accuknox">Replay the AccuKnox proof</a>
-  </article>
-  <article class="ea-c gl rv">
-    <h3><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Which pages went stale?</h3>
-    <div class="ea-v"><div class="ea-chips"><b>age</b><b>stale</b><b>no docs</b><b class="ok">proposal cards</b></div></div>
-    <p>Reads the git history of every docs page. A page is stale when product commits on its topic landed after its last edit.</p>
-    <code>firstrun audit owner/repo</code>
-    <a class="more" href="doc-audit/">Open a real audit</a>
-  </article>
-</div>
-</section>
-
-<div class="band">
-<section id="tools">
-<h2>Each Tool Caught a Real Bug in FirstRun.</h2>
-<p class="proof">Each finding changed the code.</p>
+<section id="tools" aria-labelledby="tools-h">
+<h2 id="tools-h">Each Tool Caught a Real Bug in FirstRun</h2>
+<p class="sub">Each finding changed the code.</p>
 <div class="tools">
-<article class="tool rv"><div class="txt">
-<header><img class="lg2" src="assets/logo-neatlogs.webp" alt="neatlogs logo" width="44" height="44"><h3>neatlogs</h3></header>
+<article class="tool card">
+<figure><img src="assets/t-neatlogs-investigate.webp" alt="neatlogs incident Fix Planner Directory Change and File Verification Path Contradiction, status Investigated, high priority, 10 traces, root cause at 66 percent confidence" loading="lazy" width="1400" height="680"></figure>
+<div class="bd">
+<header><img src="assets/logo-neatlogs.webp" alt="neatlogs logo" width="30" height="30"><h3>neatlogs</h3><a href="https://neatlogs.com">neatlogs.com</a></header>
 <p class="job">Raised an incident and named the cause.</p>
-<ol class="inc">
-<li><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><b>Incident</b>25 "Execution Failed" detections, 52.8x the baseline, across 10 traces.</li>
-<li><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><b>Investigation</b>Root cause at 66% confidence: a step runs <code>cd</code>, then the file check looks in the old folder.</li>
-<li><svg class="ic" aria-hidden="true"><use href="#i-wrench"/></svg><b>Fix</b><a href="https://github.com/HighnessAtharva/firstrun/commit/2de852f">Commit 2de852f</a> checks files from where the step started.</li>
-<li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><b>Proof</b>The MkDocs quickstart went from a false fail to verified.</li>
+<ol class="flow">
+<li><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><span><b>Incident.</b> 25 failures, 52.8x the baseline.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><span><b>Cause.</b> A <code>cd</code> step broke the file check.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-wrench"/></svg><span><b>Fix.</b> <a href="https://github.com/HighnessAtharva/firstrun/commit/2de852f">Commit 2de852f</a></span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span><b>Proof.</b> MkDocs went from a false fail to verified.</span></li>
 </ol>
-<p class="aside">A second investigation found that the planner invented steps. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs-investigation.md">Its fix</a> took v2 from 2 to 3 of 4 quickstarts.</p>
-<a class="more" href="https://neatlogs.com">neatlogs.com</a><button type="button" class="plus" data-tool="neatlogs" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
-<figure><img src="assets/t-neatlogs-investigate.webp" alt="neatlogs incident Fix Planner Directory Change and File Verification Path Contradiction, status Investigated, high priority, 10 traces, root cause at 66 percent confidence" loading="lazy" width="1400" height="680"><figcaption>The neatlogs incident and its investigation.</figcaption></figure>
+<p class="flow"><span style="font-size:13.5px;color:var(--mut)">A second investigation <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs-investigation.md">took v2 from 2 to 3 of 4</a> quickstarts.</span></p>
+<button type="button" class="plus ghost" data-tool="neatlogs" aria-haspopup="dialog">+ 6 screenshots</button>
+</div>
 </article>
-<article class="tool rv"><div class="txt">
-<header><img class="lg2" src="assets/logo-entire.webp" alt="Entire logo" width="44" height="44"><h3>Entire</h3></header>
+<article class="tool card">
+<figure><img src="assets/shot-entire.webp" alt="Entire trails view for the firstrun repository with trail number 1 in Planning" loading="lazy" width="1300" height="484"></figure>
+<div class="bd">
+<header><img src="assets/logo-entire.webp" alt="Entire logo" width="30" height="30"><h3>Entire</h3><a href="https://entire.io">entire.io</a></header>
 <p class="job">Its review found a fix that never ran.</p>
-<p>The Trail 7 review saw that the new <code>cd</code> guard was never called. <a href="https://github.com/HighnessAtharva/firstrun/commit/f87db02">Commit f87db02</a> wired it in. Each commit also carries the session that wrote it.</p>
-<a class="more" href="https://entire.io">entire.io</a><button type="button" class="plus" data-tool="entire" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
-<figure><img src="assets/shot-entire.webp" alt="Entire trails view for the firstrun repository with trail number 1 in Planning" loading="lazy" width="1300" height="484"><figcaption>Trail #1 for the firstrun repo.</figcaption></figure>
+<ol class="flow">
+<li><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><span><b>Review.</b> Trail 7 saw the <code>cd</code> guard was never called.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-wrench"/></svg><span><b>Fix.</b> <a href="https://github.com/HighnessAtharva/firstrun/commit/f87db02">Commit f87db02</a> wired it in.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-branch"/></svg><span><b>Record.</b> Each commit carries the session that wrote it.</span></li>
+</ol>
+<button type="button" class="plus ghost" data-tool="entire" aria-haspopup="dialog">+ 6 screenshots</button>
+</div>
 </article>
-<article class="tool rv"><div class="txt">
-<header><img class="lg2" src="assets/logo-cfoai.webp" alt="cfo.ai logo" width="44" height="44"><h3>cfo.ai</h3></header>
+<article class="tool card">
+<figure><img src="assets/shot-cfoai.webp" alt="cfo.ai chat where Ari, the AI CFO, greets Atharva" loading="lazy" width="1100" height="469"></figure>
+<div class="bd">
+<header><img src="assets/logo-cfoai.webp" alt="cfo.ai logo" width="30" height="30"><h3>cfo.ai</h3><a href="https://cfo.ai">cfo.ai</a></header>
 <p class="job">Found a budget cap that ends the company.</p>
-<p>The old $0.50 cap per run runs out of cash in month 14. <a href="#plan">See the plan</a>.</p>
-<a class="more" href="https://cfo.ai">cfo.ai</a><button type="button" class="plus" data-tool="cfoai" aria-haspopup="dialog"><i aria-hidden="true">+</i>1 screenshot</button></div>
-<figure><img src="assets/shot-cfoai.webp" alt="cfo.ai chat where Ari, the AI CFO, greets Atharva" loading="lazy" width="1100" height="469"><figcaption>Ari, the cfo.ai agent, on day one.</figcaption></figure>
+<ol class="flow">
+<li><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg><span><b>Model.</b> 18 months built from 64 measured runs.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><span><b>Finding.</b> The old $0.50 cap runs out of cash in month 14.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span><b>Fix.</b> The plan now sets the cap. <a href="#plan">See the plan</a></span></li>
+</ol>
+<button type="button" class="plus ghost" data-tool="cfoai" aria-haspopup="dialog">+ 1 screenshot</button>
+</div>
 </article>
 </div>
 </section>
-</div>
 
-<section id="plan">
-<h2>The Business Plan Found a Bug in the Agent.</h2>
-<p class="proof">neatlogs measured the cost. cfo.ai modeled the cash. The cap moved into the code.</p>
+<section id="plan" aria-labelledby="plan-h">
+<h2 id="plan-h">The Business Plan Found a Bug in the Agent</h2>
+<p class="sub">neatlogs measured the cost. cfo.ai modeled the cash. The cap moved into the code.</p>
 <ol class="pj">
-<li class="gl rv"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg>neatlogs measured</span><b>64 runs, one cost spread</b><p>Mean $0.0167 a run. One run in twenty costs $0.0508, and the worst cost $0.1014.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">drivers.csv, a trace per row</a></li>
-<li class="gl rv"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>cfo.ai modeled</span><b>18 months from the traces</b><p>Ari built three plans, Stripe fees, churn and six Scenarios. Every cost cell reads the measured drivers.</p><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE" target="_blank" rel="noopener">Open the public model</a></li>
-<li class="gl rv hot"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>The plan found</span><b>Cash runs out in month 14</b><p>The agent capped a run at $0.50, so a Scale run could cost five times its $0.0997 share of the fee.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">Read the business plan</a></li>
-<li class="gl rv"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>FirstRun fixed</span><b>The plan sets the cap</b><p><code>firstrun run --tier scale</code> stops a run at $0.028. A live Free-tier run stopped at $0.0115 of its $0.0108 cap.</p><a href="https://github.com/HighnessAtharva/firstrun/pull/15">See the change, PR #15</a></li>
+<li class="card"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg>neatlogs measured</span><b>64 runs, one cost spread</b><p>Mean $0.0167 a run. The worst run cost $0.1014.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">drivers.csv, a trace per row</a></li>
+<li class="card"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg>cfo.ai modeled</span><b>18 months from the traces</b><p>Three plans and six Scenarios. Every cost cell reads the measured drivers.</p><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE" target="_blank" rel="noopener">Open the public model</a></li>
+<li class="card hot"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>The plan found</span><b>Cash runs out in month 14</b><p>A $0.50 cap lets a Scale run cost five times its $0.0997 share.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">Read the business plan</a></li>
+<li class="card"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>FirstRun fixed</span><b>The plan sets the cap</b><p><code>firstrun run --tier scale</code> stops a run at $0.028.</p><a href="https://github.com/HighnessAtharva/firstrun/pull/15">See the change, PR #15</a></li>
 </ol>
-<div class="pc2 gl rv">
+<div class="pc2 card">
 <h3>Cash on hand, November 2026 to April 2028</h3>
-<p class="sub">Three cfo.ai Scenarios with the same customers. Only the cost cap or the Scale price changes.</p>
+<p class="sb">Three cfo.ai Scenarios with the same customers. Only the cost cap or the Scale price changes.</p>
 <div class="lgd2" aria-hidden="true"><span><i style="background:var(--s1)"></i>Base, plan-set cap</span><span><i style="background:var(--s2)"></i>Old $0.50 cap</span><span><i style="background:var(--s3)"></i>Scale at $529</span></div>
 <div class="cw" id="plw"><p class="pl-note">The chart reads the cfo.ai figures from <a href="data/cfo-model.json">data/cfo-model.json</a>.</p></div>
 <details><summary>Show the numbers</summary><div class="tw" id="plt"></div></details>
 </div>
 <p class="pl-note">Figures read back from cfo.ai on 2026-10-10. Model costs are Sonnet 5.5 list price, which Anthropic did not bill. Customer counts are assumptions until a team pays.</p>
-</section>
-
-<section id="compare">
-<h2>Compare FirstRun with Claude Code, GitHub Actions, GitHub Agents</h2>
-<div class="lgd" aria-label="Legend"><span><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg> Yes</span><span><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg> Partly or with setup</span><span><svg class="mk n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg> No</span></div>
-<div class="cmp rv"><div class="cmp-s"><table>
+<details class="cmpd card" id="compare"><summary>Compare FirstRun with Claude Code, GitHub Actions and GitHub Agents</summary>
+<div class="lgd3" aria-label="Legend"><span><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg> Yes</span><span><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg> Partly or with setup</span><span><svg class="mk n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg> No</span></div>
+<div class="cmp"><div class="cmp-s"><table>
 <thead><tr><th scope="col" class="f1">Feature</th><th scope="col" class="me"><svg class="ci" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><span>FirstRun</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M5.6 5.6l3.5 3.5M14.9 14.9l3.5 3.5M18.4 5.6l-3.5 3.5M9.1 14.9l-3.5 3.5"/></svg><span>Claude Code</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><span>GitHub Actions</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4M9 12.5v1M15 12.5v1"/><path d="M2.5 12.5v2M21.5 12.5v2"/></svg><span>GitHub Agents</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><path d="M14.7 6.3a4 4 0 00-5 5L3.5 17.5a1.8 1.8 0 002.6 2.6l6.2-6.2a4 4 0 005-5l-2.4 2.4-2-.5-.5-2z"/></svg><span>Custom workflow</span></th></tr></thead>
 <tbody>
 <tr><th scope="row"><span class="rh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2.5"/><path d="M8 21h8M12 17v4"/><path d="M7.5 9.5l2.5 2-2.5 2M12.5 13.5h3.5"/></svg></i><span>Runs the quickstart as a new developer</span></span></th><td class="me"><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Every step runs in a fresh Docker container</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Runs on your machine. An optional OS sandbox limits files and network</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>A fresh runner per job, but you script every step</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Works in its own Actions-powered VM, on your repo, not a new-user setup</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only as clean as the environment you build</span></span></td></tr>
@@ -713,50 +549,40 @@ html:has(dialog[open]){overflow:hidden}
 <tr class="hl"><th scope="row"><span class="rh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg></i><span>Ease of use<em>Stands out</em></span></span></th><td class="me"><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Paste a docs URL, then paste the prompt into your coding agent</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>One prompt, but you define the test and the clean setup</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>A YAML file per quickstart</span></span></td><td><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Assign an issue to Copilot</span></span></td><td><span class="cell"><svg class="mk n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>Highest effort</span></span></td></tr>
 <tr><th scope="row"><span class="rh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6 6.8 19.4l1-5.9L3.5 9.4l5.9-.8z"/></svg></i><span>Proof in public repos</span></span></th><td class="me"><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>4 upstream PRs, all open</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Depends on your build</span></span></td></tr>
 </tbody></table></div></div>
-
+</details>
 </section>
 
-<div class="band">
-<section id="built">
-<h2>The Build, in Public.</h2>
-<p class="lede">Every step is a post on <a href="https://x.com/cultist_dev">@cultist_dev</a>.</p>
-<div class="tlw" id="tlw">
-<ol class="tl" id="tl">
-<li><div class="when"><b>Sat Oct 10, 10:45</b></div>
-<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>my neatlogs hackathon project has already caught doc issues for a chroma (24K+ github stars). chromadb's deprecated-config error sends you to its own migration guide. that page returns 404.</p><a href="https://twitter.com/cultist_dev/status/2108788557670125946">Read the post on X</a></blockquote></div></li>
-<li><div class="when"><b>Sat Oct 10, 12:30</b></div>
-<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>#neatHack kickoff, 12:30 IST. FirstRun code before kickoff: 0 lines. neatlogs doctor probe: 7/7 PASS. Solo build. Submission opens Monday, 7 PM IST.</p><a href="https://twitter.com/cultist_dev/status/2108815318541844954">Read the post on X</a></blockquote></div></li>
-<li><div class="when"><b>Sat Oct 10, 13:14</b></div>
-<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>#neatHack, day one. all three required tools are up. Entire: trail #1 created. neatlogs: first agent trace, 3 steps, 12s. cfo.ai: Ari read my public profile.</p><a href="https://twitter.com/cultist_dev/status/2108826005854937357">Read the post on X</a></blockquote></div></li>
-<li><div class="when"><b>Sat Oct 10, 13:26</b></div>
-<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>your quickstart is the only part of your product tested by people who leave instead of filing a bug. so for #neatHack i'm building FirstRun. break. fix. prove.</p><a href="https://twitter.com/cultist_dev/status/2108828983194206308">Watch the video on X</a></blockquote></div></li>
-<li><div class="when"><b>Sat Oct 10, 15:15</b></div>
-<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>a quickstart breaks the way an agent breaks. quietly. so the plan for this weekend: every FirstRun run becomes a trace in @neatlogs.</p><a href="https://twitter.com/cultist_dev/status/2108856505566921210">Read the post on X</a></blockquote></div></li>
-<li class="next"><div class="when"><b>Sun Oct 11 to Mon Oct 12</b><span>More posts land here as the weekend goes.</span></div>
-<div class="tw"><!-- FILL:tweets --><p class="followx"><a href="https://x.com/cultist_dev">Follow the rest on X, @cultist_dev</a></p></div></li>
-</ol></div>
-</section>
+<section id="built" aria-labelledby="built-h">
+<h2 id="built-h">The Build Happened in Public</h2>
+<p class="sub">Every step is a post on <a href="https://x.com/cultist_dev">@cultist_dev</a>.</p>
+<div class="posts">
+<div><time>Sat Oct 10, 10:45</time><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>my neatlogs hackathon project has already caught doc issues for a chroma (24K+ github stars). chromadb's deprecated-config error sends you to its own migration guide. that page returns 404.</p><a href="https://twitter.com/cultist_dev/status/2108788557670125946">Read the post on X</a></blockquote></div>
+<div><time>Sat Oct 10, 12:30</time><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>#neatHack kickoff, 12:30 IST. FirstRun code before kickoff: 0 lines. neatlogs doctor probe: 7/7 PASS. Solo build. Submission opens Monday, 7 PM IST.</p><a href="https://twitter.com/cultist_dev/status/2108815318541844954">Read the post on X</a></blockquote></div>
+<div><time>Sat Oct 10, 13:14</time><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>#neatHack, day one. all three required tools are up. Entire: trail #1 created. neatlogs: first agent trace, 3 steps, 12s. cfo.ai: Ari read my public profile.</p><a href="https://twitter.com/cultist_dev/status/2108826005854937357">Read the post on X</a></blockquote></div>
+<div><time>Sat Oct 10, 13:26</time><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>your quickstart is the only part of your product tested by people who leave instead of filing a bug. so for #neatHack i'm building FirstRun. break. fix. prove.</p><a href="https://twitter.com/cultist_dev/status/2108828983194206308">Watch the video on X</a></blockquote></div>
+<div><time>Sat Oct 10, 15:15</time><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>a quickstart breaks the way an agent breaks. quietly. so the plan for this weekend: every FirstRun run becomes a trace in @neatlogs.</p><a href="https://twitter.com/cultist_dev/status/2108856505566921210">Read the post on X</a></blockquote></div>
+<div><time>Sun Oct 11 to Mon Oct 12</time><!-- FILL:tweets --><p class="post"><a href="https://x.com/cultist_dev">Follow the rest on X, @cultist_dev</a></p></div>
 </div>
+</section>
 
 <section id="about">
-<div class="about">
-<div class="ph"><div class="im"><img src="assets/atharva.webp" alt="Portrait of Atharva Shah" width="480" height="600" loading="lazy"></div></div>
+<div class="about card">
+<img src="assets/atharva.webp" alt="Portrait of Atharva Shah" width="480" height="600" loading="lazy">
 <div>
 <h2>Atharva Shah</h2>
-<p>Atharva is a DevRel engineer. He owns developer docs at AccuKnox and works with Altimate AI.</p>
-<p>A quickstart that breaks without a sound is a docs bug nobody reports. FirstRun is his answer. He built it alone during the hackathon, in public.</p>
+<p>Atharva is a DevRel engineer. He owns developer docs at AccuKnox and works with Altimate AI. He built FirstRun alone during the hackathon, in public.</p>
 <div class="links"><a href="https://atharvashah.com">atharvashah.com</a><a href="https://github.com/HighnessAtharva">GitHub</a><a href="https://x.com/cultist_dev">@cultist_dev</a></div>
 </div>
 </div>
 </section>
 </main>
-<footer><a class="wm" href="#hero"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><span>Made for neatHack 2026 by neatlogs</span><nav><a href="https://neatlogs.com/hackathon">neatHack</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://x.com/cultist_dev">X</a></nav></footer>
+<footer><a class="wm" href="#hero"><svg aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><span>Made for neatHack 2026 by neatlogs</span><nav><a href="https://neatlogs.com/hackathon">neatHack</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://x.com/cultist_dev">X</a></nav></footer>
 <dialog id="tm" class="tm" aria-labelledby="tm-t">
 <div class="tm-in">
-<header class="tm-h"><img id="tm-logo" alt="" width="40" height="40"><div><h3 id="tm-t"></h3><p id="tm-s"></p></div><button type="button" class="tm-x" id="tm-x" aria-label="Close">&times;</button></header>
+<header class="tm-h"><img id="tm-logo" alt="" width="38" height="38"><div><h3 id="tm-t"></h3><p id="tm-s"></p></div><button type="button" class="tm-x" id="tm-x" aria-label="Close">&times;</button></header>
 <dl class="tm-xyz" id="tm-xyz"></dl>
 <div class="tm-g" id="tm-g"></div>
-<div class="tm-v" id="tm-v" hidden><div class="tm-h2"><button type="button" class="tm-b" id="tm-back">&larr; All 6</button><span id="tm-c"></span></div><figure><img id="tm-img" alt=""><figcaption id="tm-cap"></figcaption></figure><div class="tm-n"><button type="button" id="tm-prev" aria-label="Previous">&lsaquo;</button><button type="button" id="tm-next" aria-label="Next">&rsaquo;</button></div></div>
+<div class="tm-v" id="tm-v" hidden><div class="tm-h2"><button type="button" class="tm-b" id="tm-back">&larr; All</button><span id="tm-c"></span></div><figure><img id="tm-img" alt=""><figcaption id="tm-cap"></figcaption></figure><div class="tm-n"><button type="button" id="tm-prev" aria-label="Previous">&lsaquo;</button><button type="button" id="tm-next" aria-label="Next">&rsaquo;</button></div></div>
 </div>
 </dialog>
 <script>
@@ -873,29 +699,36 @@ $("cp").addEventListener("click",function(){
  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent="Copied"},function(){
   var r=document.createRange();r.selectNodeContents($("pre"));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Press Ctrl+C"});
  setTimeout(function(){b.textContent="Copy prompt"},2000)});
-fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
- var a=(j.audits||[]).slice(0,4),ul=$("aull");if(!a.length||!ul)return;
- a.forEach(function(x){var li=document.createElement("li"),k=document.createElement("a"),b=document.createElement("b"),s=document.createElement("span");
-  k.href="doc-audit/?id="+encodeURIComponent(x.id);b.textContent=x.repo;
-  s.textContent=x.pages+" pages, "+x.stale+" stale, oldest "+x.oldest_days+" days. "+x.uncovered+" recent features with no docs.";
-  k.appendChild(b);k.appendChild(s);li.appendChild(k);ul.appendChild(li)});
- $("aul").hidden=false;
-}).catch(function(){});
+
+/* live numbers and chips. Only proven results and docs that work appear here. */
+function set(id,v){var e=$(id);if(e)e.textContent=v}
+function chip(cls,href,icon,title,meta){
+ var a=document.createElement("a");a.className="rc card "+cls;a.href=href;
+ a.innerHTML='<svg class="ic" aria-hidden="true"><use href="#'+icon+'"/></svg>';
+ var b=document.createElement("b"),s=document.createElement("span");b.textContent=title;s.textContent=meta;a.appendChild(b);a.appendChild(s);return a;
+}
 fetch("runs/index.json").then(function(r){return r.json()}).then(function(j){
- var seen={},rs=(j.runs||[]).filter(function(r){if(r.fixture||seen[r.title]||!(r.status==="passed"||r.status==="verified"))return false;seen[r.title]=1;return true}),ol=$("rll");
- if(!rs.length)return;
- rs.slice(0,5).forEach(function(r){
-  var li=document.createElement("li"),d=document.createElement("i"),t=document.createElement("b"),m=document.createElement("span"),a=document.createElement("a");
-  d.className="dot"+(r.status==="failed"?" f":"");d.setAttribute("aria-hidden","true");
-  t.textContent=r.title;m.textContent=r.passed+" of "+r.runnable+" steps"+(r.fixes?", "+r.fixes+" fixes":"");
-  a.className="go";a.href="doc-test/#ex="+encodeURIComponent(r.id);a.textContent="Replay";
-  li.appendChild(d);var w=document.createElement("div");w.appendChild(t);w.appendChild(document.createTextNode(" "));w.appendChild(m);li.appendChild(w);li.appendChild(a);ol.appendChild(li);
- });
- $("rla").textContent="Open doc-test";$("rl").hidden=false;
+ var best={},rank=function(r){return r.status==="verified"&&(+r.fixes||0)>0?2:(r.status==="passed"||r.status==="verified")?1:0};
+ (j.runs||[]).forEach(function(r){if(r.fixture||!r.url)return;var b=best[r.url];if(!b||rank(r)>rank(b))best[r.url]=r});
+ var pages=Object.keys(best).map(function(k){return best[k]}),fx=pages.filter(function(r){return rank(r)===2}),ok=pages.filter(function(r){return rank(r)===1});
+ if(!fx.length&&!ok.length)return;
+ set("n-fix",fx.length);set("s-fix",fx.length);set("n-ok",ok.length);set("s-ok",ok.length);
+ var box=$("replays");box.textContent="";
+ function nm(r){var t=r.title||r.target;return t.length<14&&r.target?t+", "+r.target:t}
+ fx.sort(function(a,b){return (b.fixes||0)-(a.fixes||0)}).slice(0,8).forEach(function(r){
+  box.appendChild(chip("g","doc-test/#ex="+encodeURIComponent(r.id),"i-check",nm(r),r.fixes+(r.fixes===1?" fix proven":" fixes proven")))});
+ ok.slice(0,4).forEach(function(r){
+  box.appendChild(chip("bl","doc-test/#ex="+encodeURIComponent(r.id),"i-check",nm(r),"docs work"))});
 }).catch(function(){});
-Array.prototype.forEach.call(document.querySelectorAll("#ex a[data-n]"),function(el){
- fetch("examples/"+el.getAttribute("data-n")+".txt",{method:"HEAD"}).then(function(r){el.hidden=!r.ok}).catch(function(){el.hidden=true});
-});
+fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
+ var a=j.audits||[];if(!a.length)return;
+ var st=a.reduce(function(n,x){return n+(+x.stale||0)},0);
+ set("n-rep",a.length);set("s-rep",a.length);set("n-stale",st);set("s-stale",st);
+ var box=$("audits");box.textContent="";
+ a.forEach(function(x){
+  var m=x.stale?x.stale+" stale of "+x.pages:x.uncovered?x.uncovered+" features to document":x.pages+" pages checked";
+  box.appendChild(chip("v","doc-audit/?id="+encodeURIComponent(x.id),"i-list",x.repo,m))});
+}).catch(function(){});
 
 /* X embeds: load the widget script only when the build log nears the viewport */
 (function(){
@@ -904,26 +737,6 @@ Array.prototype.forEach.call(document.querySelectorAll("#ex a[data-n]"),function
  if(!b)return;
  if("IntersectionObserver" in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){io.disconnect();load()}},{rootMargin:"600px 0px"});io.observe(b)}else{load()}
 })();
-
-/* reveal on scroll */
-var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
-var rv=document.querySelectorAll("#film .reel,#steps>*,#watch>*,#tools>*,.tool,.pr,.cmp,.rrp>div,#proof>*,.nopr,#built>*,#about .about>*,.rv,.ea-c");
-Array.prototype.forEach.call(rv,function(el){el.classList.add("rv")});
-if("IntersectionObserver" in window){
- var ro=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px",threshold:.05});
- Array.prototype.forEach.call(rv,function(el){ro.observe(el)});
-}else{Array.prototype.forEach.call(rv,function(el){el.classList.add("in")})}
-/* launch film: silent loop, plays only while on screen */
-var v=$("reel"),pp=$("pp"),mu=$("mu"),held=rm;
-function sync(){pp.textContent=v.paused?"Play":"Pause"}
-function play(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
-pp.addEventListener("click",function(){if(v.paused){held=false;play()}else{held=true;v.pause()}});
-mu.addEventListener("click",function(){v.muted=!v.muted;mu.textContent=v.muted?"Sound on":"Sound off";if(!v.muted&&v.paused){held=false;play()}});
-v.addEventListener("play",sync);v.addEventListener("pause",sync);sync();
-if("IntersectionObserver" in window){
- new IntersectionObserver(function(en){if(en[0].isIntersecting){if(!held)play()}else v.pause()},{threshold:.35}).observe(v);
-}else if(!held){play()}
-/* race track */
 
 /* tool proof modals */
 var TL={
@@ -949,31 +762,32 @@ cfoai:{n:"cfo.ai",logo:"assets/logo-cfoai.webp",s:"Turns cost into a plan",
  xyz:["Saturday, after neatlogs measured 64 runs","An 18-month model with 6 Scenarios, public at cfo.ai/s/_u5lbrHIl9KX_JQE","It showed the old $0.50 run cap runs out of cash in month 14, so the plan now sets the cap"],
  sh:[
  {t:"Ari on day one",img:"assets/t-cfo-ari.webp",x:"First look",y:"Ari read the public profile and asked if it was me",z:"The agent starts from facts, not a form"}]}};
-var XYZ=["Used at","Delivered","Why it matters"],PH=["[X: phase]","[Y: what it delivered]","[Z: why it is great]"];
-function ph(v,i){return v?'<span>'+v+'</span>':'<span class="ph-t">'+PH[i]+'</span>'}
-var tm=$("tm"),cur=null,idx=0,list=[];
-function cap(s){return '<span class="kv"><u>Used at</u>'+(s.x||PH[0])+'</span><span class="kv"><u>Delivered</u>'+(s.y||PH[1])+'</span><span class="kv"><u>Why it matters</u>'+(s.z||PH[2])+'</span>'}
+var XYZ=["Used at","Delivered","Why it matters"];
+/* modal state uses its own names, so it never clobbers the prompt tabs or the run lookup */
+var tm=$("tm"),mt=null,mi=0,ml=[];
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function cap(s){return '<span class="kv"><u>Used at</u>'+esc(s.x)+'</span><span class="kv"><u>Delivered</u>'+esc(s.y)+'</span><span class="kv"><u>Why it matters</u>'+esc(s.z)+'</span>'}
 function openTool(k){
- cur=TL[k];list=cur.sh;
- $("tm-logo").src=cur.logo;$("tm-t").textContent=cur.n;$("tm-s").textContent=cur.s+" · "+cur.sh.length+" screenshot"+(cur.sh.length===1?"":"s");
- $("tm-xyz").innerHTML=cur.xyz.map(function(v,i){return '<div><dt>'+XYZ[i]+'</dt><dd>'+ph(v,i)+'</dd></div>'}).join("");
- $("tm-g").innerHTML=list.map(function(s,i){
-  var im=s.img?'<img src="'+s.img+'" alt="'+cur.n+': '+s.t+'" loading="lazy">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 012-2h1.5l1.2-1.6A1 1 0 019.5 4h5a1 1 0 01.8.4L16.5 6H18a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg>Add screenshot';
-  return '<button type="button" class="sh'+(s.img?'':' empty')+'" data-i="'+i+'"'+(s.img?'':' tabindex="-1" aria-disabled="true"')+'><span class="im">'+im+'</span><b>'+(i+1)+'. '+s.t+'</b><span class="c">'+(s.y||PH[1])+'</span></button>'}).join("");
+ mt=TL[k];if(!mt)return;ml=mt.sh;
+ $("tm-logo").src=mt.logo;$("tm-t").textContent=mt.n;$("tm-s").textContent=mt.s+" · "+ml.length+" screenshot"+(ml.length===1?"":"s");
+ $("tm-xyz").innerHTML=mt.xyz.map(function(v,i){return '<div><dt>'+XYZ[i]+'</dt><dd>'+esc(v)+'</dd></div>'}).join("");
+ $("tm-g").innerHTML=ml.map(function(s,i){
+  return '<button type="button" class="sh" data-i="'+i+'"><span class="im"><img src="'+s.img+'" alt="'+esc(mt.n+": "+s.t)+'" loading="lazy"></span><b>'+(i+1)+'. '+esc(s.t)+'</b><span class="c">'+esc(s.y)+'</span></button>'}).join("");
  $("tm-g").hidden=false;$("tm-xyz").hidden=false;$("tm-v").hidden=true;
  if(!tm.open)tm.showModal();$("tm-x").focus();
 }
 function view(i){
- var s=list[i];if(!s||!s.img)return;idx=i;
- $("tm-img").src=s.img;$("tm-img").alt=cur.n+": "+s.t;
- $("tm-cap").innerHTML=cap(s);$("tm-c").textContent=(i+1)+" / "+list.length+" · "+s.t;
+ var s=ml[i];if(!s)return;mi=i;
+ $("tm-img").src=s.img;$("tm-img").alt=mt.n+": "+s.t;
+ $("tm-cap").innerHTML=cap(s);$("tm-c").textContent=(i+1)+" / "+ml.length+" · "+s.t;
  $("tm-g").hidden=true;$("tm-xyz").hidden=true;$("tm-v").hidden=false;
+ $("tm-prev").parentNode.hidden=ml.length<2;
 }
-function step(d){var n=idx,k;for(k=0;k<list.length;k++){n=(n+d+list.length)%list.length;if(list[n].img){view(n);return}}}
+function step(d){if(ml.length)view((mi+d+ml.length)%ml.length)}
 document.addEventListener("click",function(e){
  var b=e.target.closest&&e.target.closest(".plus,.tool figure");
  if(b){var t=b.getAttribute("data-tool")||b.closest(".tool").querySelector(".plus").getAttribute("data-tool");openTool(t);return}
- var s=e.target.closest&&e.target.closest(".sh");if(s&&!s.classList.contains("empty")){view(+s.getAttribute("data-i"));return}
+ var s=e.target.closest&&e.target.closest(".sh");if(s){view(+s.getAttribute("data-i"));return}
  if(e.target===tm)tm.close();
 });
 $("tm-x").addEventListener("click",function(){tm.close()});
@@ -981,35 +795,8 @@ $("tm-back").addEventListener("click",function(){$("tm-g").hidden=false;$("tm-xy
 $("tm-prev").addEventListener("click",function(){step(-1)});
 $("tm-next").addEventListener("click",function(){step(1)});
 tm.addEventListener("keydown",function(e){if(!$("tm-v").hidden){if(e.key==="ArrowRight")step(1);if(e.key==="ArrowLeft")step(-1)}});
-/* PR record: live status and stars from GitHub, static text stays if the call fails */
-Array.prototype.forEach.call(document.querySelectorAll(".pr"),function(c){
- var r=c.getAttribute("data-repo"),n=c.getAttribute("data-n");
- function get(u,k,cb){
-  try{var s=sessionStorage.getItem(k);if(s){var o=JSON.parse(s);if(Date.now()-o.t<6e5){cb(o.d);return}}}catch(e){}
-  fetch(u,{headers:{Accept:"application/vnd.github+json"}}).then(function(x){return x.ok?x.json():null}).then(function(d){if(!d)return;try{sessionStorage.setItem(k,JSON.stringify({t:Date.now(),d:d}))}catch(e){}cb(d)}).catch(function(){});
- }
- get("https://api.github.com/repos/"+r+"/pulls/"+n,"pr"+r+n,function(d){
-  var st=c.querySelector(".st"),m=!!d.merged_at,s=m?"merged":d.state;
-  st.textContent=s.charAt(0).toUpperCase()+s.slice(1);st.className="st"+(s==="open"?"":" "+s);
- });
- get("https://api.github.com/repos/"+r,"rp"+r,function(d){
-  var e=c.querySelector(".stars span");if(e&&d.stargazers_count!=null)e.textContent=d.stargazers_count.toLocaleString("en-US");
- });
-});
 
-/* PR carousel */
-(function(){
- var t=$("pcT");if(!t)return;
- var sl=t.children,tabs=document.querySelectorAll(".pc-b"),pv=$("pcP"),nx=$("pcN"),cur=0;
- function paint(i){cur=i;Array.prototype.forEach.call(tabs,function(b,k){b.setAttribute("aria-selected",k===i?"true":"false")});pv.disabled=i<=0;nx.disabled=i>=sl.length-1}
- function go(i){i=Math.max(0,Math.min(sl.length-1,i));t.scrollTo({left:sl[i].offsetLeft-sl[0].offsetLeft,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});paint(i)}
- var tick=0;t.addEventListener("scroll",function(){if(tick)return;tick=requestAnimationFrame(function(){tick=0;var w=sl[0].offsetWidth+16,i=Math.round(t.scrollLeft/w);if(i!==cur)paint(i)})});
- Array.prototype.forEach.call(tabs,function(b){b.addEventListener("click",function(){go(+b.getAttribute("data-s"))})});
- pv.addEventListener("click",function(){go(cur-1)});nx.addEventListener("click",function(){go(cur+1)});
- t.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){e.preventDefault();go(cur+1)}if(e.key==="ArrowLeft"){e.preventDefault();go(cur-1)}});
- paint(0);
-})();
-
+/* PR chips: state checked with gh on 2026-10-11. No live API call, so no rate limit. */
 })();
 
 /* plan chart: cfo.ai cash by Scenario */
