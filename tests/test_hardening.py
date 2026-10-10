@@ -68,3 +68,25 @@ def test_reported_step_is_the_gave_up_one():
     assert reported_failed_step(st) == 3
     line = cli._summary(st, {1: "a", 2: "b", 3: "c"})[0]
     assert "step 3/3" in line
+
+
+def test_exec_applies_the_cd_guard(monkeypatch):
+    """The guard must run inside Container.exec, not only as a helper."""
+    import subprocess
+
+    from firstrun import sandbox
+
+    seen = {}
+
+    class FakeProc:
+        returncode = 0
+
+        def communicate(self, input=None, timeout=None):
+            seen["script"] = input.decode() if isinstance(input, bytes) else input
+            return (b"", b"")
+
+    monkeypatch.setattr(subprocess, "Popen", lambda *a, **k: FakeProc())
+    c = sandbox.Container.__new__(sandbox.Container)
+    c.name = "firstrun-t-test"
+    c.exec("cd proj && ls", timeout_s=5)
+    assert sandbox.guard_leading_cd("cd proj && ls") in seen["script"]

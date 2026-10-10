@@ -236,7 +236,8 @@ class Container:
 
     def exec(self, command: str, timeout_s: int = 300) -> StepResult:
         """Run one shell command in the container workdir. Never raises on a non-zero exit."""
-        script = _PREFIX + command + "\n"
+        # The rewrite is execution-only: callers keep the original command for reports.
+        script = _PREFIX + guard_leading_cd(command) + "\n"
         start = time.monotonic()
         proc = subprocess.Popen(
             [*config.DOCKER_CMD, "exec", "-i", self.name, "fr_run"],
