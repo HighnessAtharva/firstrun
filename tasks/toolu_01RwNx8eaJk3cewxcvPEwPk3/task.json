@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01RwNx8eaJk3cewxcvPEwPk3",
+  "agent_id": "a98ee240515761b39",
+  "subagent_type": "general-purpose",
+  "task_description": "Draft cfo.ai business plan inputs",
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 65059,
+    "cache_read_tokens": 758373,
+    "output_tokens": 8944,
+    "api_call_count": 9
+  },
+  "started_at": "2026-10-10T14:15:45.2264479+05:30",
+  "completed_at": "2026-10-10T14:17:00.5016319+05:30"
+}
