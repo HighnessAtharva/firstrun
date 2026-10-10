@@ -45,7 +45,8 @@ Rules:
 8. Ignore web archive banners and site chrome (Wayback toolbar, captures, cookie text). Keep only the docs.
 9. A step that needs a paid account, a video, a screenshot, a browser, a GUI or a sign-up stays in the list
    with "skipped_out_of_scope": true and "skip_reason": one plain sentence. Skip pure explanation.
-10. Number ids from 1. Use at most 10 steps. Each step runs in a fresh shell in the same container."""
+10. Number ids from 1. Use at most 10 steps. Each step runs in a fresh shell in the same container.
+11. Commands run in one persistent shell, so never add a cd the docs do not show."""
 
 
 class PlanError(Exception):

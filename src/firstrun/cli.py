@@ -50,10 +50,12 @@ def _first_error_line(state: RunState) -> str:
 
 
 def _summary(state: RunState, commands: dict[int, str]) -> list[str]:
+    from firstrun.report import reported_failed_step
+
     total = len(commands)
     passed = sum(1 for s in state.step_status.values() if s.value == "passed")
-    if state.status == RunStatus.FAILED and state.first_failed_step is not None:
-        fid = state.first_failed_step
+    fid = reported_failed_step(state)
+    if state.status == RunStatus.FAILED and fid is not None:
         return [f"✗ step {fid}/{total}  {commands.get(fid, '')}  ->  {_first_error_line(state)}"]
     if state.status == RunStatus.FAILED and state.stop_reason:
         return [f"✗ {state.stop_reason}"]

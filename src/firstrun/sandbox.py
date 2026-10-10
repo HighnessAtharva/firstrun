@@ -26,10 +26,27 @@ exec bash /tmp/.fr_step.sh < /dev/null
 # Restore env and cwd, run the command, save env and cwd, keep the exit code.
 _PREFIX = """if [ -f /tmp/.fr_env ]; then . /tmp/.fr_env; fi
 cd "$(cat /tmp/.fr_cwd 2>/dev/null || echo /work)" 2>/dev/null || cd /work
-trap '__fr_rc=$?; pwd > /tmp/.fr_cwd; export -p > /tmp/.fr_env; exit $__fr_rc' EXIT
+# Trade-off: exit 141 (SIGPIPE) maps to 0, as in `yes | tool`, where the producer dies after the
+# consumer finishes. A real command that exits 141 by itself is also hidden. PIPESTATUS is not reliable here.
+trap '__fr_rc=$?; if [ "$__fr_rc" -eq 141 ]; then __fr_rc=0; fi; pwd > /tmp/.fr_cwd; export -p > /tmp/.fr_env; exit $__fr_rc' EXIT
 # Any failing line or pipe part fails the step, as a developer typing the lines would see it.
 set -eo pipefail
 """
+
+_LEADING_CD = re.compile(r"^\s*cd\s+([A-Za-z0-9_][A-Za-z0-9_.\-]*)/?\s*&&\s*")
+
+
+def guard_leading_cd(command: str) -> str:
+    """Steps share one shell, so a `cd dir &&` the docs show may find the shell already inside dir.
+
+    Rewrite only the leading `cd <relative dir> &&`, and only for execution. The reported command is unchanged.
+    """
+    m = _LEADING_CD.match(command)
+    if not m:
+        return command
+    d = m.group(1)
+    return f'{{ [ "$(basename "$PWD")" = "{d}" ] || cd {d}; }} && ' + command[m.end():]
+
 
 # Kill every process except PID 1 (sleep infinity) and this shell.
 _KILL_ALL = (

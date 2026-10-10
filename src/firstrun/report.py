@@ -30,6 +30,14 @@ def _cell(text: str, width: int = 60) -> str:
     return text if len(text) <= width else text[: width - 1] + "…"
 
 
+def reported_failed_step(state: RunState) -> int | None:
+    """The step that ended the run: the last gave-up step, else the highest failed or gave-up step id."""
+    if state.gave_up:
+        return state.gave_up[-1].step_id
+    bad = [i for i, st in state.step_status.items() if st in (StepStatus.FAILED, StepStatus.GAVE_UP)]
+    return max(bad) if bad else state.first_failed_step
+
+
 def _last_failed(state: RunState, step_id: int) -> StepResult | None:
     for r in reversed(state.results):
         if r.step_id == step_id and not r.passed:
@@ -69,7 +77,7 @@ def write_report(state: RunState, runbook: Runbook) -> Path:
     if state.stop_reason:
         out.append(f"- Stop reason: {state.stop_reason}")
 
-    fid = state.first_failed_step
+    fid = reported_failed_step(state)
     if fid is not None:
         failed = _last_failed(state, fid)
         first_fail = next((r for r in state.results if r.step_id == fid and not r.passed), failed)
