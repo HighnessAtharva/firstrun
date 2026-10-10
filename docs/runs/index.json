@@ -171,6 +171,23 @@
    "summary": "9 of 9 runnable steps passed."
   },
   {
+   "id": "20261010-172617-github-com",
+   "ts": "2026-10-10T17:26:24+00:00",
+   "target": "github.com",
+   "title": "github.com",
+   "url": "https://github.com/dlt-hub/dlt/blob/devel/docs/website/docs/build-a-pipeline-tutorial",
+   "status": "failed",
+   "passed": 0,
+   "total": 0,
+   "runnable": 0,
+   "skipped": 0,
+   "fixes": 0,
+   "seconds": 0,
+   "cost": 0.0,
+   "fixture": false,
+   "summary": "Stopped before any step ran."
+  },
+  {
    "id": "20261010-172527-tortoise-github-io",
    "ts": "2026-10-10T17:25:52+00:00",
    "target": "tortoise.github.io",
@@ -305,6 +322,23 @@
    "cost": 0.0206,
    "fixture": false,
    "summary": "2 of 2 runnable steps passed."
+  },
+  {
+   "id": "20261010-172110-pip-pypa-io",
+   "ts": "2026-10-10T17:21:29+00:00",
+   "target": "pip.pypa.io",
+   "title": "pip.pypa.io",
+   "url": "https://pip.pypa.io/en/stable/quickstart",
+   "status": "failed",
+   "passed": 0,
+   "total": 0,
+   "runnable": 0,
+   "skipped": 0,
+   "fixes": 0,
+   "seconds": 0,
+   "cost": 0.0,
+   "fixture": false,
+   "summary": "Stopped before any step ran."
   },
   {
    "id": "20261010-143653-help-altimate-ai",

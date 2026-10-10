@@ -3,3 +3,22 @@
   publish = "docs"
   command = ""
 
+
+# Runs became doc-test and the audit became doc-audit. Old links keep working.
+[[redirects]]
+  from = "/run.html"
+  to = "/doc-test/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/runs/"
+  to = "/doc-test/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/audit.html"
+  to = "/doc-audit/"
+  status = 301
+  force = true
