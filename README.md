@@ -113,13 +113,14 @@ A `budget` GUARDRAIL span runs before every recovery. The root span `firstrun.ru
 
 Each run is one `firstrun.run` trace. Span kinds are WORKFLOW, AGENT, TOOL and GUARDRAIL, as the diagram shows. Claude calls appear as typed LLM spans.
 
-Two detections run on the traces: "docs step broke" and "planner invented a step". The second one flagged 3 planner spans. Atharva used Investigate on them, and a fix went through the neatlogs MCP server. <!-- FILL:mcp_fix -->
+Two detections run on the traces: "docs step broke" and "planner invented a step". The second one flagged 3 planner spans in v1. Investigate traced them to the planner prompt and proposed a stricter one ([evidence/neatlogs-investigation.md](evidence/neatlogs-investigation.md)). A Claude Code session read the detection and its trend over the neatlogs MCP server and applied the fix in commit 3ca6f11, with code guards that drop invented, placeholder and fake-secret steps.
 
 The integration check read 3 real runs back from persisted traces. See [docs/neatlogs-integration.md](docs/neatlogs-integration.md).
 
 ### Entire Records How the Build Happened
 
-- **Checkpoints:** every commit carries an `Entire-Checkpoint:` trailer. <!-- FILL:checkpoint_link -->
+- **Checkpoints:** every commit carries an `Entire-Checkpoint:` trailer. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
+- **Trail reviews:** Entire runners reviewed every layer on Trails 3 to 7. They raised 2 real bugs on Layer 1, a secret retry loop and a Windows-only Docker default, both fixed in e2aacb7.
 - **Trails:** [Trail 1](https://entire.io/gh/HighnessAtharva/firstrun/trails/1) covers Layer 1.
 - **Graph:** the build agents searched the repo through the graph. 4 graph calls saved about 11,662 tokens.
 - **Brain:** it holds 7 durable facts, such as why recovery stops at 3 attempts. Its last refresh indexed 63 files and 1,056 symbols.
@@ -128,16 +129,27 @@ The integration check read 3 real runs back from persisted traces. See [docs/nea
 
 <!-- FILL:cfo -->
 
-## Version 1 Fails in Six Ways, and Version 2 Has to Fix Them
+## Version 2 Finishes 3 of 4 Quickstarts and Recovers 3 Failed Steps
 
-These are v1 runs with recovery off. Cost is the list price of Sonnet 5.5 and is not billed, because the runs use a subscription token.
+v1 ran with recovery off. v2 ran after the neatlogs planner fix (3ca6f11), with recovery and verification on. The same four targets ran both times. Cost and duration come from the neatlogs traces in [evidence/before_after_traces.json](evidence/before_after_traces.json). Cost is the Sonnet 5.5 list price and is not billed, because the runs use a subscription token.
 
-| Target | v1 result | v1 time | v1 cost | v2 |
-|---|---|---|---|---|
-| neatlogs Python SDK | passed 3/3 | 84 s | $0.036 | <!-- FILL:v2 --> |
-| Entire CLI install | failed at step 1: `curl: command not found` on python:3.11-slim | n/a | $0.023 | <!-- FILL:v2 --> |
-| Chroma getting started | passed 3/3 | 250 s | $0.029 | <!-- FILL:v2 --> |
-| OpenAI v0 README (fixture, Wayback 2023-08-02) | failed at step 6: `openai: command not found` | n/a | $0.031 | <!-- FILL:v2 --> |
+| Target | v1 (recovery off) | v2 (neatlogs fix, recovery, verify) |
+|---|---|---|
+| neatlogs Python SDK | passed 3/3 | passed 3/3 |
+| Entire CLI install | failed at step 1, `curl: command not found` | verified 4/4 after 2 fixes, one of them a real docs fix |
+| Chroma getting started | passed 3/3 | passed 2/2 |
+| OpenAI v0 README (fixture, Wayback 2023-08-02) | failed at step 6, `openai: command not found` | pinned `openai==0.28.1`, then stopped honestly: the example needs an OpenAI key |
+
+| Metric | v1 | v2 |
+|---|---|---|
+| Quickstarts that end passed or verified | 2 of 4 | 3 of 4 |
+| Failed steps recovered | 0 | 3 |
+| Fixes proven in a fresh container | 0 | 1 |
+| Average tool spans per run | 4.25 | 6.0 |
+| Average cost per run, from neatlogs | $0.0262 | $0.0200 |
+| Average run time, verification included | 128 s | 201 s |
+
+v2 takes longer because a verified fix runs the whole quickstart a second time in a new container.
 
 The six mistakes the agent made in v1:
 
@@ -147,6 +159,21 @@ The six mistakes the agent made in v1:
 4. A fake secret passes as a step. `export OPENAI_API_KEY='sk-...'` exits 0.
 5. The planner skips the steps that matter, because they need a key.
 6. 9 of 16 steps check only the exit code.
+
+## FirstRun Found 3 Real Docs Bugs and Opened 3 Upstream PRs
+
+FirstRun ran four open-source quickstarts whose docs live in public repos. Every finding below came from a verified run, where a second clean container passed with the fix.
+
+| Quickstart | Result | What FirstRun found | Upstream |
+|---|---|---|---|
+| [dbt Core with DuckDB](https://docs.getdbt.com/guides/duckdb) | verified 9/10 | `jafgen --years 6` fails because `years` is now positional | [dbt-labs/docs.getdbt.com#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149) |
+| same guide | verified | the cloned repo pins `networkx==3.7`, which needs Python 3.12, and the guide names no version | [dbt-labs/docs.getdbt.com#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150) |
+| [Entire CLI install](https://docs.entire.io/installation) | verified 4/4 | `install.sh` puts `entire` in `~/.local/bin`, which a clean shell lacks on `PATH` | [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) |
+| [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the docs commands work, the container needed `curl` and `gnupg` | none needed |
+| [MkDocs getting started](https://www.mkdocs.org/getting-started/) | verified 9/10 | the docs commands work, the container needed `curl` | none needed |
+| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | see below | the pip path never installs `create-dagster`, and `--group dev` needs pip 25.1 | draft |
+
+Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app).
 
 ## What Broke While Building
 
