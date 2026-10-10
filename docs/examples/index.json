@@ -1,0 +1,54 @@
+{
+  "runs": [
+    {
+      "fixes": 3,
+      "example": "dbt",
+      "status": "verified",
+      "url": "https://docs.getdbt.com/guides/duckdb",
+      "title": "dbt Core with DuckDB",
+      "name": "dbt",
+      "summary": "jafgen --years 6 is now jafgen 6, and the guide needs Python 3.12. PRs #10149 and #10150 are open.",
+      "date": "2026-10-10"
+    },
+    {
+      "fixes": 5,
+      "example": "accuknox",
+      "status": "verified",
+      "url": "https://help.accuknox.com/knoxctl/",
+      "title": "AccuKnox knoxctl install",
+      "name": "accuknox",
+      "summary": "Installs once curl and gnupg are present. The docs commands work; only the container needed them.",
+      "date": "2026-10-10"
+    },
+    {
+      "fixes": 1,
+      "example": "mkdocs",
+      "status": "verified",
+      "url": "https://www.mkdocs.org/getting-started/",
+      "title": "MkDocs getting started",
+      "name": "mkdocs",
+      "summary": "The docs work. The container needed curl for the sample text step.",
+      "date": "2026-10-10"
+    },
+    {
+      "fixes": 2,
+      "example": "entire",
+      "status": "verified",
+      "url": "https://docs.entire.io/installation",
+      "title": "Entire CLI install",
+      "name": "entire",
+      "summary": "install.sh puts entire in ~/.local/bin, which a clean shell does not have on PATH. PR entireio/cli#2724 is open.",
+      "date": "2026-10-10"
+    },
+    {
+      "fixes": 1,
+      "example": "fixture",
+      "status": "verified",
+      "url": "tests/fixtures/docs/broken_quickstart_FIXTURE.md",
+      "title": "Known-broken test fixture",
+      "name": "fixture",
+      "summary": "chromadb==0.3 cannot install on Python 3.11. Patched to pip install chromadb and verified.",
+      "date": "2026-10-10"
+    }
+  ]
+}

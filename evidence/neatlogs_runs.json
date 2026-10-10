@@ -1,44 +1,114 @@
 {
-  "generated_at": "2026-10-10T08:39:50Z",
+  "generated_at": "2026-10-10T10:15:21Z",
   "from": "2026-10-01T00:00:00Z",
   "groups": {
-    "check": {
-      "count": 4,
-      "avg_spans": 15.75,
-      "avg_tool_calls": 6.5,
-      "avg_cost_usd": 0.0065,
-      "avg_duration_s": 108.5,
-      "errors": 3,
+    "real": {
+      "count": 8,
+      "avg_spans": 46.0,
+      "avg_tool_calls": 18.375,
+      "avg_cost_usd": 0.0322,
+      "avg_duration_s": 532.7,
+      "errors": 8,
       "traces": [
         {
-          "traceId": "452add41933c88edf12207f9ab89254f",
-          "startedAt": "2026-10-10T08:10:34.319Z",
+          "traceId": "37bbd616f2173760f9cb30f202757f61",
+          "startedAt": "2026-10-10T08:59:24.583Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "4e6bf0f2d8617effbe34b8e58b7b97b6",
+          "startedAt": "2026-10-10T09:17:40.527Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "9e30cd0f9cee66410c81fb3a34e03177",
+          "startedAt": "2026-10-10T09:22:28.259Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "a73e1c42548dae27e02f04e69048636c",
+          "startedAt": "2026-10-10T09:28:15.692Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "478cbef0f18c91c0386a5153861a3895",
+          "startedAt": "2026-10-10T09:32:51.828Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "5766a17e7ba5155c918856a79453ef8f",
+          "startedAt": "2026-10-10T09:51:05.597Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "ec246a27f83c9e11d682eb09a1818f58",
+          "startedAt": "2026-10-10T10:02:59.042Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "cef9cc00bcc5369d74ffc7fc5f525244",
+          "startedAt": "2026-10-10T10:10:37.735Z",
+          "status": "ERROR"
+        }
+      ]
+    },
+    "v2": {
+      "count": 8,
+      "avg_spans": 18.625,
+      "avg_tool_calls": 6.75,
+      "avg_cost_usd": 0.0333,
+      "avg_duration_s": 203.9,
+      "errors": 5,
+      "traces": [
+        {
+          "traceId": "8a46d0a60a9a4f9d5287eeff88a5379d",
+          "startedAt": "2026-10-10T08:59:24.573Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "a994d8bf646fa843d271835932ab9209",
+          "startedAt": "2026-10-10T09:01:23.041Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "3b9bf8c02d0a812900579fde243a415e",
+          "startedAt": "2026-10-10T09:08:46.157Z",
           "status": "OK"
         },
         {
-          "traceId": "76f9f07ce0f45d9f1740444ac554b8a5",
-          "startedAt": "2026-10-10T08:14:34.355Z",
+          "traceId": "a462576e751e91543b5623185331d603",
+          "startedAt": "2026-10-10T09:11:04.571Z",
           "status": "ERROR"
         },
         {
-          "traceId": "1791e8263c8c06fc3ad5dcc56e26a18a",
-          "startedAt": "2026-10-10T08:17:48.914Z",
+          "traceId": "495d510fd6da5546dbc6ab6e52bcee68",
+          "startedAt": "2026-10-10T09:32:55.963Z",
+          "status": "OK"
+        },
+        {
+          "traceId": "5520c5cff5e0ea61f130eced082b20c4",
+          "startedAt": "2026-10-10T09:34:41.718Z",
           "status": "ERROR"
         },
         {
-          "traceId": "de25873fe939cef49ff9121974130c2d",
-          "startedAt": "2026-10-10T08:18:23.222Z",
+          "traceId": "f63d2b842c2257ae8c340f6ce44e3848",
+          "startedAt": "2026-10-10T09:41:31.979Z",
+          "status": "OK"
+        },
+        {
+          "traceId": "78e538e63a65c5d00d0281effa119567",
+          "startedAt": "2026-10-10T09:44:53.207Z",
           "status": "ERROR"
         }
       ]
     },
     "dev": {
-      "count": 24,
-      "avg_spans": 5.625,
-      "avg_tool_calls": 2.7917,
-      "avg_cost_usd": 0.0009,
-      "avg_duration_s": 20.8,
-      "errors": 12,
+      "count": 28,
+      "avg_spans": 5.25,
+      "avg_tool_calls": 2.6786,
+      "avg_cost_usd": 0.0008,
+      "avg_duration_s": 19.6,
+      "errors": 16,
       "traces": [
         {
           "traceId": "3e461c229adb64cde62f3638d2c8a07f",
@@ -159,6 +229,56 @@
           "traceId": "c3ed1dd0208cb72c583dc3a30fe087e5",
           "startedAt": "2026-10-10T08:14:14.714Z",
           "status": "OK"
+        },
+        {
+          "traceId": "6457e7d3008f616fd7ff9997e2e16d5f",
+          "startedAt": "2026-10-10T08:42:33.552Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "7d49f732bfd4a68caf40bb417d74cd9f",
+          "startedAt": "2026-10-10T08:43:17.115Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "2f6afb04646b8a672b746fc90469607e",
+          "startedAt": "2026-10-10T08:43:44.755Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "dc34ce669884cf503a8b0743d8cadb7a",
+          "startedAt": "2026-10-10T08:44:17.631Z",
+          "status": "ERROR"
+        }
+      ]
+    },
+    "check": {
+      "count": 4,
+      "avg_spans": 15.75,
+      "avg_tool_calls": 6.5,
+      "avg_cost_usd": 0.0065,
+      "avg_duration_s": 108.5,
+      "errors": 3,
+      "traces": [
+        {
+          "traceId": "452add41933c88edf12207f9ab89254f",
+          "startedAt": "2026-10-10T08:10:34.319Z",
+          "status": "OK"
+        },
+        {
+          "traceId": "76f9f07ce0f45d9f1740444ac554b8a5",
+          "startedAt": "2026-10-10T08:14:34.355Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "1791e8263c8c06fc3ad5dcc56e26a18a",
+          "startedAt": "2026-10-10T08:17:48.914Z",
+          "status": "ERROR"
+        },
+        {
+          "traceId": "de25873fe939cef49ff9121974130c2d",
+          "startedAt": "2026-10-10T08:18:23.222Z",
+          "status": "ERROR"
         }
       ]
     },

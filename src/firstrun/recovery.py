@@ -238,6 +238,28 @@ def _short_reason(text: str, limit: int = 400) -> str:
     return text[: cut + 1] if cut > 0 else text[:limit].rsplit(" ", 1)[0] + "."
 
 
+def _intent_tokens(command: str) -> set[str]:
+    """Program names and non-flag args of each `&&` part, ignoring sudo and a leading `cd X &&`."""
+    parts = [p.strip() for p in re.split(r"&&|\|\||;|\|", command) if p.strip()]
+    if parts and re.match(r"cd\s+\S+$", parts[0]) and len(parts) > 1:
+        parts = parts[1:]
+    out: set[str] = set()
+    for part in parts:
+        for tok in part.split():
+            if tok != "sudo" and not tok.startswith("-"):
+                out.add(tok.strip("\"'"))
+    return out
+
+
+def drifted(old_command: str, new_command: str) -> bool:
+    """True when fewer than 60% of the original command's main tokens survive in the new one."""
+    want = _intent_tokens(old_command)
+    if not want:
+        return False
+    have = _intent_tokens(new_command)
+    return len(want & have) / len(want) < 0.6
+
+
 def _ask_fix(prompt: str, tools: tuple[str, ...], max_turns: int, state: RunState, bud: Budget,
              step: Step, old_command: str, cls: FailureClass, tried: list[str],
              error_text: str = "") -> Patch | GaveUp:
@@ -259,6 +281,10 @@ def _ask_fix(prompt: str, tools: tuple[str, ...], max_turns: int, state: RunStat
         neatlogs.log("fix search found nothing: {terms}", level="warning", terms=terms, step_id=step.id)
         return GaveUp(step_id=step.id, failure_class=cls,
                       reason=f"no new fix found (searched: {terms})")
+    if drifted(old_command, new):
+        neatlogs.log("patch rejected: drift", level="warning", step_id=step.id, old=old_command, new=new)
+        return GaveUp(step_id=step.id, failure_class=cls,
+                      reason=f"fix drifted from the docs command: `{new[:120]}`")
     # A fix that only installs system packages before the original command is a container fix.
     if cls == FailureClass.DOCS_BUG and _APT.search(new) and old_command.strip() in new:
         cls = FailureClass.ENVIRONMENT
@@ -352,7 +378,8 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
                   f"Command: {old_command}\nError tail:\n{error_text}\n"
                   f"Earlier fixes that did not work: {tried or 'none'}\n"
                   'Return JSON {"new_command": "...", "reason": "...", "source": "..."}. '
-                  "new_command must run the original command after any container fix, as one shell line.")
+                  "new_command must run the original command after any container fix, as one shell line."
+                  " Keep the original command and its arguments. Only add a missing prerequisite or change a version, flag or name that the error proves wrong.")
         return _ask_fix(prompt, (), 1, state, bud, step, old_command, top, tried, error_text)
 
     # docs_bug
@@ -364,5 +391,6 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
               f"Docs excerpt:\n{docs_markdown[:3000]}\n\n"
               "Find the current, correct command with WebSearch and WebFetch. Prefer the tool's own docs, "
               "its registry page or its issue tracker. "
+              " Keep the original command and its arguments. Only add a missing prerequisite or change a version, flag or name that the error proves wrong. "
               'Return JSON {"new_command": "...", "reason": "...", "source": "<url you used>"}.')
     return _ask_fix(prompt, ("WebSearch", "WebFetch"), 6, state, bud, step, old_command, top, tried, error_text)
