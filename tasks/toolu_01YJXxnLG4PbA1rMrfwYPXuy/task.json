@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01YJXxnLG4PbA1rMrfwYPXuy",
+  "agent_id": "a60e2fadc76909f2f",
+  "subagent_type": "general-purpose",
+  "task_description": "Research neatlogs docs features",
+  "token_usage": {
+    "input_tokens": 72,
+    "cache_creation_tokens": 201678,
+    "cache_read_tokens": 5133576,
+    "output_tokens": 19031,
+    "api_call_count": 36
+  },
+  "started_at": "2026-10-10T22:35:04.7446558+05:30",
+  "completed_at": "2026-10-10T22:39:31.455299+05:30"
+}
