@@ -258,15 +258,15 @@ The integration check read 3 real runs back from persisted traces. See [docs/nea
 <td width="45%" valign="top"><img src="docs/assets/t-cfo-ari.webp" alt="Ari, the cfo.ai agent, greets Atharva on day one"><br><sub>Ari, the cfo.ai agent, on day one.</sub></td>
 <td valign="top">
 
-The measured model cost is **$0.0200 per run** with recovery and verification on. Compute adds $0.00232. The plan prices three tiers by quickstarts covered.
+The business plan sets the agent's spending limit. `firstrun econ` reads 64 neatlogs traces and writes [business/drivers.csv](business/drivers.csv) for cfo.ai. The mean run costs $0.0167, and the p95 run costs $0.0508. A 70% margin floor turns those costs into a cap per tier, and `firstrun run --tier scale` stops any run that spends past the cap.
 
-| Tier | Price | Quickstarts | Gross margin |
-|---|---|---|---|
-| Free | $0 | 1, weekly | not defined |
-| Team | $49 a month | 10, nightly | 86.3% |
-| Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | 77.6% |
+| Tier | Price | Quickstarts | Cap per run | Runs over the cap |
+|---|---|---|---|---|
+| Free | $0 | 1, weekly | $0.0108 | 48.4% |
+| Team | $49 a month | 10, nightly | $0.0471 | 7.8% |
+| Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | $0.0280 | 25.0% |
 
-The inputs and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md).
+The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over. The plan, the Scale fix and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md).
 
 </td>
 </tr>

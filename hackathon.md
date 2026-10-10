@@ -107,6 +107,19 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 - **Website:** [1run.netlify.app](https://1run.netlify.app) takes a docs URL and writes a prompt for the visitor's own coding agent. A tested URL shows its cached run first. Every run prints a share link that replays read, plan, run, fix, prove, plus the bisect timeline and the assumptions card.
 - **Jury self-test:** the Entire judge plugin ranked the repo with no excluded work, 3.93 of 5 ([evidence/jury-selftest.txt](evidence/jury-selftest.txt)).
 
+### 2026-10-10, 17:45 to 18:05 IST: The Business Plan Sets the Agent's Budget
+
+- **Done: `firstrun econ`.** The command reads 64 `firstrun.run` traces from neatlogs and writes [business/drivers.csv](business/drivers.csv) and [business/unit_economics.json](business/unit_economics.json). Mean cost per run is $0.0167, p95 is $0.0508 and max is $0.1014. Each quantile row names its trace ID.
+- **Finding:** the fixed $0.50 cap in `models.py` was 30 times the mean run. If every run hit it, Scale margin would be -403.6%. At a 70% margin floor, the Scale cap is $0.028, and 25.0% of measured runs cost more than that. [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) gives two fixes from the same formula: Scale at $529, or Scale at 1,500 runs.
+- **Done: `firstrun run --tier NAME`.** The executor and the recovery agent check the tier's cap in the `budget` GUARDRAIL span.
+- **Live runs on the typer quickstart, tag `tiercap`:**
+  - `--tier scale` ($0.0280 cap): verified 7/7 steps in 127 s with 8 patches, at $0.0201 list price. neatlogs trace `9a29db323b3d054bb2c82e82e080340f`.
+  - `--tier free` ($0.0108 cap): stopped at step 4 with `cost budget spent`, after 4 patches and $0.0114. neatlogs trace `06e7f3765141c2f417a862beef5f5134`.
+- **Tests:** 255 passed and 2 skipped in the offline suite, including 8 new tests in `tests/test_econ.py`.
+  - `--tier free` again, after the cap message moved to 4 decimals: stopped at step 4 with `cost budget spent: $0.0115 of $0.0108`. neatlogs trace `7060f5bd8dbb8cdc6c1dec3830ba7bab`.
+- **Known gap: two cost counters.** On 43 runs matched by start time, FirstRun's own count totals $1.5253 and neatlogs totals $1.0989, so FirstRun counts 39% higher. The gap holds after the traces finalized, so ingestion lag does not explain it. The cap checks FirstRun's count, so it stops a run early and never late. Unifying the two counters is next.
+- **Planned:** build the cfo.ai model from `drivers.csv` with Ari over the `cfoai` MCP server, inside an Entire-captured session, with the 4 Scenarios in the plan.
+
 ## Demo
 
 Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).
