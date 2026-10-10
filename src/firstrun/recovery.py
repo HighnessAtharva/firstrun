@@ -41,7 +41,10 @@ def _error_line(error_text: str) -> str:
 def _terminal_asker(question: str) -> str | None:
     if not sys.stdin or not sys.stdin.isatty():
         return None
-    return input(question + " ")
+    try:
+        return input(question + " ")
+    except (EOFError, OSError):  # a console with no reader, such as a background job
+        return None
 
 
 def _parse_answer(answer: str | None) -> FailureClass | None:

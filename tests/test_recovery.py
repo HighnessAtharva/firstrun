@@ -169,3 +169,21 @@ def test_live_recover_returns_real_patch(tmp_precedents):
     print("recover returned:", out, s.usage, s.classifications.get(2))
     assert isinstance(out, Patch) and out.new_command != "pip install chromadb==0.3"
     assert out.failure_class == FC.DOCS_BUG
+
+
+def test_terminal_asker_returns_none_on_eof(monkeypatch):
+    import builtins
+    import io
+
+    from firstrun import recovery
+
+    class TtyIn(io.StringIO):
+        def isatty(self):
+            return True
+
+    def no_reader(_prompt=""):
+        raise EOFError
+
+    monkeypatch.setattr(recovery.sys, "stdin", TtyIn())
+    monkeypatch.setattr(builtins, "input", no_reader)
+    assert recovery._terminal_asker("Docs bug?") is None
