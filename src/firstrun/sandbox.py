@@ -29,6 +29,9 @@ cd "$(cat /tmp/.fr_cwd 2>/dev/null || echo /work)" 2>/dev/null || cd /work
 # Trade-off: exit 141 (SIGPIPE) maps to 0, as in `yes | tool`, where the producer dies after the
 # consumer finishes. A real command that exits 141 by itself is also hidden. PIPESTATUS is not reliable here.
 trap '__fr_rc=$?; if [ "$__fr_rc" -eq 141 ]; then __fr_rc=0; fi; pwd > /tmp/.fr_cwd; export -p > /tmp/.fr_env; exit $__fr_rc' EXIT
+# The shell keeps its folder between steps and retries, so `cd proj` from inside proj is a no-op,
+# wherever the cd sits in the command. Any other cd behaves as usual.
+cd() { if [ "$#" -eq 1 ] && [ ! -d "$1" ] && [ "$(basename "$PWD")" = "${1%/}" ]; then return 0; fi; builtin cd "$@"; }
 # Any failing line or pipe part fails the step, as a developer typing the lines would see it.
 set -eo pipefail
 """

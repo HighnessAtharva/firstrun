@@ -89,3 +89,19 @@ def test_exec_applies_the_cd_guard(monkeypatch):
     c.name = "firstrun-t-test"
     c.exec("cd proj && ls", timeout_s=5)
     assert sandbox.guard_leading_cd("cd proj && ls") in seen["script"]
+
+
+def test_prefix_defines_cd_noop_when_already_inside():
+    assert 'cd() {' in sandbox._PREFIX and 'builtin cd "$@"' in sandbox._PREFIX
+
+
+@pytest.mark.live
+def test_mid_command_cd_works_from_inside_the_folder():
+    """A patch can put cd in the middle of a chain. The cd function must cover that too."""
+    from firstrun.sandbox import Container
+
+    with Container(name="firstrun-t7-cdmid-test") as c:
+        c.exec("mkdir -p proj && cd proj")
+        r = c.exec("echo start && cd proj && echo ok")
+        assert r.exit_code == 0 and "ok" in r.stdout
+        assert c.exec("cd /work && cd missing").exit_code != 0
