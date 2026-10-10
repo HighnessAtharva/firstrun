@@ -129,6 +129,13 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 - **Fixes found while building it:** the share tail kept pip download lines and dropped the real error, so stderr now goes last. `report.md` called the step that ended a run its "First Failed Step" even after recovery fixed an earlier failure. It now names both steps, and the root span carries `reported_failed_step` for the neatlogs eval.
 - **Checked:** desktop at 1280 px and phone at 375 px with no sideways scroll, the dbt, Dagster and fixture codes, and no console errors. Offline suite: 260 passed, 2 skipped.
 
+### 2026-10-10, 19:00 IST: neatlogs Alerts, an AI Evaluator, and Public Proof Upstream
+
+- **Alerts, created over the neatlogs CLI with write scopes Atharva approved:** "firstrun p95 run cost above Scale cap" (p95 `cost` above $0.035 over 1 day, `56b3b8be`), "firstrun docs breakage or failed verification spike" (compound rule on 2 detections, `74e5d64c`) and "firstrun budget guardrail tripped" (each Budget Limit Exceeded hit, `acd01964`). All three send email. A dry-run test of each returned `simulated` for email.
+- **AI evaluator:** "report names the real failed step", an agent judge with neatlogs MCP access, a $0.10 budget and 12 tool calls (`a6aa683e`). An ad-hoc run returned `NOT_FOUND_OR_OPERATION_DISABLED` with gate `tier-c-compute`, so scoring runs only through a scheduled evaluation.
+- **cfo.ai:** Ari built the model over the `cfoai` MCP from `drivers.csv`. Under the old $0.50 Scale cap, cash goes negative in month 14. The figures are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md).
+- **Public proof on the 4 upstream PRs:** each got a comment linking the live replay, opened on the fixed step, and the public Entire session. The comments are on [dbt #10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6097945132), [dbt #10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150#issuecomment-6097945350), [Entire #2724](https://github.com/entireio/cli/pull/2724#issuecomment-6097945657) and [AccuKnox #671](https://github.com/accuknox/help/pull/671#issuecomment-6097945911).
+
 ## Demo
 
 Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).
