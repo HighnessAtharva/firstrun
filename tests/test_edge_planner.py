@@ -31,6 +31,8 @@ def no_container(monkeypatch):
 @pytest.fixture
 def online(monkeypatch):
     monkeypatch.delenv("FIRSTRUN_OFFLINE", raising=False)
+    # A dummy token gets past the CLI's missing-token check, so CI with no keys reaches the planner.
+    monkeypatch.setenv("CLAUDE_CODE_OAUTH_TOKEN", "test-token")
 
 
 def _invoke(*args):
