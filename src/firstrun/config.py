@@ -13,7 +13,11 @@ PRICE_INPUT_PER_MTOK = 2.00
 PRICE_OUTPUT_PER_MTOK = 10.00
 PRICE_CACHE_READ_PER_MTOK = 0.20
 
-ENV_FILE = Path(os.environ.get("FIRSTRUN_ENV_FILE", r"D:\Atharva\NOTES\.env"))
+# FIRSTRUN_ENV_FILE wins. Otherwise .env in the current folder, then the author's shared key file.
+_AUTHOR_ENV = Path(r"D:\Atharva\NOTES\.env")
+ENV_FILE = Path(os.environ["FIRSTRUN_ENV_FILE"]) if os.environ.get("FIRSTRUN_ENV_FILE") else (
+    Path(".env") if Path(".env").exists() or not _AUTHOR_ENV.exists() else _AUTHOR_ENV
+)
 RUNS_DIR = Path(os.environ.get("FIRSTRUN_RUNS_DIR", "runs"))
 PRECEDENTS_FILE = Path(os.environ.get("FIRSTRUN_PRECEDENTS", "precedents.json"))
 SECRETS_ALLOWLIST = Path(os.environ.get("FIRSTRUN_SECRETS", "secrets.allowlist"))
