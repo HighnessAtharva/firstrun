@@ -583,7 +583,7 @@ html:has(dialog[open]){overflow:hidden}
 <header><img class="lg2" src="assets/logo-cfoai.webp" alt="cfo.ai logo" width="44" height="44"><h3>cfo.ai</h3></header>
 <p class="job">Turns cost into a plan.</p>
 <p>The measured cost per run from neatlogs goes to Ari, the cfo.ai agent, which models the pricing.</p>
-<a class="more" href="https://cfo.ai">cfo.ai</a><button type="button" class="plus" data-tool="cfoai" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
+<a class="more" href="https://cfo.ai">cfo.ai</a><button type="button" class="plus" data-tool="cfoai" aria-haspopup="dialog"><i aria-hidden="true">+</i>1 screenshot</button></div>
 <figure><img src="assets/shot-cfoai.webp" alt="cfo.ai chat where Ari, the AI CFO, greets Atharva" loading="lazy" width="1100" height="469"><figcaption>Ari, the cfo.ai agent, on day one.</figcaption></figure>
 </article>
 </div>
@@ -1018,17 +1018,16 @@ entire:{n:"Entire",logo:"assets/logo-entire.webp",s:"Records every session",
  {t:"Inline review",img:"assets/t-entire-review.webp",x:"Layer 1 review",y:"The finding sits on the line in src/firstrun/recovery.py",z:"The fix starts at the exact line"},
  {t:"Checkpoint on a commit",img:"assets/t-entire-checkpoint.webp",x:"Every commit",y:"The commit message carries an Entire-Checkpoint ID",z:"Any commit maps back to the session that wrote it"}]},
 cfoai:{n:"cfo.ai",logo:"assets/logo-cfoai.webp",s:"Turns cost into a plan",
- xyz:["Pricing, after the cost per run is measured",null,null],
+ xyz:["Saturday, after neatlogs measured 64 runs","An 18-month model with 6 Scenarios, public at cfo.ai/s/_u5lbrHIl9KX_JQE","It showed the old $0.50 run cap runs out of cash in month 14, so the plan now sets the cap"],
  sh:[
- {t:"Ari on day one",img:"assets/t-cfo-ari.webp",x:"First look",y:"Ari read the public profile and asked if it was me",z:"The agent starts from facts, not a form"},
- {t:"Cost per run in"},{t:"Scenario model"},{t:"Pricing tiers"},{t:"Margin check"},{t:"Share link and sheet"}]}};
+ {t:"Ari on day one",img:"assets/t-cfo-ari.webp",x:"First look",y:"Ari read the public profile and asked if it was me",z:"The agent starts from facts, not a form"}]}};
 var XYZ=["Used at","Delivered","Why it matters"],PH=["[X: phase]","[Y: what it delivered]","[Z: why it is great]"];
 function ph(v,i){return v?'<span>'+v+'</span>':'<span class="ph-t">'+PH[i]+'</span>'}
 var tm=$("tm"),cur=null,idx=0,list=[];
 function cap(s){return '<span class="kv"><u>Used at</u>'+(s.x||PH[0])+'</span><span class="kv"><u>Delivered</u>'+(s.y||PH[1])+'</span><span class="kv"><u>Why it matters</u>'+(s.z||PH[2])+'</span>'}
 function openTool(k){
  cur=TL[k];list=cur.sh;
- $("tm-logo").src=cur.logo;$("tm-t").textContent=cur.n;$("tm-s").textContent=cur.s+" · 6 screenshots";
+ $("tm-logo").src=cur.logo;$("tm-t").textContent=cur.n;$("tm-s").textContent=cur.s+" · "+cur.sh.length+" screenshot"+(cur.sh.length===1?"":"s");
  $("tm-xyz").innerHTML=cur.xyz.map(function(v,i){return '<div><dt>'+XYZ[i]+'</dt><dd>'+ph(v,i)+'</dd></div>'}).join("");
  $("tm-g").innerHTML=list.map(function(s,i){
   var im=s.img?'<img src="'+s.img+'" alt="'+cur.n+': '+s.t+'" loading="lazy">':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 012-2h1.5l1.2-1.6A1 1 0 019.5 4h5a1 1 0 01.8.4L16.5 6H18a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><circle cx="12" cy="12.5" r="3.2"/></svg>Add screenshot';

@@ -118,7 +118,7 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 - **Tests:** 255 passed and 2 skipped in the offline suite, including 8 new tests in `tests/test_econ.py`.
   - `--tier free` again, after the cap message moved to 4 decimals: stopped at step 4 with `cost budget spent: $0.0115 of $0.0108`. neatlogs trace `7060f5bd8dbb8cdc6c1dec3830ba7bab`.
 - **Known gap: two cost counters.** On 43 runs matched by start time, FirstRun's own count totals $1.5253 and neatlogs totals $1.0989, so FirstRun counts 39% higher. The gap holds after the traces finalized, so ingestion lag does not explain it. The cap checks FirstRun's count, so it stops a run early and never late. Unifying the two counters is next.
-- **Planned:** build the cfo.ai model from `drivers.csv` with Ari over the `cfoai` MCP server, inside an Entire-captured session, with the 4 Scenarios in the plan.
+- **Done later the same evening:** Ari built the cfo.ai model from `drivers.csv` over the `cfoai` MCP server, with 6 Scenarios. It is public at [cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE).
 
 ### 2026-10-10, 18:30 to 19:30 IST: The Docs Execution Graph
 
@@ -133,7 +133,28 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 
 Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).
 
-Video pending. The 60-second demo shows a red step, the agent's reason, a green verified run, and the drafted PR, then one click into the neatlogs trace.
+Run replay with the docs execution graph: https://1run.netlify.app/run.html?s=10#ex=dbt opens the dbt run on the step that broke.
+
+The demo video is not recorded yet. The shot sheet is in the plan, file 35.
+
+## Built in Public
+
+Every post below carries #neatHack.
+
+| When (IST) | Post | Link |
+|---|---|---|
+| Sat 10:45 | "my neatlogs hackathon project has already caught doc issues" | https://twitter.com/i/web/status/2108792303611429152 |
+| Sat 11:00 | "built this weekend at #neatHack" | URL to add |
+| Sat 12:30 | "#neatHack kickoff, 12:30 IST" | URL to add |
+| Sat 13:14 | "#neatHack, day one. all three required tools are up" | https://twitter.com/i/web/status/2108826005854937357 |
+| Sat 13:26 | "your quickstart is the only part of your product" | https://twitter.com/i/web/status/2108828983194206308 |
+| Sat 15:15 | "a quickstart breaks the way an agent breaks" | URL to add |
+| Sat 18:15 | "send me your quickstart and FirstRun runs it" | URL to add |
+| Sat 18:23 | "4 docs PRs opened on day one of #neatHack" | https://twitter.com/i/web/status/2108903653411021062 |
+| Sat 19:11 | "Some containers were harmed in the making of FirstRun" | URL to add |
+| Sat 19:30 | LinkedIn: "Never let an AI agent fix every failure on its own" | URL to add |
+| Mon 12:00 | "my AI CFO found a bug in my agent", scheduled | after it posts |
+| Mon 13:30 | "4 docs PRs in 48 hours of #neatHack", scheduled | after it posts |
 
 ## Known Limitations and Next Steps
 
@@ -143,7 +164,7 @@ Video pending. The 60-second demo shows a red step, the agent's reason, a green 
 
 Confirmed requirements from https://neatlogs.com/hackathon:
 
-- [ ] Uses neatlogs, Entire and cfo.ai, with a clear role for each.
+- [x] Uses neatlogs, Entire and cfo.ai, with a clear role for each: [evidence/README.md](evidence/README.md).
 - [ ] Demo video of 3 minutes or less covering all three tools.
 - [x] Public repo with setup and run instructions.
 - [x] Entire checkpoint link plus its ID: [01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
