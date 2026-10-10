@@ -1,0 +1,93 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JBM5YD1CXCFZNMNRSJHV5K",
+  "session_id": "ae05fb29-0c85-4558-9980-42419f08ca9c",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T07:32:21.4292577Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "src/firstrun/planner.py",
+    "tests/test_planner.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "turn_id": "6d4305600a25",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 98,
+    "cache_creation_tokens": 213732,
+    "cache_read_tokens": 9133414,
+    "output_tokens": 45582,
+    "api_call_count": 49
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01NCjejWTAvQvZiXjV9ZAHHp",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "claude-api"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "628474303796",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 167,
+        "end": 168,
+        "entry_ids": [
+          "2abe8732-2235-4b1c-b9a0-afe8b93376ab"
+        ],
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01NCjejWTAvQvZiXjV9ZAHHp"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: claude-api",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T07:32:21.2556438Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 611,
+    "human_modified": 14,
+    "human_removed": 0,
+    "total_committed": 611,
+    "total_lines_changed": 625,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 530,
+      "user_lines_removed": 13,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "src/firstrun/llm.py": 117,
+        "src/firstrun/planner.py": 207,
+        "src/firstrun/verify.py": 102,
+        "tests/test_planner.py": 104
+      },
+      "user_removed_per_file": {
+        "src/firstrun/planner.py": 7,
+        "src/firstrun/verify.py": 6
+      }
+    }
+  ]
+}
