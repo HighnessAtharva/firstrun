@@ -617,3 +617,37 @@ We could have some UUID. If the user has it and runs it in the CLI, the CLI shou
 
 Also, please be very careful about the AWS credit usage because we only have $25, and I do not have more than that. Please ensure that we only have $25. We have to be extremely careful about how we use that budget, right? Extremely careful, please. Thank you.
 </pasted_content id="1519">
+
+---
+
+<task-notification>
+<task-id>a1dfb6c99e8ef4730</task-id>
+<tool-use-id>toolu_017RYvNkzJUuLnS8WRYJsAjd</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\a1dfb6c99e8ef4730.output</output-file>
+<status>completed</status>
+<summary>Agent "CLI share code track" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Share code and the `share` command are built. The full suite passes (187 passed, 25 skipped, 1 xfailed).
+
+1. **Files:** I added `src/firstrun/share.py`, `tests/test_share.py` and `scripts/make_examples.py`. I edited `src/firstrun/cli.py`, which gains a `share` command and a new `_echo_share()` helper. The helper prints `share: &lt;link&gt;` at the end of `_run_one`, and any failure inside it is swallowed so a run never breaks.
+2. **Tests:** `tests/test_share.py` has 9 tests, all passing:
+   - encode/decode round trip
+   - `build_payload` on a copy of `run-verified`
+   - the 4000 and 3000 caps on `diff` and `pr_body`
+   - the 600-character cap on `error_tail`
+   - redaction of `REDACTED`, which does not appear in the payload or the code
+   - the fixture flag and `trace_id`
+   - the `FIRSTRUN_SHARE_BASE` override
+   - CLI `share` by id, with no id, and with an unknown id
+   - the run-end share line, plus the case where a failure stays silent
+3. **Typical size:** 1951 characters of code for `runs/20261010-073946-broken-quickstart-fixture`, a finished run.
+4. **Command output:** `firstrun share &lt;id&gt;` prints the link, then `code: &lt;code&gt;`, then `code length: 1951`. An unknown id prints `Error: unknown run id: nope`.
+5. **Script:** `scripts/make_examples.py` wrote `docs/examples/broken-quickstart-fixture.txt` and printed a markdown link for it. It skips runs still in `running` or `verifying`. That generated file is the only example I created.
+6. **Notes:**
+   - `step.attempts` is the larger of `state.attempts` and the number of results for that step, because the fixture's `attempts` map is empty.
+   - Steps with no recorded status are reported as `pending`.
+   - `verify.steps_total` excludes skipped steps.
+   - I did not touch `runs/`, and I ran no git commands.
+   - Run the CLI as `.venv\Scripts\firstrun.exe`, because `python -m firstrun` has no `__main__`.</result>
+<usage><subagent_tokens>104801</subagent_tokens><tool_uses>11</tool_uses><duration_ms>85254</duration_ms></usage>
+</task-notification>
