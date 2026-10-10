@@ -1,0 +1,29 @@
+do the app journey next and continue working until you are sure we are all good!there is also the pr 24 check if that can be safely merged do what needs to be done!
+
+---
+
+bring back the twitter embeds load them lazily!!
+
+---
+
+comparison should be open by default and not in an expandable and h2 should say Compare FirstRun with Claude Code, GitHub Actions, GitHub Agents
+
+---
+
+continue previous task which i interrupted
+
+as for the ui, pr 24 unifies the /runs and /audit grey screens into the actual app journey so respect that!
+
+mege safely when all is done!
+
+---
+
+don't restore the graident and shadows and unnecessary animations!
+
+---
+
+rest of things is fine!
+
+---
+
+keep twitter script and all that! but you understand the stuff rihgt?
