@@ -24,6 +24,18 @@ Per-trace spans, tool calls, cost and duration are in [before_after_traces.json]
 3. Investigate (Deep, workflow `firstrun`) traced the invented steps to the planner prompt: [neatlogs-investigation.md](neatlogs-investigation.md).
 4. A Claude Code session read the detection and its trend over the neatlogs MCP server and applied the fix in commit `3ca6f11`.
 
+## Three Alerts and One AI Evaluator Watch Every Run
+
+Created over the neatlogs CLI on 2026-10-10. Each alert passed a dry-run test with email as the channel.
+
+| Rule | Fires when | ID |
+|---|---|---|
+| firstrun p95 run cost above Scale cap | p95 `cost` is above $0.035 over 1 day, the $0.028 Scale cap plus 25% | `56b3b8be` |
+| firstrun docs breakage or failed verification spike | 25 or more "docs step broke" hits, or 2 or more "Verification Error Monitor" hits, in 60 minutes | `74e5d64c` |
+| firstrun budget guardrail tripped | each "Budget Limit Exceeded Alert" hit | `acd01964` |
+
+The AI evaluator "report names the real failed step" (`a6aa683e`) is an agent judge with neatlogs MCP access, a $0.10 budget and 12 tool calls. It checks that the reported failed step matches the first failed TOOL span, that the failure class fits the container output, and that every patch has a passing verify run. Ad-hoc runs return `NOT_FOUND_OR_OPERATION_DISABLED`, so it scores through a scheduled evaluation.
+
 ## The Integration Check Passed the Organizer's Gates
 
 The organizers' setup prompt ran against this repo. Gates 1, 2, 3 and 5 pass and gate 4 is partial: [docs/neatlogs-integration.md](../docs/neatlogs-integration.md).

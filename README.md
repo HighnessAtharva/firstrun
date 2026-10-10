@@ -110,7 +110,7 @@ A DevRel team ships a quickstart once and a dependency moves the week after. The
 firstrun https://docs.example.com/quickstart
 ```
 
-A clean pass ends as `passed`. A break ends as `verified` once a second container proves the fix. The nightly check costs about $0.02 per run, measured by neatlogs.
+A clean pass ends as `passed`. A break ends as `verified` once a second container proves the fix. The nightly check costs $0.0167 per run on average over 64 runs, measured by neatlogs at list price.
 
 </details>
 
