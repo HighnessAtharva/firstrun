@@ -784,3 +784,41 @@ obviously docs which have been tested should be cached and it should show cached
 - **Not done:** I did not commit or push, and the new files plus the README change are left for you.</result>
 <usage><subagent_tokens>90181</subagent_tokens><tool_uses>5</tool_uses><duration_ms>59150</duration_ms></usage>
 </task-notification>
+
+---
+
+<task-notification>
+<task-id>a59ef61d91a925dd9</task-id>
+<tool-use-id>toolu_01XsVUzKTceh6ECt6HbN1SWS</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\a59ef61d91a925dd9.output</output-file>
+<status>completed</status>
+<summary>Agent "W5 full launch experience page" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>The launch page is built in `docs/index.html`, and both screenshot widths render with no horizontal scroll and no console errors. I could not load the real X embeds here, so I only saw the readable blockquote fallback.
+
+1. **Media used:** the launch film is `D:\Atharva\NOTES\META\Attachments\neathack\video\firstrun-concept.mp4`, the same render he posted on X. I remuxed it with faststart, no re-encode, to `docs/assets/firstrun-launch.mp4`, plus `launch-poster.jpg`. The other visuals are:
+   - three frames from the video as Read, Run and Prove images (`step-run.webp`, `step-3.webp`, `step-prove.webp`);
+   - the real neatlogs, Entire and cfo.ai screenshots from `META\Attachments\neathack\x\b0-*.png`;
+   - the three tool logos from `logos\*-apple.png`, which replace the base64 logos that were inline;
+   - the portrait `hero-portrait.webp` from `D:\Atharva\atharvashah.com\public`.
+2. **Tweets embedded:** five posts by @cultist_dev, all Sat Oct 10 and all read from Zernio's published list. Each is a `twitter-tweet` blockquote, with widgets.js loaded only when the section nears the viewport.
+   - `x.com/cultist_dev/status/2108788557670125946` (Chroma 404 issue)
+   - `…/2108815318541844954` (kickoff)
+   - `…/2108826005854937357` (day one)
+   - `…/2108828983194206308` (launch film)
+   - `…/2108856505566921210` (the plan)
+3. **Video size:** 6.4 MB, 44 s, 1080p H.264 with audio.
+4. **Page size:** the HTML is 30 KB and `docs/assets` is 6.5 MB.
+5. **Screenshots:** `d-full.png`, `d-hit.png`, `m-full.png` and `m-hit.png` in `C:\Users\AtharvaShah\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\scratchpad\`. They were taken at 1280 and 375 px on a scratch copy of the site with a test `index.json`.
+6. **Cached runs:** the hero reads `examples/index.json` and does the exact-then-prefix match on the normalized URL. A bare tool name such as `dbt` also matches. A match shows the status card above the prompt panel, which is relabeled "Run it fresh with your agent". A live hint also appears as you type. I tested hit and miss on the dbt entry. Without `index.json` the hero behaves as before, and the HEAD check for `run.html` examples is unchanged.
+7. **Placeholders left:** `&lt;!-- FILL:results --&gt;`, and `&lt;!-- FILL:tweets --&gt;` for the Sun Oct 11 to Mon Oct 12 posts.
+8. **Atharva must check or supply:**
+   - Add the later posts to the timeline as they publish. I did not embed the A1 reply (2108792303611429152).
+   - Confirm the About line "owns developer docs at AccuKnox and works with Altimate AI" is how he wants to be described.
+   - Confirm the Entire and cfo.ai links (`entire.io`, `cfo.ai`), which I did not verify.
+   - Confirm the portrait is the one he wants on the page.
+   - The video's step labels and URLs show the fictional `acme` project, not real run numbers.
+
+I did not run `load-context.mjs` for the impeccable skill. The repo has no `PRODUCT.md` or `DESIGN.md`, and creating them was outside the allowed files. I kept the existing light Apple palette instead.</result>
+<usage><subagent_tokens>232561</subagent_tokens><tool_uses>63</tool_uses><duration_ms>513287</duration_ms></usage>
+</task-notification>
