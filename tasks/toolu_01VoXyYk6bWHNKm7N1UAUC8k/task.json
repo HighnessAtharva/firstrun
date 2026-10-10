@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_01VoXyYk6bWHNKm7N1UAUC8k",
+  "agent_id": "a5837e024a6c29827",
+  "subagent_type": "general-purpose",
+  "task_description": "neatlogs integration check 3b",
+  "files": [
+    "docs/neatlogs-integration.md"
+  ],
+  "token_usage": {
+    "input_tokens": 88,
+    "cache_creation_tokens": 125640,
+    "cache_read_tokens": 5500398,
+    "output_tokens": 23586,
+    "api_call_count": 44
+  },
+  "started_at": "2026-10-10T13:39:34.1968888+05:30",
+  "completed_at": "2026-10-10T13:54:11.6524877+05:30"
+}
