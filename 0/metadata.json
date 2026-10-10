@@ -1,0 +1,109 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JNS1BNG2GM1RZHKJD4BCHR",
+  "session_id": "14c3df51-e6a1-4820-9ecc-9826c98f4212",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T10:29:44.367997Z",
+  "branch": "trail/agent-hardening",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    "tests/test_hardening.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "dd63d7f49672",
+  "checkpoint_transcript_start": 440,
+  "transcript_lines_at_start": 440,
+  "compact_transcript_start": 73,
+  "token_usage": {
+    "input_tokens": 58,
+    "cache_creation_tokens": 67752,
+    "cache_read_tokens": 8213504,
+    "output_tokens": 24491,
+    "api_call_count": 29
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01HUqrr3AE2RR9Cxxe7Cz6py",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "45cf43b70a7f",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 35,
+        "end": 36,
+        "entry_ids": [
+          "f614ba60-6af7-4fe2-b8ed-c44e7fba4506"
+        ],
+        "tool_use_id": "toolu_01HUqrr3AE2RR9Cxxe7Cz6py"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01HUqrr3AE2RR9Cxxe7Cz6py"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T10:29:43.8667835Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 181,
+    "human_removed": 2,
+    "total_committed": 0,
+    "total_lines_changed": 183,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 305,
+      "user_lines_removed": 274,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 6,
+        "docs/assets/logo.svg": 1,
+        "docs/index.html": 7,
+        "src/firstrun/sandbox.py": 269,
+        "tests/test_hardening.py": 22
+      },
+      "user_removed_per_file": {
+        "docs/index.html": 6,
+        "src/firstrun/sandbox.py": 268
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 96,
+      "user_lines_removed": 92,
+      "agent_lines_added": 8,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        ".claude/launch.json": 6,
+        "tests/test_hardening.py": 90
+      },
+      "user_removed_per_file": {
+        "tests/test_hardening.py": 92
+      }
+    }
+  ]
+}
