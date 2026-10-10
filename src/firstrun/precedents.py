@@ -12,10 +12,25 @@ from firstrun.models import FailureClass
 def _read() -> dict:
     path = config.PRECEDENTS_FILE  # read at call time so tests can patch it
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+        text = path.read_text(encoding="utf-8")
+    except OSError:
         return {}
-    return data if isinstance(data, dict) else {}
+    try:
+        data = json.loads(text)
+    except ValueError:
+        data = None
+    if isinstance(data, dict):
+        return data
+    _move_aside(path)  # corrupt or empty: keep it for a human, start a new file
+    return {}
+
+
+def _move_aside(path) -> None:
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    try:
+        path.replace(path.with_name(f"{path.name}.corrupt-{stamp}"))
+    except OSError:
+        pass
 
 
 def lookup(signature: str) -> FailureClass | None:

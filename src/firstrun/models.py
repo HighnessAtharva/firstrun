@@ -14,6 +14,8 @@ class StepStatus(str, Enum):
     FAILED = "failed"
     RECOVERING = "recovering"
     GAVE_UP = "gave_up"
+    SKIPPED = "skipped"          # planner marked the step skipped_out_of_scope
+    NEEDS_HUMAN = "needs_human"  # the human did not answer the ask-once question
 
 
 class RunStatus(str, Enum):
@@ -52,6 +54,8 @@ class Step(BaseModel):
     files: list[FileSpec] = Field(default_factory=list)
     expected: Expected = Field(default_factory=Expected)
     source_line: str = ""
+    skipped_out_of_scope: bool = False   # paid account, video, GUI: the planner keeps the step but it never runs
+    skip_reason: str = ""
 
 
 class Runbook(BaseModel):

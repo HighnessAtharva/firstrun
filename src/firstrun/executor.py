@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import re
 import shlex
 import time
 from datetime import datetime, timezone
@@ -10,11 +11,13 @@ from typing import Callable
 
 import neatlogs
 
-from firstrun import report, state as state_io
+from firstrun import budget as budget_mod, report, state as state_io
+from firstrun.budget import BudgetExceeded
+from firstrun.redact import redact
 from firstrun.models import (
     Budget, GaveUp, Patch, Runbook, RunState, RunStatus, Step, StepResult, StepStatus,
 )
-from firstrun.sandbox import Container
+from firstrun.sandbox import Container, DockerUnavailable
 
 # recover(step, result, state, docs_markdown) -> Patch | GaveUp
 RecoverFn = Callable[[Step, StepResult, RunState, str], "Patch | GaveUp"]
@@ -50,6 +53,7 @@ def run_step(container: Container, step: Step, timeout_s: int | None = None) -> 
         result = container.exec(step.command, timeout_s=timeout_s)
         result.step_id = step.id
         result.command = step.command
+        result.stdout, result.stderr = redact(result.stdout), redact(result.stderr)  # never keep a secret
         result.passed = check_expected(step, result, container)
         result.duration_s = round(time.monotonic() - started, 3)
         span.set_attribute("neatlogs.step.command", step.command)
@@ -123,8 +127,16 @@ def run(
         # trace=False when the caller already opened the run trace around planning.
         ctx = neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs) if trace else contextlib.nullcontext()
         with ctx:
-            _execute(runbook, state, recover, budget, container_factory)
-            if verify is not None and state.status == RunStatus.PASSED:
+            try:
+                _execute(runbook, state, recover, budget, container_factory, capture_pins=verify is not None)
+            except DockerUnavailable as exc:
+                # Raised only while the container starts, so no step ran and no partial state exists.
+                _stop(state, RunStatus.FAILED, str(exc))
+                state_io.save_state(state)
+                _safe_report(state, runbook)
+                return state
+            # A clean pass has nothing to verify: no patch was made.
+            if verify is not None and state.status == RunStatus.PASSED and state.patches:
                 state.status = RunStatus.VERIFYING
                 state_io.save_state(state)
                 state.status = verify(runbook, state)
@@ -148,12 +160,14 @@ def _safe_report(state: RunState, runbook: Runbook) -> None:
         pass
 
 
-def _execute(runbook, state, recover, budget, container_factory) -> None:
+def _execute(runbook, state, recover, budget, container_factory, capture_pins: bool = False) -> None:
     with container_factory(runbook.image) as container:
         # Rebuild the environment of a resumed run. Replays are not recorded as results.
         for step in runbook.steps:
             if step.id > state.last_good_step:
                 break
+            if step.skipped_out_of_scope:
+                continue
             eff = _effective_command(state, step)
             res = run_step(container, eff, budget.seconds_per_step)
             neatlogs.log("replayed step {id}", id=step.id)
@@ -167,10 +181,17 @@ def _execute(runbook, state, recover, budget, container_factory) -> None:
         for step in runbook.steps:
             if step.id <= state.last_good_step:
                 continue
+            if step.skipped_out_of_scope:
+                state.step_status[step.id] = StepStatus.SKIPPED
+                neatlogs.log("step {id} skipped: {why}", id=step.id, why=step.skip_reason)
+                continue
             if not _run_with_recovery(container, step, state, recover, budget, runbook):
                 state_io.save_state(state)
                 return
             state_io.save_state(state)
+
+        if capture_pins and state.patches:  # only a patched run is verified, and verification pins these versions
+            _save_pins(container, state)
 
     state.time_to_first_success_s = round(_elapsed(state), 1)
     _stop(state, RunStatus.PASSED)
@@ -196,18 +217,43 @@ def _run_with_recovery(container, step: Step, state: RunState, recover, budget: 
         if recover is None:
             _stop(state, RunStatus.FAILED, f"step {step.id} failed")
             return False
-        if state.attempts[step.id] >= budget.attempts_per_step:
+        try:
+            budget_mod.check(state, budget, step.id)  # GUARDRAIL span `budget`
+        except BudgetExceeded as exc:
             state.step_status[step.id] = StepStatus.GAVE_UP
-            state.gave_up.append(GaveUp(step_id=step.id, reason=f"{budget.attempts_per_step} attempts used"))
-            _stop(state, RunStatus.FAILED, f"step {step.id} gave up")
+            state.gave_up.append(GaveUp(step_id=step.id, reason=str(exc)))
+            _stop(state, RunStatus.FAILED, f"step {step.id} gave up: {exc}")
             return False
 
         state.step_status[step.id] = StepStatus.RECOVERING
         decision = recover(current, result, state, runbook.docs_markdown)
         if isinstance(decision, GaveUp):
-            state.step_status[step.id] = StepStatus.GAVE_UP
+            human = decision.reason.startswith("needs_human")
+            state.step_status[step.id] = StepStatus.NEEDS_HUMAN if human else StepStatus.GAVE_UP
             state.gave_up.append(decision)
-            _stop(state, RunStatus.FAILED, f"step {step.id} gave up")
+            _stop(state, RunStatus.FAILED, f"step {step.id} gave up: {decision.reason}")
             return False
         state.patches.append(decision)
         current = current.model_copy(update={"command": decision.new_command})
+
+
+_PIN = re.compile(r"^[A-Za-z0-9_.\-]+==[^\s;]+$")
+_NOT_PINNED = {"pip", "setuptools", "wheel"}
+
+
+def parse_pins(freeze_output: str) -> str:
+    """Keep plain name==version lines from `pip freeze`. Tool packages stay free so pip can upgrade itself."""
+    keep = [ln.strip() for ln in freeze_output.splitlines()
+            if _PIN.match(ln.strip()) and ln.split("==")[0].strip().lower() not in _NOT_PINNED]
+    return "\n".join(keep) + ("\n" if keep else "")
+
+
+def _save_pins(container, state: RunState) -> None:
+    """Write the package versions of the recovery run to runs/<run_id>/pins.txt, for verification to pin."""
+    try:
+        res = container.exec("pip freeze 2>/dev/null || true", timeout_s=60)
+        text = parse_pins(res.stdout) if res.exit_code == 0 else ""
+        if text:
+            state_io.save_pins(state.run_id, text)
+    except Exception:  # pinning is best effort and never fails a run
+        pass

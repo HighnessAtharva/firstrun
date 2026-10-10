@@ -128,6 +128,7 @@ def _heuristic(error_text: str, command: str = "") -> dict[FailureClass, float]:
 @neatlogs.span(kind="TOOL", name="classify_failure")
 def classify(error_text: str, command: str = "") -> Classification:
     """TOOL span `classify_failure`. Jev first, Claude as fallback. Returns four probabilities."""
+    config.assert_model_call_allowed("classification")
     probs = _jev(error_text, command)
     if probs is not None:
         return Classification(probabilities=probs, source="jev")

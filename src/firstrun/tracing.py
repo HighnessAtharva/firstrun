@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 
 import neatlogs
 
@@ -19,6 +20,8 @@ def init_tracing(tags: list[str] | None = None, *, disable_export: bool | None =
     load_env()
     if disable_export is None:
         disable_export = os.environ.get("FIRSTRUN_NO_EXPORT") == "1" or not os.environ.get("NEATLOGS_API_KEY")
+    if not os.environ.get("NEATLOGS_API_KEY") and os.environ.get("FIRSTRUN_NO_EXPORT") != "1":
+        print("warning: NEATLOGS_API_KEY is missing. The run works, but no trace is exported.", file=sys.stderr)
     neatlogs.init(
         api_key=os.environ.get("NEATLOGS_API_KEY"),
         workflow_name="firstrun",

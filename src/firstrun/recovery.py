@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import sys
+import threading
 from typing import Callable
 
 import httpx
@@ -32,6 +33,20 @@ _LETTERS = {"d": FailureClass.DOCS_BUG, "e": FailureClass.ENVIRONMENT,
 
 Asker = Callable[[str], str]
 
+ASK_TIMEOUT_S = 60  # the human has this long to answer the ask-once question
+
+
+class AskTimeout(Exception):
+    """A person sat at the terminal and gave no answer within ASK_TIMEOUT_S seconds."""
+
+
+class NeedsHuman(Exception):
+    """The human gave no answer. `classification` holds the model's best guess."""
+
+    def __init__(self, classification: Classification):
+        super().__init__("needs_human: no answer to the ask-once question")
+        self.classification = classification
+
 
 def _error_line(error_text: str) -> str:
     lines = [ln.strip() for ln in error_text.splitlines() if ln.strip()]
@@ -39,12 +54,23 @@ def _error_line(error_text: str) -> str:
 
 
 def _terminal_asker(question: str) -> str | None:
+    """Ask in the terminal. No terminal returns None. No answer in ASK_TIMEOUT_S seconds raises AskTimeout."""
     if not sys.stdin or not sys.stdin.isatty():
         return None
-    try:
-        return input(question + " ")
-    except (EOFError, OSError):  # a console with no reader, such as a background job
-        return None
+    box: list[str | None] = []
+
+    def read() -> None:
+        try:
+            box.append(input(question + " "))
+        except (EOFError, OSError):  # a console with no reader, such as a background job
+            box.append(None)
+
+    reader = threading.Thread(target=read, daemon=True)
+    reader.start()
+    reader.join(ASK_TIMEOUT_S)
+    if not box:
+        raise AskTimeout(f"no answer in {ASK_TIMEOUT_S} s")
+    return box[0]
 
 
 def _parse_answer(answer: str | None) -> FailureClass | None:
@@ -64,8 +90,11 @@ def _resolve(error_text: str, command: str, asker: Asker | None, step_id: int | 
         neatlogs.log("precedent reused", signature=sig, failure_class=known.value)
         return Classification(probabilities={c: (1.0 if c == known else 0.0) for c in FailureClass},
                               source="precedent")
+    if _NETWORK.search(error_text):  # a dropped network is the environment, whatever a model says
+        return Classification(probabilities={c: (1.0 if c == FailureClass.ENVIRONMENT else 0.0) for c in FailureClass},
+                              source="rule")
     cls = classify_mod.classify(error_text, command)
-    if cls.confidence >= CONFIDENT:
+    if round(cls.confidence, 6) >= CONFIDENT:
         if cls.confidence >= STORE_CONFIDENT:
             precedents.store(sig, cls.top, example=error_text)
         return cls
@@ -73,8 +102,13 @@ def _resolve(error_text: str, command: str, asker: Asker | None, step_id: int | 
     question = (f"{where} failed: {_error_line(error_text)}. Is this a docs bug, an environment issue, "
                 "a product bug, or a missing secret? [d/e/p/s]")
     ask = asker or _terminal_asker
-    answer = _parse_answer(ask(question))
-    if answer is None:
+    try:
+        answer = _parse_answer(ask(question))
+    except AskTimeout:
+        neatlogs.log("no human answer within {secs} s: step needs a human", level="warning",
+                     secs=ASK_TIMEOUT_S, failure_class=cls.top.value, confidence=cls.confidence)
+        raise NeedsHuman(cls)
+    if answer is None:  # no terminal to ask: use the top class
         neatlogs.log("no human answer, using the top class", level="warning",
                      failure_class=cls.top.value, confidence=cls.confidence)
         return cls
@@ -86,9 +120,17 @@ def _resolve(error_text: str, command: str, asker: Asker | None, step_id: int | 
 def resolve_class(error_text: str, command: str, asker: Asker | None = None,
                   step_id: int | None = None) -> tuple[FailureClass, str]:
     """Precedent first, then the classifier, then ask the human once if unsure."""
-    cls = _resolve(error_text, command, asker, step_id)
+    try:
+        cls = _resolve(error_text, command, asker, step_id)
+    except NeedsHuman as exc:
+        return exc.classification.top, "unanswered"
     return cls.top, cls.source
 
+
+_NETWORK = re.compile(
+    r"temporary failure in name resolution|could not resolve host|name or service not known|network is unreachable|"
+    r"connection (?:reset|aborted)|connectionerror|max retries exceeded|read timed out|failed to establish a new connection|"
+    r"connection timed out|tls handshake timeout", re.I)
 
 # --- environment fixes -------------------------------------------------------
 
@@ -166,8 +208,22 @@ def _error_text(result: StepResult) -> str:
     return text[-3000:]
 
 
+def _search_terms(step: Step, old_command: str, error_text: str) -> str:
+    return f"{old_command.split()[0] if old_command.split() else ''} {step.intent} | {_error_line(error_text)}"[:200]
+
+
+def _short_reason(text: str, limit: int = 400) -> str:
+    """Keep whole sentences up to the limit, so a PR body never ends mid-word."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = text.rfind(". ", 0, limit)
+    return text[: cut + 1] if cut > 0 else text[:limit].rsplit(" ", 1)[0] + "."
+
+
 def _ask_fix(prompt: str, tools: tuple[str, ...], max_turns: int, state: RunState, bud: Budget,
-             step: Step, old_command: str, cls: FailureClass, tried: list[str]) -> Patch | GaveUp:
+             step: Step, old_command: str, cls: FailureClass, tried: list[str],
+             error_text: str = "") -> Patch | GaveUp:
     """One budgeted Claude call that must return {new_command, reason, source}."""
     try:
         budget_mod.check(state, bud, step.id)
@@ -177,14 +233,17 @@ def _ask_fix(prompt: str, tools: tuple[str, ...], max_turns: int, state: RunStat
         data, usage = llm.ask_json(prompt, system="You fix failing shell commands from developer quickstart guides.",
                                    tools=tools, max_turns=max_turns)
     except Exception as exc:  # noqa: BLE001
-        return GaveUp(step_id=step.id, reason=f"model call failed: {type(exc).__name__}", failure_class=cls)
+        why = "model auth failed" if isinstance(exc, llm.ModelAuthError) else f"model call failed: {type(exc).__name__}"
+        return GaveUp(step_id=step.id, reason=why, failure_class=cls)
     _add_usage(state, usage)
     new = str(data.get("new_command") or "").strip()
     if not new or new == old_command.strip() or new in tried:
-        return GaveUp(step_id=step.id, reason="no new fix found: the model repeated an earlier command",
-                      failure_class=cls)
+        terms = _search_terms(step, old_command, error_text)
+        neatlogs.log("fix search found nothing: {terms}", level="warning", terms=terms, step_id=step.id)
+        return GaveUp(step_id=step.id, failure_class=cls,
+                      reason=f"no new fix found (searched: {terms})")
     return Patch(step_id=step.id, old_command=old_command, new_command=new,
-                 reason=str(data.get("reason") or "")[:300], failure_class=cls,
+                 reason=_short_reason(str(data.get("reason") or "")), failure_class=cls,
                  source=str(data.get("source") or ""))
 
 
@@ -209,7 +268,18 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
         return GaveUp(step_id=step.id, reason=str(exc))
 
     classify_mod.LAST_USAGE.clear()
-    cls = _resolve(error_text, old_command, asker, step.id)
+    if result.timed_out:  # a hung step is an environment failure and a retry would hang again
+        cls = Classification(probabilities={c: (1.0 if c == FailureClass.ENVIRONMENT else 0.0) for c in FailureClass},
+                             source="timeout")
+        state.classifications[step.id] = cls
+        return GaveUp(step_id=step.id, reason=f"step timed out after {bud.seconds_per_step} s: {_error_line(error_text)}",
+                      failure_class=FailureClass.ENVIRONMENT)
+    try:
+        cls = _resolve(error_text, old_command, asker, step.id)
+    except NeedsHuman as exc:
+        state.classifications[step.id] = exc.classification
+        return GaveUp(step_id=step.id, failure_class=exc.classification.top,
+                      reason=f"needs_human: no answer within {ASK_TIMEOUT_S} s to the ask-once question")
     if classify_mod.LAST_USAGE:  # the classifier fell back to Claude
         _add_usage(state, classify_mod.LAST_USAGE)
         classify_mod.LAST_USAGE.clear()
@@ -233,6 +303,13 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
                      reason="secret supplied from allowlist", failure_class=top, source=name)
 
     if top == FailureClass.ENVIRONMENT:
+        if _NETWORK.search(error_text):  # a dropped network: retry the same command once
+            retried = [p for p in state.patches if p.step_id == step.id and p.source == "retry"]
+            if retried:
+                return GaveUp(step_id=step.id, failure_class=top,
+                              reason=f"network error again after one retry: {_error_line(error_text)}")
+            return Patch(step_id=step.id, old_command=old_command, new_command=old_command,
+                         reason="network error; retry once", failure_class=top, source="retry")
         pkgs = _env_packages(error_text)
         if pkgs:
             new = f"apt-get update -qq && apt-get install -y -qq {pkgs} && {old_command}"
@@ -245,7 +322,7 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
                   f"Earlier fixes that did not work: {tried or 'none'}\n"
                   'Return JSON {"new_command": "...", "reason": "...", "source": "..."}. '
                   "new_command must run the original command after any container fix, as one shell line.")
-        return _ask_fix(prompt, (), 1, state, bud, step, old_command, top, tried)
+        return _ask_fix(prompt, (), 1, state, bud, step, old_command, top, tried, error_text)
 
     # docs_bug
     hint = _pypi_hint(error_text)
@@ -257,4 +334,4 @@ def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str
               "Find the current, correct command with WebSearch and WebFetch. Prefer the tool's own docs, "
               "its registry page or its issue tracker. "
               'Return JSON {"new_command": "...", "reason": "...", "source": "<url you used>"}.')
-    return _ask_fix(prompt, ("WebSearch", "WebFetch"), 6, state, bud, step, old_command, top, tried)
+    return _ask_fix(prompt, ("WebSearch", "WebFetch"), 6, state, bud, step, old_command, top, tried, error_text)

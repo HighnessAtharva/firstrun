@@ -42,3 +42,30 @@ def load_env(path: Path | None = None) -> None:
         os.environ["FIRECRAWL_API_KEY"] = os.environ["FIRECRAWL_API_KEY_1"]
     # The Agent SDK must use the subscription token, never an API key.
     os.environ.pop("ANTHROPIC_API_KEY", None)
+
+
+# --- model call guard ---------------------------------------------------------
+
+import contextlib  # noqa: E402
+
+_blocked = 0
+
+
+class ModelCallBlocked(RuntimeError):
+    """A model call was attempted while model calls are blocked (the verification run)."""
+
+
+@contextlib.contextmanager
+def block_model_calls():
+    """Inside this block every Claude or Jev call raises ModelCallBlocked."""
+    global _blocked
+    _blocked += 1
+    try:
+        yield
+    finally:
+        _blocked -= 1
+
+
+def assert_model_call_allowed(what: str = "model call") -> None:
+    if _blocked:
+        raise ModelCallBlocked(f"{what} blocked: model calls are not allowed during verification")

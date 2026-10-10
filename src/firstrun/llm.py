@@ -25,6 +25,19 @@ except Exception:  # wrapping is best effort, the plain SDK still works
 _WORKDIR = os.path.join(tempfile.gettempdir(), "firstrun-llm")
 
 
+class ModelAuthError(RuntimeError):
+    """The Claude subscription token is missing, expired or rejected."""
+
+
+_AUTH_HINTS = ("401", "authentication", "unauthorized", "invalid api key", "oauth token", "token has expired",
+               "token expired", "please run /login", "not logged in", "setup-token")
+
+
+def _looks_like_auth_error(text: str) -> bool:
+    low = (text or "").lower()
+    return any(h in low for h in _AUTH_HINTS)
+
+
 def _cost(input_tokens: int, output_tokens: int, cache_write: int = 0, cache_read: int = 0) -> float:
     """List price, not billed. Cache writes cost 1.25x input, cache reads 0.1x input."""
     return (
@@ -70,19 +83,15 @@ async def _run(prompt: str, system: str, tools: Sequence[str], max_turns: int) -
         env=env,
     )
     text, tool_calls, usage = "", 0, {}
-    async for msg in sdk.query(prompt=prompt, options=options):
-        if isinstance(msg, claude_agent_sdk.AssistantMessage):
-            for block in msg.content:
-                if isinstance(block, claude_agent_sdk.ToolUseBlock):
-                    tool_calls += 1
-                elif isinstance(block, claude_agent_sdk.TextBlock):
-                    text = block.text  # the last text block is the answer
-        elif isinstance(msg, claude_agent_sdk.ResultMessage):
-            usage = msg.usage or {}
-            if msg.is_error and not text:
-                raise RuntimeError(f"claude query failed: {msg.result or msg.subtype}")
-            if msg.result:
-                text = msg.result
+    try:
+        async for msg in sdk.query(prompt=prompt, options=options):
+            text, tool_calls, usage = _consume(msg, text, tool_calls, usage)
+    except (config.ModelCallBlocked, ModelAuthError):
+        raise
+    except Exception as exc:  # noqa: BLE001
+        if _looks_like_auth_error(str(exc)):
+            raise ModelAuthError(f"model auth failed: {str(exc)[:200]}") from exc
+        raise
     fresh = int(usage.get("input_tokens", 0) or 0)
     write = int(usage.get("cache_creation_input_tokens", 0) or 0)
     read = int(usage.get("cache_read_input_tokens", 0) or 0)
@@ -91,7 +100,27 @@ async def _run(prompt: str, system: str, tools: Sequence[str], max_turns: int) -
                   "cost_usd": _cost(fresh, tout, write, read)}
 
 
+def _consume(msg, text: str, tool_calls: int, usage: dict):
+    if isinstance(msg, claude_agent_sdk.AssistantMessage):
+        for block in msg.content:
+            if isinstance(block, claude_agent_sdk.ToolUseBlock):
+                tool_calls += 1
+            elif isinstance(block, claude_agent_sdk.TextBlock):
+                text = block.text  # the last text block is the answer
+    elif isinstance(msg, claude_agent_sdk.ResultMessage):
+        usage = msg.usage or {}
+        if msg.is_error and not text:
+            detail = f"{msg.result or msg.subtype}"
+            if _looks_like_auth_error(detail):
+                raise ModelAuthError(f"model auth failed: {detail[:200]}")
+            raise RuntimeError(f"claude query failed: {detail}")
+        if msg.result:
+            text = msg.result
+    return text, tool_calls, usage
+
+
 def _run_sync(prompt: str, system: str, tools: Sequence[str], max_turns: int) -> tuple[str, dict]:
+    config.assert_model_call_allowed("claude call")
     try:
         asyncio.get_running_loop()
     except RuntimeError:

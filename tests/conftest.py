@@ -3,7 +3,9 @@ from pathlib import Path
 
 import pytest
 
-os.environ.setdefault("FIRSTRUN_NO_EXPORT", "1")
+# Tests never export traces. Set FIRSTRUN_EXPORT_TESTS=1 to turn that off on purpose.
+if os.environ.get("FIRSTRUN_EXPORT_TESTS") != "1":
+    os.environ["FIRSTRUN_NO_EXPORT"] = "1"
 
 from firstrun import config  # noqa: E402
 from firstrun.models import Runbook  # noqa: E402
@@ -78,3 +80,18 @@ def fake_llm():
         _call.calls = calls
         return _call
     return _make
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _neatlogs_never_exports():
+    """Start neatlogs once with export off, so no neatlogs.log or span in a test leaves the machine."""
+    if os.environ.get("FIRSTRUN_EXPORT_TESTS") == "1":
+        yield
+        return
+    import neatlogs
+
+    from firstrun import tracing
+
+    neatlogs.init(api_key=None, workflow_name="firstrun-tests", disable_export=True)
+    tracing._ready = True  # FirstRun's own init_tracing must not start a second, exporting setup
+    yield

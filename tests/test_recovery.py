@@ -187,3 +187,12 @@ def test_terminal_asker_returns_none_on_eof(monkeypatch):
     monkeypatch.setattr(recovery.sys, "stdin", TtyIn())
     monkeypatch.setattr(builtins, "input", no_reader)
     assert recovery._terminal_asker("Docs bug?") is None
+
+
+def test_short_reason_ends_on_a_sentence():
+    from firstrun.recovery import _short_reason
+
+    text = "First sentence is here. " * 30
+    out = _short_reason(text)
+    assert len(out) <= 400 and out.endswith(".")
+    assert _short_reason("Short reason.") == "Short reason."

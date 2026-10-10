@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from firstrun import config
+from firstrun.redact import redact
 from firstrun.models import Runbook, RunState, RunStatus, StepResult, StepStatus
 from firstrun.state import run_dir, target_name
 
@@ -16,6 +17,12 @@ VERDICTS = {
     RunStatus.VERIFIED: "verified",
     RunStatus.UNVERIFIED: "unverified",
 }
+
+
+def is_fixture(source_url: str) -> bool:
+    """A saved docs page or a web archive snapshot. Reports label it, so nobody reads it as live docs."""
+    low = source_url.lower()
+    return "_fixture" in low or "web.archive.org" in low
 
 
 def _cell(text: str, width: int = 60) -> str:
@@ -57,6 +64,8 @@ def write_report(state: RunState, runbook: Runbook) -> Path:
     out.append("")
     out.append(f"- Run: `{state.run_id}`")
     out.append(f"- Source: {state.source_url}")
+    if is_fixture(state.source_url):
+        out.append("- Source type: fixture (a saved copy of a docs page, not the live docs)")
     if state.stop_reason:
         out.append(f"- Stop reason: {state.stop_reason}")
 
@@ -69,7 +78,7 @@ def write_report(state: RunState, runbook: Runbook) -> Path:
         if first_fail:
             out.append("")
             out.append(f"Exit code: {first_fail.exit_code}" + (" (timed out)" if first_fail.timed_out else ""))
-            tail = "\n".join(first_fail.stderr.splitlines()[-15:])
+            tail = redact("\n".join(first_fail.stderr.splitlines()[-15:]))
             if tail.strip():
                 out += ["", "Last 15 lines of stderr:", "", "```", tail, "```"]
         cls = state.classifications.get(fid)

@@ -19,6 +19,7 @@ from pydantic import ValidationError
 from firstrun.models import Expected, Runbook, Step
 
 KEYS_SCRIPT = r"D:\Atharva\NOTES\SCRIPTS\keys\keys.py"
+MAX_STEPS = 10
 SHELL_TAGS = {"bash", "sh", "shell", "console", "zsh", "terminal", "cmd"}
 
 SYSTEM_PROMPT = """You turn a developer tool's quickstart page into a runbook of shell steps.
@@ -33,9 +34,59 @@ Rules:
 - files holds any file the docs tell the reader to create, with its exact content.
   Put the command that runs it in a later step.
 - image is python:3.11-slim unless the quickstart clearly needs another (for example node:22-slim).
-- Skip steps that need a browser, a GUI or a sign-up. Skip pure explanation.
+- Ignore web archive banners and site chrome (Wayback toolbar, captures, cookie text). Keep only the docs.
+- A step that needs a paid account, a video, a screenshot, a browser, a GUI or a sign-up stays in the list
+  with "skipped_out_of_scope": true and "skip_reason": one plain sentence. Skip pure explanation.
 - Add an env var export step only if the docs show it.
 - Number ids from 1. Each step runs in a fresh shell in the same container."""
+
+
+class PlanError(Exception):
+    """The run cannot start. `reason` is the plain sentence the report prints."""
+
+    def __init__(self, reason: str):
+        super().__init__(reason)
+        self.reason = reason
+
+
+class DocsUnreachable(PlanError):
+    pass
+
+
+# --- Windows paths and archive banners ----------------------------------------
+
+_DRIVE_PATH = re.compile(r"(?<![\w/])[A-Za-z]:\\[^\s\"'|&;<>]*")
+_DOT_PATH = re.compile(r"(?<![\w/.])\.{1,2}\\[^\s\"'|&;<>]*")
+
+
+def posix_paths(command: str) -> str:
+    r"""Rewrite Windows paths to Linux paths. Only paths change: C:\a\b becomes /work/a/b, .\a becomes ./a."""
+    def drive(m: re.Match) -> str:
+        return "/work/" + m.group(0)[3:].replace("\\", "/")
+
+    def dot(m: re.Match) -> str:
+        return m.group(0).replace("\\", "/")
+
+    return _DOT_PATH.sub(dot, _DRIVE_PATH.sub(drive, command))
+
+
+_WAYBACK_LINE = re.compile(
+    r"(?i)wayback machine|\bcaptures?\b.*\bsee a list|^\s*\[?\d+ captures|"
+    r"share via my web archive|close the toolbar|get some help using|^\s*(?:success|fail)\s*$|"
+    r"^\|\s*(?:jul|aug|sep|---|\d{4}).*\|\s*$|^\s*\d{1,2} \w{3} \d{4} - \d{1,2} \w{3} \d{4}\s*$"
+)
+
+
+def strip_archive_banner(markdown: str) -> str:
+    """Drop Wayback toolbar lines before the docs reach the planner. Code fences are never touched."""
+    out, in_fence = [], False
+    for line in markdown.splitlines():
+        if line.lstrip().startswith(("```", "~~~")):
+            in_fence = not in_fence
+        if not in_fence and _WAYBACK_LINE.search(line):
+            continue
+        out.append(line)
+    return "\n".join(out)
 
 
 # --- docs reading ---------------------------------------------------------
@@ -90,8 +141,13 @@ def read_docs(url: str) -> str:
         import httpx
 
         neatlogs.log("firecrawl failed, using httpx: {err}", err=str(exc))
-        resp = httpx.get(url, follow_redirects=True, timeout=30)
-        resp.raise_for_status()
+        try:
+            resp = httpx.get(url, follow_redirects=True, timeout=30)
+        except httpx.HTTPError as http_exc:
+            raise DocsUnreachable(f"docs unreachable: {url} ({str(exc)[:120]}; {http_exc.__class__.__name__})") from http_exc
+        if resp.status_code in (401, 403, 404, 410) or resp.status_code >= 500:
+            neatlogs.log("docs unreachable: http {code}", level="error", code=resp.status_code, firecrawl_error=str(exc)[:200])
+            raise DocsUnreachable(f"docs unreachable: HTTP {resp.status_code} for {url} (firecrawl: {str(exc)[:120]})")
         return _strip_html(resp.text)
 
 
@@ -127,7 +183,10 @@ def _build(data: dict, markdown: str, source_url: str) -> Runbook:
     data["source_url"] = source_url
     data["docs_markdown"] = markdown
     data.setdefault("image", "python:3.11-slim")
-    return Runbook.model_validate(data)
+    runbook = Runbook.model_validate(data)
+    for step in runbook.steps:
+        step.command = posix_paths(step.command)
+    return runbook
 
 
 @neatlogs.span(kind="AGENT", name="planner")
@@ -136,7 +195,7 @@ def plan_from_markdown(
 ) -> Runbook:
     """AGENT span `planner`. Claude turns the markdown into a Runbook. Commands are copied exactly."""
     ask = llm or (lambda p: ask_claude(p, SYSTEM_PROMPT)[0])
-    prompt = f"Source URL: {source_url}\n\nQuickstart page (markdown):\n\n{markdown}"
+    prompt = f"Source URL: {source_url}\n\nQuickstart page (markdown):\n\n{strip_archive_banner(markdown)}"
     error = ""
     for _ in range(2):
         text = ask(prompt if not error else f"{prompt}\n\nYour last reply was invalid: {error}\nReturn corrected JSON only.")
@@ -155,7 +214,7 @@ _FENCE = re.compile(r"^[ \t]*(```|~~~)[ \t]*([\w+-]*)[^\n]*\n(.*?)^[ \t]*\1[ \t]
 def heuristic_plan(markdown: str, source_url: str) -> Runbook:
     """No model. One step per command line in shell-tagged fenced blocks."""
     steps: list[Step] = []
-    for m in _FENCE.finditer(markdown):
+    for m in _FENCE.finditer(strip_archive_banner(markdown)):
         if m.group(2).lower() not in SHELL_TAGS:
             continue
         lines = m.group(3).splitlines()
@@ -177,20 +236,38 @@ def heuristic_plan(markdown: str, source_url: str) -> Runbook:
             if not line:
                 continue
             steps.append(
-                Step(id=len(steps) + 1, intent=f"Run: {line[:60]}", command=line,
+                Step(id=len(steps) + 1, intent=f"Run: {line[:60]}", command=posix_paths(line),
                      expected=Expected(), source_line=raw.strip())
             )
     title = next((ln.lstrip("# ").strip() for ln in markdown.splitlines() if ln.startswith("# ")), "")
     return Runbook(source_url=source_url, title=title, docs_markdown=markdown, steps=steps)
 
 
+def check_scope(runbook: Runbook) -> Runbook:
+    """Raise PlanError when the runbook has nothing to run or is too long."""
+    if len(runbook.steps) > MAX_STEPS:
+        raise PlanError(f"out of scope: more than {MAX_STEPS} steps ({len(runbook.steps)} found)")
+    if not any(not s.skipped_out_of_scope for s in runbook.steps):
+        raise PlanError("no runnable steps")
+    return runbook
+
+
 def plan(url: str, llm: Callable[[str], str] | None = None) -> Runbook:
-    """read_docs then plan_from_markdown. Heuristic when offline or when the model call fails."""
+    """read_docs then plan_from_markdown. Raises PlanError when the run cannot start.
+
+    The heuristic planner runs only offline. A model failure stops the run with "planner failed".
+    """
     markdown = read_docs(url)
     if os.environ.get("FIRSTRUN_OFFLINE") == "1" and llm is None:
-        return heuristic_plan(markdown, url)
+        return check_scope(heuristic_plan(markdown, url))
     try:
-        return plan_from_markdown(markdown, url, llm)
+        return check_scope(plan_from_markdown(markdown, url, llm))
+    except PlanError:
+        raise
     except Exception as exc:
-        neatlogs.log("planner failed, using heuristic: {err}", err=str(exc))
-        return heuristic_plan(markdown, url)
+        from firstrun.llm import ModelAuthError
+
+        neatlogs.log("planner failed: {err}", level="error", err=str(exc)[:300])
+        if isinstance(exc, ModelAuthError):
+            raise PlanError(str(exc)) from exc
+        raise PlanError(f"planner failed: {str(exc)[:300]}") from exc

@@ -23,7 +23,9 @@ def _verify():
     """Model-free re-run of the patched runbook in a brand-new container."""
     from firstrun.verify import verify
 
-    return lambda runbook, state: verify(runbook, state.patches)
+    from firstrun import state as state_io
+
+    return lambda runbook, state: verify(runbook, state.patches, pins=state_io.load_pins(state.run_id))
 
 def _first_error_line(state: RunState) -> str:
     for r in reversed(state.results):
@@ -42,9 +44,41 @@ def _summary(state: RunState, commands: dict[int, str]) -> list[str]:
     if state.status == RunStatus.FAILED and state.first_failed_step is not None:
         fid = state.first_failed_step
         return [f"✗ step {fid}/{total}  {commands.get(fid, '')}  ->  {_first_error_line(state)}"]
+    if state.status == RunStatus.FAILED and state.stop_reason:
+        return [f"✗ {state.stop_reason}"]
     secs = state.time_to_first_success_s or 0
     mark = "✓" if state.status != RunStatus.FAILED else "✗"
     return [f"{mark} {state.status.value} {passed}/{total} steps, {secs:.0f} s, ${state.usage.cost_usd:.2f}"]
+
+
+# A run that stops for one of these reasons never started a container. The exit code is 2, not 1.
+EARLY_STOPS = ("no runnable steps", "out of scope", "docs unreachable", "planner failed", "model auth failed",
+               "docker unavailable")
+
+
+def exit_code(state: RunState) -> int:
+    if state.status != RunStatus.FAILED:
+        return 0
+    return 2 if state.stop_reason.startswith(EARLY_STOPS) else 1
+
+
+def _early_stop(url: str, run_id: str, reason: str) -> RunState:
+    """Write state.json and report.md for a run that could not start. No container is touched."""
+    from datetime import datetime, timezone
+
+    from firstrun import report, state as state_io
+    from firstrun.models import Runbook
+
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    state = RunState(run_id=run_id, source_url=url, status=RunStatus.FAILED, stop_reason=reason,
+                     started_at=now, finished_at=now)
+    runbook = Runbook(source_url=url, steps=[])
+    state_io.save_runbook(run_id, runbook)
+    state_io.save_state(state)
+    report.write_report(state, runbook)
+    click.echo(f"✗ {reason}")
+    click.echo(f"run dir: {state_io.run_dir(run_id)}")
+    return state
 
 
 def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recover: bool = True) -> RunState:
@@ -65,7 +99,11 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     planner.LAST_USAGE.clear()
     # One trace per run: reading the docs, planning, every step and verification.
     with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs):
-        runbook = state_io.load_runbook(resume) if resume else planner.plan(url)
+        try:
+            runbook = state_io.load_runbook(resume) if resume else planner.plan(url)
+        except planner.PlanError as exc:
+            neatlogs.log("run stopped before step 1: {why}", level="error", why=exc.reason)
+            return _early_stop(url, run_id, exc.reason)
         final = executor.run(
             runbook, run_id=run_id, resume=bool(resume), tags=tags,
             recover=_recover_fn() if recover else None,
@@ -119,17 +157,19 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover) -> No
             line = line.strip()
             if line and not line.startswith("#"):
                 urls.append(line)
+    from firstrun import state as state_io
     from firstrun.tracing import close_tracing
 
+    if resume_id and not (state_io.run_dir(resume_id) / "state.json").exists():
+        raise click.ClickException(f"unknown run id: {resume_id}. Nothing to resume, no run was started.")
     worst = 0
     try:
         if resume_id:
             final = _run_one("", list(tags), resume_id, not no_verify, not no_recover)
-            worst = 1 if final.status == RunStatus.FAILED else 0
+            worst = exit_code(final)
         for u in urls:
             final = _run_one(u, list(tags), None, not no_verify, not no_recover)
-            if final.status == RunStatus.FAILED:
-                worst = 1
+            worst = max(worst, exit_code(final))
     finally:
         close_tracing()
     sys.exit(worst)

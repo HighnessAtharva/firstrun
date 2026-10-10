@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import secrets
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -30,7 +31,14 @@ def run_dir(run_id: str) -> Path:
 
 def new_run_id(source_url: str) -> str:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
-    return f"{stamp}-{_slug(target_name(source_url))}"
+    run_id = f"{stamp}-{_slug(target_name(source_url))}"
+    # Two runs of one target in the same second must not share a folder.
+    while True:
+        try:
+            run_dir(run_id).mkdir(parents=True, exist_ok=False)  # the mkdir claims the id
+            return run_id
+        except FileExistsError:
+            run_id = f"{stamp}-{_slug(target_name(source_url))}-{secrets.token_hex(2)}"
 
 
 def _write(path: Path, text: str) -> Path:
@@ -55,3 +63,19 @@ def save_runbook(run_id: str, runbook: Runbook) -> Path:
 
 def load_runbook(run_id: str) -> Runbook:
     return Runbook.model_validate_json((run_dir(run_id) / "runbook.json").read_text(encoding="utf-8"))
+
+
+def pins_path(run_id: str) -> Path:
+    return run_dir(run_id) / "pins.txt"
+
+
+def save_pins(run_id: str, text: str) -> Path:
+    """Package versions seen at the end of the recovery run, one name==version per line."""
+    return _write(pins_path(run_id), text)
+
+
+def load_pins(run_id: str) -> str:
+    try:
+        return pins_path(run_id).read_text(encoding="utf-8")
+    except OSError:
+        return ""

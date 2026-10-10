@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import os
+import re
 import secrets
 import shlex
 import subprocess
+import sys
 import time
 
 from firstrun import config
@@ -34,10 +36,75 @@ _KILL_ALL = (
 )
 
 
+class DockerUnavailable(RuntimeError):
+    """Docker (through WSL) cannot be reached, so the run stops before step 1."""
+
+
+_DOCKER_DOWN = re.compile(
+    r"cannot connect to the docker daemon|is the docker daemon running|error during connect|"
+    r"docker: command not found|docker: not found|no such file or directory|wsl.*not|"
+    r"the system cannot find|failed to connect|connection refused",
+    re.I,
+)
+
+
 def _tail(data: bytes, cap: int = OUTPUT_CAP) -> str:
+    """Keep the last `cap` bytes. A cut stream starts with a marker that says how much was dropped."""
     if len(data) > cap:
-        data = data[-cap:]
+        dropped = len(data) - cap
+        marker = b"[output truncated: first " + str(dropped).encode() + b" bytes dropped]" + bytes([10])
+        data = marker + data[-(cap - len(marker)):]  # the whole text, marker included, stays within cap
     return data.decode("utf-8", errors="replace")
+
+
+# --- stale containers --------------------------------------------------------
+
+_NAME_WITH_PID = re.compile(r"^firstrun-.+-(\d+)-[0-9a-f]{6}$")
+_OLD_AGE = re.compile(r"hour|day|week|month|year", re.I)
+
+
+def _pid_alive(pid: int) -> bool:
+    if sys.platform == "win32":
+        import ctypes
+
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.OpenProcess(0x1000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        if not handle:
+            return False
+        code = ctypes.c_ulong()
+        ok = kernel32.GetExitCodeProcess(handle, ctypes.byref(code))
+        kernel32.CloseHandle(handle)
+        return bool(ok) and code.value == 259  # STILL_ACTIVE
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
+
+
+def is_stale(name: str, running_for: str = "") -> bool:
+    """A firstrun- container is stale when its owner process is gone, or it is over an hour old."""
+    m = _NAME_WITH_PID.match(name)
+    if m:
+        return not _pid_alive(int(m.group(1)))
+    return bool(_OLD_AGE.search(running_for))
+
+
+def remove_stale() -> list[str]:
+    """Remove firstrun- containers a crashed run left behind. Never touches a live run's container."""
+    listing = subprocess.run(
+        [*config.DOCKER_CMD, "ps", "-a", "--filter", "name=firstrun-", "--format", "{{.Names}}:{{.RunningFor}}"],
+        capture_output=True, timeout=60,
+    )
+    if listing.returncode != 0:
+        return []
+    removed: list[str] = []
+    for line in listing.stdout.decode("utf-8", errors="replace").splitlines():
+        name, _, age = line.strip().partition(":")  # wsl passes the format through bash, so no pipe
+        if name.startswith("firstrun-") and is_stale(name, age):
+            subprocess.run([*config.DOCKER_CMD, "rm", "-f", name], capture_output=True, timeout=60)
+            removed.append(name)
+    return removed
 
 
 def _allowlist_env() -> dict[str, str]:
@@ -77,10 +144,13 @@ class Container:
     # --- docker plumbing --------------------------------------------------
 
     def _docker(self, args: list[str], input_bytes: bytes | None = None, timeout: float | None = 120):
-        return subprocess.run(
-            [*config.DOCKER_CMD, *args],
-            input=input_bytes, capture_output=True, timeout=timeout,
-        )
+        try:
+            return subprocess.run(
+                [*config.DOCKER_CMD, *args],
+                input=input_bytes, capture_output=True, timeout=timeout,
+            )
+        except OSError as exc:  # the wsl or docker program is missing
+            raise DockerUnavailable(f"docker unavailable: {exc}") from exc
 
     def _sh(self, script: str, timeout: float | None = 60) -> subprocess.CompletedProcess:
         """Run a small bash script in the container through stdin."""
@@ -89,9 +159,15 @@ class Container:
     def __enter__(self) -> "Container":
         probe = self._docker(["image", "inspect", self.image])
         if probe.returncode != 0:
+            if _DOCKER_DOWN.search(_tail(probe.stderr, 2000)) and "no such image" not in _tail(probe.stderr, 2000).lower():
+                raise DockerUnavailable(f"docker unavailable: {_tail(probe.stderr, 300).strip()}")
             pulled = self._docker(["pull", self.image], timeout=900)
             if pulled.returncode != 0:
                 raise RuntimeError(f"docker pull {self.image} failed: {_tail(pulled.stderr, 500)}")
+        try:
+            remove_stale()  # containers a crashed run left behind
+        except Exception:
+            pass
         run = self._docker(["run", "-d", "--name", self.name, "--network", "bridge", self.image, "sleep", "infinity"])
         if run.returncode != 0:
             raise RuntimeError(f"docker run failed: {_tail(run.stderr, 500)}")
@@ -160,12 +236,14 @@ class Container:
                 pass
             out, err = proc.communicate()
             code = 124
+        from firstrun.redact import redact
+
         return StepResult(
             step_id=0,
             command=command,
             exit_code=code,
-            stdout=_tail(out or b""),
-            stderr=_tail(err or b""),
+            stdout=redact(_tail(out or b"")),
+            stderr=redact(_tail(err or b"")),
             duration_s=round(time.monotonic() - start, 3),
             timed_out=timed_out,
         )

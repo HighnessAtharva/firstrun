@@ -88,8 +88,8 @@ def test_plan_offline_and_fallback(tmp_path, monkeypatch):
     monkeypatch.setenv("FIRSTRUN_OFFLINE", "1")
     assert len(planner.plan(f.as_uri()).steps) == 3
     monkeypatch.delenv("FIRSTRUN_OFFLINE")
-    rb = planner.plan(f.as_uri(), llm=lambda p: "garbage")  # falls back to heuristic
-    assert len(rb.steps) == 3
+    with pytest.raises(planner.PlanError, match="planner failed"):  # no silent heuristic after a model failure
+        planner.plan(f.as_uri(), llm=lambda p: "garbage")
 
 
 @pytest.mark.live
