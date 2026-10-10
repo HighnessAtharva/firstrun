@@ -1058,3 +1058,37 @@ Re-run notes: the Entire and dbt `prereqs.md` files were written before my last 
 Nothing needs wiring beyond that. The command is already registered, and `"prereqs"` is not treated as a URL. The container name is `firstrun-prereq-&lt;pid&gt;-&lt;hex&gt;`, so the stale-container cleaner still recognises it. I did not touch `sandbox.py`, `executor.py`, `recovery.py`, `planner.py` or any file under `runs/` other than the four finished runs' `prereqs.json` and `prereqs.md`.</result>
 <usage><subagent_tokens>151576</subagent_tokens><tool_uses>37</tool_uses><duration_ms>1548305</duration_ms></usage>
 </task-notification>
+
+---
+
+<task-notification>
+<task-id>a4393109f6c02d54b</task-id>
+<tool-use-id>toolu_01KxLpyC8m359Nsx2WS6Aw6S</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\a4393109f6c02d54b.output</output-file>
+<status>completed</status>
+<summary>Agent "U3 website for bisect and prereqs" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Both pages are built and tested. One thing needs you: `share.py` does not carry all the fields the prereqs card uses.
+
+1. **Files changed:** `docs/run.html` (bisect stage, prereqs card, replay animation) and `docs/index.html` (insert only). I did not touch `docs/examples/*.txt` or the other session's `docs/comparison.md` and `logo.svg`.
+2. **`docs/index.html` inserts:**
+   - Lines 192 to 215: the CSS block, with an `/* one engine, three answers */` comment, added at the end of the `&lt;style&gt;` (class prefix `ea-`).
+   - Lines 326 to 355: `&lt;section id="engine"&gt;` "One Engine, Three Answers", placed right before `&lt;section id="proof"&gt;`. It has three cards with a command and a `run.html#ex=fixture`, `#ex=dbt` or `#ex=accuknox` link each, plus the $0 sentence.
+   - The diff shows 6 deleted lines in that file; those come from the other session's earlier edits, not mine.
+3. **`docs/run.html`:**
+   - A sixth stage "When did it break?" appears only when the payload has `bisect`. The timeline is sorted by date and the dots reveal in probe order (instant under reduced motion). The first bad release is highlighted, and the untested releases show as grey dots.
+   - The card "What the docs assume" shows each item with its reason, a proof line, and a Copy button. It builds the block from the fields if the payload has no markdown. All data goes in with `textContent`.
+4. **Screenshots** are in `C:\Users\AtharvaShah\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\scratchpad\shots\`. Run pages are `dbt-1280.png`, `dbt-375.png`, `ak-1280.png`, `ak-375.png` and `bad-1280.png`, `bad-375.png`. The landing section is `engine-1280.png` and `engine-375.png`. Prereqs card crops are `ak-asm-1280.png` and `ak-asm-375.png`. None of the six pages has horizontal scroll at 1280 or 375 (the index page overflowed to 380 until I fixed it), and a corrupt code still shows the error line.
+5. **For the lead, `share.py`:** `build_payload` only copies `system_packages`, `python`, `path`, `secrets`, `tools`, `proven`, `image` and `rounds` into `prereqs`. The card can also show these, so please add them to the payload:
+   - `evidence`, trimmed to `{item, step_id, error_line}`, for the per-item reason lines;
+   - `steps_passed` and `steps_total`, for the "5/5 steps" proof line;
+   - `note`, for the dbt case ("step 10 is a docs bug");
+   - `markdown`, the text of `prereqs.md`.
+
+   My test codes added these fields by hand. Without them the card still renders, but it shows "Needed by the docs commands." as every reason and omits the step counts.
+6. **Test traps and demo output:**
+   - A static server on port 8765 was already running and served an old `run.html`, so I used 8791. Stop my server on 8791 when you are done.
+   - Replay fell back to my test codes because the `docs/examples/*.txt` files are not regenerated yet.
+   - The dbt prereqs card honestly shows "Not proven: the fresh container passed 8/9 steps", with the jafgen docs-bug note.</result>
+<usage><subagent_tokens>140284</subagent_tokens><tool_uses>32</tool_uses><duration_ms>234654</duration_ms></usage>
+</task-notification>
