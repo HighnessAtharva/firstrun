@@ -162,7 +162,7 @@ The six mistakes the agent made in v1:
 
 ## FirstRun Found 3 Real Docs Bugs and Opened 3 Upstream PRs
 
-FirstRun ran four open-source quickstarts whose docs live in public repos. Every finding below came from a verified run, where a second clean container passed with the fix.
+FirstRun ran five open-source quickstarts whose docs live in public repos. Every finding below came from a verified run, where a second clean container passed with the fix.
 
 | Quickstart | Result | What FirstRun found | Upstream |
 |---|---|---|---|
@@ -171,7 +171,7 @@ FirstRun ran four open-source quickstarts whose docs live in public repos. Every
 | [Entire CLI install](https://docs.entire.io/installation) | verified 4/4 | `install.sh` puts `entire` in `~/.local/bin`, which a clean shell lacks on `PATH` | [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) |
 | [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the docs commands work, the container needed `curl` and `gnupg` | none needed |
 | [MkDocs getting started](https://www.mkdocs.org/getting-started/) | verified 9/10 | the docs commands work, the container needed `curl` | none needed |
-| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | see below | the pip path never installs `create-dagster`, and `--group dev` needs pip 25.1 | draft |
+| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | verified 10/10 | the docs already cover both gaps FirstRun hit: install `create-dagster` first, and pip 25.1 for `--group` | none needed |
 
 Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app).
 
@@ -181,6 +181,8 @@ Replay any of them in the browser at [1run.netlify.app](https://1run.netlify.app
 - **One run split into 3 traces.** The first live run on the neatlogs docs produced 3 traces. The CLI now opens one `firstrun.run` trace around reading, planning, every step and verification.
 - **Ask-once crashed background runs.** The prompt raised `EOFError` with no terminal. It now returns nothing, and recovery uses the top class.
 - **Tests exported junk traces.** Each `pytest` run created about 50 empty `neatlogs-app` traces. The test fixture now sets an empty key, and a run after the fix created 0 traces.
+- **A docs note looked like a docs bug.** On Dagster, FirstRun labeled two gaps as docs bugs. A check of the source showed the page already covers both, in a prerequisite line and a note the planner skipped. FirstRun now opens no PR on Dagster. Every PR draft gets a source check before it ships.
+- **A cd broke steps three ways.** A leading cd, a cd inside a patched chain, and a file check after cd each failed a step that worked. The container now treats a cd into the folder it is already in as a no-op, and file checks also look from the run root.
 - **The Entire Brain watcher does not run on Windows.** Brain runs with `--no-daemon` and is refreshed by hand.
 
 ## Known Limits Are Listed With the Edge Case That Found Them
