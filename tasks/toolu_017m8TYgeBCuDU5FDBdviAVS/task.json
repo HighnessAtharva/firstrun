@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_017m8TYgeBCuDU5FDBdviAVS",
+  "agent_id": "adbdcd914eb82d683",
+  "subagent_type": "general-purpose",
+  "task_description": "Agent hardening from Dagster run",
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 97966,
+    "cache_read_tokens": 707022,
+    "output_tokens": 5866,
+    "api_call_count": 9
+  },
+  "started_at": "2026-10-10T15:44:27.4232698+05:30",
+  "completed_at": "2026-10-10T15:47:58.254716+05:30"
+}
