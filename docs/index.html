@@ -237,6 +237,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 .pj .k .ic{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
 .ea-c code{white-space:normal;overflow-wrap:anywhere}
 .aside{font-size:14px;color:var(--muted)}
+.twitter-tweet-rendered{margin:0!important}
 .post{margin:0;border-radius:18px;padding:14px 16px;font-size:15px;line-height:1.5;background:var(--surface);box-shadow:var(--edge)}
 .post p{margin:0 0 .4em}.post a{font-size:14px;font-weight:600}
 .inc li b{display:block;font-size:13px;letter-spacing:.02em;color:var(--ink)}
@@ -706,8 +707,7 @@ html:has(dialog[open]){overflow:hidden}
 </section>
 
 <section id="compare">
-<h2>How FirstRun Compares.</h2>
-<details class="cmpd"><summary>Compare FirstRun with Claude Code, GitHub Actions, GitHub Agents and a custom workflow</summary>
+<h2>Compare FirstRun with Claude Code, GitHub Actions, GitHub Agents</h2>
 <div class="lgd" aria-label="Legend"><span><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg> Yes</span><span><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg> Partly or with setup</span><span><svg class="mk n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg> No</span></div>
 <div class="cmp rv"><div class="cmp-s"><table>
 <thead><tr><th scope="col" class="f1">Feature</th><th scope="col" class="me"><svg class="ci" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><span>FirstRun</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M5.6 5.6l3.5 3.5M14.9 14.9l3.5 3.5M18.4 5.6l-3.5 3.5M9.1 14.9l-3.5 3.5"/></svg><span>Claude Code</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><span>GitHub Actions</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4M9 12.5v1M15 12.5v1"/><path d="M2.5 12.5v2M21.5 12.5v2"/></svg><span>GitHub Agents</span></th><th scope="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ci"><path d="M14.7 6.3a4 4 0 00-5 5L3.5 17.5a1.8 1.8 0 002.6 2.6l6.2-6.2a4 4 0 005-5l-2.4 2.4-2-.5-.5-2z"/></svg><span>Custom workflow</span></th></tr></thead>
@@ -721,7 +721,6 @@ html:has(dialog[open]){overflow:hidden}
 <tr class="hl"><th scope="row"><span class="rh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg></i><span>Ease of use<em>Stands out</em></span></span></th><td class="me"><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Paste a docs URL, then paste the prompt into your coding agent</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>One prompt, but you define the test and the clean setup</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>A YAML file per quickstart</span></span></td><td><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Assign an issue to Copilot</span></span></td><td><span class="cell"><svg class="mk n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>Highest effort</span></span></td></tr>
 <tr><th scope="row"><span class="rh"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6 6.8 19.4l1-5.9L3.5 9.4l5.9-.8z"/></svg></i><span>Proof in public repos</span></span></th><td class="me"><span class="cell"><svg class="mk y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>4 upstream PRs, all open</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Depends on your build</span></span></td></tr>
 </tbody></table></div></div>
-</details>
 
 </section>
 
@@ -732,15 +731,15 @@ html:has(dialog[open]){overflow:hidden}
 <div class="tlw" id="tlw">
 <ol class="tl" id="tl">
 <li><div class="when"><b>Sat Oct 10, 10:45</b></div>
-<div class="tw"><blockquote class="post"><p>my neatlogs hackathon project has already caught doc issues for a chroma (24K+ github stars). chromadb's deprecated-config error sends you to its own migration guide. that page returns 404.</p><a href="https://twitter.com/cultist_dev/status/2108788557670125946">Read the post on X</a></blockquote></div></li>
+<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>my neatlogs hackathon project has already caught doc issues for a chroma (24K+ github stars). chromadb's deprecated-config error sends you to its own migration guide. that page returns 404.</p><a href="https://twitter.com/cultist_dev/status/2108788557670125946">Read the post on X</a></blockquote></div></li>
 <li><div class="when"><b>Sat Oct 10, 12:30</b></div>
-<div class="tw"><blockquote class="post"><p>#neatHack kickoff, 12:30 IST. FirstRun code before kickoff: 0 lines. neatlogs doctor probe: 7/7 PASS. Solo build. Submission opens Monday, 7 PM IST.</p><a href="https://twitter.com/cultist_dev/status/2108815318541844954">Read the post on X</a></blockquote></div></li>
+<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>#neatHack kickoff, 12:30 IST. FirstRun code before kickoff: 0 lines. neatlogs doctor probe: 7/7 PASS. Solo build. Submission opens Monday, 7 PM IST.</p><a href="https://twitter.com/cultist_dev/status/2108815318541844954">Read the post on X</a></blockquote></div></li>
 <li><div class="when"><b>Sat Oct 10, 13:14</b></div>
-<div class="tw"><blockquote class="post"><p>#neatHack, day one. all three required tools are up. Entire: trail #1 created. neatlogs: first agent trace, 3 steps, 12s. cfo.ai: Ari read my public profile.</p><a href="https://twitter.com/cultist_dev/status/2108826005854937357">Read the post on X</a></blockquote></div></li>
+<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>#neatHack, day one. all three required tools are up. Entire: trail #1 created. neatlogs: first agent trace, 3 steps, 12s. cfo.ai: Ari read my public profile.</p><a href="https://twitter.com/cultist_dev/status/2108826005854937357">Read the post on X</a></blockquote></div></li>
 <li><div class="when"><b>Sat Oct 10, 13:26</b></div>
-<div class="tw"><blockquote class="post"><p>your quickstart is the only part of your product tested by people who leave instead of filing a bug. so for #neatHack i'm building FirstRun. break. fix. prove.</p><a href="https://twitter.com/cultist_dev/status/2108828983194206308">Watch the video on X</a></blockquote></div></li>
+<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>your quickstart is the only part of your product tested by people who leave instead of filing a bug. so for #neatHack i'm building FirstRun. break. fix. prove.</p><a href="https://twitter.com/cultist_dev/status/2108828983194206308">Watch the video on X</a></blockquote></div></li>
 <li><div class="when"><b>Sat Oct 10, 15:15</b></div>
-<div class="tw"><blockquote class="post"><p>a quickstart breaks the way an agent breaks. quietly. so the plan for this weekend: every FirstRun run becomes a trace in @neatlogs.</p><a href="https://twitter.com/cultist_dev/status/2108856505566921210">Read the post on X</a></blockquote></div></li>
+<div class="tw"><blockquote class="twitter-tweet post" data-dnt="true" data-conversation="none" data-theme="light"><p>a quickstart breaks the way an agent breaks. quietly. so the plan for this weekend: every FirstRun run becomes a trace in @neatlogs.</p><a href="https://twitter.com/cultist_dev/status/2108856505566921210">Read the post on X</a></blockquote></div></li>
 <li class="next"><div class="when"><b>Sun Oct 11 to Mon Oct 12</b><span>More posts land here as the weekend goes.</span></div>
 <div class="tw"><!-- FILL:tweets --><p class="followx"><a href="https://x.com/cultist_dev">Follow the rest on X, @cultist_dev</a></p></div></li>
 </ol></div>
@@ -905,6 +904,14 @@ fetch("runs/index.json").then(function(r){return r.json()}).then(function(j){
 Array.prototype.forEach.call(document.querySelectorAll("#ex a[data-n]"),function(el){
  fetch("examples/"+el.getAttribute("data-n")+".txt",{method:"HEAD"}).then(function(r){el.hidden=!r.ok}).catch(function(){el.hidden=true});
 });
+
+/* X embeds: load the widget script only when the build log nears the viewport */
+(function(){
+ var b=$("built"),done=false;
+ function load(){if(done)return;done=true;var s=document.createElement("script");s.async=true;s.src="https://platform.twitter.com/widgets.js";s.charset="utf-8";document.body.appendChild(s)}
+ if(!b)return;
+ if("IntersectionObserver" in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){io.disconnect();load()}},{rootMargin:"600px 0px"});io.observe(b)}else{load()}
+})();
 
 /* reveal on scroll */
 var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
