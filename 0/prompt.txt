@@ -292,3 +292,13 @@ Including the Akino docs, find the top three to four documentation sites where t
 <status>completed</status>
 <summary>Background command "Run FirstRun live on the neatlogs quickstart" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+<task-notification>
+<task-id>b2k50hvrp</task-id>
+<tool-use-id>toolu_016kZT6RrokoNtn6MmoBAftk</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\ae05fb29-0c85-4558-9980-42419f08ca9c\tasks\b2k50hvrp.output</output-file>
+<status>failed</status>
+<summary>Background command "Run FirstRun with recovery and verify on the broken fixture" failed with exit code 1</summary>
+</task-notification>
