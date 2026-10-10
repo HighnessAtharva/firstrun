@@ -66,3 +66,7 @@ GET /api/v1/public/traces/{traceId}/sharing can you try this for neatlogs and ma
 <status>completed</status>
 <summary>Background command "Start a fresh neatlogs device sign-in" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+approved, merged #17, create the alerts and here is your cfo firstrun model link https://cfo.ai/s/_u5lbrHIl9KX_JQE
