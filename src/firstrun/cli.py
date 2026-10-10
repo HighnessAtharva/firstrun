@@ -121,6 +121,15 @@ def _early_stop(url: str, run_id: str, reason: str) -> RunState:
     return state
 
 
+def _echo_share(run_dir) -> None:
+    try:
+        from firstrun import share
+
+        click.echo(f"share: {share.link_for_run(run_dir)[0]}")
+    except Exception:  # noqa: BLE001 - a share failure never breaks a run
+        pass
+
+
 def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recover: bool = True) -> RunState:
     import neatlogs
 
@@ -182,6 +191,7 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     click.echo(f"report: {run_dir / 'report.md'}")
     for path in written:
         click.echo(f"wrote {path}")
+    _echo_share(run_dir)
     return final
 
 class _UrlGroup(click.Group):
@@ -270,6 +280,26 @@ def report_cmd(html) -> None:
         extras = report_html.load_evidence(Path("evidence"), config.RUNS_DIR)
         report_html.write_html(config.RUNS_DIR, out, extras)
         click.echo(f"html: {out}")
+
+
+@cli.command("share")
+@click.argument("run_id", required=False)
+def share_cmd(run_id) -> None:
+    """Print a share link for a run (default: the newest run)."""
+    from firstrun import share, state as state_io
+
+    if not run_id:
+        dirs = sorted(d.name for d in Path(config.RUNS_DIR).glob("*") if (d / "state.json").exists())
+        if not dirs:
+            raise click.ClickException("no runs found")
+        run_id = dirs[-1]
+    run_dir = state_io.run_dir(run_id)
+    if not (run_dir / "state.json").exists():
+        raise click.ClickException(f"unknown run id: {run_id}")
+    link, code = share.link_for_run(run_dir)
+    click.echo(link)
+    click.echo(f"code: {code}")
+    click.echo(f"code length: {len(code)}")
 
 
 def main() -> None:
