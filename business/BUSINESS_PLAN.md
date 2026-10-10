@@ -87,9 +87,24 @@ neatlogs Detections and an Investigate run found the planner inventing steps. Th
 | v1 | $0.0262 | 2 of 4 | 0 |
 | v2 | $0.0200 | 3 of 4 | 3 |
 
+## cfo.ai Shows the Old Cap Runs Out of Cash in Month 14
+
+Ari built the model in cfo.ai over MCP, in workspace "Atharva CFOAI", page "FirstRun model". Every formula reads its number from a "FirstRun drivers" table, and its "Driver source" column names the neatlogs trace behind each measured cost. The figures below were read back from cfo.ai, not computed by hand. Cost per run is $0.01862, the 64-trace mean plus compute. Gross margin includes Stripe fees.
+
+| Scenario | Scale gross margin | Team gross margin | Month 18 MRR | Month 18 cash |
+|---|---|---|---|---|
+| Base | 78.3% | 85.1% | $2,069 | $16,832 |
+| Growth | 78.3% | 85.1% | $5,427 | $45,220 |
+| Tail month: every run at p95 cost | 44.1% | 64.2% | $2,069 | $12,767 |
+| Old cap: every Scale run at $0.50 | -406.6% | 85.1% | $2,069 | -$12,131 |
+| Scale at $529 | 86.5% | 85.1% | $2,876 (Base plus the $807 Scale gain cfo.ai reported) | $21,293 |
+| Scale at 1,500 runs | 87.7% | 85.1% | $2,069 | $17,390 |
+
+Under the old cap, cash first goes negative in December 2027, month 14. Every other Scenario has positive net cash flow, so cfo.ai shows no runway limit. Raising Scale to $529 earns the most cash. Halving the Scale allowance keeps the $299 price and still clears the 70% floor.
+
 ## Both Scenarios Pay Back Fixed Costs in Month 2
 
-These scenarios came before the cfo.ai model and use the v1 cost of $0.02771 per run. The cfo.ai model replaces them with the 64-trace drivers.
+This hand-built table came before the cfo.ai model and uses the v1 cost of $0.02771 per run. The cfo.ai table above uses the 64-trace cost, so its month 18 cash is higher.
 
 Both scenarios start with $5,000 cash on 2026-11-01. Fixed costs are $25 a month. Monthly churn is 10% on Free, 5% on Team and 3% on Scale. Stripe takes 2.9% plus $0.30 per paid invoice.
 
