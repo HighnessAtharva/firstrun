@@ -40,6 +40,8 @@ def test_known_site_and_unknown():
     assert docs_source.find("https://www.mkdocs.org/getting-started/", "")["path"] == "docs/getting-started.md"
     assert docs_source.find("https://docs.entire.io/anything", "")["repo"] == "entireio/cli"
     assert docs_source.find("https://nowhere.example/x", "")["how"] == "unknown"
+    typer = docs_source.find("https://typer.tiangolo.com/tutorial/first-steps/", "")
+    assert (typer["repo"], typer["branch"]) == ("fastapi/typer", "master")
 
 
 def test_unverified_run_refused(tmp_path, monkeypatch):

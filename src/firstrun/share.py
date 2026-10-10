@@ -8,11 +8,12 @@ import json
 import os
 from pathlib import Path
 
+from firstrun import docs_source
 from firstrun import state as state_io
 from firstrun.models import RunState, Runbook
 from firstrun.redact import redact
 
-DEFAULT_BASE = "https://1run.netlify.app/run.html"
+DEFAULT_BASE = "https://1run.netlify.app/doc-test/"
 ERROR_TAIL_MAX = 600
 DIFF_MAX = 4000
 PR_BODY_MAX = 3000
@@ -147,6 +148,8 @@ def build_payload(run_dir) -> dict:
         "pr_body": _cap(_read(run_dir / "pr_body.md"), PR_BODY_MAX),
         "trace_id": trace,
         "evidence": _evidence(run_dir),
+        # where the docs page lives on GitHub, so the replay can open a PR against it
+        "docs_source": docs_source.find(state.source_url or runbook.source_url, runbook.docs_markdown),
     }
     bisect_doc = _read(run_dir / "bisect.json")
     if bisect_doc:
