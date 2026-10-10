@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KF4N301P4GK4S0AY6P3VGV",
+  "session_id": "dba99250-dc59-4ab3-b2dd-f86c589fc02f",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T17:53:02.8229675Z",
+  "branch": "neatlogs/evals",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "docs/runs/index.json"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "330eeb77f55f",
+  "checkpoint_transcript_start": 53,
+  "transcript_lines_at_start": 53,
+  "compact_transcript_start": 5,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T17:53:02.7056539Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 1190,
+    "human_modified": 1126,
+    "human_removed": 0,
+    "total_committed": 2316,
+    "total_lines_changed": 2323,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}
