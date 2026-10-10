@@ -1,0 +1,7 @@
+plan/
+.env
+.venv/
+runs/
+precedents.json
+__pycache__/
+*.pyc
