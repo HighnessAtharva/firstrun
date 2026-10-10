@@ -2,7 +2,7 @@
 
 Every FirstRun run is one `firstrun.run` WORKFLOW trace in neatlogs. Its spans are `read_docs` and `step.<id>` (TOOL), `planner` and `recover.<id>` (AGENT), `classify_failure` (TOOL), and `budget` and `verify` (GUARDRAIL). Bisect adds `firstrun.bisect` with a `probe.<version>` span per release. Prerequisite Proof adds a `prereqs.prove` GUARDRAIL.
 
-## Before and After Traces Measure the Fix neatlogs Found
+## Before and After Traces Measure the Fix From Neatlogs
 
 | Target | v1 trace | v2 trace |
 |---|---|---|
