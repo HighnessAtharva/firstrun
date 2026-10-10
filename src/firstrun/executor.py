@@ -18,6 +18,7 @@ from firstrun.models import (
     Budget, GaveUp, Patch, Runbook, RunState, RunStatus, Step, StepResult, StepStatus,
 )
 from firstrun.sandbox import Container, DockerUnavailable
+from firstrun.tracing import mark_error, set_io
 
 # recover(step, result, state, docs_markdown) -> Patch | GaveUp
 RecoverFn = Callable[[Step, StepResult, RunState, str], "Patch | GaveUp"]
@@ -60,6 +61,12 @@ def run_step(container: Container, step: Step, timeout_s: int | None = None) -> 
         span.set_attribute("neatlogs.step.exit_code", result.exit_code)
         span.set_attribute("neatlogs.step.duration", result.duration_s)
         span.set_attribute("neatlogs.step.passed", result.passed)
+        set_io(span,
+               input={"step_id": step.id, "command": step.command, "files": [f.path for f in step.files]},
+               output={"exit_code": result.exit_code, "passed": result.passed, "timed_out": result.timed_out,
+                       "stdout": result.stdout[-2000:], "stderr": result.stderr[-2000:]})
+        if not result.passed:
+            mark_error(span, f"step {step.id} failed (exit {result.exit_code})")
     return result
 
 

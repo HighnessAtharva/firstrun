@@ -13,6 +13,7 @@ import neatlogs
 from firstrun import budget as budget_mod
 from firstrun import classify as classify_mod
 from firstrun import config, llm, precedents
+from firstrun.tracing import mark_error, set_io
 from firstrun.budget import BudgetExceeded
 from firstrun.models import (
     Budget,
@@ -251,8 +252,18 @@ def recover(step: Step, result: StepResult, state: RunState, docs_markdown: str 
             asker: Asker | None = None, budget: Budget | None = None) -> Patch | GaveUp:
     """AGENT span `recover.<id>`. Returns a Patch to retry with, or GaveUp."""
     bud = budget or Budget()
-    with neatlogs.trace(f"recover.{step.id}", kind="AGENT"):
-        return _recover(step, result, state, docs_markdown, asker, bud)
+    with neatlogs.trace(f"recover.{step.id}", kind="AGENT") as span:
+        set_io(span, input={"step_id": step.id, "command": result.command or step.command,
+                            "exit_code": result.exit_code, "error": _error_line(_error_text(result))})
+        outcome = _recover(step, result, state, docs_markdown, asker, bud)
+        if isinstance(outcome, Patch):
+            set_io(span, output={"patch": outcome.new_command, "reason": outcome.reason,
+                                 "failure_class": outcome.failure_class.value, "source": outcome.source})
+        else:
+            set_io(span, output={"gave_up": outcome.reason,
+                                 "failure_class": outcome.failure_class.value if outcome.failure_class else None})
+            mark_error(span, f"gave up on step {step.id}: {outcome.reason}")
+        return outcome
 
 
 def _recover(step: Step, result: StepResult, state: RunState, docs_markdown: str,

@@ -85,7 +85,7 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     import neatlogs
 
     from firstrun import executor, patch, planner, state as state_io
-    from firstrun.tracing import init_tracing
+    from firstrun.tracing import init_tracing, mark_error, set_io
 
     init_tracing(tags)
     run_id = resume or state_io.new_run_id(url)
@@ -98,11 +98,14 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
     }
     planner.LAST_USAGE.clear()
     # One trace per run: reading the docs, planning, every step and verification.
-    with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs):
+    with neatlogs.trace("firstrun.run", kind="WORKFLOW", **attrs) as root:
+        set_io(root, input={"url": source, "run_id": run_id, "resume": bool(resume), "tags": list(tags)})
         try:
             runbook = state_io.load_runbook(resume) if resume else planner.plan(url)
         except planner.PlanError as exc:
             neatlogs.log("run stopped before step 1: {why}", level="error", why=exc.reason)
+            set_io(root, output={"status": "failed", "stop_reason": exc.reason})
+            mark_error(root, exc.reason)
             return _early_stop(url, run_id, exc.reason)
         final = executor.run(
             runbook, run_id=run_id, resume=bool(resume), tags=tags,
@@ -110,6 +113,14 @@ def _run_one(url: str, tags: list[str], resume: str | None, verify: bool, recove
             verify=_verify() if verify else None,
             trace=False,
         )
+        set_io(root, output={
+            "status": final.status.value, "stop_reason": final.stop_reason,
+            "steps": len(runbook.steps), "patches": len(final.patches),
+            "first_failed_step": final.first_failed_step,
+            "time_to_first_success_s": final.time_to_first_success_s,
+        })
+        if final.status not in (RunStatus.PASSED, RunStatus.VERIFIED):
+            mark_error(root, f"{final.status.value}: {final.stop_reason}"[:300])
     if planner.LAST_USAGE:
         final.usage.input_tokens += int(planner.LAST_USAGE.get("input_tokens", 0))
         final.usage.output_tokens += int(planner.LAST_USAGE.get("output_tokens", 0))

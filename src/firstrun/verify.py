@@ -11,6 +11,7 @@ from typing import Any, Callable
 import neatlogs
 
 from firstrun import config
+from firstrun.tracing import mark_error, set_io
 from firstrun.models import FileSpec, Patch, Runbook, RunStatus, StepResult
 
 PINS_PATH = "/tmp/fr_pins.txt"
@@ -91,6 +92,10 @@ def _run(
             details["reason"] = f"all {len(runnable)} steps passed in a fresh container, no model calls"
         span.set_attribute("neatlogs.guardrail.passed", passed)
         span.set_attribute("neatlogs.guardrail.reason", details["reason"])
+        set_io(span, input={"steps": len(patched.steps), "patches": len(patches), "image": patched.image},
+               output={"passed": passed, "reason": details["reason"], "steps": details["steps"]})
+        if not passed:
+            mark_error(span, details["reason"])
 
     return (RunStatus.VERIFIED if passed else RunStatus.UNVERIFIED), details
 

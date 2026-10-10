@@ -129,7 +129,7 @@ def _local_path(url: str) -> Path | None:
     return None
 
 
-@neatlogs.span(kind="TOOL", name="read_docs", tool_name="firecrawl")
+@neatlogs.span(kind="TOOL", name="read_docs")
 def read_docs(url: str) -> str:
     """TOOL span `read_docs`. Firecrawl scrape to markdown. A local path or file:// URL reads the file."""
     path = _local_path(url)

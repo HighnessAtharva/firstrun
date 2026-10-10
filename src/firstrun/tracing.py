@@ -34,7 +34,43 @@ def init_tracing(tags: list[str] | None = None, *, disable_export: bool | None =
 
 
 def close_tracing() -> None:
-    neatlogs.flush()
+    """Drain buffered spans. No shutdown here: it blocks on ingestion, and the SDK's atexit hook closes it."""
+    try:
+        neatlogs.flush()
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _json(value) -> str:
+    import json
+
+    try:
+        return json.dumps(value, ensure_ascii=False, default=str)
+    except Exception:  # noqa: BLE001
+        return str(value)
+
+
+def set_io(span, input=None, output=None) -> None:
+    """Record safe input and output on a span opened with `neatlogs.trace`. Never raises."""
+    try:
+        if input is not None:
+            span.set_attribute("input.value", _json(input))
+            span.set_attribute("input.mime_type", "application/json")
+        if output is not None:
+            span.set_attribute("output.value", _json(output))
+            span.set_attribute("output.mime_type", "application/json")
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def mark_error(span, message: str) -> None:
+    """Set ERROR status on a span for a failure the app handled itself. Never raises."""
+    try:
+        from opentelemetry.trace import Status, StatusCode
+
+        span.set_status(Status(StatusCode.ERROR, message[:300]))
+    except Exception:  # noqa: BLE001
+        pass
 
 
 @neatlogs.span(kind="WORKFLOW", name="firstrun.hello")

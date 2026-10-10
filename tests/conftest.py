@@ -6,6 +6,9 @@ import pytest
 # Tests never export traces. Set FIRSTRUN_EXPORT_TESTS=1 to turn that off on purpose.
 if os.environ.get("FIRSTRUN_EXPORT_TESTS") != "1":
     os.environ["FIRSTRUN_NO_EXPORT"] = "1"
+    # An empty value blocks config.load_env from reading the real key out of .env. Without it,
+    # neatlogs.wrap boots its own exporter and sends hundreds of empty "neatlogs-app" traces.
+    os.environ["NEATLOGS_API_KEY"] = ""
 
 from firstrun import config  # noqa: E402
 from firstrun.models import Runbook  # noqa: E402
