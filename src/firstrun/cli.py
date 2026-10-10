@@ -302,6 +302,31 @@ def share_cmd(run_id) -> None:
     click.echo(f"code length: {len(code)}")
 
 
+@cli.command("pr")
+@click.argument("run_id", required=False)
+@click.option("--json", "as_json", is_flag=True, help="Print repo, path, branch, diff, pr_body and commands as JSON.")
+def pr_cmd(run_id, as_json) -> None:
+    """Print the steps for your own agent to open a docs PR (default: newest verified run). Opens nothing."""
+    from firstrun import pr, state as state_io
+
+    if not run_id:
+        found = []
+        for d in sorted(Path(config.RUNS_DIR).glob("*")):
+            sj = d / "state.json"
+            if (d / "patch.diff").exists() and sj.exists() and '"status": "verified"' in sj.read_text(encoding="utf-8"):
+                found.append(d.name)
+        if not found:
+            click.echo("✗ no verified run with a patch.diff found")
+            sys.exit(1)
+        run_id = found[-1]
+    try:
+        text = pr.as_json(state_io.run_dir(run_id)) if as_json else pr.plan(state_io.run_dir(run_id))
+    except pr.NotReady as exc:
+        click.echo(f"✗ {exc}")
+        sys.exit(1)
+    click.echo(text, nl=as_json)
+
+
 def main() -> None:
     cli()
 
