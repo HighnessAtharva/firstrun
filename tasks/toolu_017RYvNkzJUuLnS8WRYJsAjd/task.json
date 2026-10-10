@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_017RYvNkzJUuLnS8WRYJsAjd",
+  "agent_id": "a1dfb6c99e8ef4730",
+  "subagent_type": "general-purpose",
+  "task_description": "CLI share code track",
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 103356,
+    "cache_read_tokens": 648944,
+    "output_tokens": 8311,
+    "api_call_count": 8
+  },
+  "started_at": "2026-10-10T15:06:30.6561055+05:30",
+  "completed_at": "2026-10-10T15:07:54.8087631+05:30"
+}
