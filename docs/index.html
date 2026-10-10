@@ -121,6 +121,18 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.6;pa
 .watch{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 .watch a{display:inline-block;text-decoration:none;color:var(--ink);border-radius:20px;padding:12px 18px;font-weight:600;transition:transform .3s var(--ease),color .2s}
 .watch a[hidden]{display:none}
+.rl{margin:26px 0 8px}.rl h3{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:10px}
+.rl ol{list-style:none;padding:0;display:grid;gap:8px;margin-bottom:14px}
+.rl li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border-radius:16px;padding:11px 16px;background:var(--gl);box-shadow:var(--edge),var(--lift);font-size:15px}
+.rl li b{font-weight:600}.rl li span{color:var(--muted);font-size:13.5px}
+.rl .dot{width:10px;height:10px;border-radius:50%;background:var(--pass)}.rl .dot.f{background:var(--bad)}
+.rl a.go{font-weight:600;text-decoration:none;font-size:14px}
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:22px 0 6px;padding:0;list-style:none}
+.chain li{flex:1 1 190px;border-radius:16px;padding:14px 16px;background:var(--gl);box-shadow:var(--edge),var(--lift);font-size:15px;position:relative}
+.chain li b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);margin-bottom:4px}
+.chain li.hot{box-shadow:var(--edge),0 0 0 2px var(--accent),var(--lift)}
+.why3{margin-top:14px;font-size:15px;color:var(--muted)}
+
 .watch a small{display:block;font-weight:400;color:var(--muted);font-size:13px}
 .watch a:hover{color:var(--accent);transform:translateY(-3px)}
 .cli{border-radius:22px;padding:16px 22px;margin-top:14px;font-size:14px;line-height:1.8;overflow-x:auto;white-space:pre}
@@ -190,6 +202,18 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 @media(prefers-reduced-motion:reduce){#hero>*,.icon,.stk,.bdg{animation:none}html.js .rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.stk .d{animation:none;stroke-dashoffset:0}}
 @media(prefers-reduced-transparency:reduce){.gl,.hit,.panel,.tool,.cli,.watch a,.links a,.nav,.box,.chips button,.stk,.bdg,.twitter-tweet{-webkit-backdrop-filter:none;backdrop-filter:none;background:#fff}}
 /* one engine, three answers */
+.au{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;margin-top:24px}
+.au-steps{list-style:none;padding:0;display:grid;gap:10px}
+.au-steps li{border-radius:20px;padding:16px 18px}.au-steps b{display:block;font-size:17px;letter-spacing:-.015em}.au-steps span{color:var(--muted);font-size:15px}
+.au-live{border-radius:24px;padding:20px;background:var(--gl);-webkit-backdrop-filter:var(--gl-f);backdrop-filter:var(--gl-f);box-shadow:var(--edge),var(--lift)}
+.au-live h3{font-size:15px;color:var(--muted);margin-bottom:10px}
+.au-live ul{list-style:none;padding:0;display:grid;gap:10px}
+.au-live li a{display:block;text-decoration:none;color:var(--ink);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.6);box-shadow:0 0 0 1px var(--hair)}
+.au-live li a:hover{box-shadow:0 0 0 2px var(--accent)}
+.au-live li b{display:block;font-size:16px}.au-live li span{font-size:14px;color:var(--muted)}
+.au-act{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
+.au-act code{font-family:"Geist Mono",ui-monospace,Consolas,monospace;font-size:14px;border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.7);box-shadow:0 0 0 1px var(--hair)}
+@media(max-width:860px){.au{grid-template-columns:1fr}}
 .ea{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:26px}
 .ea-c{border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:10px;position:relative}
 .ea-c h3{font-size:20px;letter-spacing:-.025em;line-height:1.2}
@@ -472,7 +496,7 @@ html:has(dialog[open]){overflow:hidden}
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="0 0 64 64"><defs><linearGradient id="lgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46A6FF"/><stop offset="1" stop-color="#0060DF"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgg)"/><path d="M2 17C2 8.7 8.7 2 17 2h30c8.3 0 15 6.7 15 15v5C46 30 18 30 2 22z" fill="#fff" opacity=".24"/><rect x="2.5" y="2.5" width="59" height="59" rx="14.5" fill="none" stroke="#fff" stroke-opacity=".38"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></symbol></svg>
-<nav class="nav" aria-label="Sections"><a class="wm" href="#hero" aria-label="FirstRun home"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><div class="nl"><a href="#film">Film</a><a href="#steps">How it works</a><a href="#tools">Tools</a><a href="#prs">PRs</a><a href="#plan">Plan</a><a href="#compare">Compare</a><a href="#built">Build log</a><a href="#about">About</a></div><a class="btn sm" href="#hero" id="try">Try it</a></nav>
+<nav class="nav" aria-label="Sections"><a class="wm" href="#hero" aria-label="FirstRun home"><svg class="lg" aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><div class="nl"><a href="#film">Film</a><a href="#steps">How it works</a><a href="runs/">Runs</a><a href="#audit">Audit</a><a href="#tools">Tools</a><a href="#prs">PRs</a><a href="#plan">Plan</a><a href="#compare">Compare</a><a href="#built">Build log</a><a href="#about">About</a></div><a class="btn sm" href="#hero" id="try">Try it</a></nav>
 <main>
 <section id="hero">
 <svg class="icon" viewBox="0 0 64 64" role="img" aria-label="FirstRun logo"><use href="#lg"/></svg>
@@ -549,11 +573,17 @@ html:has(dialog[open]){overflow:hidden}
 
 <section id="watch">
 <h2>Watch a Real Run.</h2>
-<p class="lede">Every run ends with a share link. Replay one.</p>
+<p class="lede">Every run ends with a replay. Every run you start in the repo is logged on the site.</p>
 <div class="watch" id="ex">
-<a href="run.html#ex=fixture" data-n="fixture">Known-broken fixture<small>A pip pin that cannot install</small></a>
+<a href="run.html#ex=altimate-code" data-n="altimate-code" hidden>Altimate Code<small>Install passes, 5 steps need a sign-in</small></a>
 <a href="run.html#ex=dbt" data-n="dbt" hidden>dbt + DuckDB<small>A real quickstart</small></a>
 <a href="run.html#ex=dagster" data-n="dagster" hidden>Dagster<small>A real quickstart</small></a>
+<a href="run.html#ex=fixture" data-n="fixture">Known-broken fixture<small>A pip pin that cannot install</small></a>
+</div>
+<div class="rl" id="rl" hidden>
+<h3>Latest runs</h3>
+<ol id="rll"></ol>
+<a class="btn" id="rla" href="runs/">See all runs</a>
 </div>
 <div class="cli mono" id="cli"><span class="p">$ </span>pip install git+https://github.com/HighnessAtharva/firstrun
 <span class="p">$ </span>firstrun https://docs.getdbt.com/guides/duckdb
@@ -563,26 +593,34 @@ html:has(dialog[open]){overflow:hidden}
 
 <div class="band">
 <section id="tools">
-<h2>Three Tools. One Job Each.</h2>
+<h2>Three Tools Turn One Run Into a Business Decision.</h2>
+<p class="proof">A run is cheap to start and costs real money to finish. Each tool answers one question about that run, and the last answer changed the code.</p>
+<ol class="chain">
+<li><b>1. Run</b>FirstRun tests a quickstart. Every run spends model money.</li>
+<li><b>2. neatlogs</b>Records the cost and the cause of every run as a trace.</li>
+<li class="hot"><b>3. cfo.ai</b>Reads those costs and asks: can we charge for this and stay alive?</li>
+<li><b>4. The code</b>The answer set the per-run cap, so a run stops before it loses money.</li>
+</ol>
 <div class="tools">
 <article class="tool rv"><div class="txt">
 <header><img class="lg2" src="assets/logo-neatlogs.webp" alt="neatlogs logo" width="44" height="44"><h3>neatlogs</h3></header>
-<p class="job">Traces every run.</p>
+<p class="job">Answers what each run cost and why it broke.</p>
 <p>The planner, executor and verifier show up as spans, so a bad run has a cause you can read.</p>
 <a class="more" href="https://neatlogs.com">neatlogs.com</a><button type="button" class="plus" data-tool="neatlogs" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
 <figure><img src="assets/shot-neatlogs.webp" alt="neatlogs trace of the FirstRun planner: 3 steps in 12 seconds, with the runbook JSON it produced" loading="lazy" width="1300" height="572"><figcaption>The first FirstRun trace, Sat Oct 10.</figcaption></figure>
 </article>
 <article class="tool rv"><div class="txt">
 <header><img class="lg2" src="assets/logo-entire.webp" alt="Entire logo" width="44" height="44"><h3>Entire</h3></header>
-<p class="job">Records every session.</p>
+<p class="job">Answers which prompt wrote each line.</p>
 <p>Each commit carries the Claude Code session that wrote it, so any line traces to a prompt.</p>
 <a class="more" href="https://entire.io">entire.io</a><button type="button" class="plus" data-tool="entire" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
 <figure><img src="assets/shot-entire.webp" alt="Entire trails view for the firstrun repository with trail number 1 in Planning" loading="lazy" width="1300" height="484"><figcaption>Trail #1 for the firstrun repo.</figcaption></figure>
 </article>
 <article class="tool rv"><div class="txt">
 <header><img class="lg2" src="assets/logo-cfoai.webp" alt="cfo.ai logo" width="44" height="44"><h3>cfo.ai</h3></header>
-<p class="job">Turns cost into a plan.</p>
-<p>The measured cost per run from neatlogs goes to Ari, the cfo.ai agent, which models the pricing.</p>
+<p class="job">Asks if the agent can pay for itself.</p>
+<p>cfo.ai is an AI finance workspace. Its agent, Ari, read the neatlogs cost of 64 runs and built 18 months of cash for three plans. The model found that the old $0.50 cap per run ended the company in month 14.</p>
+<p><a class="more" href="#plan">See what the plan changed</a> <a class="more" href="https://cfo.ai/s/_u5lbrHIl9KX_JQE" target="_blank" rel="noopener">Open the model</a></p>
 <a class="more" href="https://cfo.ai">cfo.ai</a><button type="button" class="plus" data-tool="cfoai" aria-haspopup="dialog"><i aria-hidden="true">+</i>6 screenshots</button></div>
 <figure><img src="assets/shot-cfoai.webp" alt="cfo.ai chat where Ari, the AI CFO, greets Atharva" loading="lazy" width="1100" height="469"><figcaption>Ari, the cfo.ai agent, on day one.</figcaption></figure>
 </article>
@@ -619,6 +657,21 @@ html:has(dialog[open]){overflow:hidden}
   </article>
 </div>
 <p class="ea-note">Bisect and Prerequisite Proof replay stored commands, so they cost $0 in model calls.</p>
+</section>
+
+<section id="audit">
+<h2>The Quickstart Is One Page. The Audit Reads All of Them.</h2>
+<p class="proof">A quickstart run proves one page. A docs team owns hundreds, and the code keeps moving under them. <code>firstrun audit</code> reads the repo's git history and tells the team where to spend the week.</p>
+<div class="au">
+<ol class="au-steps">
+<li class="gl rv"><b>1. Rank every page by age</b><span>The oldest page first, with the date of its last edit.</span></li>
+<li class="gl rv"><b>2. Split stale from quiet</b><span>Stale means product commits on the page's topic landed after its last edit. Each stale page names those commits.</span></li>
+<li class="gl rv"><b>3. Find features with no docs</b><span>Every user-facing commit in 120 days is checked against the docs text.</span></li>
+<li class="gl rv"><b>4. Hand over proposal cards</b><span>Document this, refresh this page, feature this, create content, plus drafted release notes and highlights.</span></li>
+</ol>
+<div class="au-live" id="aul" hidden><h3>Real audits</h3><ul id="aull"></ul></div>
+</div>
+<div class="au-act"><a class="btn" href="audit.html">Open the docs audit</a><code>firstrun audit owner/repo</code><a href="https://github.com/HighnessAtharva/firstrun/blob/main/examples/github-action/firstrun-audit.yml">Run it every Monday as a GitHub Action</a></div>
 </section>
 
 <section id="proof">
@@ -697,7 +750,7 @@ html:has(dialog[open]){overflow:hidden}
 
 <section id="plan">
 <h2>The Business Plan Found a Bug in the Agent.</h2>
-<p class="proof">neatlogs measured every run. cfo.ai turned the runs into 18 months of cash. The model showed that the agent's own budget cap could sink the company, so the cap moved into the code.</p>
+<p class="proof">Every run on the <a href="runs/">runs page</a> shows what it cost. neatlogs measured those costs. cfo.ai turned them into 18 months of cash. The model showed that the agent's own budget cap could sink the company, so the cap moved into the code.</p>
 <ol class="pj">
 <li class="gl rv"><span class="k">neatlogs measured</span><b>64 runs, one cost spread</b><p>Mean $0.0167 a run. One run in twenty costs $0.0508, and the worst cost $0.1014.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">drivers.csv, a trace per row</a></li>
 <li class="gl rv"><span class="k">cfo.ai modeled</span><b>18 months from the traces</b><p>Ari built three plans, Stripe fees, churn and six Scenarios. Every cost cell reads the measured drivers.</p><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE" target="_blank" rel="noopener">Open the public model</a></li>
@@ -897,6 +950,26 @@ $("cp").addEventListener("click",function(){
  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent="Copied"},function(){
   var r=document.createRange();r.selectNodeContents($("pre"));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Press Ctrl+C"});
  setTimeout(function(){b.textContent="Copy prompt"},2000)});
+fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
+ var a=(j.audits||[]).slice(0,4),ul=$("aull");if(!a.length)return;
+ a.forEach(function(x){var li=document.createElement("li"),k=document.createElement("a"),b=document.createElement("b"),s=document.createElement("span");
+  k.href="audit.html?id="+encodeURIComponent(x.id);b.textContent=x.repo;
+  s.textContent=x.pages+" pages, "+x.stale+" stale, oldest "+x.oldest_days+" days. "+x.uncovered+" recent features with no docs.";
+  k.appendChild(b);k.appendChild(s);li.appendChild(k);ul.appendChild(li)});
+ $("aul").hidden=false;
+}).catch(function(){});
+fetch("runs/index.json").then(function(r){return r.json()}).then(function(j){
+ var rs=(j.runs||[]).filter(function(r){return !r.fixture}),ol=$("rll");
+ if(!rs.length)return;
+ rs.slice(0,5).forEach(function(r){
+  var li=document.createElement("li"),d=document.createElement("i"),t=document.createElement("b"),m=document.createElement("span"),a=document.createElement("a");
+  d.className="dot"+(r.status==="failed"?" f":"");d.setAttribute("aria-hidden","true");
+  t.textContent=r.title;m.textContent=r.passed+" of "+r.runnable+" steps"+(r.fixes?", "+r.fixes+" fixes":"");
+  a.className="go";a.href="run.html#ex="+encodeURIComponent(r.id);a.textContent="Replay";
+  li.appendChild(d);var w=document.createElement("div");w.appendChild(t);w.appendChild(document.createTextNode(" "));w.appendChild(m);li.appendChild(w);li.appendChild(a);ol.appendChild(li);
+ });
+ $("rla").textContent="See all "+(j.runs.length)+" runs";$("rl").hidden=false;
+}).catch(function(){});
 Array.prototype.forEach.call(document.querySelectorAll("#ex a[data-n]"),function(el){
  fetch("examples/"+el.getAttribute("data-n")+".txt",{method:"HEAD"}).then(function(r){el.hidden=!r.ok}).catch(function(){el.hidden=true});
 });

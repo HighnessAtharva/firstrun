@@ -1,0 +1,72 @@
+{
+ "audits": [
+  {
+   "id": "audit-20261010-163620-dbt-labs-dbt-core",
+   "repo": "dbt-labs/dbt-core",
+   "url": "https://github.com/dbt-labs/dbt-core",
+   "ts": "2026-10-10T16:36:20+00:00",
+   "mode": "repo",
+   "pages": 1405,
+   "stale": 15,
+   "quiet": 332,
+   "oldest_days": 709,
+   "median_age_days": 78,
+   "features": 179,
+   "uncovered": 72,
+   "cards": 24,
+   "release": "v2.0.5",
+   "docs_repo": "dbt-labs/docs.getdbt.com"
+  },
+  {
+   "id": "audit-20261010-163526-entireio-cli",
+   "repo": "entireio/cli",
+   "url": "https://github.com/entireio/cli",
+   "ts": "2026-10-10T16:35:26+00:00",
+   "mode": "repo",
+   "pages": 26,
+   "stale": 0,
+   "quiet": 0,
+   "oldest_days": 163,
+   "median_age_days": 2,
+   "features": 235,
+   "uncovered": 82,
+   "cards": 18,
+   "release": "v0.11.4",
+   "docs_repo": ""
+  },
+  {
+   "id": "audit-20261010-163411-altimateai-altimate-code",
+   "repo": "AltimateAI/altimate-code",
+   "url": "https://github.com/AltimateAI/altimate-code",
+   "ts": "2026-10-10T16:34:11+00:00",
+   "mode": "repo",
+   "pages": 71,
+   "stale": 0,
+   "quiet": 0,
+   "oldest_days": 57,
+   "median_age_days": 57,
+   "features": 49,
+   "uncovered": 47,
+   "cards": 18,
+   "release": "v0.12.6",
+   "docs_repo": ""
+  },
+  {
+   "id": "audit-20261010-163257-fastapi-typer",
+   "repo": "fastapi/typer",
+   "url": "https://github.com/fastapi/typer",
+   "ts": "2026-10-10T16:32:57+00:00",
+   "mode": "repo",
+   "pages": 74,
+   "stale": 0,
+   "quiet": 13,
+   "oldest_days": 792,
+   "median_age_days": 80,
+   "features": 0,
+   "uncovered": 0,
+   "cards": 2,
+   "release": "0.27.3",
+   "docs_repo": ""
+  }
+ ]
+}
