@@ -156,6 +156,11 @@ main{flex:1}
 @media (max-width:640px){.rl a.rr{grid-template-columns:minmax(0,1fr)}.rr .vb{grid-row:auto}.rr .rs,.rr .rm,.rr .rgo{grid-column:1}.rr .rgo{grid-row:auto;order:9}.rr .vb{justify-self:start}.lh-top .sn-tile{display:none}}
 .intro h1{font-size:32px;line-height:1.15;letter-spacing:-.03em;font-weight:700}
 .intro .lede{font-size:16px;color:var(--mut);margin-top:8px;max-width:60ch}
+.demo-v{display:inline-flex;align-items:center;gap:12px;margin-top:14px;padding:6px 16px 6px 6px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);text-decoration:none;box-shadow:var(--sh)}
+.demo-v:hover{border-color:var(--acc)}
+.demo-v img{width:72px;height:40px;border-radius:8px;object-fit:cover;display:block}
+.demo-v b{display:block;font-size:14.5px;color:var(--acc)}
+.demo-v small{display:block;font-size:12.5px;color:var(--mut)}
 .paste{margin-top:24px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--sh);overflow:hidden}
 .paste:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg)}
 .paste textarea{display:block;width:100%;min-height:120px;border:0;resize:vertical;padding:14px 16px;font:13.5px/1.6 var(--mono);color:var(--ink);background:transparent}
@@ -629,7 +634,7 @@ html{scroll-padding-top:170px}
 <main id="main">
 <section id="input" class="intro hide" aria-labelledby="inH">
 <div class="lh-top"><span class="sn-tile t-test" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg></span>
-<div><h1 id="inH">Doc-test</h1><p class="lede">FirstRun runs a docs quickstart in a clean container. When a step breaks, it fixes the step and proves the fix in a second clean run. Each row is one docs page and its best result.</p></div></div>
+<div><h1 id="inH">Doc-test</h1><p class="lede">FirstRun runs a docs quickstart in a clean container. When a step breaks, it fixes the step and proves the fix in a second clean run. Each row is one docs page and its best result.</p><a class="demo-v" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" target="_blank" rel="noopener"><img src="../assets/vid-doctest.webp" alt="" width="72" height="40" loading="lazy" decoding="async"><span><b>Watch the 3 minute demo</b><small>DocTest on YouTube, 2:59</small></span></a></div></div>
 <form class="go" id="goF" autocomplete="off"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg><label for="goU" class="sr">Docs URL or share code</label><input id="goU" spellcheck="false" placeholder="Paste a docs URL or a share code from your terminal"><button class="b pri" type="submit">Test it</button></form>
 <p class="gohint" id="goH">A docs URL shows its saved result or the command to test it. A share code opens the replay. Nothing leaves your browser.</p>
 <p id="err" class="err hide" role="alert"></p>
