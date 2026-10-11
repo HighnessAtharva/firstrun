@@ -12,3 +12,6 @@ What FirstRun does not do yet, found while testing the edge cases.
 - Stale container cleanup tells live runs apart by process id, so it works only for runs on the same Windows host. Verification containers older than 1 hour count as stale.
 - A step that needs a paid account or a video is marked `skipped_out_of_scope`. A later step that depends on it can still fail.
 - The demo rows D1 and D3 to D5 need a human: the evidence folder, the X Submit button, the video length and the logged-out link check.
+- The team map joins two emails of one person only through a shared GitHub login, a shared email or the same name. Without a GitHub token, a person who commits from a work email and a personal email under two names shows up twice.
+- The team map ignores `Co-authored-by` trailers. A pair-programmed commit counts for its author only.
+- The team map weighs the files a commit changed, not its lines, because counting lines would download every file of the clone. A one-line fix and a rewrite of the same file weigh the same.

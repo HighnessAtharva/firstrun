@@ -25,6 +25,8 @@ jobs:
       - name: Audit the docs
         env:
           TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+          # Lets the team map match commits to GitHub logins. Add --no-team to leave the map out.
+          GH_TOKEN: ${{ github.token }}
           FIRSTRUN_NO_EXPORT: "1"
         # Add --docs-repo owner/docs-repo when the docs site lives in another repo.
         run: firstrun audit ${{ github.repository }} --no-publish

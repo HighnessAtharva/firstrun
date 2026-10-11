@@ -24,3 +24,11 @@ body:
       placeholder: https://gist.github.com/you/0123456789abcdef0123
     validations:
       required: false
+  - type: checkboxes
+    id: team
+    attributes:
+      label: Team map
+      description: The board shows who works on which part of the code, from public commits in the last 12 months. It never shows an email.
+      options:
+        - label: Leave out the team map (contributor names and avatars)
+          required: false

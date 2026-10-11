@@ -79,7 +79,7 @@ def main() -> int:
         out(publish="no", message="The issue names no repo. Write it as owner/repo, for example fastapi/typer.")
         return 0
     try:
-        result = audit_mod.audit(repo, 180, use_jev=bool(os.environ.get("TYPESAFE_API_KEY")))
+        result = audit_mod.audit(repo, 180, use_jev=bool(os.environ.get("TYPESAFE_API_KEY")), team=fields["team"])
     except (RuntimeError, ValueError) as e:
         msg = str(e)
         if "clone failed" in msg:

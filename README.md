@@ -98,10 +98,21 @@ One blobless clone gives the whole history. The audit then works offline and cos
 - **Oldest first.** Every page, ranked by the date of its last edit.
 - **Stale or quiet.** A page is stale when product commits on its topic landed after its last edit, and the report names those commits. An old page that nothing changed under is quiet, so the team can leave it alone.
 - **Features with no docs.** Each user-facing commit in 120 days is checked against the docs text. A flag or name that no page mentions becomes a "Document this" card.
-- **Proposal cards.** Document this, refresh this page, feature this, create content around a feature with 3 or more commits, and automate the release notes.
+- **Proposal cards.** Document this, refresh this page, feature this, and automate the release notes.
+- **What to ship next.** One ranked list of up to 30 tasks. Each task has a score from 0 to 100, an effort of S, M or L, and one sentence that cites the commits and dates behind it. The score adds reader impact, urgency, evidence, whether Jev checked it, and ease, with fixed weights you can recompute by hand.
+- **Who works on what.** A map of the people who made the last 12 months of commits and the parts of the code they work on. Each task suggests an owner and gives the reason, such as "Maya made 14 of the last 20 commits to docs/use-cases/".
 - **Drafts.** Release notes for the newest stable tag and up to 3 product highlights, written from commit subjects and pull request numbers.
 
-`firstrun audit-issue` turns the newest audit into `issue.md`, one checkbox per card, and prints the `gh issue create` command. It opens nothing on its own.
+`firstrun audit-issue` turns the newest audit into `issue.md`, one checkbox for each of the top 10 tasks, and prints the `gh issue create` command. It opens nothing on its own. A suggested owner appears as a name and a login without the @, so nobody gets a GitHub notification.
+
+**Team map and privacy.** The map reads public commits: author names, GitHub logins and avatars, commit counts and dates. It never shows an email, raw or hashed. Emails stay in memory to join one person's commits, and a sanitizer drops any email before a board is written.
+
+Bots are left out. A commit counts by the files it changed, never by lines, and a commit 90 days old counts half. Every owner is a suggestion, not an assignment. Four opt-outs turn the map off or hide one person:
+
+- Run `firstrun audit --no-team`, or set `FIRSTRUN_TEAM=0`.
+- A repo owner adds `team: false` to `.github/firstrun.yml` or `.firstrun.yml`.
+- An audit request ticks "Leave out the team map" on the issue form. `firstrun audit-submit` leaves the map out unless you add `--with-team`.
+- A person adds `sha256:<hex>` of their lowercase login or name to `hidden` in [`docs/audits/team-optout.json`](docs/audits/team-optout.json). Their work moves into "Everyone else" and no task suggests them.
 
 To audit every week, copy [`examples/github-action/firstrun-audit.yml`](examples/github-action/firstrun-audit.yml) into `.github/workflows/`. Each Monday it audits the repo and updates one issue labeled `firstrun-audit`, so the docs team gets a fresh work list without anyone running a command.
 

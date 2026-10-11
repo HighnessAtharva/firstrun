@@ -425,7 +425,8 @@ def share_cmd(run_id) -> None:
 @click.option("--no-jev", is_flag=True, help="Sort commits by their subject line only. No model call.")
 @click.option("--no-publish", is_flag=True, help="Do not write docs/audits for the site.")
 @click.option("--docs-repo", help="A second repo that holds the docs, when they do not live next to the code.")
-def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo) -> None:
+@click.option("--no-team", is_flag=True, help="Leave out the team map and the suggested owners. FIRSTRUN_TEAM=0 does the same.")
+def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team) -> None:
     """Audit a repo's docs: stale pages, features with no docs, and proposal cards. TARGET is owner/repo, a GitHub URL, a git folder, or a docs site with a sitemap."""
     from firstrun import audit as audit_mod, tracing
 
@@ -435,7 +436,7 @@ def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo) -> None:
             result = audit_mod.audit_sitemap(target, stale_days)
         else:
             click.echo(f"auditing {target}: cloning history, no checkout")
-            result = audit_mod.audit(target, stale_days, use_jev=not no_jev, docs_repo=docs_repo)
+            result = audit_mod.audit(target, stale_days, use_jev=not no_jev, docs_repo=docs_repo, team=not no_team)
     except (RuntimeError, ValueError) as e:
         tracing.close_tracing()
         raise click.ClickException(str(e)) from e
@@ -484,12 +485,13 @@ def audit_issue_cmd(audit_id, as_json) -> None:
 @click.argument("audit_id", required=False)
 @click.option("--yes", is_flag=True, help="Upload without asking first.")
 @click.option("--open", "open_browser", is_flag=True, help="Open the prefilled issue in the browser.")
-def audit_submit_cmd(audit_id, yes, open_browser) -> None:
+@click.option("--with-team", is_flag=True, help="Keep the team map and the suggested owners. Left out by default.")
+def audit_submit_cmd(audit_id, yes, open_browser, with_team) -> None:
     """Offer a local audit for the public doc-audit log: a secret gist plus a prefilled issue. A maintainer publishes it."""
     import shutil
     import subprocess
 
-    from firstrun import intake
+    from firstrun import intake, team
 
     dirs = sorted(d for d in Path(config.RUNS_DIR).glob("audit-*") if (d / "audit.json").exists())
     if audit_id:
@@ -503,7 +505,13 @@ def audit_submit_cmd(audit_id, yes, open_browser) -> None:
     except ValueError as e:
         raise click.ClickException(f"{path} is not a complete audit: {e}") from e
     repo = doc["repo"]
+    if not with_team:
+        # A private repo's contributors stay off the public log unless the owner asks for the map.
+        path = dirs[-1] / "audit-submit.json"
+        path.write_text(json.dumps(team.strip_people(doc), indent=1, ensure_ascii=False), encoding="utf-8")
     click.echo(f"{path} holds the docs paths, page titles and commit subjects of {repo}.")
+    click.echo("The team map and the suggested owners are " + ("included." if with_team else
+                                                               "left out. Add --with-team to include them."))
     click.echo("It goes into a secret gist. A maintainer reads it before it reaches the public log.")
     if not yes and not click.confirm("Upload it?", default=False):
         raise click.Abort()
