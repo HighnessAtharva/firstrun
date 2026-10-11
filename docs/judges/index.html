@@ -5,10 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>For Judges | FirstRun</title>
 <meta name="description" content="FirstRun against the official neatHack judging criteria and the 7 official evidence rows: screenshots from neatlogs, Entire and cfo.ai, the demo chapters, the posts and the dated commits.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="For Judges | FirstRun">
+<meta property="og:description" content="FirstRun against the official neatHack judging criteria and the 7 official evidence rows: screenshots from neatlogs, Entire and cfo.ai, the demo chapters, the posts and the dated commits.">
+<meta property="og:image" content="../assets/og-card-1200x630.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
 <link rel="stylesheet" href="/assets/site-footer.css">
+<link rel="stylesheet" href="/assets/type.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
@@ -50,11 +56,11 @@ img{max-width:100%;display:block}
 .t-jade{--tint:oklch(96.6% .02 175);--edge:oklch(90% .032 175);--c:oklch(47% .09 178);--link:oklch(39% .08 180)}
 .t-lake{--tint:oklch(96.2% .02 232);--edge:oklch(89.5% .03 232);--c:oklch(47% .11 240);--link:oklch(40% .1 245)}
 
-h1{font-size:clamp(30px,4.2vw,46px);line-height:1.05;letter-spacing:-.045em;font-weight:700;text-align:center;text-wrap:balance}
-h2{font-size:clamp(24px,2.9vw,32px);line-height:1.1;letter-spacing:-.035em;font-weight:700;text-align:center;max-width:24em;margin:0 auto;text-wrap:balance}
-h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
+h1{font-size:var(--t-h1);line-height:1.05;letter-spacing:-.04em;font-weight:700;text-align:center;text-wrap:balance}
+h2{font-size:var(--t-h2);line-height:1.15;letter-spacing:-.03em;font-weight:700;text-align:center;max-width:24em;margin:0 auto;text-wrap:balance}
+h3{font-size:var(--t-h3);letter-spacing:-.015em;font-weight:700}
 .crit{max-width:44em;margin:0 auto 8px;text-align:center;font-size:13.5px;line-height:1.4;color:var(--mut);text-wrap:balance}
-.crit b{font:600 12px var(--mono);letter-spacing:.03em;color:var(--c);margin-right:6px;white-space:nowrap}
+.crit b{font:600 12.5px var(--mono);letter-spacing:.03em;color:var(--c);margin-right:6px;white-space:nowrap}
 .crit q{quotes:"\201C" "\201D"}
 .src{text-align:center;margin-top:8px;color:var(--mut);font-size:13px}
 .gap{margin-top:clamp(18px,2.4vw,26px)}
@@ -81,15 +87,15 @@ h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
 .ck{list-style:none;margin:18px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .ck li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:2px 10px;align-items:start;background:oklch(100% 0 0/.72);border:1px solid var(--edge);border-radius:12px;padding:10px 12px}
 .ck li:before{content:"";grid-row:1/4;width:22px;height:22px;border-radius:50%;background:var(--ok-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23277a4b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/13px no-repeat;border:1px solid oklch(84% .06 155)}
-.ck h3{font-size:15px;display:flex;gap:6px;align-items:baseline}
-.ck h3 i{font:600 11.5px var(--mono);font-style:normal;color:var(--mut)}
+.ck h3{font-size:var(--t-h3);display:flex;gap:6px;align-items:baseline}
+.ck h3 i{font:600 12.5px var(--mono);font-style:normal;color:var(--mut)}
 .ck h3 a{color:var(--ink);text-decoration-color:var(--edge)}
 .ck .off{grid-column:2/4;font-size:12.5px;color:var(--mut);quotes:"\201C" "\201D"}
 .ck .pr{grid-column:2/4;font-size:14px}
 .ck .pr a{font-weight:600;white-space:nowrap}
 .ck li.note{display:flex;align-items:center;justify-content:center;text-align:center;background:none;border-style:dashed;font-size:13px;color:var(--mut)}
 .ck li.note:before{display:none}
-.chip{display:inline-flex;align-items:center;gap:5px;font:600 11.5px/1.2 Geist,sans-serif;border-radius:99px;padding:3px 8px;white-space:nowrap;border:1px solid}
+.chip{display:inline-flex;align-items:center;gap:5px;font:600 12.5px/1.2 Geist,sans-serif;border-radius:99px;padding:3px 8px;white-space:nowrap;border:1px solid}
 .chip:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .c-pub{background:var(--ok-bg);color:var(--ok);border-color:oklch(84% .06 155)}
 .c-repo{background:oklch(95.5% .02 250);color:oklch(42% .1 255);border-color:oklch(86% .04 250)}
@@ -99,16 +105,16 @@ h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
 /* agent: bars + recovery, side by side */
 .two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;align-items:start}
 .panel{background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:14px;padding:14px 16px}
-.panel h3{font-size:14px;margin-bottom:10px}
+.panel h3{font-size:var(--t-h3);margin-bottom:10px}
 .bars{display:flex;flex-direction:column;gap:10px}
 .bar{display:grid;grid-template-columns:150px minmax(0,1fr) 56px;gap:4px 12px;align-items:center}
 .bar>b{font-size:13.5px;font-weight:600;line-height:1.25}
 .pair{display:flex;flex-direction:column;gap:3px}
-.trk{display:grid;grid-template-columns:20px minmax(0,1fr);gap:6px;align-items:center;font:600 11px/1 var(--mono);color:var(--mut)}
+.trk{display:grid;grid-template-columns:20px minmax(0,1fr);gap:6px;align-items:center;font:600 12.5px/1 var(--mono);color:var(--mut)}
 .trk span{position:relative;height:15px;border-radius:4px;background:oklch(94% .008 240)}
 .trk span i{position:absolute;inset:0 auto 0 0;width:var(--v);border-radius:4px;background:oklch(75% .02 250)}
 .trk.v2 span i{background:var(--c)}
-.trk span em{position:absolute;left:calc(var(--v) + 6px);top:50%;transform:translateY(-50%);font:600 12px/1 var(--mono);font-style:normal;color:var(--ink);white-space:nowrap}
+.trk span em{position:absolute;left:calc(var(--v) + 6px);top:50%;transform:translateY(-50%);font:600 12.5px/1 var(--mono);font-style:normal;color:var(--ink);white-space:nowrap}
 .trk span.full em{left:calc(var(--v) - 6px);transform:translate(-100%,-50%);color:oklch(99% .004 200)}
 .trk:not(.v2) span.full em{color:var(--ink)}
 .dl{font:600 14px/1.1 var(--mono);color:var(--ok);text-align:right}
@@ -125,7 +131,7 @@ h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
 .tool{margin-top:clamp(18px,2.4vw,26px)}
 .th-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px}
 .th-head img{width:32px;height:32px;border-radius:8px;border:1px solid var(--line)}
-.th-head h3{font-size:17px}
+.th-head h3{font-size:var(--t-h3)}
 .th-head p{font-size:14.5px;font-weight:600;color:var(--ink)}
 .th-head p b{font-family:var(--mono);color:var(--c)}
 .th-head .lk{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13.5px;font-weight:600;align-items:center}
@@ -136,13 +142,13 @@ h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
 .sheet a.th{position:relative;display:block;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--panel);box-shadow:var(--sh);aspect-ratio:16/10}
 .sheet a.th img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease)}
 .sheet a.th:hover img{transform:scale(1.04)}
-.sheet a.th b{position:absolute;left:6px;top:6px;font:600 11px/1 var(--mono);color:oklch(99% .004 200);background:oklch(25% .02 230/.86);border-radius:5px;padding:3px 5px}
+.sheet a.th b{position:absolute;left:6px;top:6px;font:600 12.5px/1 var(--mono);color:oklch(99% .004 200);background:oklch(25% .02 230/.86);border-radius:5px;padding:3px 5px}
 .sheet p{font-size:12.5px;line-height:1.3;margin-top:5px;color:var(--ink)}
 .sheet p a{font-weight:600}
 
 /* Entire stacked bar */
 .stack{display:flex;height:26px;border-radius:8px;overflow:hidden;gap:2px;margin-bottom:6px}
-.stack i{display:grid;place-items:center;font:600 12px/1 var(--mono);font-style:normal;min-width:0;color:oklch(99% .004 200)}
+.stack i{display:grid;place-items:center;font:600 12.5px/1 var(--mono);font-style:normal;min-width:0;color:oklch(99% .004 200)}
 .stack .s1{flex:91;background:var(--c-en)}.stack .s2{flex:4;background:oklch(70% .04 290)}.stack .s3{flex:37;background:oklch(88% .02 290);color:var(--ink)}
 .legend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.5px;color:var(--mut);margin-bottom:12px}
 .legend li{display:flex;align-items:center;gap:6px}
@@ -171,23 +177,23 @@ h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
 .demo{display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px;align-items:center}
 .vid{position:relative;display:block;border-radius:12px;overflow:hidden;border:1px solid var(--edge);box-shadow:var(--sh)}
 .vid img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
-.vid span{position:absolute;right:8px;bottom:8px;font:600 12px/1 var(--mono);color:oklch(99% .003 200);background:oklch(22% .014 230/.85);border-radius:99px;padding:5px 9px}
+.vid span{position:absolute;right:8px;bottom:8px;font:600 12.5px/1 var(--mono);color:oklch(99% .003 200);background:oklch(22% .014 230/.85);border-radius:99px;padding:5px 9px}
 .tl{display:flex;height:48px;gap:2px;border-radius:10px;overflow:hidden}
-.tl a{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:0;text-decoration:none;font:600 12px/1.2 Geist,sans-serif;color:oklch(99% .004 200)}
-.tl a small{font:500 11px/1.2 var(--mono)}
+.tl a{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:0;text-decoration:none;font:600 12.5px/1.2 Geist,sans-serif;color:oklch(99% .004 200)}
+.tl a small{font:500 12.5px/1.2 var(--mono)}
 .tl .ag{background:var(--c-ag);color:var(--ink)}.tl .ag:nth-child(even){background:var(--c-ag2)}
 .tl .nl{background:var(--c-nl)}.tl .en{background:var(--c-en)}.tl .cf{background:var(--c-cf)}
-.tlx{display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--mut);margin:4px 0 8px}
+.tlx{display:flex;justify-content:space-between;font:500 12.5px var(--mono);color:var(--mut);margin:4px 0 8px}
 
 /* post axis */
 .pt{position:relative;height:118px;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:12px;padding:0 18px}
 .pt .ax{position:absolute;left:18px;right:18px;top:14px;bottom:26px}
 .pt .ko{position:absolute;top:-6px;bottom:-2px;width:0;border-left:2px dashed var(--c)}
-.pt .ko span{position:absolute;bottom:4px;right:6px;font:600 11.5px/1 Geist,sans-serif;color:var(--c);white-space:nowrap}
+.pt .ko span{position:absolute;bottom:4px;right:6px;font:600 12.5px/1 Geist,sans-serif;color:var(--c);white-space:nowrap}
 .pt .ln{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--edge)}
-.pt a{position:absolute;width:24px;height:24px;margin-left:-12px;border-radius:50%;display:grid;place-items:center;font:700 10.5px/1 Geist,sans-serif;text-decoration:none;color:oklch(99% .004 200);background:var(--c);border:2px solid var(--panel);box-shadow:var(--sh)}
+.pt a{position:absolute;width:24px;height:24px;margin-left:-12px;border-radius:50%;display:grid;place-items:center;font:700 12.5px/1 Geist,sans-serif;text-decoration:none;color:oklch(99% .004 200);background:var(--c);border:2px solid var(--panel);box-shadow:var(--sh)}
 .pt a.li{background:oklch(45% .12 250)}.pt a.pre{background:oklch(55% .03 220)}
-.pt .tk{position:absolute;bottom:-19px;font:500 11px var(--mono);color:var(--mut);transform:translateX(-50%);white-space:nowrap}
+.pt .tk{position:absolute;bottom:-19px;font:500 12.5px var(--mono);color:var(--mut);transform:translateX(-50%);white-space:nowrap}
 .pt .tk.l{transform:none}.pt .tk.r{transform:translateX(-100%)}
 
 /* useful */
@@ -204,7 +210,7 @@ h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
 .codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
 .code{background:var(--panel);border:1px solid var(--edge);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .code-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 6px 5px 12px;border-bottom:1px solid var(--edge);font-size:13px;color:var(--mut)}
-.code-h .bdg{font:600 11px/1 Geist,sans-serif;background:var(--ok-bg);color:var(--ok);border-radius:99px;padding:3px 7px;margin-left:6px;white-space:nowrap}
+.code-h .bdg{font:600 12.5px/1 Geist,sans-serif;background:var(--ok-bg);color:var(--ok);border-radius:99px;padding:3px 7px;margin-left:6px;white-space:nowrap}
 .code pre{padding:10px 12px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;flex:1}
 .code pre .p{color:var(--mut);user-select:none}
 .code .note{padding:0 12px 9px;font-size:12.5px;color:var(--mut)}
@@ -228,18 +234,18 @@ details.more .note{color:var(--mut);font-size:13px}
 .tbl{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
 th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--edge);vertical-align:top}
-thead th{font-size:12px;font-weight:600;color:var(--mut);border-bottom-color:var(--c)}
+thead th{font-size:var(--t-meta);font-weight:600;color:var(--mut);border-bottom-color:var(--c)}
 td.n,th.n{text-align:right;white-space:nowrap}
 td.n{font-family:var(--mono);font-size:13px}
 td.dn{color:var(--bad);font-weight:600}
 td a.ts{font:600 12.5px var(--mono);margin-right:5px}
 .out{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .out p{font-size:12.5px;color:var(--mut);padding:5px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:4px 10px;flex-wrap:wrap}
-.out pre{padding:8px 10px;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.out pre{padding:8px 10px;font-size:12.5px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
 .out pre .p{color:var(--mut)}
 .postlist{list-style:none;columns:2;column-gap:22px;font-size:13.5px}
 .postlist li{break-inside:avoid;display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;padding:4px 0;border-bottom:1px solid var(--edge)}
-.postlist time{font:500 12px var(--mono);color:var(--mut)}
+.postlist time{font:500 12.5px var(--mono);color:var(--mut)}
 .postlist q{quotes:"\201C" "\201D"}
 .postlist a{font-weight:600}
 
@@ -249,7 +255,7 @@ dialog.lb::backdrop{background:oklch(20% .02 230/.78)}
 dialog.lb figure{background:var(--panel);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px -20px oklch(10% .02 230/.6)}
 dialog.lb img{max-width:min(1200px,94vw);max-height:calc(92vh - 56px);width:auto;height:auto;margin:0 auto;object-fit:contain;background:var(--panel)}
 dialog.lb figcaption{display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:14px;border-top:1px solid var(--line)}
-dialog.lb figcaption b{font:600 12px var(--mono);background:oklch(25% .02 230);color:oklch(99% .004 200);border-radius:5px;padding:3px 6px}
+dialog.lb figcaption b{font:600 12.5px var(--mono);background:oklch(25% .02 230);color:oklch(99% .004 200);border-radius:5px;padding:3px 6px}
 dialog.lb figcaption span{flex:1}
 dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 
@@ -275,7 +281,7 @@ dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min
 @media(max-width:640px){
  .wrap,.jump ol{padding:0 12px}
  .jump{top:70px}
- .jump a{flex-direction:column;justify-content:center;gap:1px;height:44px;padding:0 4px;font-size:11px;text-align:center}
+ .jump a{flex-direction:column;justify-content:center;gap:1px;height:44px;padding:0 4px;font-size:12.5px;text-align:center}
  .jump a b{font-size:14px}
  .sheet,.sheet.c6,.sheet.c4{--cols:2;gap:10px 8px}
  .bar{grid-template-columns:minmax(0,1fr) 48px}.bar>b{grid-column:1/-1}
@@ -283,12 +289,12 @@ dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min
  .codes{grid-template-columns:minmax(0,1fr)}
  .tiers>div{grid-template-columns:52px 70px minmax(0,1fr);padding:8px 10px}
  .pt{padding:0 12px}.pt .ax{left:12px;right:12px}.pt .tk.m{display:none}
- .tl a{font-size:10.5px}.tl a small{font-size:10px}.tl .ag span{display:none}
+ .tl a{font-size:12.5px}.tl a small{font-size:12.5px}.tl .ag span{display:none}
  .rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
  .rt,.rt tbody,.rt tr,.rt th,.rt td{display:block;width:auto!important}
  .rt tr{border-bottom:1px solid var(--edge);padding:6px 0}
  .rt th,.rt td{border:0;padding:2px 0;text-align:left!important}
- .rt td[data-l]:before{content:attr(data-l);display:block;font:600 10.5px/1.4 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+ .rt td[data-l]:before{content:attr(data-l);display:block;font:600 var(--t-meta)/1.4 var(--mono);color:var(--mut)}
  .postlist li{grid-template-columns:62px minmax(0,1fr) auto}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}.sheet a.th:hover img{transform:none}}
@@ -307,7 +313,7 @@ dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min
 <li><a href="#evidence">Tick the 7 evidence rows</a></li>
 <li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc">Watch the 2:59 demo</a></li>
 <li><a href="#agent">See v1 against v2</a></li>
-<li><a href="../receipts/FR-20261010-091740-help-accuknox-com.html">Open a real receipt</a></li>
+<li><a href="../receipts/FR-20261010-091740-help-accuknox-com.html">Open a real receipt</a> <span class="note">Receipts re-issued Oct 11 from saved run state.</span></li>
 </ol>
 </div>
 </section>
@@ -329,12 +335,12 @@ dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min
 <ol class="ck">
 <li><h3><i>1</i><a href="#agent">The agent improved</a></h3><span class="chip c-repo">In repo</span><p class="off"><q>A run before your change and a run after it, e.g., two neatlogs traces, with the numbers you compared</q></p><p class="pr">2 of 4 finished, then 3 of 4. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">8 traces</a></p></li>
 <li><h3><i>2</i><a href="#neatlogs">You used neatlogs</a></h3><span class="chip c-shot">Screenshots</span><p class="off"><q>Links to neatlogs traces from your project, or screenshots of them</q></p><p class="pr">10 dashboard screenshots. <a href="#neatlogs">See them</a></p></li>
-<li><h3><i>3</i><a href="#entire">You used Entire</a></h3><span class="chip c-pub">Public</span><p class="off"><q>Checkpoints or entire-graph output from your repository</q></p><p class="pr">91 of 132 commits carry a checkpoint. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open one</a></p></li>
+<li><h3><i>3</i><a href="#entire">You used Entire</a></h3><span class="chip c-pub">Public</span><p class="off"><q>Checkpoints or entire-graph output from your repository</q></p><p class="pr">91 of 132 commits carry a checkpoint. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299" title="Commit 3ca6f11">the checkpoint commit</a></p></li>
 <li><h3><i>4</i><a href="#cfoai">You used cfo.ai</a></h3><span class="chip c-pub">Public</span><p class="off"><q>A business plan covering your agent's pricing, costs, revenue and runway</q></p><p class="pr">All four, in a public model. <a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model</a></p></li>
-<li><h3><i>5</i><a href="#agent">The agent recovers from failures</a></h3><span class="chip c-repo">In repo</span><p class="off"><q>A run where an action failed, showing what the agent did next</q></p><p class="pr">Step 1 failed, then 4 of 4 passed clean. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Trace 5520c5cf</a></p></li>
+<li><h3><i>5</i><a href="#agent">The agent recovers from failures</a></h3><span class="chip c-repo">In repo</span><p class="off"><q>A run where an action failed, showing what the agent did next</q></p><p class="pr">Step 1 failed, then 4 of 4 passed clean. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md" title="Trace 5520c5cf">the recovered run</a> <small style="font:500 12.5px/1.2 var(--mono);color:var(--mut)">5520c5cf</small></p></li>
 <li><h3><i>6</i><a href="#public">You built in public</a></h3><span class="chip c-pub">Public</span><p class="off"><q>Links to what you shared during the hackathon, tagged #neatHack</q></p><p class="pr">11 tagged posts, 9 after kickoff. <a href="#public">See them</a></p></li>
 <li><h3><i>7</i><a href="#reproduce">You wrote the code during the hackathon</a></h3><span class="chip c-pub">Public</span><p class="off"><q>A public repository with commits dated during the hackathon</q></p><p class="pr">First commit 12:34 IST, kickoff 12:30. <a href="https://github.com/HighnessAtharva/firstrun/commit/96541a8b88ba2cb758f055c265f9f3d875ef4b08">96541a8</a></p></li>
-<li class="note">Trace pages need a neatlogs login, so screenshots stand in.</li>
+<li class="note">Trace pages need a neatlogs login. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Read the recovered trace in the repo</a>, and screenshots stand in for the rest.</li>
 </ol>
 </div>
 </section>
@@ -437,6 +443,7 @@ dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min
 <div><h4>Team</h4><p class="pz">$49</p><dl><dt>Cap a run</dt><dd>$0.04697</dd><dt>Margin</dt><dd>87.8%</dd></dl></div>
 <div><h4>Scale</h4><p class="pz">$299</p><dl><dt>Cap a run</dt><dd>$0.02787</dd><dt>Margin</dt><dd>80.1%</dd></dl></div>
 </div>
+<p class="note">How it earns: DevRel and docs teams pay a monthly tier, Free, Team $49 or Scale $299. Plan, no paying customers yet. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">BUSINESS_PLAN.md</a></p>
 <div class="cash">
 <svg viewBox="0 0 340 240" role="img" aria-labelledby="cash-t cash-d">
 <title id="cash-t">Cash on hand in the cfo.ai model, November 2026 to April 2028</title>
@@ -585,7 +592,7 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 </div>
 <details class="more" id="useful-more"><summary><span>Show details</span></summary><div class="in">
 <p>All 4 PRs are open. Each came from a run verified in a fresh container.</p>
-<p><code>firstrun receipt --check</code> fails when a receipt or its evidence changed. <a href="../receipts/FR-20261010-091740-help-accuknox-com.html">A run receipt</a> <a href="../receipts/FR-audit-20261010-163620-dbt-labs-dbt-core.html">An audit receipt</a></p>
+<p><code>firstrun receipt --check</code> fails when a receipt or its evidence changed. <a href="../receipts/FR-20261010-091740-help-accuknox-com.html">A run receipt</a> <a href="../receipts/FR-audit-20261010-163620-dbt-labs-dbt-core.html">An audit receipt</a> Receipts re-issued Oct 11 from saved run state.</p>
 <p>Each Doc-audit board maps who works on what, from 14 to 247 people. dbt-core shows 15 stale pages and 72 features with no docs. <a href="../doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">dbt-core board</a></p>
 <p>Older audits show an estimated cost, $0.0001 to $0.0055. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/scripts/audit_cost_estimates.py">How it is measured</a></p>
 </div></details>
@@ -641,7 +648,7 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 
 <footer class="sf"><div class="sf-in">
 <div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
-<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Cost caps</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="/known-limits.md">Known limits</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
 <p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
 </div></footer>
 

@@ -6,6 +6,7 @@
 <title>FirstRun: Docs that work (literally)</title>
 <link rel="stylesheet" href="assets/site-nav.css">
 <link rel="stylesheet" href="/assets/site-footer.css">
+<link rel="stylesheet" href="/assets/type.css">
 <link rel="alternate" type="text/markdown" href="/agent.md" title="FirstRun agent quickstart">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
 <meta name="description" content="Docs break quietly, and a new user finds out first. Doc-test runs your quickstart in a clean container and proves the fix. Doc-audit finds the pages your code left behind.">
@@ -129,40 +130,31 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .hint .hb:hover{background:none;text-decoration-thickness:2px}
 /* the scene layers */
 /* the backdrop: a dark room lit by the scene. A cool halo stands behind the prism, the spectrum
-   bleeds color onto the wall where it lands, the failures glow warm on the left, and a hairline
-   floor recedes under the prism. Soft light only, no stars. prism.js sets the --p* anchors;
+   bleeds a little color onto the wall where it lands, and the failures glow warm on the left.
+   Soft light only, no grid, no stars. prism.js sets the --p* anchors;
    the defaults place the light for the no-JS still. Motion is transform and opacity only. */
 .st-sky{--pcx:50vw;--pcy:calc(min(100svh,980px)*.74);--pfx:77vw;--pby:calc(min(100svh,980px)*.86);position:absolute;inset:0;z-index:0;pointer-events:none}
 /* placed with translate, so moving an anchor never counts as a layout shift */
 .st-sky i{position:absolute;left:0;top:0;display:block;pointer-events:none}
-.st-sky .halo{translate:calc(var(--pcx) - 560px) calc(var(--pcy) - 430px);width:1120px;height:860px;background:radial-gradient(closest-side,oklch(40% .13 272/.55),oklch(30% .1 276/.22) 50%,transparent);animation:bg-breathe 13s cubic-bezier(.45,0,.55,1) infinite alternate}
+.st-sky .halo{translate:calc(var(--pcx) - 560px) calc(var(--pcy) - 430px);width:1120px;height:860px;background:radial-gradient(closest-side,oklch(40% .13 272/.5),oklch(30% .1 276/.2) 50%,transparent)}
 .st-sky .bleed{translate:calc(var(--pfx) - 380px) calc(var(--pcy) - 390px);width:840px;height:780px;
- background:linear-gradient(180deg,transparent 6%,oklch(58% .15 245/.4) 24%,oklch(70% .14 75/.34) 50%,oklch(54% .19 298/.42) 76%,transparent 94%);
- -webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent);animation:bg-drift 17s cubic-bezier(.45,0,.55,1) infinite alternate}
-.st-sky .warm,.st-sky .warm-a{translate:-280px calc(var(--pcy) - 300px);width:780px;height:560px;animation:bg-sway 19s cubic-bezier(.45,0,.55,1) infinite alternate;transition:opacity .6s var(--ease)}
-.st-sky .warm{background:radial-gradient(closest-side,oklch(40% .13 30/.38),transparent)}
-.st-sky .warm-a{opacity:0;background:radial-gradient(closest-side,oklch(46% .11 72/.34),transparent)}
-.stage[data-mode=audit] .st-sky .warm{opacity:0}.stage[data-mode=audit] .st-sky .warm-a{opacity:1}
-.st-sky .floor{left:-60%;right:-60%;translate:0 calc(var(--pby) - 118px);height:720px;transform-origin:50% 0;transform:perspective(520px) rotateX(74deg);
- background-image:linear-gradient(oklch(85% .05 275/.17) 1px,transparent 1px),linear-gradient(90deg,oklch(85% .05 275/.17) 1px,transparent 1px);background-size:72px 72px;background-position:50% 0;
- -webkit-mask-image:radial-gradient(12% 80% at 50% 0,#000 15%,transparent);mask-image:radial-gradient(12% 80% at 50% 0,#000 15%,transparent)}
-.stage.live .st-sky .bleed{animation:bg-in 1.6s .9s var(--ease) both,bg-drift 17s 2.5s cubic-bezier(.45,0,.55,1) infinite alternate}
+ background:linear-gradient(180deg,transparent 6%,oklch(58% .15 245/.22) 24%,oklch(70% .14 75/.18) 50%,oklch(54% .19 298/.24) 76%,transparent 94%);
+ -webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent)}
+.st-sky .warm{translate:-280px calc(var(--pcy) - 300px);width:780px;height:560px;background:radial-gradient(closest-side,oklch(40% .13 30/.3),transparent);transition:background .6s var(--ease)}
+.stage[data-mode=audit] .st-sky .warm{background:radial-gradient(closest-side,oklch(46% .11 72/.28),transparent)}
+.stage.live .st-sky .bleed{animation:bg-in 1.6s .9s var(--ease) both}
 .stage.idle .st-sky i,.stage.paused .st-sky i{animation-play-state:paused}
-@keyframes bg-breathe{to{transform:scale(1.07)}}
-@keyframes bg-drift{to{transform:translate3d(-14px,22px,0) scale(1.05)}}
-@keyframes bg-sway{to{transform:translate3d(36px,-14px,0)}}
 @keyframes bg-in{from{opacity:0}}
 .st-scene{position:absolute;inset:0;z-index:1;pointer-events:none}
 .st-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 .st-svg{position:absolute;left:0;bottom:104px;width:100%;height:29%;display:none}
 html:not(.js) .st-svg{display:block}html:not(.js) .st-cv{display:none}
-.st-fx{position:absolute;inset:0;background:radial-gradient(125% 95% at 50% 42%,transparent 55%,oklch(6% .02 278/.6))}
-.st-fx:after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.st-fx{display:none}
 .st-in,.st-out{list-style:none;padding:0;margin:0}
 .st-in li{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity}
 .st-in li.off{display:none}
-.st-in span{display:inline-block;font:500 12.5px/1.2 var(--mono);color:oklch(85% .085 28);background:oklch(19% .04 25/.94);box-shadow:inset 0 0 0 1px oklch(70% .16 28/.34),0 0 26px -8px oklch(62% .2 28/.55);border-radius:99px;padding:8px 14px;white-space:nowrap;transition:color .4s,background-color .4s,box-shadow .4s}
-.stage[data-mode=audit] .st-in span{color:oklch(88% .1 78);background:oklch(20% .035 70/.94);box-shadow:inset 0 0 0 1px oklch(80% .14 78/.34),0 0 26px -8px oklch(76% .15 78/.5)}
+.st-in span{display:inline-block;font:500 12.5px/1.2 var(--mono);color:oklch(85% .085 28);background:oklch(19% .04 25/.94);box-shadow:inset 0 0 0 1px oklch(70% .16 28/.4);border-radius:99px;padding:8px 14px;white-space:nowrap;transition:color .4s,background-color .4s,box-shadow .4s}
+.stage[data-mode=audit] .st-in span{color:oklch(88% .1 78);background:oklch(20% .035 70/.94);box-shadow:inset 0 0 0 1px oklch(80% .14 78/.4)}
 /* the three angles on the right. Title first, one real number second, the rest on hover, focus or tap.
    prism.js places the column and lands one ray on each icon. */
 .st-out{position:absolute;z-index:2;left:0;top:0;width:300px;display:grid;gap:24px;text-align:left;text-shadow:0 1px 14px oklch(8% .02 278)}
@@ -171,10 +163,10 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
 .grp{position:relative}
 .gw{display:grid;grid-template-columns:28px minmax(0,1fr);gap:0 12px;transition:opacity .3s var(--ease)}
 .gi{width:28px;height:28px;margin-top:-3px;border-radius:9px;display:grid;place-items:center;color:var(--c);
- background:color-mix(in oklch,var(--c) 15%,oklch(16% .03 278));box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--c) 42%,transparent),0 0 20px -4px color-mix(in oklch,var(--c) 70%,transparent);transition:box-shadow .3s var(--ease)}
+ background:color-mix(in oklch,var(--c) 15%,oklch(16% .03 278));box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--c) 45%,transparent);transition:box-shadow .3s var(--ease)}
 .gi .ic{width:16px;height:16px}
-.gt{font-size:15.5px;font-weight:600;line-height:1.3;letter-spacing:-.015em;color:var(--s-ink);text-wrap:balance}
-.gn{margin-top:2px;font-size:13px;line-height:1.45;color:var(--s-mut)}
+.gt{font-size:19px;font-weight:600;line-height:1.25;letter-spacing:-.015em;color:var(--s-ink);text-wrap:balance}
+.gn{margin-top:3px;font-size:14.5px;line-height:1.45;color:var(--s-mut)}
 .gn em{font-style:normal;font-weight:600;color:var(--s-ink)}
 /* the reveal: rows open with grid-template-rows, so nothing animates height */
 .gm{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s var(--ease)}
@@ -187,7 +179,7 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
 .gl:after{content:"";position:absolute;inset:-10px -12px}
 .gl:focus-visible{outline:0}
 .grp:has(.gl:focus-visible){outline:2px solid var(--c);outline-offset:6px;border-radius:12px}
-.grp.hot .gi{box-shadow:inset 0 0 0 1px var(--c),0 0 26px -2px var(--c)}
+.grp.hot .gi{box-shadow:inset 0 0 0 1.5px var(--c)}
 /* one ray at a time: the open group stays lit and the others step back. The route buttons do the
    same: Test docs lights the run and the cost, Audit docs lights the ranked fixes. */
 .stage[data-focus] .grp:not(.hot) .gw,.stage[data-em=test]:not([data-focus]) .g2 .gw,.stage[data-em=audit]:not([data-focus]) .g0 .gw,.stage[data-em=audit]:not([data-focus]) .g1 .gw{opacity:.5}
@@ -206,9 +198,8 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
 .st-pz svg{width:14px;height:14px;fill:currentColor;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .st-pz[hidden]{display:none}.st-pz .pl{display:none}.stage.paused .st-pz .pa{display:none}.stage.paused .st-pz .pl{display:block}
 /* the hand-off: the light page rises as a curved horizon, rim-lit by the spectrum */
-.hz,.hz-glow{position:absolute;left:50%;width:max(240%,2600px);height:640px;border-radius:50%;transform:translateX(-50%);pointer-events:none}
-.hz{z-index:3;top:calc(100% - 62px);background:var(--bg);box-shadow:0 -1px 0 oklch(100% 0 0/.5),0 -10px 34px -8px oklch(86% .07 270/.55)}
-.hz-glow{z-index:2;top:calc(100% - 82px);filter:blur(22px);background:linear-gradient(90deg,transparent 30%,oklch(66% .15 256/.55) 40%,oklch(66% .17 300/.55) 47%,oklch(75% .16 30/.5) 54%,oklch(84% .15 80/.55) 60%,transparent 70%)}
+.hz{position:absolute;left:50%;width:max(240%,2600px);height:640px;border-radius:50%;transform:translateX(-50%);pointer-events:none}
+.hz{z-index:3;top:calc(100% - 62px);background:var(--bg);box-shadow:0 -1px 0 oklch(100% 0 0/.5),0 -8px 28px -10px oklch(86% .05 270/.4)}
 /* without the scene script: the prism drawing, and under it the three angles as three columns, open */
 @media(min-width:900px){
  .stage:not(.live) .st-in{display:none}
@@ -219,7 +210,7 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
  .stage:not(.live) .gm{grid-template-rows:1fr}.stage:not(.live) .gmi{opacity:1}
  .st-out.tight{gap:16px}.st-out.tight .gq .q1{box-shadow:inset 0 0 0 1px oklch(100% 0 0/.1)}}
 /* a narrow desktop gives the stage more floor, so the column of angles and its reveals fit */
-@media(min-width:900px) and (max-width:1199px){html.js .st-room{flex-basis:clamp(470px,54vh,520px)}.gt{font-size:15px}}
+@media(min-width:900px) and (max-width:1199px){html.js .st-room{flex-basis:clamp(470px,54vh,520px)}.gt{font-size:17px}.gn{font-size:14px}}
 /* below 900 px the scene stacks under the text: broken steps, then the prism, then the proof */
 @media(max-width:899px){
  .stage{min-height:0}
@@ -242,12 +233,13 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
  .cap input{flex:1 1 100%;padding:8px 10px}
  .routes{flex:1 1 100%}.rt{flex:1 1 0;padding:0 12px}
  .st-in span{font-size:11.5px;padding:6px 11px}
- .gt{font-size:15px}
+ .gt{font-size:17px}.gn{font-size:14px}
  .pop{grid-template-columns:minmax(0,1fr)}.pop-x{margin-top:14px}
- .hz{top:calc(100% - 46px)}.hz-glow{top:calc(100% - 64px)}}
+ .hz{top:calc(100% - 46px)}}
 
 /* generated prompt */
 #out{padding-top:28px}
+.you{font-size:16px;line-height:1.5;margin:0 0 14px 4px;max-width:46em}.you b{overflow-wrap:anywhere}
 .hit{padding:20px 22px;margin-bottom:16px}
 .hit[hidden],.fresh[hidden]{display:none}
 .hit-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;color:var(--mut);font-size:14px}
@@ -326,6 +318,37 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;
 .dots i:after{content:"";width:6px;height:3.5px;border:solid oklch(99.5% .003 150);border-width:0 0 1.8px 1.8px;transform:translateY(-1px) rotate(-45deg)}
 .src{text-align:center;margin-top:26px;color:var(--mut);font-size:15px}
 
+/* what you give it, what it does, what it cannot do yet */
+.io{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,40px);margin:clamp(36px,4.5vw,52px) auto 0;max-width:980px;text-align:left}
+.io-c{border-top:2px solid var(--edge);padding-top:16px}
+.io-c h3{font-size:18px;line-height:1.3;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.io-c h3 .ic{width:18px;height:18px;color:var(--cd)}
+.io-c.no{border-top-color:var(--line)}.io-c.no h3 .ic{color:var(--mut)}
+.io-c ul{list-style:none;padding:0;display:grid;gap:8px;font-size:15px;line-height:1.45;color:var(--ink)}
+.io-c li{padding-left:16px;position:relative}
+.io-c li:before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--c)}
+.io-c.no li:before{background:var(--line)}
+.io-c code{font-size:13.5px}
+.local{max-width:980px;margin:22px auto 0;padding:14px 18px;border-radius:14px;background:var(--panel);border:1px solid var(--edge);font-size:15px;line-height:1.5;display:flex;gap:12px;align-items:flex-start}
+.local .ic{color:var(--cd);margin-top:2px}
+/* the plan FirstRun made from the dbt page, one row per command */
+.plan{max-width:760px;margin:clamp(40px,5vw,56px) auto 0;padding:0;overflow:hidden}
+.plan-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.plan-h h3{font-size:18px}
+.plan-h p{font-size:14px;color:var(--mut)}
+.plan ol{list-style:none;padding:6px 0;margin:0}
+.plan li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:7px 20px;font-size:14px}
+.plan li+li{border-top:1px solid var(--line)}
+.plan .n{font:600 13px/1 var(--mono);color:var(--mut);text-align:right}
+.plan code{font-size:13.5px;overflow-wrap:anywhere;color:var(--ink)}
+.plan .why{display:block;font-size:13px;color:var(--mut);margin-top:3px}
+.tg{font:600 12.5px/1 Geist,sans-serif;padding:5px 9px;border-radius:999px;white-space:nowrap;background:var(--ok-bg);color:var(--ok-d)}
+.tg.fx{background:var(--test-bg);color:var(--test-d)}
+.tg.sk{background:var(--sunk);color:var(--mut);border:1px dashed var(--line)}
+.plan-f{padding:14px 20px;border-top:1px solid var(--line);background:var(--ok-bg);color:var(--ok-d);font-weight:600;font-size:15px}
+@media(max-width:900px){.io{grid-template-columns:minmax(0,1fr);max-width:520px}}
+@media(max-width:560px){.plan li{grid-template-columns:22px minmax(0,1fr);row-gap:6px}.plan li .tg{grid-column:2;justify-self:start}}
+
 /* the number line: plain sentences with the numbers set large */
 .tally{display:flex;flex-wrap:wrap;justify-content:center;gap:12px clamp(28px,5vw,64px);margin-top:clamp(56px,7vw,88px);text-align:center}
 .tally p{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:16px;color:var(--mut)}
@@ -347,7 +370,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;
 .pr-b{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
 .pr-top{display:flex;align-items:center;gap:8px;min-width:0}
 .repo{font:500 12.5px/1.2 var(--mono);color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.st{margin-left:auto;font-weight:600;font-size:12px;border-radius:99px;padding:2px 9px 2px 8px;background:var(--ok-bg);color:var(--ok-d);display:inline-flex;align-items:center;gap:5px;flex:none;text-transform:capitalize}
+.st{margin-left:auto;font-weight:600;font-size:12.5px;border-radius:99px;padding:2px 9px 2px 8px;background:var(--ok-bg);color:var(--ok-d);display:inline-flex;align-items:center;gap:5px;flex:none;text-transform:capitalize}
 .st:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .st.merged{background:var(--audit-bg);color:var(--audit-d)}
 .st.closed{background:var(--sunk);color:var(--mut)}
@@ -364,7 +387,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;
 .count{font:500 14px var(--mono);color:var(--mut);min-width:6.5em;text-align:center}
 .empty{text-align:center;color:var(--mut);padding:28px 0}
 /* the kind of each upstream item, so an issue never reads as a PR */
-.kd{flex:none;font-weight:600;font-size:12px;line-height:1;border-radius:7px;padding:5px 8px;background:var(--test-bg);color:var(--test-d)}
+.kd{flex:none;font-weight:600;font-size:12.5px;line-height:1;border-radius:7px;padding:5px 8px;background:var(--test-bg);color:var(--test-d)}
 .kd.k-issue{background:var(--gold-bg);color:var(--gold-d)}
 .kd.k-discussion{background:var(--audit-bg);color:var(--audit-d)}
 .kd.k-comment{background:var(--ok-bg);color:var(--ok-d)}
@@ -394,7 +417,7 @@ h2:has(>.fr){max-width:18.2em}
 .fd:hover{background:var(--hover)}
 .fd:hover b{color:var(--cd);text-decoration:underline;text-underline-offset:3px}
 .fd:focus-visible{outline-offset:-3px;border-radius:0}
-.fk{justify-self:start;font-weight:600;font-size:12px;line-height:1;border-radius:7px;padding:6px 9px;white-space:nowrap}
+.fk{justify-self:start;font-weight:600;font-size:12.5px;line-height:1;border-radius:7px;padding:6px 9px;white-space:nowrap}
 .fk.k-st{background:var(--bad-bg);color:var(--bad)}
 .fk.k-nd{background:var(--audit-bg);color:var(--audit-d)}
 .fm{display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -414,9 +437,9 @@ h2:has(>.fr){max-width:18.2em}
 .tline{display:flex;align-items:center;gap:3px;margin:6px 0 2px}
 .tline .pg{width:14px;height:14px;border-radius:50%;background:var(--audit);flex:none;margin-right:6px}
 .tline i{flex:1;height:16px;border-radius:2px;background:oklch(80% .08 295);min-width:2px}
-.tkey{display:flex;justify-content:space-between;font:500 12px Geist,sans-serif;color:var(--mut)}
+.tkey{display:flex;justify-content:space-between;font:500 12.5px Geist,sans-serif;color:var(--mut)}
 .cm{font-size:12.5px;color:var(--ink);padding:4px 0;border-top:1px solid var(--line)}
-.cm small{display:block;color:var(--mut);font-family:Geist,sans-serif;font-size:12px}
+.cm small{display:block;color:var(--mut);font-family:Geist,sans-serif;font-size:12.5px}
 .found{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
 .found div{display:flex;align-items:baseline;gap:10px;font-family:Geist,sans-serif;font-size:15px;color:var(--mut)}
 .found b{font-size:36px;line-height:1;letter-spacing:-.04em;color:var(--audit-d);min-width:1.6em;text-align:right}
@@ -439,7 +462,7 @@ h2:has(>.fr){max-width:18.2em}
 .tmh-say b{color:var(--ink);font-weight:650}
 .tmh-say .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--pc);margin:0 6px 1px 1px;vertical-align:middle}
 .tmh-map{display:grid;grid-template-columns:minmax(196px,29%) minmax(110px,1fr) minmax(160px,26%);margin-top:12px}
-.tmh-hd{font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);padding:0 0 9px 8px;border-bottom:1px solid var(--line2);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmh-hd{font-size:var(--t-meta);font-weight:600;color:var(--mut);padding:0 0 9px 8px;border-bottom:1px solid var(--line2);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tmh-hd.r{padding-left:12px}
 .tmh-col{display:flex;flex-direction:column;min-width:0}
 .tmh-sv{position:relative;min-width:0}
@@ -450,12 +473,12 @@ h2:has(>.fr){max-width:18.2em}
 .tmh-p:hover,.tmh-a:hover{background:var(--hover)}
 .tmh-p[aria-pressed=true],.tmh-a[aria-pressed=true]{background:var(--tc,var(--audit-bg));box-shadow:inset 0 0 0 1.5px var(--pc,var(--audit))}
 .tmh-p .nm,.tmh-a .nm{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.25;overflow:hidden;text-overflow:ellipsis}
-.tmh-p .sb{display:block;font-size:12px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
-.tmh-a .pth{display:block;font:11px/1.3 var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left}
+.tmh-p .sb{display:block;font-size:12.5px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.tmh-a .pth{display:block;font:12.5px/1.3 var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left}
 .tmh-a .pth bdi{direction:ltr;unicode-bidi:isolate}
-.tmh-p .pk{white-space:nowrap;font-size:11px;font-weight:650;color:var(--cd);background:oklch(95% .03 284);border-radius:99px;padding:2px 7px;font-variant-numeric:tabular-nums}
+.tmh-p .pk{white-space:nowrap;font-size:12.5px;font-weight:650;color:var(--cd);background:oklch(95% .03 284);border-radius:99px;padding:2px 7px;font-variant-numeric:tabular-nums}
 .tmh-o{cursor:default}.tmh-o:hover{background:none}
-.tmh-ev{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1.5px dashed oklch(76% .01 255);font-size:11px;font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
+.tmh-ev{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1.5px dashed oklch(76% .01 255);font-size:12.5px;font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
 /* one person, one area or one task lights up; the rest steps back */
 .tmh-card.f .tmh-p:not(.hi),.tmh-card.f .tmh-a:not(.hi),.tmh-card.f .tmh-ar:not(.hi){opacity:.4}
 #team .rb{fill-opacity:.3;mix-blend-mode:multiply;transition:fill-opacity .25s var(--ease)}
@@ -481,13 +504,13 @@ h2:has(>.fr){max-width:18.2em}
 .tmh-ar:hover{background:var(--hover)}
 .tmh-ar[aria-pressed=true]{background:var(--audit-bg);box-shadow:inset 0 0 0 1.5px var(--audit)}
 .tmh-ar .nm{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tmh-ar .pth{display:block;font:11px/1.3 var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tmh-ar .pth{display:block;font:12.5px/1.3 var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tmh-sbar{grid-column:1/-1;display:flex;height:10px;border-radius:99px;overflow:hidden;gap:2px;background:var(--line2)}
 .tmh-sbar i{display:block;height:100%;background:var(--pc);transition:opacity .18s var(--ease)}
 .tmh-card.f .tmh-sbar i:not(.hi){opacity:.2}
 .tmh-ows{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px}
 .tmh-ows span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:oklch(36% .012 255);font-variant-numeric:tabular-nums}
-.tmh-bdg{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:99px;font-size:11.5px;font-weight:650;white-space:nowrap;background:var(--sunk);color:var(--mut)}
+.tmh-bdg{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:99px;font-size:12.5px;font-weight:650;white-space:nowrap;background:var(--sunk);color:var(--mut)}
 .tmh-bdg.warn{background:var(--gold-bg);color:var(--gold-d)}
 .tmh-more{display:none}
 .tmh-list~.tmh-more{margin:6px auto 2px;min-height:38px;font-size:14px;background:var(--panel);color:var(--ink);border-color:var(--line)}
@@ -531,14 +554,14 @@ mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,conic-gradien
 .r-h{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1.5px dashed var(--line)}
 .r-h svg{width:28px;height:28px}
 .r-h b{font-size:16px;letter-spacing:-.02em}
-.r-h span{margin-left:auto;font:500 12px var(--mono);color:var(--mut)}
+.r-h span{margin-left:auto;font:500 12.5px var(--mono);color:var(--mut)}
 .r-meta{padding:12px 0;color:var(--mut);font-size:13px;line-height:1.6;border-bottom:1.5px dashed var(--line)}
 .r-meta b{color:var(--ink);font-weight:500}
 .r-row{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;padding:12px 0;border-bottom:1.5px dashed var(--line)}
 .r-row:last-of-type{border-bottom:0}
 .r-row span{min-width:0}
 .r-row strong{font:600 15px var(--mono);font-variant-numeric:tabular-nums}
-.mk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:600 12px/1 var(--mono);background:var(--gold);color:oklch(22% .03 70)}
+.mk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:600 12.5px/1 var(--mono);background:var(--gold);color:oklch(22% .03 70)}
 .bar{grid-column:2/4;height:7px;border-radius:99px;background:var(--gold-bg);overflow:hidden;margin-top:-2px}
 .bar i{display:block;height:100%;width:96.4%;border-radius:99px;background:var(--gold)}
 .r-sub{grid-column:2/4;font-size:12.5px;color:var(--mut);margin-top:-4px}
@@ -570,7 +593,7 @@ mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,conic-gradien
 .vc.big .vt{padding:20px 24px 22px;gap:6px}
 .vc.big .vt h3{font-size:clamp(19px,2vw,23px)}
 .vt p{color:var(--mut);font-size:14px;max-width:44em}
-.vt .k{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.vt .k{font:600 var(--t-meta)/1 var(--mono);color:var(--mut)}
 
 /* tools: a calm graphite band. Three tabs, one per tool. Each tab shows a big screenshot and three numbered proofs. */
 .b-tools{--tint:oklch(96.6% .005 255);--glow:oklch(99.2% .002 255/.9);--dot:oklch(35% .012 255/.10);--edge:oklch(90.8% .007 255);--c:var(--ink);--cd:var(--ink);--link:var(--test-d)}
@@ -714,14 +737,14 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <script src="assets/prism.js" defer></script>
 <main>
 <section id="hero" class="stage" data-nav="dark" data-mode="test" aria-labelledby="hero-h">
-<div class="st-sky" id="stSky" aria-hidden="true"><i class="halo"></i><i class="warm"></i><i class="warm-a"></i><i class="bleed"></i><i class="floor"></i></div>
+<div class="st-sky" id="stSky" aria-hidden="true"><i class="halo"></i><i class="warm"></i><i class="bleed"></i></div>
 <div class="st-c" id="stC">
 <h1 id="hero-h">Find the Broken Step Before Your Users Do</h1>
-<p class="sub"><span>Test your docs in a clean container.</span> <span>See what every run costs.</span> <span>Give each fix to whoever knows the code.</span></p>
+<p class="sub"><span>For teams that own a docs quickstart.</span> <span>FirstRun runs every command, not only the links,</span> <span>and proves each fix in a fresh container.</span></p>
 <form class="cap" id="f" action="doc-test/" autocomplete="off">
 <label class="sr" for="u">Docs URL, GitHub repo, or the name of a tool</label>
 <input id="u" type="text" inputmode="url" spellcheck="false" placeholder="Paste your docs URL or repo" aria-describedby="uHelp">
-<p class="sr" id="uHelp">A partial URL works. So does a tool name. Nothing leaves your browser.</p>
+<p class="sr" id="uHelp">Paste a docs URL. A partial URL or a tool name also works, and your agent finds the page. Nothing leaves your browser.</p>
 <div class="routes">
 <a class="rt rt-test" id="goT" href="doc-test/" aria-describedby="popT-s"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg>Test docs</a>
 <a class="rt rt-audit" id="goA" href="doc-audit/" aria-describedby="popA-s"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg>Audit docs</a>
@@ -749,7 +772,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <button type="button" data-u="https://docs.getdbt.com/guides/duckdb">dbt + DuckDB</button>
 <button type="button" data-u="https://docs.dagster.io/getting-started/quickstart">Dagster</button>
 <button type="button" data-u="https://www.mkdocs.org/getting-started/">MkDocs</button></div>
-<p class="hint" id="hint" aria-live="polite" data-d="A partial URL works. So does a tool name. Nothing leaves your browser."></p>
+<p class="hint" id="hint" aria-live="polite" data-d="Paste a docs URL. A partial URL or a tool name also works, and your agent finds the page. Nothing leaves your browser."></p>
 </div>
 <div class="st-room"></div>
 <div class="st-scene" id="stScene" aria-hidden="true">
@@ -772,9 +795,9 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <span class="gi" aria-hidden="true"><svg class="ic"><use href="#i-box"/></svg></span>
 <div class="gb">
 <p class="gt">Proven in a clean container</p>
-<p class="gn">dbt guide: step 10 fixed, <em>9 of 9</em> steps pass</p>
+<p class="gn">dbt guide: 3 steps fixed, <em>9 of 9</em> pass</p>
 <div class="gm"><div class="gmi">
-<p class="gd">It broke on <code>jafgen --years 6</code>. A second clean container ran the fixed page.</p>
+<p class="gd">Two were docs bugs: <code>jafgen --years 6</code> at step 10, and a guide that never says it needs Python 3.12. Step 1 only needed git. The rerun made no model calls.</p>
 <a class="gl" href="#steps">See the run in Doc-test</a>
 </div></div>
 </div></div></li>
@@ -809,11 +832,12 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <p>How Doc-audit works, on dbt-labs/dbt-core. The project flags page was last edited 453 days ago, with 29 code changes since. The infer-configs page is 709 days old. 15 of 1,405 pages are stale. 72 shipped features have no docs. AccuKnox/help has 87 stale pages, and its oldest page is 1,100 days old.</p>
 </div>
 <button type="button" class="st-pz" id="stPause" aria-pressed="false" aria-label="Pause the animation" hidden><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button>
-<div class="hz-glow" aria-hidden="true"></div><div class="hz" aria-hidden="true"></div>
+<div class="hz" aria-hidden="true"></div>
 </section>
 
 <section id="out" hidden>
 <div class="wrap">
+<p class="you" id="you" aria-live="polite"></p>
 <div class="hit card" id="hit" hidden>
 <div class="hit-top"><span class="pill" id="hit-p">Verified</span><span id="hit-m"></span></div>
 <h3 id="hit-t"></h3>
@@ -838,7 +862,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <li class="card"><svg class="ic" aria-hidden="true"><use href="#i-pr"/></svg>Opens the PR after your yes</li>
 </ol>
 <div class="cli mono card"><span class="p">$ </span>pip install git+https://github.com/HighnessAtharva/firstrun
-<span class="p">$ </span>firstrun https://docs.getdbt.com/guides/duckdb
+<span class="p">$ </span>firstrun <span id="cliU">https://docs.getdbt.com/guides/duckdb</span>
 <span class="p">$ </span>firstrun audit owner/repo   <span class="c"># Doc-audit from the terminal</span></div>
 </div>
 </section>
@@ -856,6 +880,21 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <div class="wrap">
 <p class="eyebrow"><span class="tile"><svg class="ic" aria-hidden="true"><use href="#i-term"/></svg></span>Doc-test</p>
 <h2 id="test-h"><span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Runs Your Quickstart Like a Brand-New User</h2>
+<div class="io" aria-label="What FirstRun takes, what it does, and what it cannot do yet">
+<div class="io-c"><h3><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg>You give it</h3><ul>
+<li>A public docs URL, like <code>docs.getdbt.com/guides/duckdb</code></li>
+<li>A tool name. Your coding agent finds its quickstart page.</li>
+<li>A GitHub repo, for Doc-audit</li></ul></div>
+<div class="io-c"><h3><svg class="ic" aria-hidden="true"><use href="#i-term"/></svg>It plans, runs and proves</h3><ul>
+<li>One model call turns the page into at most 10 steps, one command each.</li>
+<li>Each step runs in a clean Docker container.</li>
+<li>A broken step gets a fix. A fresh container reruns every step with no model calls.</li></ul></div>
+<div class="io-c no"><h3><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Not yet</h3><ul>
+<li>Pages behind a login</li>
+<li>API specs and bug reports as input</li>
+<li>Long-running servers. It skips them and says why, like <code>dbt docs serve</code> below.</li></ul></div>
+</div>
+<p class="local"><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg><span>Every step runs on your machine. Only the docs page and the output of a failed step go to the model. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/docs/known-limits.md">Read the known limits</a></span></p>
 <ol class="beats" aria-label="A real Doc-test run on the dbt and DuckDB quickstart">
 <li class="beat">
 <p class="bl"><span class="bn">1</span>A step breaks</p>
@@ -873,6 +912,22 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <div class="win-b"><div class="pass"><span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><b>9 of 9 steps passed</b></div></div></div>
 </li>
 </ol>
+<div class="plan card">
+<div class="plan-h"><h3>The Plan FirstRun Made From the dbt Page</h3><p>10 steps, one command each</p></div>
+<ol aria-label="The 10 steps of the dbt run">
+<li><span class="n">1</span><span><code>git clone https://github.com/dbt-labs/jaffle_shop_duckdb.git</code><span class="why">The container had no git, so FirstRun installs it first.</span></span><span class="tg fx">Fixed</span></li>
+<li><span class="n">2</span><span><code>cd jaffle_shop_duckdb</code></span><span class="tg">Passed</span></li>
+<li><span class="n">3</span><span><code>pip install -r requirements.txt</code><span class="why">A docs bug. The guide never says it needs Python 3.12, which networkx 3.7 needs. The fix pins 3.6.1.</span></span><span class="tg fx">Fixed</span></li>
+<li><span class="n">4</span><span><code>dbt seed</code></span><span class="tg">Passed</span></li>
+<li><span class="n">5</span><span><code>dbt build</code></span><span class="tg">Passed</span></li>
+<li><span class="n">6</span><span><code>dbt docs generate</code></span><span class="tg">Passed</span></li>
+<li><span class="n">7</span><span><code>dbt docs serve</code><span class="why">It starts a web server, which a headless container cannot check.</span></span><span class="tg sk">Skipped</span></li>
+<li><span class="n">8</span><span><code>ls -lah *.duckdb</code></span><span class="tg">Passed</span></li>
+<li><span class="n">9</span><span><code>python -m pip install jafgen</code></span><span class="tg">Passed</span></li>
+<li><span class="n">10</span><span><code>jafgen --years 6</code><span class="why">A docs bug. The tool now takes <code>jafgen 6</code>.</span></span><span class="tg fx">Fixed</span></li>
+</ol>
+<p class="plan-f">Fresh container: 9 of 9 runnable steps passed, with no model calls.</p>
+</div>
 <p class="src">A real run on the dbt + DuckDB quickstart. <a href="doc-test/?s=10#ex=dbt">Replay this run</a></p>
 
 <div class="impact" id="proof" role="region" aria-labelledby="impact-h">
@@ -943,7 +998,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <p class="tmh-top"><img src="https://github.com/AltimateAI.png?size=48" alt="" width="24" height="24" loading="lazy" decoding="async"><b>AltimateAI/altimate-code</b><span>14 people, 619 commits in 12 months</span></p>
 <p class="tmh-say" id="tmh-say" aria-live="polite"></p>
 <div class="tmh-map" id="tmh-map">
-<p class="tmh-hd">People<span> &middot; share of their work</span></p><p class="tmh-hd" aria-hidden="true"></p><p class="tmh-hd r">Code<span> &middot; share of each part</span></p>
+<p class="tmh-hd">People</p><p class="tmh-hd" aria-hidden="true"></p><p class="tmh-hd r">Code<span> &middot; share of each part</span></p>
 <div class="tmh-col" id="tmh-ppl" role="group" aria-label="People"></div>
 <div class="tmh-sv" id="tmh-sv"></div>
 <div class="tmh-col" id="tmh-ars" role="group" aria-label="Parts of the code"></div>
@@ -989,7 +1044,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <div class="vids">
 <article class="vc big card">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" data-yt="JJNWWhSV9pc" aria-label="Play the Doc-test demo, 2 minutes 59 seconds"><img src="assets/vid-doctest.webp" alt="Doc-test thumbnail: step 10 of a quickstart fails with no such option --years, then the fix passes 9 of 9 steps" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:59</span></a></div>
-<div class="vt"><p class="k">Doc-test &middot; 2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3><p>A clean container runs the dbt guide, hits the step that breaks, fixes the page and passes a second run.</p></div>
+<div class="vt"><p class="k">2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3><p>A clean container runs the dbt guide, hits the step that breaks, fixes the page and passes a second run.</p></div>
 </article>
 <article class="vc card">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8" data-yt="jKL8Ocb0Ki8" aria-label="Play the teaser, 36 seconds"><img src="assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails because jafgen rejects the --years flag" width="800" height="450" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">0:36</span></a></div>
@@ -1015,12 +1070,12 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 
 <div class="tp rv" id="tools-neatlogs" role="tabpanel" aria-labelledby="tab-neatlogs">
 <p class="ph"><img src="assets/logo-neatlogs.webp" alt="" width="40" height="40">neatlogs</p>
-<p class="role"><a href="https://neatlogs.com">neatlogs</a> traces every run, so a failed step comes with its cause.</p>
+<p class="role"><a href="https://neatlogs.com">neatlogs</a> traces every run, so a failed step comes with its cause. On the same 4 quickstarts, agent v2 finished 3 where v1 finished 2, and the mean cost fell from $0.0262 to $0.0200. <a href="judges/#agent">See v1 against v2</a></p>
 <div class="show"><ol class="evs">
 <li class="ev"><figure><a class="shot" href="assets/t-neatlogs-investigate.webp" target="_blank" rel="noopener"><img src="assets/e-nl-investigate.webp" alt="neatlogs incident: 25 Execution Failed detections against a baseline of 0.5, a 52.8x spike, investigated with a root cause at 66% confidence" width="870" height="484" loading="lazy" decoding="async"></a>
 <figcaption><p class="cap"><span class="n" aria-hidden="true">1</span><span>Investigate traced a 52.8x spike in failed steps to one root cause.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">Read the neatlogs evidence</a></figcaption></figure></li>
 <li class="ev"><figure><a class="shot" href="assets/t-neatlogs-recovery.webp" target="_blank" rel="noopener"><img src="assets/e-nl-recovery.webp" alt="neatlogs trace of a FirstRun run: step 3 fails, the recover.3 agent span classifies the failure and retries, and step 3 runs again" width="900" height="500" loading="lazy" decoding="async"></a>
-<figcaption><p class="cap"><span class="n" aria-hidden="true">2</span><span>Every recovery is a span. Step 3 failed twice, and recover.3 retried it.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Read a full recovered trace</a></figcaption></figure></li>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">2</span><span>Every recovery is a span. In this Dagster run, step 3 failed twice and recover.3 retried it.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Read another recovered run in full</a></figcaption></figure></li>
 <li class="ev"><figure><a class="shot" href="assets/t-neatlogs-bisect.webp" target="_blank" rel="noopener"><img src="assets/e-nl-bisect.webp" alt="neatlogs trace of a Docs Bisect run: 5 probes across jafgen releases, last good 0.3.1, first bad 0.4.6" width="990" height="550" loading="lazy" decoding="async"></a>
 <figcaption><p class="cap"><span class="n" aria-hidden="true">3</span><span>A Bisect trace tested 5 jafgen releases and found the first bad one, 0.4.6.</span></p><a class="src2" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">Read the finding on dbt PR #10149</a></figcaption></figure></li>
 </ol></div>
@@ -1031,7 +1086,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <p class="role"><a href="https://entire.io">Entire</a> records the session behind each commit and reviews code before it merges.</p>
 <div class="show"><ol class="evs">
 <li class="ev"><figure><a class="shot pad" href="assets/t-entire-checkpoint.webp" target="_blank" rel="noopener"><img src="assets/e-en-checkpoint.webp" alt="GitHub commit 3a0dcad whose message ends with an Entire-Checkpoint ID" width="650" height="214" loading="lazy" decoding="async"></a>
-<figcaption><p class="cap"><span class="n" aria-hidden="true">1</span><span>74 commits each link to the Entire session that wrote them.</span></p><a class="src2" href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open a commit's session on Entire</a></figcaption></figure></li>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">1</span><span>91 of 132 commits link to the Entire session that wrote them.</span></p><a class="src2" href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open a commit's session on Entire</a></figcaption></figure></li>
 <li class="ev"><figure><a class="shot dk" href="assets/t-entire-gate.webp" target="_blank" rel="noopener"><img src="assets/e-en-gate.webp" alt="Entire Trail 3 for Layer 1: merge blocked, no approvals and 1 unresolved high finding" width="660" height="366" loading="lazy" decoding="async"></a>
 <figcaption><p class="cap"><span class="n" aria-hidden="true">2</span><span>Trail 3 blocked the merge while 1 high finding stayed open.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">Read the Entire evidence</a></figcaption></figure></li>
 <li class="ev"><figure><a class="shot dk" href="assets/t-entire-findings.webp" target="_blank" rel="noopener"><img src="assets/e-en-findings.webp" alt="Entire Trail Review findings: a high finding in recovery.py, a retry loop on a missing secret, and a medium finding in config.py, a Docker default that only works on the author's machine" width="806" height="530" loading="lazy" decoding="async"></a>
@@ -1069,7 +1124,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <section id="compare" aria-labelledby="cmp-h">
 <div class="wrap">
 <h2 id="cmp-h">Compare <span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> With Claude Code, GitHub Actions and GitHub Agents</h2>
-<p class="edge">FirstRun does one job: it runs the quickstart, fixes the docs, proves the fix and opens the PR.</p>
+<p class="edge">FirstRun does one job: it runs the quickstart, fixes the docs, proves the fix and opens the PR. A link checker or a docs linter only reads the page.</p>
 <div class="lgd3" aria-label="Legend"><span><svg class="mk2 y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg> Yes</span><span><svg class="mk2 p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg> Partly or with setup</span><span><svg class="mk2 n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg> No</span></div>
 <div class="cmp"><div class="cmp-s"><table>
 <thead><tr><th scope="col">Feature</th><th scope="col" class="me"><svg class="ci" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><span>FirstRun</span></th><th scope="col">Claude Code</th><th scope="col">GitHub Actions</th><th scope="col">GitHub Agents</th><th scope="col">Custom workflow</th></tr></thead>
@@ -1078,7 +1133,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <tr><th scope="row">Plans steps from a docs URL</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Writes one step per command on the page</span></span></td><td><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>When you prompt it with the page</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>You write each step</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>Starts from an issue or task, not a docs page</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>You write the parser</span></span></td></tr>
 <tr><th scope="row">Tries again when a step fails</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Finds the cause, patches, retries up to 3 times per step</span></span></td><td><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Iterates inside one session</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>The job fails and stops</span></span></td><td><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Iterates and pushes commits to its draft PR</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only what you code</span></span></td></tr>
 <tr><th scope="row">Proves the fix</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>A second clean container must pass the whole quickstart</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only if you ask for it</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only if you script a second run</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Your repo's own tests, not a clean-user rerun</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only if you code it</span></span></td></tr>
-<tr><th scope="row">Shows the cost of each run</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>neatlogs traces every run. A run costs about $0.02</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Cost and token metrics, after you set them up</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Logs and run history, no agent traces</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>A session log, with no cost trace you own</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>You build it</span></span></td></tr>
+<tr><th scope="row">Shows the cost of each run</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>neatlogs traces every run. The mean run costs $0.018</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Cost and token metrics, after you set them up</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Logs and run history, no agent traces</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>A session log, with no cost trace you own</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>You build it</span></span></td></tr>
 <tr><th scope="row">Opens the docs PR</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>After you approve once</span></span></td><td><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>When you ask</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only if you script it</span></span></td><td><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Opens a draft PR and asks you for review</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Only if you code it</span></span></td></tr>
 <tr><th scope="row">Easy to start</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Paste a docs URL, then paste the prompt into your coding agent</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>One prompt, but you define the test and the clean setup</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>A YAML file per quickstart</span></span></td><td><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>Assign an issue to Copilot</span></span></td><td><span class="cell"><svg class="mk2 n" viewBox="0 0 24 24" aria-label="No"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg><span>Highest effort</span></span></td></tr>
 <tr><th scope="row">Proof in public repos</th><td class="me"><span class="cell"><svg class="mk2 y" viewBox="0 0 24 24" aria-label="Yes"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg><span>4 upstream docs PRs, all open</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Not specific to docs</span></span></td><td><span class="cell"><svg class="mk2 p" viewBox="0 0 24 24" aria-label="Partly"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg><span>Depends on your build</span></span></td></tr>
@@ -1132,7 +1187,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 </main>
 <footer class="sf"><div class="sf-in">
 <div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
-<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Cost caps</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="/known-limits.md">Known limits</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
 <p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
 </div></footer>
 <script>
@@ -1225,7 +1280,13 @@ function show(){
  if(!r){$("u").focus();return}
  txt=build(r);
  Promise.race([ready,new Promise(function(ok){setTimeout(ok,500)})]).then(function(){
-  paintHit(lookup(raw));
+  var hit=lookup(raw);
+  paintHit(hit);
+  var y=$("you");y.textContent="";
+  y.appendChild(document.createTextNode("You pasted "));
+  var b=document.createElement("b");b.textContent=clean(raw).slice(0,120);y.appendChild(b);
+  y.appendChild(document.createTextNode(hit?". A saved run matches it, so watch the replay below. To run it fresh, copy the prompt into your coding agent. FirstRun runs on your machine, not on this site.":". FirstRun runs on your machine, not on this site. Copy this prompt into your coding agent, and it installs FirstRun and runs the page."));
+  if(r.url&&r.url!=="<URL>")$("cliU").textContent=r.url;
   $("out").hidden=false;
   render();
   $("out").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
@@ -1267,6 +1328,8 @@ function route(kind){
  }
  if(!s){$("u").focus();return}
  if(r&&!r.deep)return say(["That looks like a GitHub repo. ",["Audit "+r.repo,function(){toAudit(r.repo)},1]," or ",["test its README",function(){show()}],"."]);
+ var n=norm(s);
+ if(n&&n.q&&!lookup(s)&&(/[^\w .+#-]/.test(s)||s.split(/\s+/).length>3))return say(["That is not a docs URL or a tool name. Paste a docs link, or try ",["dbt + DuckDB",function(){$("u").value="https://docs.getdbt.com/guides/duckdb";hintNow();show()}],"."]);
  show();
 }
 $("f").addEventListener("submit",function(e){e.preventDefault();route("test")});
