@@ -281,6 +281,10 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;
 .ctl{position:absolute;right:max(20px,8%);bottom:9%;display:flex;gap:8px}
 .ctl button{min-height:36px;padding:0 16px;font-size:13px;color:var(--ink);background:oklch(99.7% .0015 255/.92);border:1px solid var(--line);box-shadow:var(--lift)}
 .ctl button:hover{background:var(--panel)}
+.credit{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;max-width:1680px;margin:clamp(12px,1.6vw,20px) auto 0;padding:0 16px;font-size:14px;line-height:1.4;color:var(--mut);text-align:center}
+.credit-me{display:inline-flex;align-items:center;gap:8px;font-weight:550}
+.credit img{width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:top;flex:none;box-shadow:0 0 0 1px var(--line)}
+@media (max-width:520px){.credit-dot{display:none}.credit-for{flex-basis:100%}}
 
 /* bands: one full-bleed color world per tool, so a new reader always knows which tool this is.
    A soft glow from the top edge plus a quiet dot field, masked so it fades out. */
@@ -799,6 +803,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <video id="reel" muted loop playsinline preload="metadata" poster="assets/launch-poster.jpg" aria-label="FirstRun launch film, 44 seconds, plays silently on a loop"><source src="assets/firstrun-launch.mp4" type="video/mp4"></video>
 <div class="ctl"><button type="button" id="pp">Pause</button><button type="button" id="mu">Sound on</button></div>
 </div>
+<p class="credit"><a class="credit-me" href="#about"><img src="assets/atharva.webp" alt="Portrait of Atharva Shah" width="30" height="30" loading="lazy" decoding="async">Atharva Shah</a><span class="credit-dot" aria-hidden="true">&middot;</span><span class="credit-for">Built for <a href="https://neatlogs.com/hackathon" target="_blank" rel="noopener">neatHack</a>, the neatlogs hackathon</span></p>
 </section>
 
 <!-- DOC-TEST: blue world -->
