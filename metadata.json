@@ -3,8 +3,13 @@
   "checkpoint_id": "01M4NM595AM8KJ27EDET64Q36E",
   "strategy": "manual-commit",
   "branch": "docs/final-alignment",
-  "checkpoints_count": 8,
-  "files_touched": null,
+  "checkpoints_count": 9,
+  "files_touched": [
+    "README.md",
+    "docs/judges/index.html",
+    "evidence/README.md",
+    "evidence/entire.md"
+  ],
   "sessions": [
     {
       "metadata": "/0/metadata.json",
@@ -26,6 +31,13 @@
       "compact_transcript": "/2/transcript.jsonl",
       "content_hash": "/2/content_hash.txt",
       "prompt": "/2/prompt.txt"
+    },
+    {
+      "metadata": "/3/metadata.json",
+      "transcript": "/3/full.jsonl",
+      "compact_transcript": "/3/transcript.jsonl",
+      "content_hash": "/3/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
