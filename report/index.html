@@ -105,10 +105,10 @@ footer{padding:36px 0 56px;color:var(--muted);font-size:13px}
 <div class="wrap">
 <header>
   <div class="mark">FirstRun<i></i></div>
-  <p class="pitch" id="built">Built 2026-10-10T15:27:29Z UTC from the run files at build time.</p>
+  <p class="pitch" id="built">Built 2026-10-11T05:23:13Z UTC from the run files at build time.</p>
   <h1>Docs that work (literally).</h1>
   <p class="pitch">FirstRun runs your quickstart in a clean container like a brand-new developer, finds the first step that breaks, and proves the fix with a second clean run.</p>
-  <p class="summary"><b>48</b> quickstarts ran. <b class="ok">17</b> verified. <b class="bad">23</b> broke.</p>
+  <p class="summary"><b>68</b> quickstarts ran. <b class="ok">24</b> verified. <b class="bad">31</b> broke.</p>
 </header>
 
 <main>
@@ -2256,15 +2256,837 @@ No fix found.
 | 4 | skipped | 0 | - | - | `warehouse_test snowflake` |
 | 5 | skipped | 0 | - | - | `/agent analyst` |
 | 6 | skipped | 0 | - | - | `altimate --agent analyst` |</pre></div></details>
+<details class="run"><summary><div><div class="target">pip.pypa.io/en/stable/quickstart</div><div class="rid">20261010-172110-pip-pypa-io</div></div><span class="pill failed">failed</span><div class="meta"><span><b>0/0</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0000</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><p class="empty">No steps recorded: <span class="missing">missing</span></p><h3>Stop reason</h3><pre>no runnable steps</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: pip.pypa.io
+
+**Verdict:** fail (0/0 steps passed)
+
+- Run: `20261010-172110-pip-pypa-io`
+- Source: https://pip.pypa.io/en/stable/quickstart
+- Stop reason: no runnable steps
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.00 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|</pre></div></details>
+<details class="run"><summary><div><div class="target">Flask-SQLAlchemy Quick Start</div><div class="rid">20261010-172110-flask-sqlalchemy-palletsprojects-com</div></div><span class="pill passed">passed</span><div class="meta"><span><b>2/2</b> steps passed</span><span>First success: <b>32.4 s</b></span><span>Cost: <b>$0.0206</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install -U Flask-SQLAlchemy</td><td class="num"><span class="exit0">0</span></td><td class="num">13.1 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">python quickstart.py</td><td class="num"><span class="exit0">0</span></td><td class="num">3.3 s</td><td>passed</td></tr></tbody></table></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Flask-SQLAlchemy Quick Start
+
+**Verdict:** pass (2/2 steps passed)
+
+- Run: `20261010-172110-flask-sqlalchemy-palletsprojects-com`
+- Source: https://flask-sqlalchemy.palletsprojects.com/en/stable/quickstart
+
+## Numbers
+
+- Time to first success: 32 s
+- Tool calls: 0
+- Cost: $0.02 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 13.1 | `pip install -U Flask-SQLAlchemy` |
+| 2 | passed | 1 | 0 | 3.3 | `python quickstart.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">SQLAlchemy ORM Quick Start</div><div class="rid">20261010-172110-docs-sqlalchemy-org</div></div><span class="pill verified">verified</span><div class="meta"><span><b>1/1</b> steps passed</span><span>First success: <b>59.4 s</b></span><span>Cost: <b>$0.0476</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>python quickstart.py</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">python quickstart.py</td><td class="num"><span class="exit0">0</span></td><td class="num">35.2 s</td><td>passed</td></tr></tbody></table></div><h3>Error</h3><pre>Traceback (most recent call last):
+  File &quot;/work/quickstart.py&quot;, line 3, in &lt;module&gt;
+    from sqlalchemy import ForeignKey
+ModuleNotFoundError: No module named &#x27;sqlalchemy&#x27;</pre><h3>Patch</h3><div class="patch"><p>Step 1: The traceback shows ModuleNotFoundError for &#x27;sqlalchemy&#x27;, which is not included in the clean python:3.11-slim image. Installing it with pip before running the original command resolves the missing prerequisite.</p><p class="old">Before: <code>python quickstart.py</code></p><p class="new">After: <code>pip install sqlalchemy &amp;&amp; python quickstart.py</code></p><p>Source: ModuleNotFoundError: No module named &#x27;sqlalchemy&#x27; in the error output</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: SQLAlchemy ORM Quick Start
+
+**Verdict:** verified (1/1 steps passed)
+
+- Run: `20261010-172110-docs-sqlalchemy-org`
+- Source: https://docs.sqlalchemy.org/en/21/orm/quickstart.html
+
+## First Failed Step
+
+Step 1 of 1: `python quickstart.py`
+
+Exit code: 1
+
+Last 15 lines of stderr:
+
+```
+Traceback (most recent call last):
+  File &quot;/work/quickstart.py&quot;, line 3, in &lt;module&gt;
+    from sqlalchemy import ForeignKey
+ModuleNotFoundError: No module named &#x27;sqlalchemy&#x27;
+```
+
+## Cause
+
+environment (confidence 96%, source jev)
+
+## Fix
+
+- Step 1: `python quickstart.py` became `pip install sqlalchemy &amp;&amp; python quickstart.py`. The traceback shows ModuleNotFoundError for &#x27;sqlalchemy&#x27;, which is not included in the clean python:3.11-slim image. Installing it with pip before running the original command resolves the missing prerequisite. Source: ModuleNotFoundError: No module named &#x27;sqlalchemy&#x27; in the error output
+
+## Numbers
+
+- Time to first success: 59 s
+- Tool calls: 0
+- Cost: $0.05 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 2 | 0 | 35.2 | `python quickstart.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Tutorial: Get started with Go</div><div class="rid">20261010-172129-go-dev</div></div><span class="pill passed">passed</span><div class="meta"><span><b>8/9</b> steps passed</span><span>First success: <b>94.3 s</b></span><span>Cost: <b>$0.0296</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">cd</td><td class="num"><span class="exit0">0</span></td><td class="num">0.8 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">mkdir hello</td><td class="num"><span class="exit0">0</span></td><td class="num">0.7 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">cd hello</td><td class="num"><span class="exit0">0</span></td><td class="num">1.0 s</td><td>passed</td></tr><tr class=""><td class="num">4</td><td class="cmd">go mod init example/hello</td><td class="num"><span class="exit0">0</span></td><td class="num">0.9 s</td><td>passed</td></tr><tr class=""><td class="num">5</td><td class="cmd">go run .</td><td class="num"><span class="exit0">0</span></td><td class="num">8.6 s</td><td>passed</td></tr><tr class=""><td class="num">6</td><td class="cmd">go help</td><td class="num"><span class="exit0">0</span></td><td class="num">0.9 s</td><td>passed</td></tr><tr class=""><td class="num">7</td><td class="cmd"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr><tr class=""><td class="num">8</td><td class="cmd">go mod tidy</td><td class="num"><span class="exit0">0</span></td><td class="num">9.0 s</td><td>passed</td></tr><tr class=""><td class="num">9</td><td class="cmd">go run .</td><td class="num"><span class="exit0">0</span></td><td class="num">2.3 s</td><td>passed</td></tr></tbody></table></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Tutorial: Get started with Go
+
+**Verdict:** pass (8/9 steps passed)
+
+- Run: `20261010-172129-go-dev`
+- Source: https://go.dev/doc/tutorial/getting-started
+
+## Numbers
+
+- Time to first success: 94 s
+- Tool calls: 0
+- Cost: $0.03 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 0.8 | `cd` |
+| 2 | passed | 1 | 0 | 0.7 | `mkdir hello` |
+| 3 | passed | 1 | 0 | 1.0 | `cd hello` |
+| 4 | passed | 1 | 0 | 0.9 | `go mod init example/hello` |
+| 5 | passed | 1 | 0 | 8.6 | `go run .` |
+| 6 | passed | 1 | 0 | 0.9 | `go help` |
+| 7 | skipped | 0 | - | - | `` |
+| 8 | passed | 1 | 0 | 9.0 | `go mod tidy` |
+| 9 | passed | 1 | 0 | 2.3 | `go run .` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Flask Quickstart</div><div class="rid">20261010-172208-flask-palletsprojects-com</div></div><span class="pill failed">failed</span><div class="meta"><span><b>0/4</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0032</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>flask --app hello run</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">flask --app hello run</td><td class="num"><span class="exitn">124</span></td><td class="num">303.0 s</td><td>gave_up</td></tr><tr class=""><td class="num">2</td><td class="cmd">flask run --host=0.0.0.0</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">3</td><td class="cmd">flask --app hello run --debug</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">4</td><td class="cmd">python -c &#x27;import secrets; print(secrets.token_hex())&#x27;</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr></tbody></table></div><h3>Error</h3><pre>WARNING: Running pip as the &#x27;root&#x27; user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -&gt; 26.2.1
+[notice] To update, run: pip install --upgrade pip
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m</pre><h3>Patch</h3><div class="patch"><p>Step 1: flask is not installed in the clean python:3.11-slim image, so the flask executable is missing; installing the flask package provides it and then the original command runs unchanged.</p><p class="old">Before: <code>flask --app hello run</code></p><p class="new">After: <code>pip install flask &amp;&amp; flask --app hello run</code></p><p>Source: Flask quickstart documentation (pip install Flask) and the &#x27;flask: command not found&#x27; error</p></div><h3>Stop reason</h3><pre>step 1 gave up: step timed out after 300 s: (command timed out)</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Flask Quickstart
+
+**Verdict:** fail (0/4 steps passed)
+
+- Run: `20261010-172208-flask-palletsprojects-com`
+- Source: https://flask.palletsprojects.com/en/stable/quickstart
+- Stop reason: step 1 gave up: step timed out after 300 s: (command timed out)
+
+## First Failed Step
+
+Step 1 of 4: `flask --app hello run`
+
+Exit code: 127
+
+Last 15 lines of stderr:
+
+```
+/tmp/.fr_step.sh: line 11: flask: command not found
+```
+
+## Cause
+
+environment (confidence 100%, source timeout)
+
+## Fix
+
+- Step 1: `flask --app hello run` became `pip install flask &amp;&amp; flask --app hello run`. flask is not installed in the clean python:3.11-slim image, so the flask executable is missing; installing the flask package provides it and then the original command runs unchanged. Source: Flask quickstart documentation (pip install Flask) and the &#x27;flask: command not found&#x27; error
+- Gave up on step 1: step timed out after 300 s: (command timed out)
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.00 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | gave_up | 2 | 124 | 303.0 | `flask --app hello run` |
+| 2 | pending | 0 | - | - | `flask run --host=0.0.0.0` |
+| 3 | pending | 0 | - | - | `flask --app hello run --debug` |
+| 4 | pending | 0 | - | - | `python -c &#x27;import secrets; print(secrets.token_hex())&#x27;` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Build advanced dlt pipeline from scratch</div><div class="rid">20261010-172306-dlthub-com</div></div><span class="pill failed">failed</span><div class="meta"><span><b>1/10</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.1000</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>dlt --version</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">dlt --version</td><td class="num"><span class="exit0">0</span></td><td class="num">42.6 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">python quick_start_pipeline.py</td><td class="num"><span class="exit0">0</span></td><td class="num">7.7 s</td><td>gave_up</td></tr><tr class=""><td class="num">3</td><td class="cmd">dlt pipeline quick_start show</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">4</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">5</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">6</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">7</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">8</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">9</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">10</td><td class="cmd">python github_issues.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr></tbody></table></div><h3>Error</h3><pre>/tmp/.fr_step.sh: line 11: dlt: command not found</pre><h3>Patch</h3><div class="patch"><p>Step 1: The dlt CLI is not installed in the clean python:3.11-slim image; the &#x27;command not found&#x27; error shows the package is missing. Installing the &#x27;dlt&#x27; package from PyPI provides the dlt executable, then the original command runs unchanged.</p><p class="old">Before: <code>dlt --version</code></p><p class="new">After: <code>pip install dlt &amp;&amp; dlt --version</code></p><p>Source: error</p></div><div class="patch"><p>Step 2: The error shows dlt is installed but the duckdb destination extra is missing; the error itself says to run pip install &quot;dlt[duckdb]&quot;. The original command is kept and runs after the install.</p><p class="old">Before: <code>python quick_start_pipeline.py</code></p><p class="new">After: <code>pip install &quot;dlt[duckdb]&quot; &amp;&amp; python quick_start_pipeline.py</code></p><p>Source: Error message from dlt MissingDependencyException: &#x27;pip install &quot;dlt[duckdb]&quot;&#x27;</p></div><div class="patch"><p>Step 2: The output shows no failure. dlt installed, the pipeline loaded 1 package into duckdb with no failed jobs, and the only complaint is pip&#x27;s warning about running as root. That warning is harmless in a throwaway container. Setting PIP_ROOT_USER_ACTION=ignore silences it, and the original command and arguments stay the same.</p><p class="old">Before: <code>pip install &quot;dlt[duckdb]&quot; &amp;&amp; python quick_start_pipeline.py</code></p><p class="new">After: <code>PIP_ROOT_USER_ACTION=ignore pip install &quot;dlt[duckdb]&quot; &amp;&amp; python quick_start_pipeline.py</code></p><p>Source: https://pip.pypa.io/en/stable/cli/pip/#cmdoption-root-user-action</p></div><h3>Stop reason</h3><pre>step 2 gave up: attempt budget spent: step 2 used 3 attempts</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Build advanced dlt pipeline from scratch
+
+**Verdict:** fail (1/10 steps passed)
+
+- Run: `20261010-172306-dlthub-com`
+- Source: https://dlthub.com/docs/tutorial/load-data-from-an-api
+- Stop reason: step 2 gave up: attempt budget spent: step 2 used 3 attempts
+
+## The Step That Ended the Run
+
+Step 2 of 10: `python quick_start_pipeline.py`
+
+The first failure was step 1: `dlt --version`. Recovery fixed it.
+
+Exit code: 1
+
+Last 15 lines of stderr:
+
+```
+    self._sync_destination(destination, staging, dataset_name)
+  File &quot;/usr/local/lib/python3.11/site-packages/dlt/pipeline/pipeline.py&quot;, line 190, in _wrap
+    rv = f(self, *args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/usr/local/lib/python3.11/site-packages/dlt/pipeline/pipeline.py&quot;, line 949, in _sync_destination
+    raise PipelineStepFailed(self, &quot;sync&quot;, None, ex, None) from ex
+dlt.pipeline.exceptions.PipelineStepFailed: Pipeline execution failed at `step=sync` with exception:
+
+&lt;class &#x27;dlt.common.exceptions.MissingDependencyException&#x27;&gt;
+
+You must install additional dependencies to run `duckdb destination`. If you use pip you may do the following:
+
+pip install &quot;dlt[duckdb]&quot;
+
+Dependencies for specific destinations are available as extras of dlt
+```
+
+## Cause
+
+environment (confidence 61%, source jev)
+
+## Fix
+
+- Step 2: `python quick_start_pipeline.py` became `pip install &quot;dlt[duckdb]&quot; &amp;&amp; python quick_start_pipeline.py`. The error shows dlt is installed but the duckdb destination extra is missing; the error itself says to run pip install &quot;dlt[duckdb]&quot;. The original command is kept and runs after the install. Source: Error message from dlt MissingDependencyException: &#x27;pip install &quot;dlt[duckdb]&quot;&#x27;
+- Step 2: `pip install &quot;dlt[duckdb]&quot; &amp;&amp; python quick_start_pipeline.py` became `PIP_ROOT_USER_ACTION=ignore pip install &quot;dlt[duckdb]&quot; &amp;&amp; python quick_start_pipeline.py`. The output shows no failure. dlt installed, the pipeline loaded 1 package into duckdb with no failed jobs, and the only complaint is pip&#x27;s warning about running as root. That warning is harmless in a throwaway container. Setting PIP_ROOT_USER_ACTION=ignore silences it, and the original command and arguments stay the same. Source: https://pip.pypa.io/en/stable/cli/pip/#cmdoption-root-user-action
+- Gave up on step 2: attempt budget spent: step 2 used 3 attempts
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.10 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 2 | 0 | 42.6 | `dlt --version` |
+| 2 | gave_up | 3 | 0 | 7.7 | `python quick_start_pipeline.py` |
+| 3 | pending | 0 | - | - | `dlt pipeline quick_start show` |
+| 4 | pending | 0 | - | - | `python github_issues.py` |
+| 5 | pending | 0 | - | - | `python github_issues.py` |
+| 6 | pending | 0 | - | - | `python github_issues.py` |
+| 7 | pending | 0 | - | - | `python github_issues.py` |
+| 8 | pending | 0 | - | - | `python github_issues.py` |
+| 9 | pending | 0 | - | - | `python github_issues.py` |
+| 10 | pending | 0 | - | - | `python github_issues.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Writing your first Django app, part 1</div><div class="rid">20261010-172328-docs-djangoproject-com</div></div><span class="pill verified">verified</span><div class="meta"><span><b>4/6</b> steps passed</span><span>First success: <b>59.3 s</b></span><span>Cost: <b>$0.0426</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>python -m django --version</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">python -m django --version</td><td class="num"><span class="exit0">0</span></td><td class="num">21.8 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">mkdir djangotutorial</td><td class="num"><span class="exit0">0</span></td><td class="num">0.7 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">django-admin startproject mysite djangotutorial</td><td class="num"><span class="exit0">0</span></td><td class="num">1.7 s</td><td>passed</td></tr><tr class=""><td class="num">4</td><td class="cmd">python manage.py runserver</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr><tr class=""><td class="num">5</td><td class="cmd">python manage.py startapp polls</td><td class="num"><span class="exit0">0</span></td><td class="num">4.5 s</td><td>passed</td></tr><tr class=""><td class="num">6</td><td class="cmd">python manage.py runserver</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr></tbody></table></div><h3>Error</h3><pre>/usr/local/bin/python: No module named django</pre><h3>Patch</h3><div class="patch"><p>Step 1: The error &#x27;No module named django&#x27; shows Django is not installed in the clean python:3.11-slim image, so it must be installed with pip before running the original command.</p><p class="old">Before: <code>python -m django --version</code></p><p class="new">After: <code>pip install django &amp;&amp; python -m django --version</code></p><p>Source: pip install from PyPI (official Django package)</p></div><div class="patch"><p>Step 5: manage.py is missing because no Django project exists in /work yet and Django isn&#x27;t installed in the clean image. Installing Django and running &#x27;django-admin startproject mysite .&#x27; creates manage.py in the current directory, so the original startapp command can then run unchanged.</p><p class="old">Before: <code>python manage.py startapp polls</code></p><p class="new">After: <code>pip install django &amp;&amp; django-admin startproject mysite . &amp;&amp; python manage.py startapp polls</code></p><p>Source: Django tutorial part 1: &#x27;django-admin startproject mysite&#x27; must be run before &#x27;python manage.py startapp polls&#x27;</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Writing your first Django app, part 1
+
+**Verdict:** verified (4/6 steps passed)
+
+- Run: `20261010-172328-docs-djangoproject-com`
+- Source: https://docs.djangoproject.com/en/5.2/intro/tutorial01
+
+## First Failed Step
+
+Step 1 of 6: `python -m django --version`
+
+Exit code: 1
+
+Last 15 lines of stderr:
+
+```
+/usr/local/bin/python: No module named django
+```
+
+## Cause
+
+environment (confidence 99%, source jev)
+
+## Fix
+
+- Step 1: `python -m django --version` became `pip install django &amp;&amp; python -m django --version`. The error &#x27;No module named django&#x27; shows Django is not installed in the clean python:3.11-slim image, so it must be installed with pip before running the original command. Source: pip install from PyPI (official Django package)
+
+## Numbers
+
+- Time to first success: 59 s
+- Tool calls: 0
+- Cost: $0.04 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 2 | 0 | 21.8 | `python -m django --version` |
+| 2 | passed | 1 | 0 | 0.7 | `mkdir djangotutorial` |
+| 3 | passed | 1 | 0 | 1.7 | `django-admin startproject mysite djangotutorial` |
+| 4 | skipped | 0 | - | - | `python manage.py runserver` |
+| 5 | passed | 2 | 0 | 4.5 | `python manage.py startapp polls` |
+| 6 | skipped | 0 | - | - | `python manage.py runserver` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Example app — peewee 4.5.3 documentation</div><div class="rid">20261010-172525-docs-peewee-orm-com</div></div><span class="pill failed">failed</span><div class="meta"><span><b>1/2</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0315</b> list price, not billed</span></div><div class="fail-line">First failed step 2: <code>python run_example.py</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install flask</td><td class="num"><span class="exit0">0</span></td><td class="num">12.0 s</td><td>passed</td></tr><tr class="broke"><td class="num">2</td><td class="cmd">python run_example.py</td><td class="num"><span class="exitn">124</span></td><td class="num">301.6 s</td><td>gave_up</td></tr></tbody></table></div><h3>Error</h3><pre>::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, &lt;STDIN&gt; line 49.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Cloning into &#x27;peewee&#x27;...
+WARNING: Running pip as the &#x27;root&#x27; user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -&gt; 26.2.1
+[notice] To update, run: pip install --upgrade pip
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 164-798-858</pre><h3>Patch</h3><div class="patch"><p>Step 2: run_example.py is not in /work. It lives in examples/twitter of the peewee GitHub repo, and the pip package does not ship it. The command adds the missing prerequisites: git (python:3.11-slim does not include it), a clone of the repo, and pip install of flask and peewee, which the app imports. It then cd&#x27;s into examples/twitter, as the docs say, before running the original command.</p><p class="old">Before: <code>python run_example.py</code></p><p class="new">After: <code>apt-get update &amp;&amp; apt-get install -y git &amp;&amp; git clone --depth 1 https://github.com/coleifer/peewee.git &amp;&amp; pip install flask peewee &amp;&amp; cd peewee/examples/twitter &amp;&amp; python run_example.py</code></p><p>Source: https://docs.peewee-orm.com/en/latest/peewee/example.html</p></div><h3>Stop reason</h3><pre>step 2 gave up: step timed out after 300 s: (command timed out)</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Example app — peewee 4.5.3 documentation
+
+**Verdict:** fail (1/2 steps passed)
+
+- Run: `20261010-172525-docs-peewee-orm-com`
+- Source: http://docs.peewee-orm.com/en/latest/peewee/example.html
+- Stop reason: step 2 gave up: step timed out after 300 s: (command timed out)
+
+## First Failed Step
+
+Step 2 of 2: `python run_example.py`
+
+Exit code: 2
+
+Last 15 lines of stderr:
+
+```
+python: can&#x27;t open file &#x27;/work/run_example.py&#x27;: [Errno 2] No such file or directory
+```
+
+## Cause
+
+environment (confidence 100%, source timeout)
+
+## Fix
+
+- Step 2: `python run_example.py` became `apt-get update &amp;&amp; apt-get install -y git &amp;&amp; git clone --depth 1 https://github.com/coleifer/peewee.git &amp;&amp; pip install flask peewee &amp;&amp; cd peewee/examples/twitter &amp;&amp; python run_example.py`. run_example.py is not in /work. It lives in examples/twitter of the peewee GitHub repo, and the pip package does not ship it. The command adds the missing prerequisites: git (python:3.11-slim does not include it), a clone of the repo, and pip install of flask and peewee, which the app imports. It then cd&#x27;s into examples/twitter, as the docs say, before running the original command. Source: https://docs.peewee-orm.com/en/latest/peewee/example.html
+- Gave up on step 2: step timed out after 300 s: (command timed out)
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.03 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 12.0 | `pip install flask` |
+| 2 | gave_up | 2 | 124 | 301.6 | `python run_example.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Tortoise ORM Getting Started</div><div class="rid">20261010-172527-tortoise-github-io</div></div><span class="pill passed">passed</span><div class="meta"><span><b>3/3</b> steps passed</span><span>First success: <b>25.0 s</b></span><span>Cost: <b>$0.0327</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install tortoise-orm</td><td class="num"><span class="exit0">0</span></td><td class="num">8.5 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">python init_db.py</td><td class="num"><span class="exit0">0</span></td><td class="num">5.8 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">python quickstart.py</td><td class="num"><span class="exit0">0</span></td><td class="num">2.0 s</td><td>passed</td></tr></tbody></table></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Tortoise ORM Getting Started
+
+**Verdict:** pass (3/3 steps passed)
+
+- Run: `20261010-172527-tortoise-github-io`
+- Source: https://tortoise.github.io/getting_started.html
+
+## Numbers
+
+- Time to first success: 25 s
+- Tool calls: 0
+- Cost: $0.03 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 8.5 | `pip install tortoise-orm` |
+| 2 | passed | 1 | 0 | 5.8 | `python init_db.py` |
+| 3 | passed | 1 | 0 | 2.0 | `python quickstart.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">github.com/dlt-hub/dlt/blob/devel/docs/website/docs/build-a-pipeline-tutorial</div><div class="rid">20261010-172617-github-com</div></div><span class="pill failed">failed</span><div class="meta"><span><b>0/0</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0000</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><p class="empty">No steps recorded: <span class="missing">missing</span></p><h3>Stop reason</h3><pre>docs unreachable: HTTP 503 for https://github.com/dlt-hub/dlt/blob/devel/docs/website/docs/build-a-pipeline-tutorial (firecrawl: firecrawl failed: Error: Insufficient credits to perform this request. For more credits, you can upgrade your plan at ht)</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: github.com
+
+**Verdict:** fail (0/0 steps passed)
+
+- Run: `20261010-172617-github-com`
+- Source: https://github.com/dlt-hub/dlt/blob/devel/docs/website/docs/build-a-pipeline-tutorial
+- Stop reason: docs unreachable: HTTP 503 for https://github.com/dlt-hub/dlt/blob/devel/docs/website/docs/build-a-pipeline-tutorial (firecrawl: firecrawl failed: Error: Insufficient credits to perform this request. For more credits, you can upgrade your plan at ht)
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.00 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|</pre></div></details>
+<details class="run"><summary><div><div class="target">DuckDB Python API quickstart</div><div class="rid">20261010-172624-duckdb-org</div></div><span class="pill passed">passed</span><div class="meta"><span><b>9/9</b> steps passed</span><span>First success: <b>33.2 s</b></span><span>Cost: <b>$0.0475</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install duckdb</td><td class="num"><span class="exit0">0</span></td><td class="num">8.1 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">python basic.py</td><td class="num"><span class="exit0">0</span></td><td class="num">1.7 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">python relation.py</td><td class="num"><span class="exit0">0</span></td><td class="num">1.3 s</td><td>passed</td></tr><tr class=""><td class="num">4</td><td class="cmd">python write_data.py</td><td class="num"><span class="exit0">0</span></td><td class="num">3.0 s</td><td>passed</td></tr><tr class=""><td class="num">5</td><td class="cmd">python in_memory.py</td><td class="num"><span class="exit0">0</span></td><td class="num">2.3 s</td><td>passed</td></tr><tr class=""><td class="num">6</td><td class="cmd">python persistent.py</td><td class="num"><span class="exit0">0</span></td><td class="num">4.1 s</td><td>passed</td></tr><tr class=""><td class="num">7</td><td class="cmd">python config_threads.py</td><td class="num"><span class="exit0">0</span></td><td class="num">1.9 s</td><td>passed</td></tr><tr class=""><td class="num">8</td><td class="cmd">python config_storage.py</td><td class="num"><span class="exit0">0</span></td><td class="num">1.5 s</td><td>passed</td></tr><tr class=""><td class="num">9</td><td class="cmd">python community_ext.py</td><td class="num"><span class="exit0">0</span></td><td class="num">2.7 s</td><td>passed</td></tr></tbody></table></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: DuckDB Python API quickstart
+
+**Verdict:** pass (9/9 steps passed)
+
+- Run: `20261010-172624-duckdb-org`
+- Source: https://duckdb.org/docs/lts/clients/python/overview.html
+
+## Numbers
+
+- Time to first success: 33 s
+- Tool calls: 0
+- Cost: $0.05 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 8.1 | `pip install duckdb` |
+| 2 | passed | 1 | 0 | 1.7 | `python basic.py` |
+| 3 | passed | 1 | 0 | 1.3 | `python relation.py` |
+| 4 | passed | 1 | 0 | 3.0 | `python write_data.py` |
+| 5 | passed | 1 | 0 | 2.3 | `python in_memory.py` |
+| 6 | passed | 1 | 0 | 4.1 | `python persistent.py` |
+| 7 | passed | 1 | 0 | 1.9 | `python config_threads.py` |
+| 8 | passed | 1 | 0 | 1.5 | `python config_storage.py` |
+| 9 | passed | 1 | 0 | 2.7 | `python community_ext.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Litestar Getting Started</div><div class="rid">20261010-172724-docs-litestar-dev</div></div><span class="pill failed">failed</span><div class="meta"><span><b>1/3</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0247</b> list price, not billed</span></div><div class="fail-line">First failed step 2: <code>litestar run</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install &#x27;litestar[standard]&#x27;</td><td class="num"><span class="exit0">0</span></td><td class="num">37.3 s</td><td>passed</td></tr><tr class="broke"><td class="num">2</td><td class="cmd">litestar run</td><td class="num"><span class="exitn">124</span></td><td class="num">308.2 s</td><td>gave_up</td></tr><tr class=""><td class="num">3</td><td class="cmd"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr></tbody></table></div><h3>Error</h3><pre>INFO:     Started server process [82]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</pre><h3>Stop reason</h3><pre>step 2 gave up: step timed out after 300 s: (command timed out)</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Litestar Getting Started
+
+**Verdict:** fail (1/3 steps passed)
+
+- Run: `20261010-172724-docs-litestar-dev`
+- Source: https://docs.litestar.dev/main/getting-started.html
+- Stop reason: step 2 gave up: step timed out after 300 s: (command timed out)
+
+## First Failed Step
+
+Step 2 of 3: `litestar run`
+
+Exit code: 124 (timed out)
+
+Last 15 lines of stderr:
+
+```
+INFO:     Started server process [82]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+```
+
+## Cause
+
+environment (confidence 100%, source timeout)
+
+## Fix
+
+No fix found.
+- Gave up on step 2: step timed out after 300 s: (command timed out)
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.02 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 37.3 | `pip install &#x27;litestar[standard]&#x27;` |
+| 2 | gave_up | 1 | 124 | 308.2 | `litestar run` |
+| 3 | pending | 0 | - | - | `` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Hypothesis Quickstart</div><div class="rid">20261010-172745-hypothesis-readthedocs-io</div></div><span class="pill verified">verified</span><div class="meta"><span><b>3/3</b> steps passed</span><span>First success: <b>47.0 s</b></span><span>Cost: <b>$0.0231</b> list price, not billed</span></div><div class="fail-line">First failed step 3: <code>pytest example.py</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install hypothesis</td><td class="num"><span class="exit0">0</span></td><td class="num">6.3 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">python example.py</td><td class="num"><span class="exit0">0</span></td><td class="num">4.7 s</td><td>passed</td></tr><tr class="broke"><td class="num">3</td><td class="cmd">pytest example.py</td><td class="num"><span class="exitn">1</span></td><td class="num">13.4 s</td><td>passed</td></tr></tbody></table></div><h3>Error</h3><pre>/tmp/.fr_step.sh: line 11: pytest: command not found</pre><h3>Patch</h3><div class="patch"><p>Step 3: pytest is not installed in the clean python:3.11-slim image, so the shell reports &#x27;command not found&#x27;. Installing it with pip first provides the missing prerequisite, then the original command runs unchanged.</p><p class="old">Before: <code>pytest example.py</code></p><p class="new">After: <code>pip install pytest &amp;&amp; pytest example.py</code></p><p>Source: error output: &#x27;pytest: command not found&#x27; in python:3.11-slim, which ships without pytest</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Hypothesis Quickstart
+
+**Verdict:** verified (3/3 steps passed)
+
+- Run: `20261010-172745-hypothesis-readthedocs-io`
+- Source: https://hypothesis.readthedocs.io/en/latest/quickstart.html
+
+## First Failed Step
+
+Step 3 of 3: `pytest example.py`
+
+Exit code: 127
+
+Last 15 lines of stderr:
+
+```
+/tmp/.fr_step.sh: line 11: pytest: command not found
+```
+
+## Cause
+
+environment (confidence 98%, source jev)
+
+## Fix
+
+- Step 3: `pytest example.py` became `pip install pytest &amp;&amp; pytest example.py`. pytest is not installed in the clean python:3.11-slim image, so the shell reports &#x27;command not found&#x27;. Installing it with pip first provides the missing prerequisite, then the original command runs unchanged. Source: error output: &#x27;pytest: command not found&#x27; in python:3.11-slim, which ships without pytest
+
+## Numbers
+
+- Time to first success: 47 s
+- Tool calls: 0
+- Cost: $0.02 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 6.3 | `pip install hypothesis` |
+| 2 | passed | 1 | 0 | 4.7 | `python example.py` |
+| 3 | passed | 2 | 1 | 13.4 | `pytest example.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Perseus Quickstart</div><div class="rid">20261010-172923-framesurge-sh</div></div><span class="pill failed">failed</span><div class="meta"><span><b>2/3</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0272</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>cargo install perseus-cli</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">cargo install perseus-cli</td><td class="num"><span class="exit0">0</span></td><td class="num">131.9 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">perseus new my-app</td><td class="num"><span class="exit0">0</span></td><td class="num">9.2 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">perseus serve -w</td><td class="num"><span class="exitn">124</span></td><td class="num">300.7 s</td><td>gave_up</td></tr></tbody></table></div><h3>Error</h3><pre>o-1949cf8c6b5b557f/console-0.16.6/src/lib.rs:96:44
+   |
+94 | #[cfg(feature = &quot;std&quot;)]
+   |       --------------- the item is gated behind the `std` feature
+95 | pub use crate::utils::{
+96 |     colors_enabled, colors_enabled_stderr, measure_text_width, pad_str, pad_str_with,
+   |                                            ^^^^^^^^^^^^^^^^^^
+note: found an item that was configured out
+  --&gt; /usr/local/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/console-0.16.6/src/lib.rs:99:55
+   |
+94 | #[cfg(feature = &quot;std&quot;)]
+   |       --------------- the item is gated behind the `std` feature
+...
+99 |     truncate_str, Alignment, Attribute, Color, Emoji, Style, StyledObject,
+   |                                                       ^^^^^
+
+   Compiling tokio-util v0.7.20
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `indicatif` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: failed to compile `perseus-cli v0.4.2`, intermediate artifacts can be found at `/tmp/cargo-installsr9hdb`.
+To reuse those artifacts with a future compilation, set the environment variable `CARGO_BUILD_BUILD_DIR` to that path.</pre><h3>Patch</h3><div class="patch"><p>Step 1: indicatif 0.17.0-beta.1 needs an older console API, but cargo resolved console 0.16.6, which gates `Style`, `Term` and `measure_text_width` behind the `std` feature. `--locked` makes cargo use the Cargo.lock published with perseus-cli 0.4.2, which pins compatible dependency versions instead of the newest ones.</p><p class="old">Before: <code>cargo install perseus-cli</code></p><p class="new">After: <code>cargo install perseus-cli --locked</code></p><p>Source: https://doc.rust-lang.org/cargo/commands/cargo-install.html (the --locked flag)</p></div><h3>Stop reason</h3><pre>step 3 gave up: step timed out after 300 s: (command timed out)</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Perseus Quickstart
+
+**Verdict:** fail (2/3 steps passed)
+
+- Run: `20261010-172923-framesurge-sh`
+- Source: https://framesurge.sh/perseus/en-US/docs/next/quickstart
+- Stop reason: step 3 gave up: step timed out after 300 s: (command timed out)
+
+## The Step That Ended the Run
+
+Step 3 of 3: `perseus serve -w`
+
+The first failure was step 1: `cargo install perseus-cli`. Recovery fixed it.
+
+Exit code: 124 (timed out)
+
+Last 15 lines of stderr:
+
+```
+Error: couldn&#x27;t fetch metadata for current crate (have you run `perseus init` yet?)
+
+Caused by:
+	`cargo metadata` exited with an error: error: could not find `Cargo.toml` in `/work` or any parent directory
+	
+```
+
+## Cause
+
+environment (confidence 100%, source timeout)
+
+## Fix
+
+No fix found.
+- Gave up on step 3: step timed out after 300 s: (command timed out)
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.03 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 2 | 0 | 131.9 | `cargo install perseus-cli` |
+| 2 | passed | 1 | 0 | 9.2 | `perseus new my-app` |
+| 3 | gave_up | 1 | 124 | 300.7 | `perseus serve -w` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Peewee Quickstart</div><div class="rid">20261010-173117-docs-peewee-orm-com</div></div><span class="pill verified">verified</span><div class="meta"><span><b>1/2</b> steps passed</span><span>First success: <b>82.8 s</b></span><span>Cost: <b>$0.0639</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>python quickstart.py</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">python quickstart.py</td><td class="num"><span class="exit0">0</span></td><td class="num">6.5 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">python -m pwiz -e postgresql blog &gt; blog_models.py</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr></tbody></table></div><h3>Error</h3><pre>Traceback (most recent call last):
+  File &quot;/work/quickstart.py&quot;, line 2, in &lt;module&gt;
+    from peewee import *
+ModuleNotFoundError: No module named &#x27;peewee&#x27;</pre><h3>Patch</h3><div class="patch"><p>Step 1: The traceback shows ModuleNotFoundError for &#x27;peewee&#x27;, which is a missing prerequisite in the clean python:3.11-slim image. Installing the peewee package from PyPI before running the original command resolves it.</p><p class="old">Before: <code>python quickstart.py</code></p><p class="new">After: <code>pip install peewee &amp;&amp; python quickstart.py</code></p><p>Source: https://docs.peewee-orm.com/en/latest/peewee/installation.html</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Peewee Quickstart
+
+**Verdict:** verified (1/2 steps passed)
+
+- Run: `20261010-173117-docs-peewee-orm-com`
+- Source: https://docs.peewee-orm.com/en/latest/peewee/quickstart.html
+
+## First Failed Step
+
+Step 1 of 2: `python quickstart.py`
+
+Exit code: 1
+
+Last 15 lines of stderr:
+
+```
+Traceback (most recent call last):
+  File &quot;/work/quickstart.py&quot;, line 2, in &lt;module&gt;
+    from peewee import *
+ModuleNotFoundError: No module named &#x27;peewee&#x27;
+```
+
+## Cause
+
+environment (confidence 96%, source jev)
+
+## Fix
+
+- Step 1: `python quickstart.py` became `pip install peewee &amp;&amp; python quickstart.py`. The traceback shows ModuleNotFoundError for &#x27;peewee&#x27;, which is a missing prerequisite in the clean python:3.11-slim image. Installing the peewee package from PyPI before running the original command resolves it. Source: https://docs.peewee-orm.com/en/latest/peewee/installation.html
+
+## Numbers
+
+- Time to first success: 83 s
+- Tool calls: 0
+- Cost: $0.06 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 2 | 0 | 6.5 | `python quickstart.py` |
+| 2 | skipped | 0 | - | - | `python -m pwiz -e postgresql blog &gt; blog_models.py` |</pre></div></details>
+<details class="run"><summary><div><div class="target">WordCount Quickstart for Python</div><div class="rid">20261010-173419-beam-apache-org</div></div><span class="pill verified">verified</span><div class="meta"><span><b>4/8</b> steps passed</span><span>First success: <b>155.5 s</b></span><span>Cost: <b>$0.0382</b> list price, not billed</span></div><div class="fail-line">First failed step 4: <code>python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">python -m venv /path/to/directory</td><td class="num"><span class="exit0">0</span></td><td class="num">12.3 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">. /path/to/directory/bin/activate</td><td class="num"><span class="exit0">0</span></td><td class="num">1.3 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">pip install apache-beam</td><td class="num"><span class="exit0">0</span></td><td class="num">72.1 s</td><td>passed</td></tr><tr class="broke"><td class="num">4</td><td class="cmd">python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts</td><td class="num"><span class="exit0">0</span></td><td class="num">35.1 s</td><td>passed</td></tr><tr class=""><td class="num">5</td><td class="cmd">python -m apache_beam.examples.wordcount --input /path/to/inputfile \
+                                         --output /path/to/write/counts \
+                                         --runner FlinkRunner</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr><tr class=""><td class="num">6</td><td class="cmd">python -m apache_beam.examples.wordcount --input /path/to/inputfile \
+                                         --output /path/to/write/counts \
+                                         --runner SparkRunner</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr><tr class=""><td class="num">7</td><td class="cmd">pip install apache-beam[gcp]</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr><tr class=""><td class="num">8</td><td class="cmd">python -m apache_beam.examples.wordcount --input gs://dataflow-samples/shakespeare/kinglear.txt \
+                                         --output gs://&lt;your-gcs-bucket&gt;/counts \
+                                         --runner DataflowRunner \
+                                         --project your-gcp-project \
+                                         --region your-gcp-region \
+                                         --temp_location gs://&lt;your-gcs-bucket&gt;/tmp/</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>skipped</td></tr></tbody></table></div><h3>Error</h3><pre>ages/apache_beam/examples/wordcount.py&quot;, line 116, in &lt;module&gt;
+    run()
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/examples/wordcount.py&quot;, line 90, in run
+    lines = pipeline | &#x27;Read&#x27; &gt;&gt; ReadFromText(known_args.input)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/textio.py&quot;, line 807, in __init__
+    self._source = self._source_class(
+                   ^^^^^^^^^^^^^^^^^^^
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/textio.py&quot;, line 143, in __init__
+    super().__init__(
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/filebasedsource.py&quot;, line 126, in __init__
+    self._validate()
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/options/value_provider.py&quot;, line 192, in _f
+    return fnc(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/filebasedsource.py&quot;, line 191, in _validate
+    raise IOError(&#x27;No files found based on the file pattern %s&#x27; % pattern)
+OSError: No files found based on the file pattern /path/to/inputfile</pre><h3>Patch</h3><div class="patch"><p>Step 4: Beam started and ran with the DirectRunner. The failure is &#x27;No files found based on the file pattern /path/to/inputfile&#x27;, because the quickstart&#x27;s placeholder input file doesn&#x27;t exist in a clean container. The fix creates a small input file and the output directory, then runs the original command unchanged. The apitools warning is harmless.</p><p class="old">Before: <code>python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts</code></p><p class="new">After: <code>mkdir -p /path/to/write &amp;&amp; printf &#x27;hello world\nhello beam\n&#x27; &gt; /path/to/inputfile &amp;&amp; python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts</code></p><p>Source: Apache Beam Python quickstart (wordcount example) and the error output above</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: WordCount Quickstart for Python
+
+**Verdict:** verified (4/8 steps passed)
+
+- Run: `20261010-173419-beam-apache-org`
+- Source: https://beam.apache.org/get-started/quickstart-py
+
+## First Failed Step
+
+Step 4 of 8: `python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts`
+
+Exit code: 1
+
+Last 15 lines of stderr:
+
+```
+    lines = pipeline | &#x27;Read&#x27; &gt;&gt; ReadFromText(known_args.input)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/textio.py&quot;, line 807, in __init__
+    self._source = self._source_class(
+                   ^^^^^^^^^^^^^^^^^^^
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/textio.py&quot;, line 143, in __init__
+    super().__init__(
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/filebasedsource.py&quot;, line 126, in __init__
+    self._validate()
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/options/value_provider.py&quot;, line 192, in _f
+    return fnc(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/path/to/directory/lib/python3.11/site-packages/apache_beam/io/filebasedsource.py&quot;, line 191, in _validate
+    raise IOError(&#x27;No files found based on the file pattern %s&#x27; % pattern)
+OSError: No files found based on the file pattern /path/to/inputfile
+```
+
+## Cause
+
+environment (confidence 62%, source jev)
+
+## Fix
+
+- Step 4: `python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts` became `mkdir -p /path/to/write &amp;&amp; printf &#x27;hello world\nhello beam\n&#x27; &gt; /path/to/inputfile &amp;&amp; python -m apache_beam.examples.wordcount --input /path/to/inputfile --output /path/to/write/counts`. Beam started and ran with the DirectRunner. The failure is &#x27;No files found based on the file pattern /path/to/inputfile&#x27;, because the quickstart&#x27;s placeholder input file doesn&#x27;t exist in a clean container. The fix creates a small input file and the output directory, then runs the original command unchanged. The apitools warning is harmless. Source: Apache Beam Python quickstart (wordcount example) and the error output above
+
+## Numbers
+
+- Time to first success: 156 s
+- Tool calls: 0
+- Cost: $0.04 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 12.3 | `python -m venv /path/to/directory` |
+| 2 | passed | 1 | 0 | 1.3 | `. /path/to/directory/bin/activate` |
+| 3 | passed | 1 | 0 | 72.1 | `pip install apache-beam` |
+| 4 | passed | 2 | 0 | 35.1 | `python -m apache_beam.examples.wordcount --input /path/to/i…` |
+| 5 | skipped | 0 | - | - | `python -m apache_beam.examples.wordcount --input /path/to/i…` |
+| 6 | skipped | 0 | - | - | `python -m apache_beam.examples.wordcount --input /path/to/i…` |
+| 7 | skipped | 0 | - | - | `pip install apache-beam[gcp]` |
+| 8 | skipped | 0 | - | - | `python -m apache_beam.examples.wordcount --input gs://dataf…` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Quickstart</div><div class="rid">20261010-173804-flask-palletsprojects-com</div></div><span class="pill verified">verified</span><div class="meta"><span><b>4/4</b> steps passed</span><span>First success: <b>322.0 s</b></span><span>Cost: <b>$0.0613</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>flask --app hello run</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">flask --app hello run</td><td class="num"><span class="exitn">124</span></td><td class="num">92.9 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">flask run --host=0.0.0.0</td><td class="num"><span class="exitn">124</span></td><td class="num">90.9 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">flask --app hello run --debug</td><td class="num"><span class="exitn">124</span></td><td class="num">97.8 s</td><td>passed</td></tr><tr class=""><td class="num">4</td><td class="cmd">python -c &#x27;import secrets; print(secrets.token_hex())&#x27;</td><td class="num"><span class="exit0">0</span></td><td class="num">3.4 s</td><td>passed</td></tr></tbody></table></div><h3>Error</h3><pre>/tmp/.fr_step.sh: line 11: flask: command not found</pre><h3>Patch</h3><div class="patch"><p>Step 1: flask is not installed in the clean python:3.11-slim image, so the flask executable is missing. Installing it with pip provides the command; the original command and arguments are unchanged.</p><p class="old">Before: <code>flask --app hello run</code></p><p class="new">After: <code>pip install flask &amp;&amp; flask --app hello run</code></p><p>Source: pip install flask (PyPI package &#x27;Flask&#x27;), per the Flask quickstart installation instructions</p></div><div class="patch"><p>Step 2: Flask is installed, but it found no app: there is no app.py or wsgi.py in the working directory and FLASK_APP is not set. The error names the --app option as the fix. The module name &#x27;hello&#x27; is a guess taken from the Flask quickstart, so replace it with the module that defines your Flask app. The file must exist in the current directory.</p><p class="old">Before: <code>flask run --host=0.0.0.0</code></p><p class="new">After: <code>flask --app hello run --host=0.0.0.0</code></p><p>Source: https://flask.palletsprojects.com/en/stable/quickstart/</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Quickstart
+
+**Verdict:** verified (4/4 steps passed)
+
+- Run: `20261010-173804-flask-palletsprojects-com`
+- Source: https://flask.palletsprojects.com/en/stable/quickstart
+
+## First Failed Step
+
+Step 1 of 4: `flask --app hello run`
+
+Exit code: 127
+
+Last 15 lines of stderr:
+
+```
+/tmp/.fr_step.sh: line 11: flask: command not found
+```
+
+## Cause
+
+environment (confidence 100%, source precedent)
+
+## Fix
+
+- Step 1: `flask --app hello run` became `pip install flask &amp;&amp; flask --app hello run`. flask is not installed in the clean python:3.11-slim image, so the flask executable is missing. Installing it with pip provides the command; the original command and arguments are unchanged. Source: pip install flask (PyPI package &#x27;Flask&#x27;), per the Flask quickstart installation instructions
+
+## Numbers
+
+- Time to first success: 322 s
+- Tool calls: 0
+- Cost: $0.06 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 2 | 124 | 92.9 | `flask --app hello run` |
+| 2 | passed | 2 | 124 | 90.9 | `flask run --host=0.0.0.0` |
+| 3 | passed | 1 | 124 | 97.8 | `flask --app hello run --debug` |
+| 4 | passed | 1 | 0 | 3.4 | `python -c &#x27;import secrets; print(secrets.token_hex())&#x27;` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Command Line Applications in Rust (book build)</div><div class="rid">20261010-174114-github-com</div></div><span class="pill verified">verified</span><div class="meta"><span><b>3/3</b> steps passed</span><span>First success: <b>199.1 s</b></span><span>Cost: <b>$0.0203</b> list price, not billed</span></div><div class="fail-line">First failed step 2: <code>mdbook build</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">cargo install mdbook</td><td class="num"><span class="exit0">0</span></td><td class="num">122.7 s</td><td>passed</td></tr><tr class="broke"><td class="num">2</td><td class="cmd">mdbook build</td><td class="num"><span class="exit0">0</span></td><td class="num">1.9 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">mdbook test</td><td class="num"><span class="exit0">0</span></td><td class="num">1.3 s</td><td>passed</td></tr></tbody></table></div><h3>Error</h3><pre>ERROR failed to read `/work/src/SUMMARY.md`
+	Caused by: No such file or directory (os error 2)</pre><h3>Patch</h3><div class="patch"><p>Step 2: mdbook is installed and running, but it needs src/SUMMARY.md, which does not exist in the clean container&#x27;s /work. The fix creates a minimal SUMMARY.md only if one is missing, then runs the original `mdbook build` unchanged. If the guide expects real chapters, the project files may not have been copied into /work.</p><p class="old">Before: <code>mdbook build</code></p><p class="new">After: <code>mkdir -p src &amp;&amp; { [ -f src/SUMMARY.md ] || printf &#x27;# Summary\n&#x27; &gt; src/SUMMARY.md; } &amp;&amp; mdbook build</code></p><p>Source: mdBook documentation: SUMMARY.md is the required book table of contents at src/SUMMARY.md</p></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Command Line Applications in Rust (book build)
+
+**Verdict:** verified (3/3 steps passed)
+
+- Run: `20261010-174114-github-com`
+- Source: https://github.com/rust-cli/book
+
+## First Failed Step
+
+Step 2 of 3: `mdbook build`
+
+Exit code: 101
+
+Last 15 lines of stderr:
+
+```
+ERROR failed to read `/work/src/SUMMARY.md`
+	Caused by: No such file or directory (os error 2)
+```
+
+## Cause
+
+environment (confidence 59%, source jev)
+
+## Fix
+
+- Step 2: `mdbook build` became `mkdir -p src &amp;&amp; { [ -f src/SUMMARY.md ] || printf &#x27;# Summary\n&#x27; &gt; src/SUMMARY.md; } &amp;&amp; mdbook build`. mdbook is installed and running, but it needs src/SUMMARY.md, which does not exist in the clean container&#x27;s /work. The fix creates a minimal SUMMARY.md only if one is missing, then runs the original `mdbook build` unchanged. If the guide expects real chapters, the project files may not have been copied into /work. Source: mdBook documentation: SUMMARY.md is the required book table of contents at src/SUMMARY.md
+
+## Numbers
+
+- Time to first success: 199 s
+- Tool calls: 0
+- Cost: $0.02 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 122.7 | `cargo install mdbook` |
+| 2 | passed | 2 | 0 | 1.9 | `mdbook build` |
+| 3 | passed | 1 | 0 | 1.3 | `mdbook test` |</pre></div></details>
+<details class="run"><summary><div><div class="target">cargo-quickstart</div><div class="rid">20261010-174646-docs-rs</div></div><span class="pill failed">failed</span><div class="meta"><span><b>0/6</b> steps passed</span><span>First success: <b><span class="missing">missing</span></b></span><span>Cost: <b>$0.0296</b> list price, not billed</span></div><div class="fail-line">First failed step 1: <code>git clone https://github.com/sm-moshi/cargo-quickstart</code></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class="broke"><td class="num">1</td><td class="cmd">git clone https://github.com/sm-moshi/cargo-quickstart</td><td class="num"><span class="exitn">128</span></td><td class="num">18.4 s</td><td>gave_up</td></tr><tr class=""><td class="num">2</td><td class="cmd">cd cargo-quickstart</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">3</td><td class="cmd">cargo install --path crates/quickstart-cli</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">4</td><td class="cmd">cargo quickstart my-awesome-project --bin --edition 2021 --git --license MIT</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">5</td><td class="cmd">cargo quickstart completions bash &gt; /usr/local/etc/bash_completion.d/cargo-quickstart</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr><tr class=""><td class="num">6</td><td class="cmd">cargo quickstart doctor</td><td class="num"><span class="missing">missing</span></td><td class="num"><span class="missing">missing</span></td><td>pending</td></tr></tbody></table></div><h3>Error</h3><pre>Cloning into &#x27;cargo-quickstart&#x27;...
+fatal: could not read Username for &#x27;https://github.com&#x27;: No such device or address</pre><h3>Stop reason</h3><pre>step 1 gave up: no new fix found (searched: git Clone the cargo-quickstart repository | fatal: could not read Username for &#x27;https://github.com&#x27;: No such device or address)</pre><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: cargo-quickstart
+
+**Verdict:** fail (0/6 steps passed)
+
+- Run: `20261010-174646-docs-rs`
+- Source: https://docs.rs/crate/cargo-quickstart/latest
+- Stop reason: step 1 gave up: no new fix found (searched: git Clone the cargo-quickstart repository | fatal: could not read Username for &#x27;https://github.com&#x27;: No such device or address)
+
+## First Failed Step
+
+Step 1 of 6: `git clone https://github.com/sm-moshi/cargo-quickstart`
+
+Exit code: 128
+
+Last 15 lines of stderr:
+
+```
+Cloning into &#x27;cargo-quickstart&#x27;...
+fatal: could not read Username for &#x27;https://github.com&#x27;: No such device or address
+```
+
+## Cause
+
+environment (confidence 68%, source jev)
+
+## Fix
+
+No fix found.
+- Gave up on step 1: no new fix found (searched: git Clone the cargo-quickstart repository | fatal: could not read Username for &#x27;https://github.com&#x27;: No such device or address)
+
+## Numbers
+
+- Time to first success: not reached
+- Tool calls: 0
+- Cost: $0.03 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | gave_up | 1 | 128 | 18.4 | `git clone https://github.com/sm-moshi/cargo-quickstart` |
+| 2 | pending | 0 | - | - | `cd cargo-quickstart` |
+| 3 | pending | 0 | - | - | `cargo install --path crates/quickstart-cli` |
+| 4 | pending | 0 | - | - | `cargo quickstart my-awesome-project --bin --edition 2021 --…` |
+| 5 | pending | 0 | - | - | `cargo quickstart completions bash &gt; /usr/local/etc/bash_com…` |
+| 6 | pending | 0 | - | - | `cargo quickstart doctor` |</pre></div></details>
+<details class="run"><summary><div><div class="target">Litestar Getting Started</div><div class="rid">20261010-174858-docs-litestar-dev</div></div><span class="pill passed">passed</span><div class="meta"><span><b>3/3</b> steps passed</span><span>First success: <b>145.2 s</b></span><span>Cost: <b>$0.0490</b> list price, not billed</span></div></summary><div class="detail"><h3>Steps</h3><div class="tscroll"><table><thead><tr><th>#</th><th>Command</th><th>Exit</th><th>Time</th><th>Status</th></tr></thead><tbody><tr class=""><td class="num">1</td><td class="cmd">pip install litestar</td><td class="num"><span class="exit0">0</span></td><td class="num">21.5 s</td><td>passed</td></tr><tr class=""><td class="num">2</td><td class="cmd">pip install &#x27;litestar[standard]&#x27;</td><td class="num"><span class="exit0">0</span></td><td class="num">7.7 s</td><td>passed</td></tr><tr class=""><td class="num">3</td><td class="cmd">litestar run</td><td class="num"><span class="exitn">124</span></td><td class="num">92.3 s</td><td>passed</td></tr></tbody></table></div><h3>neatlogs trace</h3><p><span class="missing">missing</span></p><h3>report.md</h3><pre># FirstRun report: Litestar Getting Started
+
+**Verdict:** pass (3/3 steps passed)
+
+- Run: `20261010-174858-docs-litestar-dev`
+- Source: https://docs.litestar.dev/main/getting-started.html
+
+## Numbers
+
+- Time to first success: 145 s
+- Tool calls: 0
+- Cost: $0.05 (list price, not billed)
+
+## Step Results
+
+| Step | Status | Attempts | Exit | Seconds | Command |
+|---|---|---|---|---|---|
+| 1 | passed | 1 | 0 | 21.5 | `pip install litestar` |
+| 2 | passed | 1 | 0 | 7.7 | `pip install &#x27;litestar[standard]&#x27;` |
+| 3 | passed | 1 | 124 | 92.3 | `litestar run` |</pre></div></details>
 </section>
 
 <h2>Built with</h2>
 <section class="panels" aria-label="Tools">
-<article class="card"><div class="logo neatlogs" role="img" aria-label="neatlogs logo"></div><h3>neatlogs</h3><p class="role">Traces every step of every run.</p><dl class="kv"><div><dt>Trace links</dt><dd><span title="source: evidence/neatlogs_runs.json">31 of 48</span></dd></div><div><dt>v1 vs v2</dt><dd><span title="source: evidence/neatlogs_runs.json">4.25 vs 6.75 tool calls</span></dd></div></dl><div class="tscroll"><table><thead><tr><th>Tag</th><th>Runs</th><th>Spans</th><th>Tools</th><th>Cost</th><th>Time</th><th>Errors</th></tr></thead><tbody><tr><td>v1</td><td class="num"><span title="source: evidence/neatlogs_runs.json">4</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">9.2</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">4.2</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0262</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">128 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">0</span></td></tr><tr><td>v2</td><td class="num"><span title="source: evidence/neatlogs_runs.json">8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">18.6</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">6.8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0333</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">204 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">5</span></td></tr><tr><td>check</td><td class="num"><span title="source: evidence/neatlogs_runs.json">4</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">15.8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">6.5</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0065</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">108 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">3</span></td></tr><tr><td>dev</td><td class="num"><span title="source: evidence/neatlogs_runs.json">28</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">5.2</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">2.7</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0008</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">20 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">16</span></td></tr><tr><td>real</td><td class="num"><span title="source: evidence/neatlogs_runs.json">8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">46.0</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">18.4</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0322</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">533 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">8</span></td></tr></tbody></table></div></article><article class="card"><div class="logo entire" role="img" aria-label="Entire logo"></div><h3>Entire</h3><p class="role">Checkpoints the work and graphs the code.</p><dl class="kv"><div><dt>Checkpoints</dt><dd><span title="source: evidence/entire.json">2</span></dd></div><div><dt>Graph stats</dt><dd><span title="source: evidence/entire.json">~32,939 tokens saved</span></dd></div><div><dt>Latest checkpoint</dt><dd><span class="missing">missing</span></dd></div></dl></article><article class="card"><div class="logo cfoai" role="img" aria-label="cfo.ai logo"></div><h3>cfo.ai</h3><p class="role">Prices a run and plans the business.</p><dl class="kv"><div><dt>Cost per run</dt><dd><span class="missing">missing</span></dd></div><div><dt>Plan</dt><dd><span class="missing">missing</span></dd></div></dl></article>
+<article class="card"><div class="logo neatlogs" role="img" aria-label="neatlogs logo"></div><h3>neatlogs</h3><p class="role">Traces every step of every run.</p><dl class="kv"><div><dt>Trace links</dt><dd><span title="source: evidence/neatlogs_runs.json">31 of 68</span></dd></div><div><dt>v1 vs v2</dt><dd><span title="source: evidence/neatlogs_runs.json">4.25 vs 6.75 tool calls</span></dd></div></dl><div class="tscroll"><table><thead><tr><th>Tag</th><th>Runs</th><th>Spans</th><th>Tools</th><th>Cost</th><th>Time</th><th>Errors</th></tr></thead><tbody><tr><td>v1</td><td class="num"><span title="source: evidence/neatlogs_runs.json">4</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">9.2</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">4.2</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0262</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">128 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">0</span></td></tr><tr><td>v2</td><td class="num"><span title="source: evidence/neatlogs_runs.json">8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">18.6</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">6.8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0333</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">204 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">5</span></td></tr><tr><td>check</td><td class="num"><span title="source: evidence/neatlogs_runs.json">4</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">15.8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">6.5</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0065</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">108 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">3</span></td></tr><tr><td>dev</td><td class="num"><span title="source: evidence/neatlogs_runs.json">28</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">5.2</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">2.7</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0008</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">20 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">16</span></td></tr><tr><td>real</td><td class="num"><span title="source: evidence/neatlogs_runs.json">8</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">46.0</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">18.4</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">$0.0322</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">533 s</span></td><td class="num"><span title="source: evidence/neatlogs_runs.json">8</span></td></tr></tbody></table></div></article><article class="card"><div class="logo entire" role="img" aria-label="Entire logo"></div><h3>Entire</h3><p class="role">Checkpoints the work and graphs the code.</p><dl class="kv"><div><dt>Checkpoints</dt><dd><span title="source: evidence/entire.json">2</span></dd></div><div><dt>Graph stats</dt><dd><span title="source: evidence/entire.json">~32,939 tokens saved</span></dd></div><div><dt>Latest checkpoint</dt><dd><span class="missing">missing</span></dd></div></dl></article><article class="card"><div class="logo cfoai" role="img" aria-label="cfo.ai logo"></div><h3>cfo.ai</h3><p class="role">Prices a run and plans the business.</p><dl class="kv"><div><dt>Cost per run</dt><dd><span class="missing">missing</span></dd></div><div><dt>Plan</dt><dd><span class="missing">missing</span></dd></div></dl></article>
 </section>
 </main>
 
-<footer>Built 2026-10-10T15:27:29Z UTC. Cost is list price, not billed. Every value that reads "missing" was not in the run files.</footer>
+<footer>Built 2026-10-11T05:23:13Z UTC. Cost is list price, not billed. Every value that reads "missing" was not in the run files.</footer>
 </div>
 </body>
 </html>

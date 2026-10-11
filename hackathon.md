@@ -138,7 +138,7 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 
 ## Demo
 
-Landing page: https://1run.netlify.app (Netlify, published from docs/ on main).
+Landing page: https://firstrun.atharvashah.com (Netlify, published from docs/ on main). The older address https://1run.netlify.app serves the same site.
 
 Run replay with the docs execution graph: https://1run.netlify.app/run.html?s=10#ex=dbt opens the dbt run on the step that broke.
 
@@ -146,22 +146,25 @@ The demo video is not recorded yet. The shot sheet is in the plan, file 35.
 
 ## Built in Public
 
-Every post below carries #neatHack.
+Links were checked logged out on 2026-10-11 through the public X embed endpoint and the Zernio post ledger. The Tag column says whether the post text carries #neatHack.
 
-| When (IST) | Post | Link |
-|---|---|---|
-| Sat 10:45 | "my neatlogs hackathon project has already caught doc issues" | https://twitter.com/i/web/status/2108792303611429152 |
-| Sat 11:00 | "built this weekend at #neatHack" | URL to add |
-| Sat 12:30 | "#neatHack kickoff, 12:30 IST" | URL to add |
-| Sat 13:14 | "#neatHack, day one. all three required tools are up" | https://twitter.com/i/web/status/2108826005854937357 |
-| Sat 13:26 | "your quickstart is the only part of your product" | https://twitter.com/i/web/status/2108828983194206308 |
-| Sat 15:15 | "a quickstart breaks the way an agent breaks" | URL to add |
-| Sat 18:15 | "send me your quickstart and FirstRun runs it" | URL to add |
-| Sat 18:23 | "4 docs PRs opened on day one of #neatHack" | https://twitter.com/i/web/status/2108903653411021062 |
-| Sat 19:11 | "Some containers were harmed in the making of FirstRun" | URL to add |
-| Sat 19:30 | LinkedIn: "Never let an AI agent fix every failure on its own" | URL to add |
-| Mon 12:00 | "my AI CFO found a bug in my agent", scheduled | after it posts |
-| Mon 13:30 | "4 docs PRs in 48 hours of #neatHack", scheduled | after it posts |
+| When (IST) | Post | Tag | Link |
+|---|---|---|---|
+| Sat 10:45 | "my neatlogs hackathon project has already caught doc issues" | yes | https://twitter.com/i/web/status/2108788557670125946 |
+| Sat 11:00 | "built this weekend at #neatHack", a reply to the 10:45 post | yes | https://twitter.com/i/web/status/2108792303611429152 |
+| Sat 12:32 | "#neatHack kickoff, 12:30 IST" | yes | https://twitter.com/i/web/status/2108815318541844954 |
+| Sat 13:14 | "#neatHack, day one. all three required tools are up" | yes | https://twitter.com/i/web/status/2108826005854937357 |
+| Sat 13:26 | "your quickstart is the only part of your product" | yes | https://twitter.com/i/web/status/2108828983194206308 |
+| Sat 15:15 | "a quickstart breaks the way an agent breaks" | yes | https://twitter.com/i/web/status/2108856505566921210 |
+| Sat 18:15 | "send me your quickstart and FirstRun runs it" | yes | https://twitter.com/i/web/status/2108901819426431407 |
+| Sat 18:23 | "4 docs PRs opened on day one of #neatHack" | yes | https://twitter.com/i/web/status/2108903653411021062 |
+| Sat 19:11 | "Some containers were harmed in the making of FirstRun" | no | https://twitter.com/i/web/status/2108915865697608147 |
+| Sat 19:30 | LinkedIn: "Never let an AI agent fix every failure on its own" | yes | https://www.linkedin.com/feed/update/urn:li:share:7514686677714665473/ |
+| Sat 21:15 | "an agent that heals every failure on its own drifts" | yes | https://twitter.com/i/web/status/2108947112809378291 |
+| Sun 07:32 | "a maintainer who gets a PR from an agent asks one question" | yes | https://twitter.com/i/web/status/2109102359779365016 |
+| Sun 10:32 | "FirstRun had no web UI at kickoff. that was the bet." | no | https://twitter.com/i/web/status/2109147626390097946 |
+| Mon 12:00 | "my AI CFO found a bug in my agent", scheduled | | after it posts |
+| Mon 13:30 | "4 docs PRs in 48 hours of #neatHack", scheduled | | after it posts |
 
 ## Known Limitations and Next Steps
 
