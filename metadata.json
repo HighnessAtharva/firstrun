@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4NJRQ19FYHNXRCSX5Z1NGJZ",
   "strategy": "manual-commit",
   "branch": "docs/final-alignment",
-  "checkpoints_count": 4,
+  "checkpoints_count": 5,
   "files_touched": null,
   "sessions": [
     {
@@ -19,20 +19,27 @@
       "compact_transcript": "/1/transcript.jsonl",
       "content_hash": "/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/2/metadata.json",
+      "transcript": "/2/full.jsonl",
+      "compact_transcript": "/2/transcript.jsonl",
+      "content_hash": "/2/content_hash.txt",
+      "prompt": "/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 6,
-    "cache_creation_tokens": 345886,
-    "cache_read_tokens": 825061,
-    "output_tokens": 3108,
-    "api_call_count": 3,
+    "input_tokens": 38,
+    "cache_creation_tokens": 365419,
+    "cache_read_tokens": 14063226,
+    "output_tokens": 12420,
+    "api_call_count": 18,
     "subagent_tokens": {
-      "input_tokens": 20,
-      "cache_creation_tokens": 146483,
-      "cache_read_tokens": 964989,
-      "output_tokens": 2778,
-      "api_call_count": 10
+      "input_tokens": 28,
+      "cache_creation_tokens": 149142,
+      "cache_read_tokens": 2415764,
+      "output_tokens": 5838,
+      "api_call_count": 14
     }
   }
 }
