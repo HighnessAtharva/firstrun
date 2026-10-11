@@ -109,7 +109,7 @@ Six mistakes the agent itself made in v1. These are the "before" story:
 
 ### 2026-10-10, 17:45 to 18:05 IST: The Business Plan Sets the Agent's Budget
 
-- **Done: `firstrun econ`.** The command reads 64 `firstrun.run` traces from neatlogs and writes [business/drivers.csv](business/drivers.csv) and [business/unit_economics.json](business/unit_economics.json). Mean cost per run is $0.0167, p95 is $0.0508 and max is $0.1014. Each quantile row names its trace ID.
+- **Done: `firstrun econ`.** The command reads 88 `firstrun.run` traces from neatlogs and writes [business/drivers.csv](business/drivers.csv) and [business/unit_economics.json](business/unit_economics.json). Mean cost per run is $0.0178, p95 is $0.0529 and max is $0.1014. Each quantile row names its trace ID.
 - **Finding:** the fixed $0.50 cap in `models.py` was 30 times the mean run. If every run hit it, Scale margin would be -403.6%. At a 70% margin floor, the Scale cap is $0.028, and 25.0% of measured runs cost more than that. [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) gives two fixes from the same formula: Scale at $529, or Scale at 1,500 runs.
 - **Done: `firstrun run --tier NAME`.** The executor and the recovery agent check the tier's cap in the `budget` GUARDRAIL span.
 - **Live runs on the typer quickstart, tag `tiercap`:**

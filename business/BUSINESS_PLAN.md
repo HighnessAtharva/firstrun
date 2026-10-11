@@ -14,20 +14,20 @@ cfo.ai model, public and read-only: [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://
 | Team | $49 | 10, nightly | 300 |
 | Scale | $299 | 100, nightly, with PRs, Docs Bisect and Prerequisite Proof | 3,000 |
 
-## The Average Run Costs $0.0167, but One in Twenty Costs Three Times That
+## The Average Run Costs $0.0178, but One in Twenty Costs Three Times That
 
-neatlogs holds 64 `firstrun.run` traces from 2026-10-10. `firstrun econ` reads them and writes [`drivers.csv`](drivers.csv), the file cfo.ai imports. Each quantile row names the trace it came from, so a judge can open the trace behind any cost in the model.
+neatlogs holds 88 `firstrun.run` traces from 2026-10-10 and 2026-10-11. `firstrun econ` reads them and writes [`drivers.csv`](drivers.csv), the file cfo.ai imports. Each quantile row names the trace it came from, so a judge can open the trace behind any cost in the model.
 
 | Driver | Cost per run | neatlogs trace |
 |---|---|---|
-| Mean | $0.01672 | all 64 |
-| p50 | $0.01076 | `cef9cc00bcc5369d74ffc7fc5f525244` |
+| Mean | $0.01782 | all 88 |
+| p50 | $0.01355 | `2120da35fc8a46c311f4da61c07cff0c` |
 | p90 | $0.04424 | `ec246a27f83c9e11d682eb09a1818f58` |
-| p95 | $0.05078 | `9e30cd0f9cee66410c81fb3a34e03177` |
+| p95 | $0.05286 | `495d510fd6da5546dbc6ab6e52bcee68` |
 | Max | $0.10135 | `a462576e751e91543b5623185331d603` |
-| Compute | $0.0019 | assumption: AWS t3.medium at $0.0416 an hour for the measured 164.8 s mean |
+| Compute | $0.0020 | assumption: AWS t3.medium at $0.0416 an hour for the measured 175.7 s mean |
 
-The costs are Sonnet 5.5 list price, and Anthropic did not bill them. The 64 traces include 28 development runs, so the spread is wider than a production month would show.
+The costs are Sonnet 5.5 list price, and Anthropic did not bill them. The 88 traces include development runs, so the spread is wider than a production month would show.
 
 The expensive runs are the useful ones. A run that hits a broken step pays for recovery and for the second clean run. Of 19 real-world runs, 10 ended `verified` with 32 proven patches, and the 19 runs cost $0.97 in total. That is $0.0975 per verified quickstart (source: `runs/*/state.json`).
 
@@ -91,12 +91,12 @@ Ari built the model in cfo.ai over MCP, in workspace "Atharva CFOAI", page "Firs
 
 | Scenario | Scale gross margin | Team gross margin | Month 18 MRR | Month 18 cash |
 |---|---|---|---|---|
-| Base | 78.3% | 85.1% | $2,069 | $16,832 |
-| Growth | 78.3% | 85.1% | $5,427 | $45,220 |
-| Tail month: every run at p95 cost | 44.1% | 64.2% | $2,069 | $12,767 |
-| Old cap: every Scale run at $0.50 | -406.6% | 85.1% | $2,069 | -$12,131 |
-| Scale at $529 | 86.5% | 85.1% | $2,876 (Base plus the $807 Scale gain cfo.ai reported) | $21,293 |
-| Scale at 1,500 runs | 87.7% | 85.1% | $2,069 | $17,390 |
+| Base | 77.1% | 84.3% | $2,069 | $16,685 |
+| Growth | 77.1% | 84.3% | $5,427 | $44,674 |
+| Tail month: every run at p95 cost | 41.9% | 62.9% | $2,069 | $12,503 |
+| Old cap: every Scale run at $0.50 | -406.7% | 84.3% | $2,069 | -$12,212 |
+| Scale at $529 | 85.8% | 84.3% | $2,875 | $21,146 |
+| Scale at 1,500 runs | 87.0% | 84.3% | $2,069 | $17,280 |
 
 Under the old cap, cash first goes negative in December 2027, month 14. Every other Scenario has positive net cash flow, so cfo.ai shows no runway limit. Raising Scale to $529 earns the most cash. Halving the Scale allowance keeps the $299 price and still clears the 70% floor.
 
