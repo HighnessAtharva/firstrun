@@ -15,7 +15,9 @@
    "seconds": 145,
    "cost": 0.049,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed."
+   "summary": "3 of 3 runnable steps passed.",
+   "receipt": "FR-20261010-174858-docs-litestar-dev",
+   "receipt_usd": 0.051
   },
   {
    "id": "20261010-174646-docs-rs",
@@ -32,7 +34,9 @@
    "seconds": 0,
    "cost": 0.0296,
    "fixture": false,
-   "summary": "Step 1 broke: Clone the cargo-quickstart repository."
+   "summary": "Step 1 broke: Clone the cargo-quickstart repository.",
+   "receipt": "FR-20261010-174646-docs-rs",
+   "receipt_usd": 0.0316
   },
   {
    "id": "20261010-174114-github-com",
@@ -49,7 +53,9 @@
    "seconds": 199,
    "cost": 0.0203,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "3 of 3 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-174114-github-com",
+   "receipt_usd": 0.0223
   },
   {
    "id": "20261010-173804-fla[REDACTED]",
@@ -66,7 +72,9 @@
    "seconds": 322,
    "cost": 0.0613,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed. 2 fixes proven in a fresh container."
+   "summary": "4 of 4 runnable steps passed. 2 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-173804-flask-palletsprojects-com",
+   "receipt_usd": 0.0633
   },
   {
    "id": "20261010-173419-beam-apache-org",
@@ -83,7 +91,9 @@
    "seconds": 156,
    "cost": 0.0382,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container. 4 skipped: The Flink runner needs an external Flink setup that a plain slim Python container does not provide."
+   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container. 4 skipped: The Flink runner needs an external Flink setup that a plain slim Python container does not provide.",
+   "receipt": "FR-20261010-173419-beam-apache-org",
+   "receipt_usd": 0.0402
   },
   {
    "id": "20261010-173117-docs-peewee-orm-com",
@@ -100,7 +110,9 @@
    "seconds": 83,
    "cost": 0.0639,
    "fixture": false,
-   "summary": "1 of 1 runnable steps passed. 1 fix proven in a fresh container. 1 skipped: This needs a running Postgres server with an existing database named blog, which is not available in the container."
+   "summary": "1 of 1 runnable steps passed. 1 fix proven in a fresh container. 1 skipped: This needs a running Postgres server with an existing database named blog, which is not available in the container.",
+   "receipt": "FR-20261010-173117-docs-peewee-orm-com",
+   "receipt_usd": 0.0659
   },
   {
    "id": "20261010-172923-framesurge-sh",
@@ -117,7 +129,9 @@
    "seconds": 0,
    "cost": 0.0272,
    "fixture": false,
-   "summary": "Step 3 broke: Start the app with a server and file watching. `cargo metadata` exited with an error: error: could not find `Cargo.toml` in `/work` or any parent directory"
+   "summary": "Step 3 broke: Start the app with a server and file watching. `cargo metadata` exited with an error: error: could not find `Cargo.toml` in `/work` or any parent directory",
+   "receipt": "FR-20261010-172923-framesurge-sh",
+   "receipt_usd": 0.0292
   },
   {
    "id": "20261010-172745-hypothesis-readthedocs-io",
@@ -134,7 +148,9 @@
    "seconds": 47,
    "cost": 0.0231,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "3 of 3 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-172745-hypothesis-readthedocs-io",
+   "receipt_usd": 0.0251
   },
   {
    "id": "20261010-172724-docs-litestar-dev",
@@ -151,7 +167,9 @@
    "seconds": 0,
    "cost": 0.0247,
    "fixture": false,
-   "summary": "Step 2 broke: Create app.py with the minimal example and run the Litestar app."
+   "summary": "Step 2 broke: Create app.py with the minimal example and run the Litestar app.",
+   "receipt": "FR-20261010-172724-docs-litestar-dev",
+   "receipt_usd": 0.0267
   },
   {
    "id": "20261010-172624-duckdb-org",
@@ -168,7 +186,9 @@
    "seconds": 33,
    "cost": 0.0475,
    "fixture": false,
-   "summary": "9 of 9 runnable steps passed."
+   "summary": "9 of 9 runnable steps passed.",
+   "receipt": "FR-20261010-172624-duckdb-org",
+   "receipt_usd": 0.0495
   },
   {
    "id": "20261010-172617-github-com",
@@ -185,7 +205,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": false,
-   "summary": "Stopped before any step ran."
+   "summary": "Stopped before any step ran.",
+   "receipt": "FR-20261010-172617-github-com",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-172527-tortoise-github-io",
@@ -202,7 +224,9 @@
    "seconds": 25,
    "cost": 0.0327,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed."
+   "summary": "3 of 3 runnable steps passed.",
+   "receipt": "FR-20261010-172527-tortoise-github-io",
+   "receipt_usd": 0.0347
   },
   {
    "id": "20261010-172525-docs-peewee-orm-com",
@@ -219,7 +243,9 @@
    "seconds": 0,
    "cost": 0.0315,
    "fixture": false,
-   "summary": "Step 2 broke: Run the example twitter app script."
+   "summary": "Step 2 broke: Run the example twitter app script.",
+   "receipt": "FR-20261010-172525-docs-peewee-orm-com",
+   "receipt_usd": 0.0335
   },
   {
    "id": "20261010-172328-docs-djangoproject-com",
@@ -236,7 +262,9 @@
    "seconds": 59,
    "cost": 0.0426,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed. 2 fixes proven in a fresh container. 2 skipped: The server runs until stopped and the docs verify it by visiting http://127.0.0.1:8000/ in a web browser."
+   "summary": "4 of 4 runnable steps passed. 2 fixes proven in a fresh container. 2 skipped: The server runs until stopped and the docs verify it by visiting http://127.0.0.1:8000/ in a web browser.",
+   "receipt": "FR-20261010-172328-docs-djangoproject-com",
+   "receipt_usd": 0.0446
   },
   {
    "id": "20261010-172306-dlthub-com",
@@ -253,7 +281,9 @@
    "seconds": 0,
    "cost": 0.1,
    "fixture": false,
-   "summary": "Step 2 broke: Load a list of Python dicts into DuckDB. Load package 1791653123.5538468 is LOADED and contains no failed jobs"
+   "summary": "Step 2 broke: Load a list of Python dicts into DuckDB. Load package 1791653123.5538468 is LOADED and contains no failed jobs",
+   "receipt": "FR-20261010-172306-dlthub-com",
+   "receipt_usd": 0.102
   },
   {
    "id": "20261010-172208-fla[REDACTED]",
@@ -270,7 +300,9 @@
    "seconds": 0,
    "cost": 0.0032,
    "fixture": false,
-   "summary": "Step 1 broke: Save the minimal Flask application as hello.py and start the development server."
+   "summary": "Step 1 broke: Save the minimal Flask application as hello.py and start the development server.",
+   "receipt": "FR-20261010-172208-flask-palletsprojects-com",
+   "receipt_usd": 0.0052
   },
   {
    "id": "20261010-172129-go-dev",
@@ -287,7 +319,9 @@
    "seconds": 94,
    "cost": 0.0296,
    "fixture": false,
-   "summary": "8 of 8 runnable steps passed. 1 skipped: This step requires browsing the pkg.go.dev website in a web browser."
+   "summary": "8 of 8 runnable steps passed. 1 skipped: This step requires browsing the pkg.go.dev website in a web browser.",
+   "receipt": "FR-20261010-172129-go-dev",
+   "receipt_usd": 0.0316
   },
   {
    "id": "20261010-172110-docs-sqlalchemy-org",
@@ -304,7 +338,9 @@
    "seconds": 59,
    "cost": 0.0476,
    "fixture": false,
-   "summary": "1 of 1 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "1 of 1 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-172110-docs-sqlalchemy-org",
+   "receipt_usd": 0.0496
   },
   {
    "id": "20261010-172110-fla[REDACTED]",
@@ -321,7 +357,9 @@
    "seconds": 32,
    "cost": 0.0206,
    "fixture": false,
-   "summary": "2 of 2 runnable steps passed."
+   "summary": "2 of 2 runnable steps passed.",
+   "receipt": "FR-20261010-172110-flask-sqlalchemy-palletsprojects-com",
+   "receipt_usd": 0.0226
   },
   {
    "id": "20261010-172110-pip-pypa-io",
@@ -338,7 +376,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": false,
-   "summary": "Stopped before any step ran."
+   "summary": "Stopped before any step ran.",
+   "receipt": "FR-20261010-172110-pip-pypa-io",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-143653-help-altimate-ai",
@@ -355,7 +395,9 @@
    "seconds": 105,
    "cost": 0.0393,
    "fixture": false,
-   "summary": "1 of 1 runnable steps passed. 5 skipped: This launches an interactive TUI whose sign-in opens a browser and needs a signup."
+   "summary": "1 of 1 runnable steps passed. 5 skipped: This launches an interactive TUI whose sign-in opens a browser and needs a signup.",
+   "receipt": "FR-20261010-143653-help-altimate-ai",
+   "receipt_usd": 0.0413
   },
   {
    "id": "20261010-124014-typer-tiangolo-com",
@@ -372,7 +414,9 @@
    "seconds": 0,
    "cost": 0.0115,
    "fixture": false,
-   "summary": "Step 4 broke: Use two CLI arguments, name and lastname. ModuleNotFoundError: No module named 'typer'"
+   "summary": "Step 4 broke: Use two CLI arguments, name and lastname. ModuleNotFoundError: No module named 'typer'",
+   "receipt": "FR-20261010-124014-typer-tiangolo-com",
+   "receipt_usd": 0.0135
   },
   {
    "id": "20261010-123047-typer-tiangolo-com",
@@ -389,7 +433,9 @@
    "seconds": 0,
    "cost": 0.0114,
    "fixture": false,
-   "summary": "Step 4 broke: Use two CLI arguments, name and lastname. ModuleNotFoundError: No module named 'typer'"
+   "summary": "Step 4 broke: Use two CLI arguments, name and lastname. ModuleNotFoundError: No module named 'typer'",
+   "receipt": "FR-20261010-123047-typer-tiangolo-com",
+   "receipt_usd": 0.0134
   },
   {
    "id": "20261010-122736-typer-tiangolo-com",
@@ -406,7 +452,9 @@
    "seconds": 127,
    "cost": 0.0201,
    "fixture": false,
-   "summary": "7 of 7 runnable steps passed. 8 fixes proven in a fresh container."
+   "summary": "7 of 7 runnable steps passed. 8 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-122736-typer-tiangolo-com",
+   "receipt_usd": 0.0221
   },
   {
    "id": "20261010-120353-fla[REDACTED]",
@@ -423,7 +471,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": false,
-   "summary": "Step 1 broke: Save the minimal Flask application as hello.py and start the development server. /tmp/.fr_step.sh: line 11: flask: command not found"
+   "summary": "Step 1 broke: Save the minimal Flask application as hello.py and start the development server. /tmp/.fr_step.sh: line 11: flask: command not found",
+   "receipt": "FR-20261010-120353-flask-palletsprojects-com",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-115735-fastapi-tiangolo-com",
@@ -440,7 +490,9 @@
    "seconds": 0,
    "cost": 0.0402,
    "fixture": false,
-   "summary": "Step 1 broke: Save the simplest FastAPI app to main.py and run the live development server."
+   "summary": "Step 1 broke: Save the simplest FastAPI app to main.py and run the live development server.",
+   "receipt": "FR-20261010-115735-fastapi-tiangolo-com",
+   "receipt_usd": 0.0422
   },
   {
    "id": "20261010-115346-python-poetry-org",
@@ -457,7 +509,9 @@
    "seconds": 104,
    "cost": 0.0432,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed. 3 fixes proven in a fresh container."
+   "summary": "4 of 4 runnable steps passed. 3 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-115346-python-poetry-org",
+   "receipt_usd": 0.0452
   },
   {
    "id": "20261010-115131-docs-astral-sh",
@@ -474,7 +528,9 @@
    "seconds": 0,
    "cost": 0.0312,
    "fixture": false,
-   "summary": "Step 3 broke: Enable Bash shell autocompletion for uv."
+   "summary": "Step 3 broke: Enable Bash shell autocompletion for uv.",
+   "receipt": "FR-20261010-115131-docs-astral-sh",
+   "receipt_usd": 0.0332
   },
   {
    "id": "20261010-114125-python-httpx-org",
@@ -491,7 +547,9 @@
    "seconds": 296,
    "cost": 0.0776,
    "fixture": false,
-   "summary": "10 of 10 runnable steps passed. 2 fixes proven in a fresh container."
+   "summary": "10 of 10 runnable steps passed. 2 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-114125-python-httpx-org",
+   "receipt_usd": 0.0796
   },
   {
    "id": "20261010-113839-docs-pola-rs",
@@ -508,7 +566,9 @@
    "seconds": 73,
    "cost": 0.0908,
    "fixture": false,
-   "summary": "10 of 10 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "10 of 10 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-113839-docs-pola-rs",
+   "receipt_usd": 0.0928
   },
   {
    "id": "20261010-113542-typer-tiangolo-com",
@@ -525,7 +585,9 @@
    "seconds": 121,
    "cost": 0.0815,
    "fixture": false,
-   "summary": "7 of 7 runnable steps passed. 8 fixes proven in a fresh container."
+   "summary": "7 of 7 runnable steps passed. 8 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-113542-typer-tiangolo-com",
+   "receipt_usd": 0.0835
   },
   {
    "id": "20261010-113327-docs-astral-sh",
@@ -542,7 +604,9 @@
    "seconds": 0,
    "cost": 0.0739,
    "fixture": false,
-   "summary": "Step 4 broke: Automatically fix the fixable lint error. Found 2 errors (2 fixed, 0 remaining)."
+   "summary": "Step 4 broke: Automatically fix the fixable lint error. Found 2 errors (2 fixed, 0 remaining).",
+   "receipt": "FR-20261010-113327-docs-astral-sh",
+   "receipt_usd": 0.0759
   },
   {
    "id": "20261010-112611-raw-githubusercontent-com",
@@ -559,7 +623,9 @@
    "seconds": 0,
    "cost": 0.0309,
    "fixture": false,
-   "summary": "Step 2 broke: Run FirstRun on a quickstart URL (needs CLAUDE_CODE_OAUTH_TOKEN and Docker)."
+   "summary": "Step 2 broke: Run FirstRun on a quickstart URL (needs CLAUDE_CODE_OAUTH_TOKEN and Docker).",
+   "receipt": "FR-20261010-112611-raw-githubusercontent-com",
+   "receipt_usd": 0.0329
   },
   {
    "id": "20261010-104238-docs-dagster-io",
@@ -576,7 +642,9 @@
    "seconds": 0,
    "cost": 0.0255,
    "fixture": false,
-   "summary": "Step 5 broke: Fill in the sample data and asset code, then list the Dagster definitions."
+   "summary": "Step 5 broke: Fill in the sample data and asset code, then list the Dagster definitions.",
+   "receipt": "FR-20261010-104238-docs-dagster-io",
+   "receipt_usd": 0.0275
   },
   {
    "id": "20261010-103602-docs-dagster-io",
@@ -593,7 +661,9 @@
    "seconds": 0,
    "cost": 0.0261,
    "fixture": false,
-   "summary": "Step 2 broke: Change into the project, create and activate a virtual environment, install pandas and the project as an editable package."
+   "summary": "Step 2 broke: Change into the project, create and activate a virtual environment, install pandas and the project as an editable package.",
+   "receipt": "FR-20261010-103602-docs-dagster-io",
+   "receipt_usd": 0.0281
   },
   {
    "id": "20261010-103006-docs-dagster-io",
@@ -610,7 +680,9 @@
    "seconds": 0,
    "cost": 0.0239,
    "fixture": false,
-   "summary": "Step 2 broke: Change into the project, create and activate a virtual environment, install pandas and the project as an editable package."
+   "summary": "Step 2 broke: Change into the project, create and activate a virtual environment, install pandas and the project as an editable package.",
+   "receipt": "FR-20261010-103006-docs-dagster-io",
+   "receipt_usd": 0.0259
   },
   {
    "id": "20261010-101907-docs-dagster-io",
@@ -627,7 +699,9 @@
    "seconds": 0,
    "cost": 0.0573,
    "fixture": false,
-   "summary": "Step 3 broke: Scaffold an assets file."
+   "summary": "Step 3 broke: Scaffold an assets file.",
+   "receipt": "FR-20261010-101907-docs-dagster-io",
+   "receipt_usd": 0.0593
   },
   {
    "id": "20261010-101029-mkdocs-org",
@@ -644,7 +718,9 @@
    "seconds": 92,
    "cost": 0.0314,
    "fixture": false,
-   "summary": "9 of 9 runnable steps passed. 1 fix proven in a fresh container. 1 skipped: The dev server runs until stopped and the preview must be viewed in a browser."
+   "summary": "9 of 9 runnable steps passed. 1 fix proven in a fresh container. 1 skipped: The dev server runs until stopped and the preview must be viewed in a browser.",
+   "receipt": "FR-20261010-101029-mkdocs-org",
+   "receipt_usd": 0.0334
   },
   {
    "id": "20261010-100249-docs-dagster-io",
@@ -661,7 +737,9 @@
    "seconds": 0,
    "cost": 0.0939,
    "fixture": false,
-   "summary": "Step 3 broke: Scaffold an assets file."
+   "summary": "Step 3 broke: Scaffold an assets file.",
+   "receipt": "FR-20261010-100249-docs-dagster-io",
+   "receipt_usd": 0.0959
   },
   {
    "id": "20261010-095059-help-accuknox-com",
@@ -678,7 +756,9 @@
    "seconds": 336,
    "cost": 0.0166,
    "fixture": false,
-   "summary": "5 of 5 runnable steps passed. 5 fixes proven in a fresh container."
+   "summary": "5 of 5 runnable steps passed. 5 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-095059-help-accuknox-com",
+   "receipt_usd": 0.0186
   },
   {
    "id": "20261010-094453-web-archive-org",
@@ -695,7 +775,9 @@
    "seconds": 0,
    "cost": 0.0436,
    "fixture": true,
-   "summary": "Step 2 broke: Run the usage example: list models and create a chat completion (API key is read from OPENAI_API_KEY). openai.error.AuthenticationError: No API key provided. You can set your API key in code using 'openai.api_key = [REDACTED]', or you can set "
+   "summary": "Step 2 broke: Run the usage example: list models and create a chat completion (API key is read from OPENAI_API_KEY). openai.error.AuthenticationError: No API key provided. You can set your API key in code using 'openai.api_key = [REDACTED]', or you can set ",
+   "receipt": "FR-20261010-094453-web-archive-org",
+   "receipt_usd": 0.0456
   },
   {
    "id": "20261010-094131-docs-trychroma-com",
@@ -712,7 +794,9 @@
    "seconds": 180,
    "cost": 0.0117,
    "fixture": false,
-   "summary": "2 of 2 runnable steps passed."
+   "summary": "2 of 2 runnable steps passed.",
+   "receipt": "FR-20261010-094131-docs-trychroma-com",
+   "receipt_usd": 0.0137
   },
   {
    "id": "20261010-093435-docs-entire-io",
@@ -729,7 +813,9 @@
    "seconds": 134,
    "cost": 0.0229,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed. 2 fixes proven in a fresh container."
+   "summary": "4 of 4 runnable steps passed. 2 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-093435-docs-entire-io",
+   "receipt_usd": 0.0249
   },
   {
    "id": "20261010-093255-docs-neatlogs-com",
@@ -746,7 +832,9 @@
    "seconds": 75,
    "cost": 0.0629,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed."
+   "summary": "3 of 3 runnable steps passed.",
+   "receipt": "FR-20261010-093255-docs-neatlogs-com",
+   "receipt_usd": 0.0649
   },
   {
    "id": "20261010-093245-docs-getdbt-com",
@@ -763,7 +851,9 @@
    "seconds": 600,
    "cost": 0.0314,
    "fixture": false,
-   "summary": "9 of 9 runnable steps passed. 3 fixes proven in a fresh container. 1 skipped: It starts a long-running web server and opens the docs in a browser, which cannot be checked in a headless container."
+   "summary": "9 of 9 runnable steps passed. 3 fixes proven in a fresh container. 1 skipped: It starts a long-running web server and opens the docs in a browser, which cannot be checked in a headless container.",
+   "receipt": "FR-20261010-093245-docs-getdbt-com",
+   "receipt_usd": 0.0334
   },
   {
    "id": "20261010-092815-mkdocs-org",
@@ -780,7 +870,9 @@
    "seconds": 0,
    "cost": 0.0463,
    "fixture": false,
-   "summary": "Step 2 broke: Create a new MkDocs project and enter its directory."
+   "summary": "Step 2 broke: Create a new MkDocs project and enter its directory.",
+   "receipt": "FR-20261010-092815-mkdocs-org",
+   "receipt_usd": 0.0483
   },
   {
    "id": "20261010-092227-docs-dagster-io",
@@ -797,7 +889,9 @@
    "seconds": 191,
    "cost": 0.0765,
    "fixture": false,
-   "summary": "10 of 10 runnable steps passed. 3 fixes proven in a fresh container."
+   "summary": "10 of 10 runnable steps passed. 3 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-092227-docs-dagster-io",
+   "receipt_usd": 0.0785
   },
   {
    "id": "20261010-091740-help-accuknox-com",
@@ -814,7 +908,9 @@
    "seconds": 154,
    "cost": 0.0453,
    "fixture": false,
-   "summary": "5 of 5 runnable steps passed. 2 fixes proven in a fresh container."
+   "summary": "5 of 5 runnable steps passed. 2 fixes proven in a fresh container.",
+   "receipt": "FR-20261010-091740-help-accuknox-com",
+   "receipt_usd": 0.0473
   },
   {
    "id": "20261010-091104-web-archive-org",
@@ -831,7 +927,9 @@
    "seconds": 0,
    "cost": 0.1032,
    "fixture": true,
-   "summary": "Step 5 broke: Run the usage example: list models and create a chat completion (API key is read from OPENAI_API_KEY)."
+   "summary": "Step 5 broke: Run the usage example: list models and create a chat completion (API key is read from OPENAI_API_KEY).",
+   "receipt": "FR-20261010-091104-web-archive-org",
+   "receipt_usd": 0.1052
   },
   {
    "id": "20261010-090839-docs-trychroma-com",
@@ -848,7 +946,9 @@
    "seconds": 120,
    "cost": 0.028,
    "fixture": false,
-   "summary": "2 of 2 runnable steps passed."
+   "summary": "2 of 2 runnable steps passed.",
+   "receipt": "FR-20261010-090839-docs-trychroma-com",
+   "receipt_usd": 0.03
   },
   {
    "id": "20261010-090116-docs-entire-io",
@@ -865,7 +965,9 @@
    "seconds": 293,
    "cost": 0.0311,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-090116-docs-entire-io",
+   "receipt_usd": 0.0331
   },
   {
    "id": "20261010-085917-docs-getdbt-com",
@@ -882,7 +984,9 @@
    "seconds": 613,
    "cost": 0.062,
    "fixture": false,
-   "summary": "9 of 9 runnable steps passed. 4 fixes proven in a fresh container. 1 skipped: It starts a long-running web server and opens the docs in a browser, which cannot be checked in a headless container."
+   "summary": "9 of 9 runnable steps passed. 4 fixes proven in a fresh container. 1 skipped: It starts a long-running web server and opens the docs in a browser, which cannot be checked in a headless container.",
+   "receipt": "FR-20261010-085917-docs-getdbt-com",
+   "receipt_usd": 0.064
   },
   {
    "id": "20261010-085914-docs-neatlogs-com",
@@ -899,7 +1003,9 @@
    "seconds": 0,
    "cost": 0.0528,
    "fixture": false,
-   "summary": "Step 4 broke: Send the first trace by wrapping an OpenAI client and making one chat call. KeyError: 'NEATLOGS_API_KEY'"
+   "summary": "Step 4 broke: Send the first trace by wrapping an OpenAI client and making one chat call. KeyError: 'NEATLOGS_API_KEY'",
+   "receipt": "FR-20261010-085914-docs-neatlogs-com",
+   "receipt_usd": 0.0548
   },
   {
    "id": "20261010-084417-curl-missing-fixture",
@@ -916,7 +1022,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": true,
-   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found"
+   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found",
+   "receipt": "FR-20261010-084417-curl-missing-fixture",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-084344-curl-missing-fixture",
@@ -933,7 +1041,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": true,
-   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found"
+   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found",
+   "receipt": "FR-20261010-084344-curl-missing-fixture",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-084317-curl-missing-fixture",
@@ -950,7 +1060,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": true,
-   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found"
+   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found",
+   "receipt": "FR-20261010-084317-curl-missing-fixture",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-084233-curl-missing-fixture",
@@ -967,7 +1079,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": true,
-   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found"
+   "summary": "Step 1 broke: Run: curl -fsSL https://example.com -o /dev/null. /tmp/.fr_step.sh: line 4: curl: command not found",
+   "receipt": "FR-20261010-084233-curl-missing-fixture",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-081816-httpbin-org",
@@ -984,7 +1098,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": false,
-   "summary": "Stopped before any step ran."
+   "summary": "Stopped before any step ran.",
+   "receipt": "FR-20261010-081816-httpbin-org",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-081748-broken-quickstart-fixture",
@@ -1001,7 +1117,9 @@
    "seconds": 152,
    "cost": 0.0206,
    "fixture": true,
-   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-081748-broken-quickstart-fixture",
+   "receipt_usd": 0.0226
   },
   {
    "id": "20261010-081434-curl-missing-fixture",
@@ -1018,7 +1136,9 @@
    "seconds": 38,
    "cost": 0.0025,
    "fixture": true,
-   "summary": "2 of 2 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "2 of 2 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-081434-curl-missing-fixture",
+   "receipt_usd": 0.0045
   },
   {
    "id": "20261010-081034-curl-missing-fixture",
@@ -1035,7 +1155,9 @@
    "seconds": 33,
    "cost": 0.0052,
    "fixture": true,
-   "summary": "2 of 2 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "2 of 2 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-081034-curl-missing-fixture",
+   "receipt_usd": 0.0072
   },
   {
    "id": "20261010-074700-web-archive-org",
@@ -1052,7 +1174,9 @@
    "seconds": 0,
    "cost": 0.0312,
    "fixture": true,
-   "summary": "Step 6 broke: Show usage for the openai command-line utility. /tmp/.fr_step.sh: line 4: openai: command not found"
+   "summary": "Step 6 broke: Show usage for the openai command-line utility. /tmp/.fr_step.sh: line 4: openai: command not found",
+   "receipt": "FR-20261010-074700-web-archive-org",
+   "receipt_usd": 0.0332
   },
   {
    "id": "20261010-074228-docs-trychroma-com",
@@ -1069,7 +1193,9 @@
    "seconds": 250,
    "cost": 0.0287,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed."
+   "summary": "3 of 3 runnable steps passed.",
+   "receipt": "FR-20261010-074228-docs-trychroma-com",
+   "receipt_usd": 0.0307
   },
   {
    "id": "20261010-074200-docs-entire-io",
@@ -1086,7 +1212,9 @@
    "seconds": 0,
    "cost": 0.0226,
    "fixture": false,
-   "summary": "Step 1 broke: Install the stable channel of the Entire CLI with the Linux install script. /tmp/.fr_step.sh: line 4: curl: command not found"
+   "summary": "Step 1 broke: Install the stable channel of the Entire CLI with the Linux install script. /tmp/.fr_step.sh: line 4: curl: command not found",
+   "receipt": "FR-20261010-074200-docs-entire-io",
+   "receipt_usd": 0.0246
   },
   {
    "id": "20261010-074001-docs-neatlogs-com",
@@ -1103,7 +1231,9 @@
    "seconds": 84,
    "cost": 0.0355,
    "fixture": false,
-   "summary": "3 of 3 runnable steps passed."
+   "summary": "3 of 3 runnable steps passed.",
+   "receipt": "FR-20261010-074001-docs-neatlogs-com",
+   "receipt_usd": 0.0375
   },
   {
    "id": "20261010-073946-broken-quickstart-fixture",
@@ -1120,7 +1250,9 @@
    "seconds": 195,
    "cost": 0.0173,
    "fixture": true,
-   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container."
+   "summary": "4 of 4 runnable steps passed. 1 fix proven in a fresh container.",
+   "receipt": "FR-20261010-073946-broken-quickstart-fixture",
+   "receipt_usd": 0.0193
   },
   {
    "id": "20261010-073801-broken-quickstart-fixture",
@@ -1137,7 +1269,9 @@
    "seconds": 0,
    "cost": 0.0,
    "fixture": true,
-   "summary": "2 of 4 runnable steps passed."
+   "summary": "2 of 4 runnable steps passed.",
+   "receipt": "FR-20261010-073801-broken-quickstart-fixture",
+   "receipt_usd": 0.002
   },
   {
    "id": "20261010-073522-docs-neatlogs-com",
@@ -1154,7 +1288,9 @@
    "seconds": 70,
    "cost": 0.0,
    "fixture": false,
-   "summary": "4 of 4 runnable steps passed."
+   "summary": "4 of 4 runnable steps passed.",
+   "receipt": "FR-20261010-073522-docs-neatlogs-com",
+   "receipt_usd": 0.002
   }
  ]
 }

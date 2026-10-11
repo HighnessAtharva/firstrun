@@ -112,7 +112,20 @@ main{flex:1}
 .rl{list-style:none;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden;box-shadow:var(--sh)}
 .rl li+li{border-top:1px solid var(--line2)}
 .rl a.rr{display:grid;grid-template-columns:118px minmax(0,1fr) auto;gap:4px 16px;align-items:start;padding:15px 18px;color:inherit;text-decoration:none}
-.rl a.rr:hover{background:var(--hover)}
+.rl li:hover{background:var(--hover)}
+.rcpw{padding:0 18px 15px 152px;margin-top:-5px}
+.rcp{display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:3px 13px 3px 10px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;box-shadow:var(--sh);transition:border-color .15s,color .15s,background .15s}
+.rcp svg.i{width:15px;height:15px;color:var(--acc)}
+.rcp .lbl{text-decoration:underline;text-decoration-color:var(--acc-ln);text-underline-offset:3px}
+.rcp .sep{color:var(--faint);font-weight:400}
+.rcp .amt{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.rcp .nc{font-weight:400;color:var(--mut)}
+.rcp:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-bg)}
+.rcp:hover .lbl{text-decoration-color:currentColor}
+.b.rcp-b .amt{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.b.rcp-b .sep{color:var(--faint)}
+.b.rcp-b .lbl{text-decoration:underline;text-decoration-color:var(--acc-ln);text-underline-offset:3px}
+.b.rcp-b svg.i{color:var(--acc)}
 .rr .vb{grid-row:1/span 3;align-self:start;margin-top:1px}
 .rr .rt{font-weight:600;font-size:15.5px;letter-spacing:-.01em}
 .rr .rt small{font:12.5px var(--mono);color:var(--mut);font-weight:400;margin-left:8px}
@@ -153,7 +166,7 @@ main{flex:1}
 .vd-a.gh svg{width:16px;height:16px}
 .vd-acts{display:flex;flex-wrap:wrap;gap:8px}
 .kbh{border:0;background:none;font:inherit;cursor:pointer;color:inherit}
-@media (max-width:640px){.rl a.rr{grid-template-columns:minmax(0,1fr)}.rr .vb{grid-row:auto}.rr .rs,.rr .rm,.rr .rgo{grid-column:1}.rr .rgo{grid-row:auto;order:9}.rr .vb{justify-self:start}.lh-top .sn-tile{display:none}}
+@media (max-width:640px){.rcpw{padding-left:18px;margin-top:-3px}.rl a.rr{grid-template-columns:minmax(0,1fr)}.rr .vb{grid-row:auto}.rr .rs,.rr .rm,.rr .rgo{grid-column:1}.rr .rgo{grid-row:auto;order:9}.rr .vb{justify-self:start}.lh-top .sn-tile{display:none}}
 .intro h1{font-size:32px;line-height:1.15;letter-spacing:-.03em;font-weight:700}
 .intro .lede{font-size:16px;color:var(--mut);margin-top:8px;max-width:60ch}
 .demo-v{display:inline-flex;align-items:center;gap:12px;margin-top:14px;padding:6px 16px 6px 6px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);text-decoration:none;box-shadow:var(--sh)}
@@ -609,6 +622,7 @@ html{scroll-padding-top:170px}
 <symbol id="i-play" viewBox="0 0 16 16"><path d="M5 3.3v9.4L12.5 8z" fill="currentColor"/></symbol>
 <symbol id="i-l" viewBox="0 0 16 16"><path d="M13 8H3M7 4L3 8l4 4"/></symbol>
 <symbol id="i-r" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></symbol>
+<symbol id="i-rcp" viewBox="0 0 16 16"><path d="M3.5 1.8h9v12.4l-1.5-1-1.5 1-1.5-1-1.5 1-1.5-1-1.5 1z"/><path d="M5.8 5h4.4M5.8 7.8h4.4M5.8 10.4h2.4"/></symbol>
 <symbol id="i-file" viewBox="0 0 16 16"><path d="M9.2 1.8H4.5c-.9 0-1.6.7-1.6 1.6v9.2c0 .9.7 1.6 1.6 1.6h7c.9 0 1.6-.7 1.6-1.6V5.7z"/><path d="M9.2 1.8v3.9h3.9"/></symbol>
 <symbol id="i-term" viewBox="0 0 16 16"><rect x="1.8" y="2.5" width="12.4" height="11" rx="2"/><path d="M4.7 6.3l2.2 1.9-2.2 1.9M8.6 10.3h2.7"/></symbol>
 <symbol id="i-wrap" viewBox="0 0 16 16"><path d="M2.5 4h11M2.5 8h9a2 2 0 0 1 0 4H8.5M10 10.5L8.5 12 10 13.5M2.5 12h3"/></symbol>
@@ -671,6 +685,7 @@ html{scroll-padding-top:170px}
 <button type="button" class="mi hide" id="shNative"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg><span class="mt">More options</span></button>
 </div></div>
 <a class="b" id="openDocs" target="_blank" rel="noopener noreferrer"><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg>Open the docs</a>
+<a class="b rcp-b hide" id="rcpBtn"></a>
 <div class="anch"><button type="button" class="b" id="dlBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="dlPop"><svg class="i" aria-hidden="true"><use href="#i-dl"/></svg>Download<svg class="i" aria-hidden="true"><use href="#i-down"/></svg></button>
 <div class="pop" id="dlPop" role="menu" aria-label="Download files" style="min-width:250px">
 <button type="button" class="mi" role="menuitem" id="dlRep"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg><span class="mt">report.md<small>Every step, fix and proof</small></span></button>
@@ -773,6 +788,11 @@ function capLine(cost){if(!CAPS||!(cost>0))return "";var t=Object.keys(CAPS).map
 function runCost(d){var r=RUNS.filter(function(x){return x.id===d.run_id})[0];return r&&+r.cost>0?+r.cost:(+d.cost_usd||0)}
 function paintCost(d){var f=$("costFact");if(!f||!d)return;var dd=f.querySelector("dd"),c=runCost(d);if(c>0)dd.firstChild.textContent="$"+c.toFixed(4);var old=f.querySelector(".capl");if(old)old.remove();var t=capLine(c);if(!t)return;var a=el("a","capl",t);a.href="../plan/";a.title="Tier caps from the cfo.ai plan";dd.appendChild(a)}
 var VL={fixed:"Fix proven",works:"Docs work",open:"Inconclusive"},VC={fixed:"ok",works:"acc",open:"mute"};
+/* receipts: docs/receipts/<receipt id>.html, amount from the run log row */
+function usd(v){v=+v;return "$"+(v>0&&v<0.001?v.toFixed(6):v.toFixed(4))}
+function rcpFill(a,r){a.textContent="";a.href="../receipts/"+encodeURIComponent(r.receipt)+".html";a.appendChild(ic("rcp"));a.appendChild(el("span","lbl","View receipt"));
+  if(r.receipt_usd!=null&&isFinite(+r.receipt_usd)){var s=el("span","sep","·");s.setAttribute("aria-hidden","true");a.appendChild(s);a.appendChild(el("span","amt",usd(r.receipt_usd)))}else a.appendChild(el("span","nc","no cost recorded"))}
+function paintReceipt(d){var b=$("rcpBtn");if(!b||!d)return;var r=(RUNS||[]).filter(function(x){return x.id===d.run_id})[0];if(!r||!r.receipt){b.classList.add("hide");return}rcpFill(b,r);b.classList.remove("hide")}
 function patchFor(d,id){return (d.patches||[]).filter(function(p){return String(p.step_id)===String(id)})}
 function stepBy(d,id){for(var i=0;i<d.steps.length;i++)if(String(d.steps[i].id)===String(id))return d.steps[i];return null}
 function tries(s){
@@ -1326,7 +1346,7 @@ function renderHead(d){
   else{add("Steps",(c.ok+c.fix)+"/"+(d.steps.length-c.skip)+" passed",c.skip?c.skip+" skipped":"");
   add("Fixes",String(ps.length),ps.length?plural(db,"docs bug"):"");
   add("Proof",v&&v.steps_total!=null?v.steps_passed+"/"+v.steps_total:"None",v&&v.status==="verified"?"fresh container":"")}
-  add("Cost",d.cost_usd!=null?"$"+(+d.cost_usd).toFixed(2):"Not recorded",d.cost_usd!=null?"list price, not billed":"");F.lastChild.id="costFact";paintCost(d);
+  add("Model cost",d.cost_usd!=null?"$"+(+d.cost_usd).toFixed(2):"Not recorded",d.cost_usd!=null?"list price, not billed":"");F.lastChild.id="costFact";paintCost(d);paintReceipt(d);
   renderVerdict(d);
   var Lk=$("links");Lk.textContent="";var ev=evAll(d).filter(function(e){return e.step_id==null||e.kind==="pr"});
   if(ev.length){Lk.appendChild(el("span","lh","Proof"));ev.forEach(function(e){Lk.appendChild(evChip(e,true))})}
@@ -1550,15 +1570,17 @@ function paintList(){
     a.appendChild(el("span","rs",g.v==="open"?String(r.summary||"").replace(/broke:/,"stopped:"):r.summary));
     var m=el("span","rm"),sp=el("span");sp.appendChild(el("b",null,r.passed+" of "+r.runnable));sp.appendChild(document.createTextNode(" steps passed"));m.appendChild(sp);
     if(r.fixes)m.appendChild(el("span",null,plural(r.fixes,"fix","fixes")));
-    if(r.cost>0){m.appendChild(el("span",null,"$"+(+r.cost).toFixed(3)+" model cost"));var cl=capLine(+r.cost);if(cl)m.appendChild(el("span","capt",cl))}
+    if(r.cost>0){if(!r.receipt)m.appendChild(el("span",null,"$"+(+r.cost).toFixed(3)+" model cost"));var cl=capLine(+r.cost);if(cl)m.appendChild(el("span","capt",cl))}
     m.appendChild(el("span",null,when(r.ts)));
     if(g.runs.length>1)m.appendChild(el("span",null,plural(g.runs.length-1,"other run")));
     if(r.fixture)m.appendChild(el("span","tagf","fixture"));
-    a.appendChild(m);li.appendChild(a);L.appendChild(li);
+    a.appendChild(m);li.appendChild(a);
+    if(r.receipt){var rw=el("div","rcpw"),rp=el("a","rcp");rcpFill(rp,r);rw.appendChild(rp);li.appendChild(rw)}
+    L.appendChild(li);
   });
   show("none",n===0);
 }
-fetch("../runs/index.json").then(function(r){return r.json()}).then(function(j){RUNS=(j&&Array.isArray(j.runs)?j.runs:[]);grouped();paintList();if(S.d){renderVerdict(S.d);paintCost(S.d)}}).catch(function(){$("none").textContent="The run log did not load.";show("none",true)});
+fetch("../runs/index.json").then(function(r){return r.json()}).then(function(j){RUNS=(j&&Array.isArray(j.runs)?j.runs:[]);grouped();paintList();if(S.d){renderVerdict(S.d);paintCost(S.d);paintReceipt(S.d)}}).catch(function(){$("none").textContent="The run log did not load.";show("none",true)});
 fetch("../data/plan.json").then(function(r){return r.json()}).then(function(j){CAPS={};Object.keys(j.tiers||{}).forEach(function(n){CAPS[n]=+j.tiers[n].cap_usd_per_run});paintList();if(S.d)paintCost(S.d)}).catch(function(){});
 fetch("../examples/index.json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
   (j&&Array.isArray(j.runs)?j.runs:[]).forEach(function(r){if(r&&r.summary)SUM[r.example]=String(r.summary)});if(S.d)renderVerdict(S.d);
