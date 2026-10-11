@@ -1,0 +1,119 @@
+the for judges page pleas emake it more compact please use all the images available for entire and neatlogs and even cfo.ai we have several of those, less text more images and a good compact manner please /impeccable
+
+---
+
+Find the Broken Step Before Your Users Do
+FirstRun runs your docs on a clean machine, fixes the step that breaks, and proves the fix.
+
+The hero h1 says this but i need to nail and show 3 things right - test docs in container, see projected costs and pick the priroity issues based on proficiency. This has to be really good and should be conveyed pretty well. IK there are a lot of items to showcase but hero section should show all three angles very well in their language without overwheling people!!
+
+---
+
+mege when everything is ready
+
+---
+
+<task-notification>
+<task-id>aa199cb231d524434</task-id>
+<tool-use-id>toolu_013wsfrr6Kzpzq6aK7Ygw6cT</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\8af02350-7a0b-4c1e-859f-73dd272ab4c3\tasks\aa199cb231d524434.output</output-file>
+<status>completed</status>
+<summary>Agent "Make judges page mirror official rubric" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>The third pass is committed on `site/judges-evidence` as `891a0c8`, on top of `8ce5761`. It carries the trailer `Entire-Checkpoint: 01M4NE45FC6Q91RYZ6G2WRHBVC`. It is not pushed yet, so PR #56 does not include it until someone pushes.
+
+| | Before | After |
+|---|---|---|
+| Page height at 1280 px | 10,256 px | 5,083 px |
+| Visible words, details closed | ~1,550 | 837, of which 789 are outside code blocks |
+| Page height at 768 px | | 6,473 px |
+| Page height at 375 px | | 8,139 px |
+
+**Checks run:**
+- No sideways scroll at 375 px, with the details blocks closed and with all of them open.
+- The page logs no console errors.
+- All 68 local images and links return 200, and every `#` anchor resolves.
+- All 29 images inside the page are lazy-loaded with a width and height.
+- No em dashes or semicolons appear in the prose.
+- Keyboard test of the full-size image viewer: Enter opens it, the arrow keys move within one tool's set, Escape closes it, and focus returns to the thumbnail.
+
+## Layout
+
+- **Hero:** the H1 and the 60-second path as 4 pills on one row.
+- **Sticky rubric bar:** sits under the site nav with the 5 weights. Desktop shows the official names, and 860 px and below shows short labels.
+- **Evidence:** the 7 official rows in a two-column grid. Each row has the claim, the official wording, one proof line with one link, and a status chip. A dashed cell carries the caveat that neatlogs trace pages need a login.
+- **Every section:** opens with a single small line holding the weight and the verbatim official criterion, and has one "Show details" block.
+- **Agent:** the v1/v2 bars and the recovery steps of trace 5520c5cf side by side.
+- **Tools:** each of neatlogs, Entire and cfo.ai has a logo, one headline number, links and a caveat chip, then a contact sheet.
+  - Sheets run 5 or 6 per row at desktop, 3 or 4 at 768 px and 2 at 375 px.
+  - Entire also has the stacked coverage bar (77 / 4 / 34).
+  - cfo.ai also has the tier strip and the cash chart side by side.
+- **Demo:** a small video thumbnail next to the chapter timeline. The tool-by-aspect table is in details.
+- **Public:** the post time axis. All 11 posts are in details.
+- **Usefulness:** a row of 4 PR screenshots and 3 number pills.
+- **Broke and reproduce:** 5 compact number tiles, and the 4 copy blocks in a 2×2 grid.
+
+## Images Used
+
+Each is a 480×300 thumbnail under `docs/assets/judges/`; clicking opens the full image.
+
+| # | Full image | Caption | Source |
+|---|---|---|---|
+| N1 | `t-neatlogs-trace.webp` | One run is one trace | README caption; trace ID not recorded |
+| N2 | `t-neatlogs-recovery.webp` | A recover.3 span retries a step | README; ID not recorded |
+| N3 | `t-neatlogs-investigate.webp` | Investigate: 52.8x spike, cause at 66% | The screenshot; links to commit 2de852f |
+| N4 | `j-nl-detection.webp` | Detection "docs step broke": 78 flagged spans | `neatlogs.md`, `nl-detection-docs-step-broke.png` |
+| N5 | `t-neatlogs-detection.webp` | Flagged spans, 40 at capture time | README "40 flagged" |
+| N6 | `t-neatlogs-analysis.webp` | Detection analysis over 132 traces | README |
+| N7 | `t-neatlogs-analytics.webp` | Analytics: 132 traces, $0.9071 total cost | README |
+| N8 | `j-nl-eval-run.webp` | AI judge on trace 5520c5cf: right step | `neatlogs.md` |
+| N9 | `judges/nl-eval-audit.webp` (new, from `evidence/nl-eval-audit-result.png`) | AI judge on audit 4e936e06: 5 of 5 | `neatlogs.md` |
+| N10 | `t-neatlogs-bisect.webp` | Bisect trace: jafgen 0.4.6 first bad | Comment on dbt PR #10149 |
+| E1 | `t-entire-checkpoint.webp` | Commit 3a0dcad carries its checkpoint | Checked with `git log` |
+| E2 | `t-entire-gate.webp` | Trail 3 blocked merge on a high finding | `entire.md` |
+| E3 | `t-entire-findings.webp` | Trail 3 review: 1 high, 1 medium | `entire.md` |
+| E4 | `t-entire-review.webp` | Inline review on recovery.py line 228 | The screenshot |
+| E5 | `t-entire-board.webp` | Entire Trails board with trail #1 | Neutral caption |
+| E6 | `t-entire-analytics.webp` | Entire analytics after the first checkpoint | Neutral caption |
+| C1 | `t-cfo-drivers.webp` | Costs measured from 88 traces | `drivers.csv` |
+| C2 | `e-cfo-caps.webp` | Caps written to the CLI, 2026-10-11 | `unit_economics.json` |
+| C3 | `judges/receipt-full.webp` (new, my capture of the AccuKnox receipt page) | Receipt: $0.0453, 96.4% of Team cap | Receipt page |
+| C4 | `judges/plan-costcaps.webp` (new, crop of the plan page) | 51 runs' cost against the 3 caps | Plan page |
+| C5 | `judges/plan-alerts.webp` (new, crop of the plan page) | Cap alerts fired 3 times in 2 days | `plan.json` alerts |
+| P1–P4 | `pr-10149`, `pr-10150`, `pr-2724`, `pr-671.webp` | One line per PR | The PR links (all 4 confirmed open, not merged, earlier this session) |
+| Demo | `vid-doctest.webp` | Links to YouTube | |
+| Logos | `logo-neatlogs`, `logo-entire`, `logo-cfoai.webp` | | |
+
+## Images Skipped
+
+- **`t-cfo-ari.webp` and `shot-cfoai.webp` (a crop of it):** this is personal context. Ari's greeting says your email is a personal Gmail address and names your employer role. It also proves nothing about the plan.
+- **Exact duplicate crops:** `shot-neatlogs`, `shot-entire`, `e-cfo-drivers`, and the `e-nl-*` / `e-en-*` crops. Their full `t-*` originals are used instead.
+- **Not tool evidence:** `vid-docaudit`, `vid-teaser`, `launch-poster.jpg`, `og-card-1200x630.jpg`.
+- **Duplicated by my own visuals:** the plan page's cash chart and tier table.
+
+None of the images I used show a key, token or private email. `t-entire-findings` does show a local Windows path, `D:\Atharva\NOTES`, which is not a secret.
+
+## Truth Notes
+
+- **Entire coverage:** I recomputed it from `git log` on `origin/main`: 77 of 115 non-merge commits carry a trailer, 38 do not. The 38 are the same set `entire.md` explains, because the 2 newer commits both have trailers. The page labels it "git log on main, 2026-10-11". This branch itself shows 79 of 117, and the count rises again once PR #56 merges.
+- **Captions without a recorded trace ID:** the repo records no trace ID for N1, N2 and N5–N7, and no trace ID for N10. Their captions only describe what the screenshot shows, and the details block says the IDs are not recorded.
+- **"9 of 11 posts after kickoff":** this is from the previous pass, and the post axis greys out the 2 posts before kickoff.
+
+## What a Judge Sees
+
+At 1280 px, the first screen shows the hero, the rubric bar and the 7-row checklist, so a judge can tick all 7 rows within about one scroll. All 21 tool screenshots fit in roughly one screen, about 1,500 px.
+
+Two things a judge still cannot do: open neatlogs traces or Entire Trail pages without a login, and read the text inside the 150 px thumbnails. They have to click a thumbnail to read it.
+
+## Screenshots
+
+In `C:\Users\AtharvaShah\AppData\Local\Temp\claude\D--Atharva-firstrun\8af02350-7a0b-4c1e-859f-73dd272ab4c3\scratchpad\v3\`:
+- **Full pages:** `judges-1280.png`, `judges-768.png`, `judges-375.png`.
+- **Slices:** `s1280-00` to `s1280-03`, `s768-*`, `s375-*`.
+- **Full-size viewer open:** `lightbox-1280.png`.
+- **Thumbnail overview:** `thumbsheet.png`.
+
+I deleted the temporary capture file `docs/judges/zz-lb-tmp.html` before the commit, and the preview server is stopped.</result>
+<usage><subagent_tokens>588684</subagent_tokens><tool_uses>77</tool_uses><duration_ms>811259</duration_ms></usage>
+<worktree><worktreePath>D:\Atharva\firstrun\.claude\worktrees\agent-aa199cb231d524434</worktreePath><worktreeBranch>worktree-agent-aa199cb231d524434</worktreeBranch></worktree>
+</task-notification>
