@@ -21,9 +21,10 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 <table>
 <tr>
-<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="280"></a><br><sub><b>Demo video (2:59)</b></sub></td>
-<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="280"></a><br><sub><b>Teaser (0:36)</b></sub></td>
-<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="280"></a><br><sub><b>DocAudit tour (0:57)</b></sub></td>
+<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="210"></a><br><sub><b>DocTest demo (2:59)</b></sub></td>
+<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=2vZb6pZAF8Q"><img src="docs/assets/vid-docaudit-journey.webp" alt="DocAudit thumbnail: 15 stale pages found in dbt-core, each fix goes to the person who knows the code" width="210"></a><br><sub><b>DocAudit journey (1:56)</b></sub></td>
+<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="210"></a><br><sub><b>Teaser (0:36)</b></sub></td>
+<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="210"></a><br><sub><b>DocAudit tour (0:57)</b></sub></td>
 </tr>
 </table>
 

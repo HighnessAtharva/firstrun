@@ -93,8 +93,13 @@ html{scroll-padding-top:88px}
 /* Agent Ready launcher */
 .fr-agw{position:fixed;right:20px;bottom:20px;z-index:40;font-family:Geist,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;opacity:0;visibility:hidden;transform:translateY(8px);pointer-events:none;transition:opacity .2s var(--sn-ease),transform .2s var(--sn-ease),visibility 0s .2s}
 .fr-agw.is-on:not(.is-open){opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .2s var(--sn-ease),transform .2s var(--sn-ease)}
-.fr-agl{display:inline-flex;align-items:center;gap:9px;height:44px;padding:0 16px 0 7px;border-radius:99px;background:var(--sn-panel);border:1px solid var(--sn-line);box-shadow:var(--sn-sh);color:var(--sn-ink);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;cursor:pointer;transition:transform .2s var(--sn-ease),box-shadow .2s var(--sn-ease)}
-.fr-agl:hover{transform:translateY(-2px);box-shadow:0 1px 2px oklch(30% .02 255/.08),0 14px 30px -12px oklch(30% .04 255/.32)}
+/* the border is a conic gradient in the agent colors that turns. @property lets the angle animate. */
+@property --fr-a{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes fr-spin{to{--fr-a:360deg}}
+@keyframes fr-glow{0%,100%{box-shadow:0 1px 2px oklch(30% .02 255/.08),0 10px 26px -12px oklch(45% .12 290/.35)}50%{box-shadow:0 1px 2px oklch(30% .02 255/.08),0 10px 30px -8px oklch(55% .17 40/.45)}}
+.fr-agl{display:inline-flex;align-items:center;gap:9px;height:44px;padding:0 16px 0 7px;border-radius:99px;border:2px solid transparent;background:linear-gradient(var(--sn-panel),var(--sn-panel)) padding-box,conic-gradient(from var(--fr-a),#D97757,#F2B45C,#0A66D6,#7A9DFF,#6B3FC8,#D97757) border-box;animation:fr-spin 3.2s linear infinite,fr-glow 3.2s ease-in-out infinite;box-shadow:var(--sn-sh);color:var(--sn-ink);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;cursor:pointer;transition:transform .2s var(--sn-ease),box-shadow .2s var(--sn-ease)}
+.fr-agl:hover{transform:translateY(-2px);animation-duration:1.6s,3.2s}
+.has-agl .sf-in{padding-bottom:88px}
 .fr-agl:focus-visible{outline:3px solid var(--sn-test);outline-offset:2px}
 .fr-agl-st{display:inline-flex}
 .fr-agl-lg{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--sn-panel);border:1px solid var(--sn-line);margin-left:-8px}
@@ -105,7 +110,7 @@ html{scroll-padding-top:88px}
 .fr-agw:hover .fr-agl-tip,.fr-agw:focus-within .fr-agl-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s var(--sn-ease),transform .2s var(--sn-ease)}
 @media(max-width:759px){.fr-agw{right:16px;bottom:16px}.fr-agl{height:40px;gap:7px;padding:0 13px 0 6px}.fr-agl-x{display:none}.fr-agl-lg{width:26px;height:26px}.fr-agl-tip{width:min(260px,calc(100vw - 32px))}}
 @media(max-height:399px){.fr-agw{display:none}}
-@media(prefers-reduced-motion:reduce){.fr-agw,.fr-agl,.fr-agl-tip{transition:none!important;transform:none!important}}
+@media(prefers-reduced-motion:reduce){.fr-agw,.fr-agl,.fr-agl-tip{transition:none!important;transform:none!important}.fr-agl{animation:none}}
 /* below 1080 px the section links move into the menu */
 @media(max-width:1079px){
  .sn-links,.sn-sep,.sn-gh{display:none}

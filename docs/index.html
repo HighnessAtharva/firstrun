@@ -193,7 +193,7 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
 .qt{font-weight:500;min-width:0}
 .qo{grid-column:2;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--s-mut)}
 .qa{width:18px;height:18px;border-radius:50%;flex:none;display:grid;place-items:center;font:600 10px/1 Geist,sans-serif;color:oklch(20% .04 298);background:oklch(82% .1 298)}
-.st-pz{position:absolute;z-index:4;right:20px;bottom:46px;width:36px;height:36px;min-height:0;padding:0;border-radius:50%;background:oklch(100% 0 0/.06);border:1px solid oklch(100% 0 0/.16);color:var(--s-mut)}
+.st-pz{position:absolute;z-index:4;left:20px;bottom:46px;width:36px;height:36px;min-height:0;padding:0;border-radius:50%;background:oklch(100% 0 0/.06);border:1px solid oklch(100% 0 0/.16);color:var(--s-mut)}
 .st-pz:hover{background:oklch(100% 0 0/.13);color:var(--s-ink)}
 .st-pz svg{width:14px;height:14px;fill:currentColor;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .st-pz[hidden]{display:none}.st-pz .pl{display:none}.stage.paused .st-pz .pa{display:none}.stage.paused .st-pz .pl{display:block}
@@ -224,7 +224,7 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
  .st-out,.stage:not(.live) .st-out{position:relative;z-index:2;left:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:440px;margin:0 auto;padding:4px 16px 132px;grid-template-columns:minmax(0,1fr);gap:22px}
  .stage.live .grp{opacity:1}
  .st-svg{position:relative;bottom:auto;height:auto;order:2}
- .st-pz{bottom:64px;right:16px}
+ .st-pz{bottom:64px;left:16px}
  .st-fx{display:none}}
 @media(max-width:759px){
  .st-c{padding:92px 16px 0}
@@ -575,10 +575,12 @@ mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,conic-gradien
 .rlinks{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 32px;margin-top:clamp(36px,5vw,52px);font-weight:600}
 
 /* watch it work: three YouTube videos behind a click-to-load facade */
-.vids{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:18px;margin-top:44px}
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
 .vc{display:flex;flex-direction:column;overflow:hidden;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
 .vc:hover{transform:translateY(-4px);box-shadow:var(--lift-h)}
-.vc.big{grid-row:1/3}
+.vc.big{grid-row:auto}
+.vc.sm{flex-direction:row;align-items:stretch}.vc.sm .vm{flex:0 0 42%;border-bottom:0;border-right:1px solid var(--line)}.vc.sm .vt{justify-content:center}
+.vc.au .pi{color:var(--audit)}.vc.au .vp:hover .pi,.vc.au .vp:focus-visible .pi{background:var(--audit)}
 .vm{position:relative;aspect-ratio:16/9;background:var(--sunk);border-bottom:1px solid var(--line)}
 .vm img,.vm iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;object-fit:cover}
 .vp{position:absolute;inset:0;display:block;color:var(--ink);border-radius:0}
@@ -716,7 +718,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
  .track{--g:16px}
  .reel{aspect-ratio:16/9}.ctl{right:20px;bottom:6%}
  .tl{grid-template-columns:minmax(0,1fr);padding:0 0 0 40px}.tl li:nth-child(n){grid-column:auto}}
-@media(max-width:560px){.vids{grid-template-columns:1fr}.vc.big .pi{width:68px;height:68px;margin:-34px 0 0 -34px}.rcpt{padding:22px 18px 34px}}
+@media(max-width:560px){.vids{grid-template-columns:1fr}.vc.sm{flex-direction:column}.vc.sm .vm{border-right:0;border-bottom:1px solid var(--line)}.vc.big .pi{width:68px;height:68px;margin:-34px 0 0 -34px}.rcpt{padding:22px 18px 34px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.st-sky i{animation:none!important}.pop,.st-in span,.gm,.gmi,.gw,.gi,.gq li{transition:none}html.js .rv{opacity:1;transform:none;transition:none}
  .pr,.vc,.pi,button,.btn{transition:none}.pr:hover,.vc:hover{transform:none}.vp:hover .pi{transform:none}.tw.vid{animation:none}}
 </style>
@@ -823,7 +825,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <li><span class="qr">2</span><span class="qt">Altimate Base hosted model</span><span class="qa" aria-hidden="true">A</span><span class="sr">for anandgupta42</span></li>
 <li><span class="qr">3</span><span class="qt">YOLO mode on ctrl+y</span><span class="qa" aria-hidden="true">H</span><span class="sr">for Haider</span></li>
 </ol>
-<a class="gl" href="#audit">See the full board in Doc-audit</a>
+<a class="gl" href="#team">See who knows the code</a>
 </div></div>
 </div></div></li>
 </ul>
@@ -949,6 +951,33 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 </div>
 </section>
 
+<!-- DOC-AUDIT TEAM MAP: deeper indigo world. assets/team-map.js and the board JSON load when the band nears the viewport.
+     Without JS the still image below shows the same map. -->
+<section id="team" class="band b-team" aria-labelledby="team-h">
+<div class="wrap wide">
+<p class="eyebrow"><span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M15.5 14.2a4.6 4.6 0 0 1 5 4.8"/></svg></span>Doc-audit</p>
+<h2 id="team-h">Each Fix Goes to the Person Who Knows the Code</h2>
+<div class="tmh rv" id="tmh" data-id="audit-20261010-163411-altimateai-altimate-code">
+<div class="tmh-card card" id="tmh-card">
+<p class="tmh-top"><img src="https://github.com/AltimateAI.png?size=48" alt="" width="24" height="24" loading="lazy" decoding="async"><b>AltimateAI/altimate-code</b><span>14 people, 619 commits in 12 months</span></p>
+<p class="tmh-say" id="tmh-say" aria-live="polite"></p>
+<div class="tmh-map" id="tmh-map">
+<p class="tmh-hd">People</p><p class="tmh-hd" aria-hidden="true"></p><p class="tmh-hd r">Code<span> &middot; share of each part</span></p>
+<div class="tmh-col" id="tmh-ppl" role="group" aria-label="People"></div>
+<div class="tmh-sv" id="tmh-sv"></div>
+<div class="tmh-col" id="tmh-ars" role="group" aria-label="Parts of the code"></div>
+</div>
+<ul class="tmh-list" id="tmh-list" aria-label="Parts of the code"></ul>
+<table class="sr" id="tmh-tab"></table>
+</div>
+<div class="tmh-next"><h3>Top 3 Tasks on This Board</h3><ol class="tmh-nx" id="tmh-nx"></ol></div>
+</div>
+<noscript><img class="tmh-still" src="assets/team-map-altimate-code.webp" alt="Who works on what in AltimateAI/altimate-code. Ribbons link 9 named people and everyone else to 7 parts of the code. anandgupta42 made most of the commits. Haider holds 35% of src/altimate, so the top task, Write a page for workspace, goes to Haider." width="1248" height="671" loading="lazy" decoding="async"></noscript>
+<p class="tmh-foot">Built from public commits in the last 12 months. Suggestions, not assignments.</p>
+<p class="rlinks"><a href="doc-audit/?id=audit-20261010-163411-altimateai-altimate-code">Open the full board</a><a href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">See the dbt-core team</a></p>
+</div>
+</section>
+
 <!-- DOC-AUDIT: purple world -->
 <section id="audit" class="band b-audit" aria-labelledby="audit-h">
 <div class="wrap">
@@ -987,33 +1016,6 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 </div>
 </section>
 
-<!-- DOC-AUDIT TEAM MAP: deeper indigo world. assets/team-map.js and the board JSON load when the band nears the viewport.
-     Without JS the still image below shows the same map. -->
-<section id="team" class="band b-team" aria-labelledby="team-h">
-<div class="wrap wide">
-<p class="eyebrow"><span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M15.5 14.2a4.6 4.6 0 0 1 5 4.8"/></svg></span>Doc-audit</p>
-<h2 id="team-h">Each Fix Goes to the Person Who Knows the Code</h2>
-<div class="tmh rv" id="tmh" data-id="audit-20261010-163411-altimateai-altimate-code">
-<div class="tmh-card card" id="tmh-card">
-<p class="tmh-top"><img src="https://github.com/AltimateAI.png?size=48" alt="" width="24" height="24" loading="lazy" decoding="async"><b>AltimateAI/altimate-code</b><span>14 people, 619 commits in 12 months</span></p>
-<p class="tmh-say" id="tmh-say" aria-live="polite"></p>
-<div class="tmh-map" id="tmh-map">
-<p class="tmh-hd">People</p><p class="tmh-hd" aria-hidden="true"></p><p class="tmh-hd r">Code<span> &middot; share of each part</span></p>
-<div class="tmh-col" id="tmh-ppl" role="group" aria-label="People"></div>
-<div class="tmh-sv" id="tmh-sv"></div>
-<div class="tmh-col" id="tmh-ars" role="group" aria-label="Parts of the code"></div>
-</div>
-<ul class="tmh-list" id="tmh-list" aria-label="Parts of the code"></ul>
-<table class="sr" id="tmh-tab"></table>
-</div>
-<div class="tmh-next"><h3>Top 3 Tasks on This Board</h3><ol class="tmh-nx" id="tmh-nx"></ol></div>
-</div>
-<noscript><img class="tmh-still" src="assets/team-map-altimate-code.webp" alt="Who works on what in AltimateAI/altimate-code. Ribbons link 9 named people and everyone else to 7 parts of the code. anandgupta42 made most of the commits. Haider holds 35% of src/altimate, so the top task, Write a page for workspace, goes to Haider." width="1248" height="671" loading="lazy" decoding="async"></noscript>
-<p class="tmh-foot">Built from public commits in the last 12 months. Suggestions, not assignments.</p>
-<p class="rlinks"><a href="doc-audit/?id=audit-20261010-163411-altimateai-altimate-code">Open the full board</a><a href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">See the dbt-core team</a></p>
-</div>
-</section>
-
 <!-- RECEIPT: warm world -->
 <section id="receipt" class="band b-rcpt" aria-labelledby="rcpt-h">
 <div class="wrap">
@@ -1040,17 +1042,21 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 
 <section id="watch" aria-labelledby="watch-h">
 <div class="wrap">
-<h2 id="watch-h">Watch <span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Catch a Broken Guide</h2>
+<h2 id="watch-h">Watch <span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Test a Guide and Audit a Repo</h2>
 <div class="vids">
 <article class="vc big card">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" data-yt="JJNWWhSV9pc" aria-label="Play the Doc-test demo, 2 minutes 59 seconds"><img src="assets/vid-doctest.webp" alt="Doc-test thumbnail: step 10 of a quickstart fails with no such option --years, then the fix passes 9 of 9 steps" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:59</span></a></div>
-<div class="vt"><p class="k">2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3><p>A clean container runs the dbt guide, hits the step that breaks, fixes the page and passes a second run.</p></div>
+<div class="vt"><p class="k">Doc-test &middot; 2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3><p>A clean container runs the dbt guide, hits the step that breaks, fixes the page and passes a second run.</p></div>
 </article>
-<article class="vc card">
+<article class="vc big card au">
+<div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=2vZb6pZAF8Q" data-yt="2vZb6pZAF8Q" aria-label="Play the Doc-audit journey, 1 minute 56 seconds"><img src="assets/vid-docaudit-journey.webp" alt="Doc-audit thumbnail: 15 stale pages found in dbt-core, each fix goes to the person who knows the code" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">1:56</span></a></div>
+<div class="vt"><p class="k">Doc-audit &middot; 1:56</p><h3>Find the Docs Your Code Left Behind</h3><p>A real audit of dbt-core: one repo in, a run on a laptop, the board, an owner for each fix, and the receipt.</p></div>
+</article>
+<article class="vc sm card">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8" data-yt="jKL8Ocb0Ki8" aria-label="Play the teaser, 36 seconds"><img src="assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails because jafgen rejects the --years flag" width="800" height="450" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">0:36</span></a></div>
 <div class="vt"><p class="k">Teaser &middot; 0:36</p><h3>The dbt Guide That Never Worked</h3></div>
 </article>
-<article class="vc card">
+<article class="vc sm card au">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=zo94agwRAXc" data-yt="zo94agwRAXc" aria-label="Play the Doc-audit tour, 57 seconds"><img src="assets/vid-docaudit.webp" alt="Doc-audit thumbnail: a dbt-core page is 453 days stale after 29 commits changed the code" width="800" height="450" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">0:57</span></a></div>
 <div class="vt"><p class="k">Doc-audit &middot; 0:57</p><h3>Docs Rot Quietly. FirstRun DocAudit Finds It</h3></div>
 </article>
