@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>For Judges | FirstRun</title>
-<meta name="description" content="FirstRun against the official neatHack judging criteria and the 7 official evidence rows, each with a link a judge can open: traces, checkpoints, the cfo.ai plan, the demo chapters, the posts and the dated commits.">
+<meta name="description" content="FirstRun against the official neatHack judging criteria and the 7 official evidence rows: screenshots from neatlogs, Entire and cfo.ai, the demo chapters, the posts and the dated commits.">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
@@ -18,29 +18,26 @@
 --ok:oklch(47% .12 155);--ok-bg:oklch(95.6% .035 155);--bad:oklch(50% .15 25);--bad-bg:oklch(95.5% .03 25);
 --c-nl:oklch(45% .09 200);--c-en:oklch(45% .13 295);--c-cf:oklch(46% .11 145);--c-ag:oklch(78% .03 250);--c-ag2:oklch(72% .035 250);
 --sh:0 1px 2px oklch(30% .02 220/.06);
---lift:0 1px 2px oklch(30% .03 220/.05),0 10px 28px -14px oklch(35% .05 220/.2);
 --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 --ease:cubic-bezier(.16,1,.3,1);
---pad:clamp(56px,7vw,92px);
+--pad:clamp(34px,4.2vw,52px);
 --tint:var(--bg);--edge:var(--line);--c:oklch(48% .1 165);--link:oklch(40% .085 168)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--bg);color:var(--ink);font-family:Geist,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{background:var(--bg);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html{background:var(--bg);color:var(--ink);font-family:Geist,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:136px}
+body{background:var(--bg);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
 html,body{overflow-x:clip}
 code,pre{font-family:var(--mono)}
-code{font-size:.88em;background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:6px;padding:.05em .35em;overflow-wrap:anywhere}
+code{font-size:.88em;background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:5px;padding:.02em .3em;overflow-wrap:anywhere}
 a{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 a:hover{text-decoration-thickness:2px}
-:focus-visible{outline:2px solid var(--c);outline-offset:3px;border-radius:6px}
+:focus-visible{outline:2px solid var(--c);outline-offset:2px;border-radius:6px}
 img{max-width:100%;display:block}
-.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-.col{max-width:880px;margin-left:auto;margin-right:auto}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.skip{position:absolute;left:12px;top:-60px;z-index:80;background:var(--panel);padding:8px 14px;border-radius:10px;box-shadow:var(--lift)}
+.skip{position:absolute;left:12px;top:-60px;z-index:80;background:var(--panel);padding:8px 14px;border-radius:10px}
 .skip:focus{top:12px}
-[id]{scroll-margin-top:84px}
+[id]{scroll-margin-top:136px}
 
-/* bands */
 .band{background:var(--tint);border-top:1px solid var(--edge);padding:var(--pad) 0}
 .t-sage{--tint:oklch(96.6% .022 160);--edge:oklch(90% .035 160);--c:oklch(47% .1 162);--link:oklch(39% .085 165)}
 .t-slate{--tint:oklch(96.6% .013 248);--edge:oklch(90% .025 248);--c:oklch(48% .13 256);--link:oklch(41% .12 258)}
@@ -52,275 +49,251 @@ img{max-width:100%;display:block}
 .t-jade{--tint:oklch(96.6% .02 175);--edge:oklch(90% .032 175);--c:oklch(47% .09 178);--link:oklch(39% .08 180)}
 .t-lake{--tint:oklch(96.2% .02 232);--edge:oklch(89.5% .03 232);--c:oklch(47% .11 240);--link:oklch(40% .1 245)}
 
-h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;letter-spacing:-.045em;font-weight:700;text-align:center;max-width:14em;margin:0 auto;text-wrap:balance}
-h2{font-size:clamp(28px,3.9vw,42px);line-height:1.08;letter-spacing:-.04em;font-weight:700;text-align:center;max-width:18em;margin:0 auto;text-wrap:balance}
-h3{font-size:clamp(19px,2vw,22px);line-height:1.2;letter-spacing:-.02em;font-weight:700}
-.eyebrow{display:flex;justify-content:center;margin-bottom:14px}
-.eyebrow span{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--c);background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:99px;padding:5px 14px 5px 6px}
-.eyebrow b{font:600 13px/1 var(--mono);background:var(--c);color:oklch(99% .004 200);border-radius:99px;padding:5px 9px}
-.crit{max-width:38em;margin:0 auto 16px;text-align:center;font-size:15px;line-height:1.45;color:var(--mut);text-wrap:balance}
-.crit small{display:block;font:600 11.5px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin-bottom:3px}
+h1{font-size:clamp(30px,4.2vw,46px);line-height:1.05;letter-spacing:-.045em;font-weight:700;text-align:center;text-wrap:balance}
+h2{font-size:clamp(24px,2.9vw,32px);line-height:1.1;letter-spacing:-.035em;font-weight:700;text-align:center;max-width:24em;margin:0 auto;text-wrap:balance}
+h3{font-size:17px;letter-spacing:-.015em;font-weight:700}
+.crit{max-width:44em;margin:0 auto 8px;text-align:center;font-size:13.5px;line-height:1.4;color:var(--mut);text-wrap:balance}
+.crit b{font:600 12px var(--mono);letter-spacing:.03em;color:var(--c);margin-right:6px;white-space:nowrap}
 .crit q{quotes:"\201C" "\201D"}
-.src{text-align:center;margin-top:14px;color:var(--mut);font-size:14px}
-.vis{margin:clamp(28px,3.6vw,40px) auto 0;max-width:880px}
-
-/* the "Yes:" rows */
-.yes{list-style:none;margin:26px auto 0;max-width:880px;display:flex;flex-direction:column;gap:8px}
-.yes li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:start;background:oklch(100% 0 0/.62);border:1px solid var(--edge);border-radius:14px;padding:12px 16px;font-size:15.5px}
-.yes li:before{content:"";width:22px;height:22px;margin-top:1px;border-radius:50%;background:var(--ok-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23277a4b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/13px no-repeat;border:1px solid oklch(84% .06 155)}
-.yes b{font-weight:650}
-.yes a{font-weight:600;white-space:nowrap}
-.yes li span>a{margin-left:4px}
-.flag{display:inline-flex;align-items:center;gap:5px;font:600 12px/1.3 Geist,sans-serif;color:var(--mut);background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:99px;padding:3px 10px;margin:10px auto 0}
-.flags{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
-.flag:before{content:"i";display:grid;place-items:center;width:14px;height:14px;border-radius:50%;background:var(--mut);color:var(--panel);font:700 9.5px/1 Geist,sans-serif}
-
-/* details */
-details.more{max-width:880px;margin:16px auto 0}
-details.more>summary{list-style:none;cursor:pointer;display:flex;justify-content:center}
-details.more>summary::-webkit-details-marker{display:none}
-details.more>summary span{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--link);border:1px solid var(--edge);background:oklch(100% 0 0/.6);border-radius:99px;padding:7px 16px;min-height:36px}
-details.more>summary span:after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .2s}
-details.more[open]>summary span:after{transform:translateY(2px) rotate(225deg)}
-details.more .in{margin-top:16px;background:oklch(100% 0 0/.62);border:1px solid var(--edge);border-radius:16px;padding:20px 22px;font-size:15px;display:flex;flex-direction:column;gap:16px}
-details.more .in h4{font-size:14.5px;font-weight:650;margin-bottom:6px}
-details.more .in p+p{margin-top:6px}
-details.more .note{color:var(--mut);font-size:14px}
+.src{text-align:center;margin-top:8px;color:var(--mut);font-size:13px}
+.gap{margin-top:clamp(18px,2.4vw,26px)}
 
 /* hero */
-.hero{padding-top:clamp(36px,5vw,60px)}
-.lede{text-align:center;margin:16px auto 0;font-size:clamp(17px,1.9vw,20px);color:var(--mut);max-width:30em;text-wrap:balance}
-.path{list-style:none;counter-reset:p;margin:clamp(30px,4vw,44px) auto 0;max-width:720px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.path li{counter-increment:p;display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:oklch(100% 0 0/.5)}
-.path li:before{content:counter(p);grid-row:1/3;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:600 15px/1 var(--mono);background:var(--c);color:oklch(99% .004 200)}
-.path a{font-size:18px;font-weight:650;letter-spacing:-.02em;line-height:1.2}
-.path span{font-size:13.5px;color:var(--mut)}
+.hero{padding:clamp(24px,3vw,34px) 0 clamp(22px,2.6vw,30px)}
+.hero h1 span{display:block;font-size:.42em;letter-spacing:.02em;font-weight:600;color:var(--c);margin-bottom:8px;font-family:var(--mono)}
+.path{list-style:none;counter-reset:p;margin:18px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.path li{counter-increment:p;display:flex;align-items:center;gap:8px;background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:99px;padding:5px 14px 5px 5px}
+.path li:before{content:counter(p);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:600 12.5px/1 var(--mono);background:var(--c);color:oklch(99% .004 200)}
+.path a{font-weight:600;font-size:15px}
 
-/* rubric weights */
-.score{margin:clamp(34px,4.5vw,48px) auto 0;max-width:1000px}
-.score p{text-align:center;font-size:14px;color:var(--mut);margin-bottom:10px}
-.score ol{list-style:none;display:flex;gap:5px}
-.score li{flex:var(--w) 1 0;min-width:122px}
-.score a{display:flex;flex-direction:column;justify-content:space-between;gap:10px;height:100%;min-height:118px;padding:14px 14px 15px;border-radius:14px;background:var(--tint);border:1px solid var(--edge);color:var(--ink);text-decoration:none;transition:background .2s,transform .3s var(--ease)}
-.score a:hover{background:oklch(100% 0 0/.8);transform:translateY(-2px)}
-.score a b{font:600 clamp(26px,3vw,34px)/1 var(--mono);letter-spacing:-.04em;color:var(--c)}
-.score a span{font-size:14px;font-weight:600;line-height:1.25;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--edge);overflow-wrap:anywhere}
+/* sticky rubric bar */
+.jump{position:sticky;top:72px;z-index:40;padding:6px 0;background:oklch(98.6% .004 200/.97);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.jump ol{list-style:none;display:flex;gap:4px;max-width:1120px;margin:0 auto;padding:0 24px}
+.jump li{flex:var(--w) 1 0;min-width:0}.jump li:last-child{min-width:158px}.jump li:nth-child(4){min-width:136px}
+.jump a{display:flex;align-items:center;gap:8px;height:42px;padding:0 10px;border-radius:10px;background:var(--tint);border:1px solid var(--edge);color:var(--ink);text-decoration:none;font-size:12.5px;font-weight:600;line-height:1.15;transition:background .2s}
+.jump a:hover{background:oklch(100% 0 0/.9)}
+.jump a b{font:600 17px/1 var(--mono);letter-spacing:-.04em;color:var(--c);flex:none}
+.jump a span{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.jump .s{display:none}
 
-/* evidence checklist */
-.ck{list-style:none;margin:clamp(28px,3.6vw,40px) auto 0;max-width:960px;display:flex;flex-direction:column;gap:10px}
-.ck li{display:grid;grid-template-columns:30px minmax(0,1fr) 150px 104px;gap:6px 18px;align-items:center;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:16px;padding:14px 18px}
-.ck .ic{width:30px;height:30px;border-radius:50%;background:var(--ok-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23277a4b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/16px no-repeat;border:1px solid oklch(84% .06 155);align-self:start;margin-top:2px}
-.ck h3{font-size:17px;letter-spacing:-.015em;display:flex;gap:8px;align-items:baseline}
-.ck h3 i{font:600 12px/1 var(--mono);font-style:normal;color:var(--mut)}
+/* evidence grid */
+.ck{list-style:none;margin:18px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ck li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:2px 10px;align-items:start;background:oklch(100% 0 0/.72);border:1px solid var(--edge);border-radius:12px;padding:10px 12px}
+.ck li:before{content:"";grid-row:1/4;width:22px;height:22px;border-radius:50%;background:var(--ok-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23277a4b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/13px no-repeat;border:1px solid oklch(84% .06 155)}
+.ck h3{font-size:15px;display:flex;gap:6px;align-items:baseline}
+.ck h3 i{font:600 11.5px var(--mono);font-style:normal;color:var(--mut)}
 .ck h3 a{color:var(--ink);text-decoration-color:var(--edge)}
-.ck .off{font-size:13px;color:var(--mut);margin-top:2px;quotes:"\201C" "\201D"}
-.ck .pr{font-size:15px;margin-top:6px}
+.ck .off{grid-column:2/4;font-size:12.5px;color:var(--mut);quotes:"\201C" "\201D"}
+.ck .pr{grid-column:2/4;font-size:14px}
 .ck .pr a{font-weight:600;white-space:nowrap}
-.ck .gl{width:150px;height:84px;border-radius:10px;border:1px solid var(--line);overflow:hidden;background:var(--panel);display:grid;place-items:center;text-decoration:none;color:var(--ink)}
-.ck .gl img{width:100%;height:100%;object-fit:cover;object-position:top left}
-.ck .gl b{font:600 20px/1 var(--mono);letter-spacing:-.04em;color:var(--c)}
-.ck .gl small{display:block;font-size:11.5px;color:var(--mut);text-align:center;margin-top:4px}
-.chip{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1.2 Geist,sans-serif;border-radius:99px;padding:4px 10px;white-space:nowrap;border:1px solid;justify-self:start}
-.chip:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.ck li.note{display:flex;align-items:center;justify-content:center;text-align:center;background:none;border-style:dashed;font-size:13px;color:var(--mut)}
+.ck li.note:before{display:none}
+.chip{display:inline-flex;align-items:center;gap:5px;font:600 11.5px/1.2 Geist,sans-serif;border-radius:99px;padding:3px 8px;white-space:nowrap;border:1px solid}
+.chip:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .c-pub{background:var(--ok-bg);color:var(--ok);border-color:oklch(84% .06 155)}
 .c-repo{background:oklch(95.5% .02 250);color:oklch(42% .1 255);border-color:oklch(86% .04 250)}
 .c-shot{background:oklch(95.8% .03 85);color:oklch(42% .08 70);border-color:oklch(85% .06 80)}
+.c-mut{background:oklch(100% 0 0/.7);color:var(--mut);border-color:var(--edge)}
 
-/* before and after bars */
-.bars{display:flex;flex-direction:column;gap:18px;background:oklch(100% 0 0/.62);border:1px solid var(--edge);border-radius:18px;padding:22px 24px}
-.bar{display:grid;grid-template-columns:210px minmax(0,1fr) 84px;gap:6px 18px;align-items:center}
-.bar>b{font-size:15px;font-weight:650;line-height:1.3}
-.bar>b small{display:block;font-weight:500;font-size:12.5px;color:var(--mut)}
-.pair{display:flex;flex-direction:column;gap:5px}
-.trk{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:center;font:600 12px/1 var(--mono);color:var(--mut)}
-.trk span{position:relative;height:22px;border-radius:6px;background:oklch(94% .008 240)}
-.trk span i{position:absolute;inset:0 auto 0 0;width:var(--v);border-radius:6px;background:oklch(75% .02 250)}
+/* agent: bars + recovery, side by side */
+.two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px;align-items:start}
+.panel{background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:14px;padding:14px 16px}
+.panel h3{font-size:14px;margin-bottom:10px}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:150px minmax(0,1fr) 56px;gap:4px 12px;align-items:center}
+.bar>b{font-size:13.5px;font-weight:600;line-height:1.25}
+.pair{display:flex;flex-direction:column;gap:3px}
+.trk{display:grid;grid-template-columns:20px minmax(0,1fr);gap:6px;align-items:center;font:600 11px/1 var(--mono);color:var(--mut)}
+.trk span{position:relative;height:15px;border-radius:4px;background:oklch(94% .008 240)}
+.trk span i{position:absolute;inset:0 auto 0 0;width:var(--v);border-radius:4px;background:oklch(75% .02 250)}
 .trk.v2 span i{background:var(--c)}
-.trk span em{position:absolute;left:calc(var(--v) + 8px);top:50%;transform:translateY(-50%);font:600 13px/1 var(--mono);font-style:normal;color:var(--ink);white-space:nowrap}
-.trk span.full em{left:calc(var(--v) - 8px);transform:translate(-100%,-50%);color:oklch(99% .004 200)}
+.trk span em{position:absolute;left:calc(var(--v) + 6px);top:50%;transform:translateY(-50%);font:600 12px/1 var(--mono);font-style:normal;color:var(--ink);white-space:nowrap}
+.trk span.full em{left:calc(var(--v) - 6px);transform:translate(-100%,-50%);color:oklch(99% .004 200)}
 .trk:not(.v2) span.full em{color:var(--ink)}
-.dl{font:600 15px/1.2 var(--mono);color:var(--ok);text-align:right}
-.dl small{display:block;font:500 11.5px Geist,sans-serif;color:var(--mut);margin-top:2px}
+.dl{font:600 14px/1.1 var(--mono);color:var(--ok);text-align:right}
+.rs{list-style:none;display:flex;flex-direction:column;gap:5px}
+.rs li{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.rs li code{flex:none;font-weight:600;border-radius:6px;padding:3px 7px;border:1px solid}
+.rs .e code{background:var(--bad-bg);color:var(--bad);border-color:oklch(85% .06 25)}
+.rs .r code{background:oklch(95.5% .02 250);color:oklch(42% .1 255);border-color:oklch(86% .04 250)}
+.rs .k code{background:var(--ok-bg);color:var(--ok);border-color:oklch(84% .06 155)}
+.mini{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:10px;font-size:13.5px}
+.mini a{font-weight:600}
 
 /* tools */
-.tblock{margin-top:clamp(36px,4.5vw,52px)}
-.tblock+.tblock{padding-top:clamp(36px,4.5vw,52px);border-top:1px solid var(--edge)}
-.thead{display:flex;align-items:center;justify-content:center;gap:12px;text-align:left}
-.thead img{width:44px;height:44px;border-radius:11px;border:1px solid var(--line);background:var(--panel)}
-.thead p{font-size:14.5px;color:var(--mut)}
-.tiles{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:22px auto 0}
-.tile{min-width:170px;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:14px;padding:14px 18px;text-align:center}
-.tile b{display:block;font:600 clamp(30px,3.4vw,40px)/1 var(--mono);letter-spacing:-.05em;color:var(--c)}
-.tile span{display:block;font-size:13.5px;color:var(--ink);margin-top:6px}
-.tile a{font-size:12.5px;font-weight:600}
+.tool{margin-top:clamp(18px,2.4vw,26px)}
+.th-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px}
+.th-head img{width:32px;height:32px;border-radius:8px;border:1px solid var(--line)}
+.th-head h3{font-size:17px}
+.th-head p{font-size:14.5px;font-weight:600;color:var(--ink)}
+.th-head p b{font-family:var(--mono);color:var(--c)}
+.th-head .lk{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13.5px;font-weight:600;align-items:center}
 
-.gal{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}
-.gal figure{display:flex;flex-direction:column;gap:8px}
-.gal a.im{display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);box-shadow:var(--sh);aspect-ratio:16/9}
-.gal a.im img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .5s var(--ease)}
-.gal a.im:hover img{transform:scale(1.02)}
-.gal figcaption{font-size:14.5px;line-height:1.4;display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap}
-.gal figcaption a{font-weight:600;font-size:13.5px;white-space:nowrap}
+/* contact sheets */
+.sheet{list-style:none;display:grid;grid-template-columns:repeat(var(--cols,5),minmax(0,1fr));gap:12px 10px}
+.sheet.c6{--cols:6}.sheet.c4{--cols:4}
+.sheet a.th{position:relative;display:block;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--panel);box-shadow:var(--sh);aspect-ratio:16/10}
+.sheet a.th img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease)}
+.sheet a.th:hover img{transform:scale(1.04)}
+.sheet a.th b{position:absolute;left:6px;top:6px;font:600 11px/1 var(--mono);color:oklch(99% .004 200);background:oklch(25% .02 230/.86);border-radius:5px;padding:3px 5px}
+.sheet p{font-size:12.5px;line-height:1.3;margin-top:5px;color:var(--ink)}
+.sheet p a{font-weight:600}
 
-.stack{display:flex;height:44px;border-radius:12px;overflow:hidden;gap:3px;background:var(--panel);border:1px solid var(--edge);padding:3px}
-.stack i{display:grid;place-items:center;font:600 14px/1 var(--mono);font-style:normal;border-radius:8px;min-width:0;color:oklch(99% .004 200)}
-.stack .s1{flex:75;background:var(--c-en)}
-.stack .s2{flex:4;background:oklch(70% .04 290)}
-.stack .s3{flex:34;background:oklch(88% .02 290);color:var(--ink)}
-.legend{list-style:none;display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:center;margin-top:12px;font-size:14px}
-.legend li{display:flex;align-items:center;gap:8px}
-.legend li:before{content:"";width:12px;height:12px;border-radius:3px;background:var(--sw)}
-.legend b{font-family:var(--mono)}
+/* Entire stacked bar */
+.stack{display:flex;height:26px;border-radius:8px;overflow:hidden;gap:2px;margin-bottom:6px}
+.stack i{display:grid;place-items:center;font:600 12px/1 var(--mono);font-style:normal;min-width:0;color:oklch(99% .004 200)}
+.stack .s1{flex:77;background:var(--c-en)}.stack .s2{flex:4;background:oklch(70% .04 290)}.stack .s3{flex:34;background:oklch(88% .02 290);color:var(--ink)}
+.legend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.5px;color:var(--mut);margin-bottom:12px}
+.legend li{display:flex;align-items:center;gap:6px}
+.legend li:before{content:"";width:10px;height:10px;border-radius:3px;background:var(--sw)}
+.legend b{font-family:var(--mono);color:var(--ink)}
 
-.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:16px;overflow:hidden}
-.tiers>div{padding:16px 18px;display:flex;flex-direction:column;gap:4px}
-.tiers>div+div{border-left:1px solid var(--edge)}
-.tiers h4{font-size:14px;font-weight:650;color:var(--mut)}
-.tiers .pz{font:600 28px/1.1 var(--mono);letter-spacing:-.04em}
-.tiers .pz small{font:500 13px Geist,sans-serif;color:var(--mut);letter-spacing:0}
-.tiers dl{display:grid;grid-template-columns:auto auto;gap:3px 10px;font-size:13.5px;margin-top:6px}
+/* cfo.ai strip + chart */
+.plan{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-bottom:12px;align-items:center}
+.tiers{display:grid;grid-template-rows:repeat(3,1fr);background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:12px;overflow:hidden}
+.tiers>div{display:grid;grid-template-columns:62px 82px minmax(0,1fr);align-items:center;gap:8px;padding:8px 14px;font-size:13px}
+.tiers>div+div{border-top:1px solid var(--edge)}
+.tiers h4{font-size:13.5px}
+.tiers .pz{font:600 20px/1 var(--mono);letter-spacing:-.04em}
+.tiers dl{display:grid;grid-template-columns:auto auto;gap:1px 8px}
 .tiers dt{color:var(--mut)}.tiers dd{font-family:var(--mono);text-align:right}
-.cash{margin-top:14px;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:16px;padding:14px 10px 6px}
-.cash svg{width:100%;height:auto;display:block}.cash .narrow{display:none}
-.cash text{font-family:Geist,sans-serif;font-size:13px;fill:var(--mut)}
-.cash .t{font-weight:650;fill:var(--ink);font-size:14px}
+.cash{background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:12px;padding:8px 8px 2px;display:grid;place-items:center}
+.cash svg{width:100%;max-width:330px;height:auto}
+.cash text{font-family:Geist,sans-serif;font-size:12px;fill:var(--mut)}
+.cash .t{font-weight:650;fill:var(--ink);font-size:13px}
 .cash .lb{font-weight:650;fill:var(--ok)}.cash .lo{font-weight:650;fill:var(--bad)}
 .cash .g{stroke:oklch(91% .01 220);stroke-width:1}.cash .z{stroke:oklch(70% .02 220);stroke-width:1.2}
-.cash .b{fill:none;stroke:var(--ok);stroke-width:3;stroke-linejoin:round}
-.cash .o{fill:none;stroke:var(--bad);stroke-width:3;stroke-dasharray:7 5;stroke-linejoin:round}
+.cash .b{fill:none;stroke:var(--ok);stroke-width:2.5;stroke-linejoin:round}
+.cash .o{fill:none;stroke:var(--bad);stroke-width:2.5;stroke-dasharray:6 4;stroke-linejoin:round}
 
-/* demo timeline */
-.tl{display:flex;height:58px;gap:2px;border-radius:12px;overflow:hidden}
-.tl a{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:0;text-decoration:none;font:600 12.5px/1.2 Geist,sans-serif;color:oklch(99% .004 200);transition:filter .2s}
-.tl a:hover{filter:brightness(1.1)}
-.tl a small{font:500 11.5px/1.2 var(--mono)}
+/* demo */
+.demo{display:grid;grid-template-columns:260px minmax(0,1fr);gap:18px;align-items:center}
+.vid{position:relative;display:block;border-radius:12px;overflow:hidden;border:1px solid var(--edge);box-shadow:var(--sh)}
+.vid img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.vid span{position:absolute;right:8px;bottom:8px;font:600 12px/1 var(--mono);color:oklch(99% .003 200);background:oklch(22% .014 230/.85);border-radius:99px;padding:5px 9px}
+.tl{display:flex;height:48px;gap:2px;border-radius:10px;overflow:hidden}
+.tl a{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:0;text-decoration:none;font:600 12px/1.2 Geist,sans-serif;color:oklch(99% .004 200)}
+.tl a small{font:500 11px/1.2 var(--mono)}
 .tl .ag{background:var(--c-ag);color:var(--ink)}.tl .ag:nth-child(even){background:var(--c-ag2)}
 .tl .nl{background:var(--c-nl)}.tl .en{background:var(--c-en)}.tl .cf{background:var(--c-cf)}
-.tlx{display:flex;justify-content:space-between;font:500 12px var(--mono);color:var(--mut);margin-top:6px}
-.watch{display:flex;justify-content:center;margin-top:20px}
-.watch a{display:inline-flex;align-items:center;gap:10px;font-weight:650;font-size:16px;background:var(--panel);border:1px solid var(--edge);border-radius:99px;padding:9px 18px 9px 10px;box-shadow:var(--sh)}
-.watch a i{width:30px;height:30px;border-radius:50%;background:var(--c);display:grid;place-items:center}
-.watch a i svg{width:13px;height:13px;margin-left:2px;fill:oklch(99% .004 200)}
+.tlx{display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--mut);margin:4px 0 8px}
 
-/* post timeline */
-.pt{position:relative;height:150px;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:16px;padding:0 22px}
-.pt .ax{position:absolute;left:22px;right:22px;top:20px;bottom:30px}
-.pt .ko{position:absolute;top:-8px;bottom:-4px;width:0;border-left:2px dashed var(--c)}
-.pt .ko span{position:absolute;top:-4px;left:6px;font:600 12px/1 Geist,sans-serif;color:var(--c);white-space:nowrap}
+/* post axis */
+.pt{position:relative;height:118px;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:12px;padding:0 18px}
+.pt .ax{position:absolute;left:18px;right:18px;top:14px;bottom:26px}
+.pt .ko{position:absolute;top:-6px;bottom:-2px;width:0;border-left:2px dashed var(--c)}
+.pt .ko span{position:absolute;bottom:4px;right:6px;font:600 11.5px/1 Geist,sans-serif;color:var(--c);white-space:nowrap}
 .pt .ln{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--edge)}
-.pt a{position:absolute;width:26px;height:26px;margin-left:-13px;border-radius:50%;display:grid;place-items:center;font:700 11px/1 Geist,sans-serif;text-decoration:none;color:oklch(99% .004 200);background:var(--c);border:2px solid var(--panel);box-shadow:var(--sh)}
-.pt a.li{background:oklch(45% .12 250)}
-.pt a.pre{background:oklch(62% .03 220)}
-.pt .tk{position:absolute;bottom:-22px;font:500 11.5px var(--mono);color:var(--mut);transform:translateX(-50%);white-space:nowrap}
+.pt a{position:absolute;width:24px;height:24px;margin-left:-12px;border-radius:50%;display:grid;place-items:center;font:700 10.5px/1 Geist,sans-serif;text-decoration:none;color:oklch(99% .004 200);background:var(--c);border:2px solid var(--panel);box-shadow:var(--sh)}
+.pt a.li{background:oklch(45% .12 250)}.pt a.pre{background:oklch(55% .03 220)}
+.pt .tk{position:absolute;bottom:-19px;font:500 11px var(--mono);color:var(--mut);transform:translateX(-50%);white-space:nowrap}
 .pt .tk.l{transform:none}.pt .tk.r{transform:translateX(-100%)}
-.postlist{list-style:none;display:flex;flex-direction:column}
-.postlist li{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:4px 14px;padding:8px 2px;border-bottom:1px solid var(--edge);font-size:14.5px;align-items:baseline}
-.postlist time{font:500 13px var(--mono);color:var(--mut)}
-.postlist q{quotes:"\201C" "\201D"}
-.postlist a{font-weight:600;white-space:nowrap}
 
-/* tables inside details */
-.tbl{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
-th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--edge);vertical-align:top}
-thead th{font-size:13px;font-weight:600;color:var(--mut);border-bottom-color:var(--c)}
-td.n,th.n{text-align:right;white-space:nowrap}
-td.n{font-family:var(--mono);font-size:14px}
-td.dn{color:var(--bad);font-weight:600}
-td a.ts{font:600 13px var(--mono);margin-right:6px}
-
-/* real output */
-.out{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.out p{font-size:13px;color:var(--mut);padding:7px 12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px}
-.out pre{padding:10px 12px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
-.out pre .p{color:var(--mut);user-select:none}
-
-/* recovery strip */
-.rs{list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.rs li{font:600 12.5px/1 var(--mono);border-radius:8px;padding:7px 9px;border:1px solid}
-.rs .e{background:var(--bad-bg);color:var(--bad);border-color:oklch(85% .06 25)}
-.rs .r{background:oklch(95.5% .02 250);color:oklch(42% .1 255);border-color:oklch(86% .04 250)}
-.rs .k{background:var(--ok-bg);color:var(--ok);border-color:oklch(84% .06 155)}
-.rs .ar{border:0;padding:0;color:var(--mut)}
-
-.areas{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px}
-.areas li{font-size:14.5px;padding:6px 0;border-bottom:1px solid var(--edge)}
-.areas b{font-weight:650}
-
-/* PR chips */
-.prc{display:inline-flex;flex-wrap:wrap;gap:6px;margin-left:4px;vertical-align:middle}
-.prc a{font:600 12.5px/1 var(--mono);background:var(--panel);border:1px solid var(--edge);border-radius:99px;padding:5px 9px}
+/* useful */
+.nums{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+.nums a{display:inline-flex;align-items:baseline;gap:6px;background:oklch(100% 0 0/.7);border:1px solid var(--edge);border-radius:99px;padding:5px 14px;font-size:13.5px;color:var(--ink);text-decoration-color:var(--edge)}
+.nums a b{font:600 17px/1 var(--mono);color:var(--c)}
 
 /* what broke */
-.broke{list-style:none;margin:28px auto 0;max-width:820px;border-top:1px solid var(--edge)}
-.broke li{display:grid;grid-template-columns:90px minmax(0,1fr);gap:4px 18px;padding:12px 4px;border-bottom:1px solid var(--edge);align-items:baseline;font-size:15px}
-.broke .num{font:600 22px/1.1 var(--mono);color:var(--c);letter-spacing:-.03em;text-align:right}
+.broke{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:16px}
+.broke li{background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.35}
+.broke b{display:block;font:600 20px/1.1 var(--mono);color:var(--c);letter-spacing:-.03em;margin-bottom:3px}
 
 /* reproduce */
-.code{margin:24px auto 0;max-width:760px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;box-shadow:var(--sh);overflow:hidden}
-.code+.code{margin-top:14px}
-.code-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 16px;border-bottom:1px solid var(--edge);font-size:14px;color:var(--mut)}
-.code-h .bdg{font:600 12px/1 Geist,sans-serif;background:var(--ok-bg);color:var(--ok);border-radius:99px;padding:4px 9px;margin-left:8px;white-space:nowrap}
-.code pre{padding:14px 16px;font-size:14px;line-height:1.7;overflow-x:auto;white-space:pre}
+.codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.code{background:var(--panel);border:1px solid var(--edge);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.code-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 6px 5px 12px;border-bottom:1px solid var(--edge);font-size:13px;color:var(--mut)}
+.code-h .bdg{font:600 11px/1 Geist,sans-serif;background:var(--ok-bg);color:var(--ok);border-radius:99px;padding:3px 7px;margin-left:6px;white-space:nowrap}
+.code pre{padding:10px 12px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;flex:1}
 .code pre .p{color:var(--mut);user-select:none}
-.cp{font:inherit;font-size:13.5px;font-weight:600;min-height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--edge);background:var(--tint);color:var(--ink);cursor:pointer;flex:none}
-.cp:hover{background:oklch(100% 0 0/.8)}
-.code .note{padding:0 16px 12px;font-size:14px;color:var(--mut)}
+.code .note{padding:0 12px 9px;font-size:12.5px;color:var(--mut)}
+.cp{font:inherit;font-size:12.5px;font-weight:600;min-height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--edge);background:var(--tint);color:var(--ink);cursor:pointer;flex:none}
+.cp:hover{background:oklch(100% 0 0/.85)}
 
-footer{max-width:1040px;margin:0 auto;padding:36px 24px 52px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;color:var(--mut);font-size:14.5px}
-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px}
-footer .home{font-weight:650;font-size:16px}
+/* one details block per section */
+details.more{margin-top:14px}
+details.more>summary{list-style:none;cursor:pointer;display:flex;justify-content:center}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary span{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--link);border:1px solid var(--edge);background:oklch(100% 0 0/.6);border-radius:99px;padding:5px 14px;min-height:32px}
+details.more>summary span:after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .2s}
+details.more[open]>summary span:after{transform:translateY(2px) rotate(225deg)}
+details.more .in{margin-top:12px;background:oklch(100% 0 0/.66);border:1px solid var(--edge);border-radius:14px;padding:16px 18px;font-size:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
+details.more .in>.w{grid-column:1/-1}
+details.more h4{font-size:13.5px;font-weight:650;margin-bottom:5px}
+details.more p+p{margin-top:5px}
+details.more .note{color:var(--mut);font-size:13px}
+.areas{list-style:none;display:flex;flex-direction:column;font-size:13.5px}
+.areas li{padding:3px 0;border-bottom:1px solid var(--edge)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--edge);vertical-align:top}
+thead th{font-size:12px;font-weight:600;color:var(--mut);border-bottom-color:var(--c)}
+td.n,th.n{text-align:right;white-space:nowrap}
+td.n{font-family:var(--mono);font-size:13px}
+td.dn{color:var(--bad);font-weight:600}
+td a.ts{font:600 12.5px var(--mono);margin-right:5px}
+.out{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.out p{font-size:12.5px;color:var(--mut);padding:5px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:4px 10px;flex-wrap:wrap}
+.out pre{padding:8px 10px;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.out pre .p{color:var(--mut)}
+.postlist{list-style:none;columns:2;column-gap:22px;font-size:13.5px}
+.postlist li{break-inside:avoid;display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;padding:4px 0;border-bottom:1px solid var(--edge)}
+.postlist time{font:500 12px var(--mono);color:var(--mut)}
+.postlist q{quotes:"\201C" "\201D"}
+.postlist a{font-weight:600}
 
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.hero .wrap>*{animation:rise .8s var(--ease) both}
-.hero .wrap>:nth-child(2){animation-delay:.05s}.hero .wrap>:nth-child(3){animation-delay:.1s}.hero .wrap>:nth-child(n+4){animation-delay:.16s}
+/* lightbox */
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(1200px,94vw);max-height:92vh;margin:auto;overflow:visible}
+dialog.lb::backdrop{background:oklch(20% .02 230/.78)}
+dialog.lb figure{background:var(--panel);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px -20px oklch(10% .02 230/.6)}
+dialog.lb img{max-width:min(1200px,94vw);max-height:calc(92vh - 56px);width:auto;height:auto;margin:0 auto;object-fit:contain;background:var(--panel)}
+dialog.lb figcaption{display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:14px;border-top:1px solid var(--line)}
+dialog.lb figcaption b{font:600 12px var(--mono);background:oklch(25% .02 230);color:oklch(99% .004 200);border-radius:5px;padding:3px 6px}
+dialog.lb figcaption span{flex:1}
+dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 
-@media(max-width:860px){
- .ck li{grid-template-columns:30px minmax(0,1fr) 112px;}
- .ck .chip{grid-column:2}
- .ck .gl{grid-column:3;grid-row:1/3;width:112px;height:68px}
- .bar{grid-template-columns:minmax(0,1fr) 76px}.bar>b{grid-column:1/-1}
- .areas{grid-template-columns:minmax(0,1fr)}
+footer{max-width:1120px;margin:0 auto;padding:24px 24px 36px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;color:var(--mut);font-size:14px}
+footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px}
+footer .home{font-weight:650}
+
+@media(max-width:980px){
+ .sheet,.sheet.c6{--cols:4}
+ .broke{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-@media(max-width:760px){
- .rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
- .rt,.rt tbody,.rt tr,.rt th,.rt td{display:block;width:auto!important}
- .rt tr{border-bottom:1px solid var(--edge);padding:10px 0}
- .rt th,.rt td{border:0;padding:2px 0;text-align:left!important}
- .rt td[data-l]:before{content:attr(data-l);display:block;font:600 11px/1.4 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
- .kv td[data-l]{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
- .kv td[data-l]:before{display:inline;flex:none}
- .tiers{grid-template-columns:minmax(0,1fr)}
- .tiers>div+div{border-left:0;border-top:1px solid var(--edge)}
- .tiers>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);align-items:center;column-gap:14px}
- .tiers h4,.tiers .pz{grid-column:1}.tiers dl{grid-column:2;grid-row:1/3;margin:0}
- .gal{grid-template-columns:minmax(0,1fr)}
- .cash .wide{display:none}.cash .narrow{display:block}.cash text{font-size:12px}.cash .t{font-size:13px}
- .postlist li{grid-template-columns:minmax(0,1fr) auto}.postlist q{grid-column:1/-1;grid-row:2}
+@media(max-width:860px){
+ .jump .l{display:none}.jump .s{display:block}
+ .jump li,.jump li:last-child,.jump li:nth-child(4){flex:1 1 0;min-width:0}
+ .two,.plan{grid-template-columns:minmax(0,1fr)}
+ .sheet,.sheet.c6{--cols:3}.sheet.c4{--cols:2}
+ .demo{grid-template-columns:200px minmax(0,1fr)}
+ details.more .in{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:700px){
+ .ck{grid-template-columns:minmax(0,1fr)}
+ .demo{grid-template-columns:minmax(0,1fr)}.vid{max-width:320px;margin:0 auto}
+ .th-head .lk{margin-left:0;width:100%}
+ .postlist{columns:1}
 }
 @media(max-width:640px){
- .wrap{padding:0 16px}footer{padding-left:16px;padding-right:16px}
- .path{grid-template-columns:minmax(0,1fr)}
- .score ol{flex-direction:column;gap:6px}
- .score a{min-height:0;flex-direction:row;align-items:center;gap:14px;padding:11px 14px;background:linear-gradient(90deg,oklch(100% 0 0/.75) calc(var(--w)*2.6%),var(--tint) 0)}
- .score a b{min-width:3.2ch;font-size:24px}
- .ck li{grid-template-columns:26px minmax(0,1fr);padding:14px;gap:6px 12px}
- .ck .ic{width:26px;height:26px;background-size:14px}
- .ck .gl{grid-column:2;grid-row:auto;width:100%;height:96px}
- .ck .chip{grid-column:2}
- .bars{padding:16px}
- .tl{height:64px}
- .tl a{font-size:11px}.tl a small{font-size:10.5px}
- .tl .ag span{display:none}
- .pt{padding:0 14px}.pt .ax{left:14px;right:14px}
- .pt .tk.m{display:none}
- .broke li{grid-template-columns:minmax(0,1fr);gap:2px}.broke .num{text-align:left}
- .code pre{font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere}
- .code-h{flex-wrap:wrap;padding-left:14px}
- details.more .in{padding:16px 14px}
- .tile{min-width:0;flex:1 1 140px}
+ .wrap,.jump ol{padding:0 12px}
+ .jump{top:70px}
+ .jump a{flex-direction:column;justify-content:center;gap:1px;height:44px;padding:0 4px;font-size:11px;text-align:center}
+ .jump a b{font-size:14px}
+ .sheet,.sheet.c6,.sheet.c4{--cols:2;gap:10px 8px}
+ .bar{grid-template-columns:minmax(0,1fr) 48px}.bar>b{grid-column:1/-1}
+ .broke{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .codes{grid-template-columns:minmax(0,1fr)}
+ .tiers>div{grid-template-columns:52px 70px minmax(0,1fr);padding:8px 10px}
+ .pt{padding:0 12px}.pt .ax{left:12px;right:12px}.pt .tk.m{display:none}
+ .tl a{font-size:10.5px}.tl a small{font-size:10px}.tl .ag span{display:none}
+ .rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .rt,.rt tbody,.rt tr,.rt th,.rt td{display:block;width:auto!important}
+ .rt tr{border-bottom:1px solid var(--edge);padding:6px 0}
+ .rt th,.rt td{border:0;padding:2px 0;text-align:left!important}
+ .rt td[data-l]:before{content:attr(data-l);display:block;font:600 10.5px/1.4 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+ .postlist li{grid-template-columns:62px minmax(0,1fr) auto}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero .wrap>*{animation:none}*{transition:none!important}.score a:hover,.gal a.im:hover img{transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}.sheet a.th:hover img{transform:none}}
 </style>
 </head>
 <body>
@@ -331,190 +304,145 @@ footer .home{font-weight:650;font-size:16px}
 
 <section class="band t-sage hero" aria-labelledby="top-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>neatHack 2026</b>For judges</span></div>
-<h1 id="top-h">Check Every FirstRun Claim in 60 Seconds</h1>
-<p class="lede">Each official criterion and evidence row, with a link you can open.</p>
+<h1 id="top-h"><span>neatHack 2026 · For judges</span>Check Every FirstRun Claim in 60 Seconds</h1>
 <ol class="path" aria-label="The 60-second path">
-<li><a href="#evidence">Tick the 7 evidence rows</a><span>One line and one link each</span></li>
-<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc">Watch the demo</a><span>2:59, a chapter per tool</span></li>
-<li><a href="#agent">See v1 against v2</a><span>2 of 4 finished, then 3 of 4</span></li>
-<li><a href="../receipts/FR-20261010-091740-help-accuknox-com.html">Open a real receipt</a><span>$0.0453 against a $0.04697 cap</span></li>
+<li><a href="#evidence">Tick the 7 evidence rows</a></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc">Watch the 2:59 demo</a></li>
+<li><a href="#agent">See v1 against v2</a></li>
+<li><a href="../receipts/FR-20261010-091740-help-accuknox-com.html">Open a real receipt</a></li>
 </ol>
-<nav class="score" aria-label="Official judging categories and weights">
-<p>Five categories, weighted to a score out of 100. Click one to jump.</p>
-<ol>
-<li class="t-slate" style="--w:30"><a href="#agent"><b>30%</b><span>The agent</span></a></li>
-<li class="t-mint" style="--w:25"><a href="#tools"><b>25%</b><span>Use of neatlogs, Entire and cfo.ai</span></a></li>
-<li class="t-mist" style="--w:20"><a href="#demo"><b>20%</b><span>Demo video</span></a></li>
-<li class="t-moss" style="--w:15"><a href="#public"><b>15%</b><span>Building in public</span></a></li>
-<li class="t-sea" style="--w:10"><a href="#useful"><b>10%</b><span>Usefulness and originality</span></a></li>
-</ol>
-</nav>
 </div>
 </section>
 
+<nav class="jump" aria-label="Official judging categories and weights">
+<ol>
+<li class="t-slate" style="--w:30"><a href="#agent"><b>30%</b><span class="l">The agent</span><span class="s">Agent</span></a></li>
+<li class="t-mint" style="--w:25"><a href="#tools"><b>25%</b><span class="l">Use of neatlogs, Entire and cfo.ai</span><span class="s">Tools</span></a></li>
+<li class="t-mist" style="--w:20"><a href="#demo"><b>20%</b><span class="l">Demo video</span><span class="s">Demo</span></a></li>
+<li class="t-moss" style="--w:15"><a href="#public"><b>15%</b><span class="l">Building in public</span><span class="s">Public</span></a></li>
+<li class="t-sea" style="--w:12"><a href="#useful"><b>10%</b><span class="l">Usefulness and originality</span><span class="s">Useful</span></a></li>
+</ol>
+</nav>
+
 <section id="evidence" class="band t-steel" aria-labelledby="ev-h">
 <div class="wrap">
-<p class="crit"><small>Official evidence and verification</small><q>Back up each claim in your submission with evidence that judges can check.</q></p>
+<p class="crit"><b>Evidence</b><q>Back up each claim in your submission with evidence that judges can check.</q></p>
 <h2 id="ev-h">All 7 Official Evidence Rows Have Proof You Can Open</h2>
 <ol class="ck">
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>1</i><a href="#agent">The agent improved</a></h3><p class="off"><q>A run before your change and a run after it, e.g., two neatlogs traces, with the numbers you compared</q></p><p class="pr">Yes: 2 of 4 quickstarts finished before the fix, 3 of 4 after. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">8 traces compared</a></p></div><a class="gl" href="#agent" aria-label="See the v1 and v2 bars"><span><b>2 → 3</b><small>of 4 finished</small></span></a><span class="chip c-repo">In repo</span></li>
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>2</i><a href="#neatlogs">You used neatlogs</a></h3><p class="off"><q>Links to neatlogs traces from your project, or screenshots of them</q></p><p class="pr">Yes: 4 dashboard screenshots, each tied to a trace or file. <a href="#neatlogs">See them</a></p></div><a class="gl" href="#neatlogs"><img src="../assets/j-nl-detection.webp" alt="neatlogs detection screenshot: 78 flagged spans" width="970" height="860" loading="lazy" decoding="async"></a><span class="chip c-shot">Screenshots</span></li>
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>3</i><a href="#entire">You used Entire</a></h3><p class="off"><q>Checkpoints or entire-graph output from your repository</q></p><p class="pr">Yes: 75 of 113 non-merge commits carry a checkpoint. The graph output is in the repo. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open a checkpoint</a></p></div><a class="gl" href="#entire"><img src="../assets/e-en-checkpoint.webp" alt="A GitHub commit message ending with an Entire-Checkpoint line" width="650" height="214" loading="lazy" decoding="async"></a><span class="chip c-pub">Public</span></li>
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>4</i><a href="#cfoai">You used cfo.ai</a></h3><p class="off"><q>A business plan covering your agent's pricing, costs, revenue and runway</q></p><p class="pr">Yes: a public plan with all four, built in cfo.ai. <a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">Open the model</a></p></div><a class="gl" href="#cfoai" aria-label="See the plan"><span><b>$0 $49 $299</b><small>3 plans, a month</small></span></a><span class="chip c-pub">Public</span></li>
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>5</i><a href="#recovery">The agent recovers from failures</a></h3><p class="off"><q>A run where an action failed, showing what the agent did next</q></p><p class="pr">Yes: step 1 failed, the agent fixed it, and a fresh container passed 4 of 4. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">The full trace</a></p></div><a class="gl" href="#recovery" aria-label="See the recovery"><span><b>4 / 4</b><small>passed after recovery</small></span></a><span class="chip c-repo">In repo</span></li>
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>6</i><a href="#public">You built in public</a></h3><p class="off"><q>Links to what you shared during the hackathon, tagged #neatHack</q></p><p class="pr">Yes: 11 posts tagged #neatHack, all open with no login. <a href="#public">See the posts</a></p></div><a class="gl" href="#public" aria-label="See the 11 posts"><span><b>11</b><small>tagged posts</small></span></a><span class="chip c-pub">Public</span></li>
-<li><span class="ic" aria-hidden="true"></span><div><h3><i>7</i><a href="#reproduce">You wrote the code during the hackathon</a></h3><p class="off"><q>A public repository with commits dated during the hackathon</q></p><p class="pr">Yes: the first commit is dated 12:34 IST, 4 minutes after kickoff. <a href="https://github.com/HighnessAtharva/firstrun/commit/96541a8b88ba2cb758f055c265f9f3d875ef4b08">First commit</a></p></div><a class="gl" href="#reproduce" aria-label="List the commit dates yourself"><span><b>12:34</b><small>IST, Oct 10</small></span></a><span class="chip c-pub">Public</span></li>
+<li><h3><i>1</i><a href="#agent">The agent improved</a></h3><span class="chip c-repo">In repo</span><p class="off"><q>A run before your change and a run after it, e.g., two neatlogs traces, with the numbers you compared</q></p><p class="pr">2 of 4 finished, then 3 of 4. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">8 traces</a></p></li>
+<li><h3><i>2</i><a href="#neatlogs">You used neatlogs</a></h3><span class="chip c-shot">Screenshots</span><p class="off"><q>Links to neatlogs traces from your project, or screenshots of them</q></p><p class="pr">10 dashboard screenshots. <a href="#neatlogs">See them</a></p></li>
+<li><h3><i>3</i><a href="#entire">You used Entire</a></h3><span class="chip c-pub">Public</span><p class="off"><q>Checkpoints or entire-graph output from your repository</q></p><p class="pr">77 of 115 commits carry a checkpoint. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open one</a></p></li>
+<li><h3><i>4</i><a href="#cfoai">You used cfo.ai</a></h3><span class="chip c-pub">Public</span><p class="off"><q>A business plan covering your agent's pricing, costs, revenue and runway</q></p><p class="pr">All four, in a public model. <a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model</a></p></li>
+<li><h3><i>5</i><a href="#agent">The agent recovers from failures</a></h3><span class="chip c-repo">In repo</span><p class="off"><q>A run where an action failed, showing what the agent did next</q></p><p class="pr">Step 1 failed, then 4 of 4 passed clean. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Trace 5520c5cf</a></p></li>
+<li><h3><i>6</i><a href="#public">You built in public</a></h3><span class="chip c-pub">Public</span><p class="off"><q>Links to what you shared during the hackathon, tagged #neatHack</q></p><p class="pr">11 tagged posts, 9 after kickoff. <a href="#public">See them</a></p></li>
+<li><h3><i>7</i><a href="#reproduce">You wrote the code during the hackathon</a></h3><span class="chip c-pub">Public</span><p class="off"><q>A public repository with commits dated during the hackathon</q></p><p class="pr">First commit 12:34 IST, kickoff 12:30. <a href="https://github.com/HighnessAtharva/firstrun/commit/96541a8b88ba2cb758f055c265f9f3d875ef4b08">96541a8</a></p></li>
+<li class="note">Trace pages need a neatlogs login, so screenshots stand in.</li>
 </ol>
-<div class="flags"><span class="flag">neatlogs trace pages need a login, so rows 1, 2 and 5 use screenshots and exported files.</span></div>
 </div>
 </section>
 
 <section id="agent" class="band t-slate" aria-labelledby="agent-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>30%</b>The agent</span></div>
-<p class="crit"><small>Official criterion</small><q>How well the agent, or the system of agents, handles a substantial task from start to finish.</q></p>
-<h2 id="agent-h">The Agent Runs a Quickstart From Start to Finish, and v2 Beat v1</h2>
-<div class="vis">
-<div class="bars" role="group" aria-label="Version 1 against version 2 on the same 4 quickstarts">
-<div class="bar"><b>Quickstarts finished<small>out of 4</small></b><div class="pair"><div class="trk"><abbr title="version 1">v1</abbr><span style="--v:50%"><i></i><em>2</em></span></div><div class="trk v2"><abbr title="version 2">v2</abbr><span style="--v:75%"><i></i><em>3</em></span></div></div><span class="dl">+1</span></div>
-<div class="bar"><b>Failed steps recovered</b><div class="pair"><div class="trk"><abbr title="version 1">v1</abbr><span style="--v:0%"><i></i><em>0</em></span></div><div class="trk v2"><abbr title="version 2">v2</abbr><span style="--v:75%"><i></i><em>3</em></span></div></div><span class="dl">+3</span></div>
-<div class="bar"><b>Fixes verified in a fresh container</b><div class="pair"><div class="trk"><abbr title="version 1">v1</abbr><span style="--v:0%"><i></i><em>0</em></span></div><div class="trk v2"><abbr title="version 2">v2</abbr><span style="--v:25%"><i></i><em>1</em></span></div></div><span class="dl">+1</span></div>
-<div class="bar"><b>Cost per run<small>lower is better</small></b><div class="pair"><div class="trk"><abbr title="version 1">v1</abbr><span class="full" style="--v:87%"><i></i><em>$0.0262</em></span></div><div class="trk v2"><abbr title="version 2">v2</abbr><span class="full" style="--v:67%"><i></i><em>$0.0200</em></span></div></div><span class="dl">24%<small>cheaper</small></span></div>
+<p class="crit"><b>30% The agent</b><q>How well the agent, or the system of agents, handles a substantial task from start to finish.</q></p>
+<h2 id="agent-h">The Agent Runs a Quickstart Start to Finish, and v2 Beat v1</h2>
+<div class="two gap">
+<div class="panel">
+<h3>Same 4 quickstarts, v1 against v2</h3>
+<div class="bars" role="group" aria-label="Version 1 against version 2">
+<div class="bar"><b>Finished, of 4</b><div class="pair"><div class="trk">v1<span style="--v:50%"><i></i><em>2</em></span></div><div class="trk v2">v2<span style="--v:75%"><i></i><em>3</em></span></div></div><span class="dl">+1</span></div>
+<div class="bar"><b>Failed steps recovered</b><div class="pair"><div class="trk">v1<span style="--v:0%"><i></i><em>0</em></span></div><div class="trk v2">v2<span style="--v:75%"><i></i><em>3</em></span></div></div><span class="dl">+3</span></div>
+<div class="bar"><b>Fixes verified clean</b><div class="pair"><div class="trk">v1<span style="--v:0%"><i></i><em>0</em></span></div><div class="trk v2">v2<span style="--v:25%"><i></i><em>1</em></span></div></div><span class="dl">+1</span></div>
+<div class="bar"><b>Cost per run</b><div class="pair"><div class="trk">v1<span class="full" style="--v:87%"><i></i><em>$0.0262</em></span></div><div class="trk v2">v2<span class="full" style="--v:67%"><i></i><em>$0.0200</em></span></div></div><span class="dl">-24%</span></div>
 </div>
-<p class="src">From 8 neatlogs traces, 4 before the fix and 4 after: <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a></p>
+<p class="src" style="text-align:left">8 neatlogs traces: <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a></p>
 </div>
-<ul class="yes">
-<li><span><b>Yes, start to finish:</b> it reads the docs, plans, runs each step, recovers, then verifies in a fresh container. <a href="https://github.com/HighnessAtharva/firstrun#readme">How a run works</a></span></li>
-<li id="recovery"><span><b>Yes, it recovers:</b> trace 5520c5cf failed twice and ended verified, 4 of 4. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">The full trace</a></span></li>
-<li><span><b>Yes, it knows when to ask:</b> a human is asked once, only below 0.7 confidence. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/recovery.py#L29">The threshold</a></span></li>
-</ul>
-<details class="more" id="agent-more"><summary><span>Show details</span></summary><div class="in">
-<div><h4>The recovered run, span by span (trace 5520c5cf)</h4>
-<ol class="rs" aria-label="Recovery sequence">
-<li class="e">step.1 failed: curl: command not found</li><li class="ar" aria-hidden="true">→</li>
-<li class="r">recover.1 installed curl</li><li class="ar" aria-hidden="true">→</li>
-<li class="e">step.2 failed: ~/.local/bin not on PATH</li><li class="ar" aria-hidden="true">→</li>
-<li class="r">recover.2 added it to PATH</li><li class="ar" aria-hidden="true">→</li>
-<li class="k">steps 2 to 4 passed</li><li class="ar" aria-hidden="true">→</li>
-<li class="k">verify: fresh container, 4 of 4, no model calls</li>
+<div class="panel">
+<h3>Recovery in trace 5520c5cf</h3>
+<ol class="rs">
+<li class="e"><code>step.1</code>failed: curl: command not found</li>
+<li class="r"><code>recover.1</code>installed curl</li>
+<li class="e"><code>step.2</code>failed: ~/.local/bin not on PATH</li>
+<li class="r"><code>recover.2</code>added it to PATH</li>
+<li class="k"><code>verify</code>fresh container, 4 of 4, no model calls</li>
 </ol>
-<p class="note" style="margin-top:8px">30 spans, 417 s, $0.0095. The trace status reads ERROR because a failed step rolls up to the trace. The run ended verified.</p></div>
+<p class="mini"><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Exported trace</a></p>
+</div>
+</div>
+<details class="more" id="agent-more"><summary><span>Show details</span></summary><div class="in">
 <div><h4>Every part of a run points to code</h4>
 <ul class="areas">
-<li><b>Plan:</b> copies each docs command exactly. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/planner.py#L319">planner.py</a></li>
-<li><b>Tools:</b> Firecrawl reads, Docker runs, Jev classifies. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/classify.py#L128">classify.py</a></li>
-<li><b>State:</b> saved after every step, so a run can resume. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/state.py#L52">state.py</a></li>
-<li><b>Context:</b> the planner reads only the quickstart page. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/planner.py#L140">planner.py</a></li>
-<li><b>Run:</b> one fresh container, an exit code per step. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/executor.py#L87">executor.py</a></li>
-<li><b>Recover:</b> classify, patch and retry, 3 tries at most. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/recovery.py#L300">recovery.py</a></li>
-<li><b>Verify:</b> a second container, model calls blocked. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/verify.py#L57">verify.py</a></li>
-<li><b>Ask once:</b> a human answer is stored and reused. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/precedents.py">precedents.py</a></li>
+<li>Plan: copies each docs command. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/planner.py#L319">planner.py</a></li>
+<li>Tools: Firecrawl, Docker and Jev. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/classify.py#L128">classify.py</a></li>
+<li>State: saved after every step. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/state.py#L52">state.py</a></li>
+<li>Context: reads only the quickstart page. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/planner.py#L140">planner.py</a></li>
+<li>Run: one fresh container per run. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/executor.py#L87">executor.py</a></li>
+<li>Recover: classify, patch, retry, 3 tries. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/recovery.py#L300">recovery.py</a></li>
+<li>Verify: second container, no model calls. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/verify.py#L57">verify.py</a></li>
+<li>Ask once: a human is asked only below 0.7 confidence. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/recovery.py#L29">recovery.py</a> <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/precedents.py">precedents.py</a></li>
 </ul></div>
-<div><h4>All six numbers from the 8 traces</h4>
-<div class="tbl"><table class="rt kv">
+<div><h4>All six numbers</h4>
+<div class="tbl"><table>
 <thead><tr><th scope="col">Metric</th><th scope="col" class="n">v1</th><th scope="col" class="n">v2</th></tr></thead>
 <tbody>
-<tr><th scope="row">Quickstarts that end passed or verified</th><td class="n" data-l="v1">2 of 4</td><td class="n" data-l="v2">3 of 4</td></tr>
-<tr><th scope="row">Failed steps recovered</th><td class="n" data-l="v1">0</td><td class="n" data-l="v2">3</td></tr>
-<tr><th scope="row">Fixes verified in a fresh container</th><td class="n" data-l="v1">0</td><td class="n" data-l="v2">1</td></tr>
-<tr><th scope="row">Average tool calls per run</th><td class="n" data-l="v1">4.25</td><td class="n" data-l="v2">6.0</td></tr>
-<tr><th scope="row">Average cost per run</th><td class="n" data-l="v1">$0.0262</td><td class="n" data-l="v2">$0.0200</td></tr>
-<tr><th scope="row">Average run time, verification included</th><td class="n" data-l="v1">128 s</td><td class="n" data-l="v2">201 s</td></tr>
+<tr><th scope="row">Finished, passed or verified</th><td class="n">2 of 4</td><td class="n">3 of 4</td></tr>
+<tr><th scope="row">Failed steps recovered</th><td class="n">0</td><td class="n">3</td></tr>
+<tr><th scope="row">Fixes verified clean</th><td class="n">0</td><td class="n">1</td></tr>
+<tr><th scope="row">Tool calls per run</th><td class="n">4.25</td><td class="n">6.0</td></tr>
+<tr><th scope="row">Cost per run</th><td class="n">$0.0262</td><td class="n">$0.0200</td></tr>
+<tr><th scope="row">Run time, verify included</th><td class="n">128 s</td><td class="n">201 s</td></tr>
 </tbody></table></div>
-<p class="note">v2 runs longer because a verified fix reruns the whole quickstart. Costs are list price, not billed. The fix between v1 and v2 is <a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">commit 3ca6f11</a>, and the 8 trace IDs are in <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#before-and-after-traces-measure-the-fix-from-neatlogs">neatlogs.md</a>.</p></div>
+<p class="note">List price, not billed. The fix is <a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">commit 3ca6f11</a>. Trace IDs: <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#before-and-after-traces-measure-the-fix-from-neatlogs">neatlogs.md</a>. The trace status reads ERROR because a failed step rolls up, but the run ended verified.</p></div>
 </div></details>
 </div>
 </section>
 
 <section id="tools" class="band t-mint" aria-labelledby="tools-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>25%</b>Use of neatlogs, Entire and cfo.ai</span></div>
-<p class="crit"><small>Official criterion</small><q>How effectively you used neatlogs, Entire and cfo.ai to build, improve and plan a business around the agent.</q></p>
+<p class="crit"><b>25% Tools</b><q>How effectively you used neatlogs, Entire and cfo.ai to build, improve and plan a business around the agent.</q></p>
 <h2 id="tools-h">neatlogs Improved the Agent, Entire Recorded the Build, cfo.ai Planned the Business</h2>
 
-<div class="tblock" id="neatlogs">
-<div class="thead"><img src="../assets/logo-neatlogs.webp" alt="" width="44" height="44" loading="lazy"><div><h3>neatlogs</h3><p>Improve: traces every run and found the agent's own bug.</p></div></div>
-<div class="tiles">
-<div class="tile"><b>52.8x</b><span>spike in failed steps caught</span><a href="../assets/t-neatlogs-investigate.webp">Screenshot</a></div>
-<div class="tile"><b>25</b><span>failed detections, 10 traces</span><a href="../assets/t-neatlogs-investigate.webp">Screenshot</a></div>
-</div>
-<ul class="gal vis">
-<li><figure><a class="im" href="../assets/t-neatlogs-investigate.webp" target="_blank" rel="noopener"><img src="../assets/e-nl-investigate.webp" alt="neatlogs incident: 25 Execution Failed detections against a baseline of 0.5, a 52.8x increase over 10 traces, root cause at 66% confidence" width="870" height="484" loading="lazy" decoding="async"></a><figcaption><span>Investigate named the cause at 66% confidence.</span><a href="https://github.com/HighnessAtharva/firstrun/commit/2de852f">Fix 2de852f</a></figcaption></figure></li>
-<li><figure><a class="im" href="../assets/j-nl-detection.webp" target="_blank" rel="noopener"><img src="../assets/j-nl-detection.webp" alt="neatlogs detection docs step broke: 78 flagged spans, flat at 0 until a spike on October 10 and 11" width="970" height="860" loading="lazy" decoding="async"></a><figcaption><span>A detection flagged 78 step errors.</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-detection-docs-step-broke.png">Source file</a></figcaption></figure></li>
-<li><figure><a class="im" href="../assets/j-nl-eval-run.webp" target="_blank" rel="noopener"><img src="../assets/j-nl-eval-run.webp" alt="neatlogs evaluator result on trace 5520c5cf: names_real_failed_step true, failure_class environment for curl command not found" width="872" height="770" loading="lazy" decoding="async"></a><figcaption><span>An AI judge checked trace 5520c5cf.</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-eval-run-result.png">Source file</a></figcaption></figure></li>
-<li><figure><a class="im" href="../assets/t-neatlogs-bisect.webp" target="_blank" rel="noopener"><img src="../assets/e-nl-bisect.webp" alt="neatlogs trace of a Docs Bisect run: 5 probes across jafgen releases, last good 0.3.1, first bad 0.4.6" width="990" height="550" loading="lazy" decoding="async"></a><figcaption><span>A bisect trace found the first bad release.</span><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">PR comment</a></figcaption></figure></li>
-</ul>
-<ul class="yes">
-<li><span><b>Yes:</b> every run is one trace, and every step is a span. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">neatlogs.md</a></span></li>
-<li><span><b>Yes:</b> neatlogs found the agent's own planner bug, and commit 3ca6f11 fixed it. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs-investigation.md">Investigate result</a></span></li>
-<li><span><b>Yes:</b> an AI judge named the right failed step in 46 of 52 runs. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#two-launched-evals-scored-67-traces-and-found-where-the-agent-overclaims">Scores</a></span></li>
-</ul>
-<details class="more" id="nl-more"><summary><span>Show details</span></summary><div class="in">
-<p>Trace pages need a neatlogs login, so the screenshots stand in. The trace IDs are in <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">neatlogs.md</a>, and one full trace is exported.</p>
-<p>The run judge scored 17 runs at 1 or 2 out of 5, and the evidence file lists why. The audit judge averaged 4.87 of 5 over 15 audits.</p>
-<p>The bisect trace tested 5 jafgen releases: 0.3.1 passes and 0.4.6, from 2024-04-07, fails. The repo does not record this trace ID.</p>
-</div></details>
+<div class="tool" id="neatlogs">
+<div class="th-head"><img src="../assets/logo-neatlogs.webp" alt="" width="32" height="32" loading="lazy"><h3>neatlogs</h3><p>A <b>52.8x</b> spike led to fix 2de852f.</p><span class="lk"><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">neatlogs.md</a><span class="chip c-mut">Traces need a login</span></span></div>
+<ol class="sheet" data-set="neatlogs">
+<li><a class="th" href="../assets/t-neatlogs-trace.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md" aria-label="Open N1 full size"><img src="../assets/judges/th-nl-trace.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N1</b></a><p>One run is one trace</p></li>
+<li><a class="th" href="../assets/t-neatlogs-recovery.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md" aria-label="Open N2 full size"><img src="../assets/judges/th-nl-recovery.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N2</b></a><p>A recover.3 span retries a step</p></li>
+<li><a class="th" href="../assets/t-neatlogs-investigate.webp" data-src="https://github.com/HighnessAtharva/firstrun/commit/2de852f" aria-label="Open N3 full size"><img src="../assets/judges/th-nl-investigate.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N3</b></a><p>Investigate: 52.8x spike, cause at 66%</p></li>
+<li><a class="th" href="../assets/j-nl-detection.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-detection-docs-step-broke.png" aria-label="Open N4 full size"><img src="../assets/judges/th-nl-detection.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N4</b></a><p>Detection "docs step broke": 78 flagged spans</p></li>
+<li><a class="th" href="../assets/t-neatlogs-detection.webp" data-src="https://github.com/HighnessAtharva/firstrun#readme" aria-label="Open N5 full size"><img src="../assets/judges/th-nl-flagged.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N5</b></a><p>Flagged spans, 40 at capture time</p></li>
+<li><a class="th" href="../assets/t-neatlogs-analysis.webp" data-src="https://github.com/HighnessAtharva/firstrun#readme" aria-label="Open N6 full size"><img src="../assets/judges/th-nl-analysis.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N6</b></a><p>Detection analysis over 132 traces</p></li>
+<li><a class="th" href="../assets/t-neatlogs-analytics.webp" data-src="https://github.com/HighnessAtharva/firstrun#readme" aria-label="Open N7 full size"><img src="../assets/judges/th-nl-analytics.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N7</b></a><p>Analytics: 132 traces, $0.9071 total cost</p></li>
+<li><a class="th" href="../assets/j-nl-eval-run.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-eval-run-result.png" aria-label="Open N8 full size"><img src="../assets/judges/th-nl-eval-run.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N8</b></a><p>AI judge on trace 5520c5cf: right step</p></li>
+<li><a class="th" href="../assets/judges/nl-eval-audit.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md" aria-label="Open N9 full size"><img src="../assets/judges/th-nl-eval-audit.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N9</b></a><p>AI judge on audit 4e936e06: 5 of 5</p></li>
+<li><a class="th" href="../assets/t-neatlogs-bisect.webp" data-src="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074" aria-label="Open N10 full size"><img src="../assets/judges/th-nl-bisect.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>N10</b></a><p>Bisect trace: jafgen 0.4.6 first bad</p></li>
+</ol>
 </div>
 
-<div class="tblock" id="entire">
-<div class="thead"><img src="../assets/logo-entire.webp" alt="" width="44" height="44" loading="lazy"><div><h3>Entire</h3><p>Build: recorded the session behind each commit.</p></div></div>
-<div class="vis">
-<div class="stack" role="img" aria-label="113 non-merge commits: 75 carry an Entire checkpoint, 4 are setup commits before the first session, 34 are site commits without one"><i class="s1">75</i><i class="s2"></i><i class="s3">34</i></div>
-<ul class="legend">
-<li style="--sw:var(--c-en)"><span><b>75</b> commits carry a checkpoint</span></li>
-<li style="--sw:oklch(70% .04 290)"><span><b>4</b> setup commits, before the first session</span></li>
-<li style="--sw:oklch(88% .02 290)"><span><b>34</b> site commits, many with the hook stopped</span></li>
-</ul>
-<p class="src">113 non-merge commits, counted on 2026-10-11 in <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">entire.md</a></p>
-</div>
-<ul class="yes">
-<li><span><b>Yes:</b> a checkpoint opens its full session with no login. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Checkpoint page</a></span></li>
-<li><span><b>Yes:</b> the entire-graph output is in the repo: 102 files, 1,587 symbols. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a></span></li>
-<li><span><b>Yes:</b> Trail reviews found 3 real bugs, and all 3 are fixed. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md#trails-reviewed-every-layer-and-the-runners-found-3-real-bugs">Findings</a></span></li>
-</ul>
-<details class="more" id="en-more"><summary><span>Show details</span></summary><div class="in">
-<div class="out"><p><span>A checkpoint on a commit</span><a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Commit 3ca6f11</a></p>
-<pre><span class="p">$ </span>git log -1 --format="%h %s%n%(trailers:key=Entire-Checkpoint)" 3ca6f11
-3ca6f11 Planner fix from neatlogs Investigate: copy commands only, guard against invented steps
-Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
-<div class="out"><p><span>entire-graph output, last line, fields trimmed</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a></p>
-<pre><span class="p">$ </span>tail -1 evidence/graph.ndjson
-{"record_type": "summary", "stats": {"files": 102, "parsed_files": 101, "symbols": 1587, "relations": 4644, "completeness_level": "ok"}}</pre></div>
-<div class="out"><p><span>The Entire judge plugin on a fresh clone</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/jury-selftest.txt">jury-selftest.txt</a></p>
-<pre>Combined: 3.93/5  (Grade A process 3.75 · Grade B solution 4.10)
-█████ 4.5/5 authenticity
-█████ 5.0/5 integrity</pre></div>
-<p class="note">The 34 site commits landed on 2026-10-10 and 2026-10-11. On many of them the Entire commit hook hung and was stopped. Merge commits carry no checkpoint. Trail pages need an entire.io login. The self-test ran at 42 commits and flags thin commit-to-session coverage.</p>
-</div></details>
+<div class="tool" id="entire">
+<div class="th-head"><img src="../assets/logo-entire.webp" alt="" width="32" height="32" loading="lazy"><h3>Entire</h3><p><b>77</b> of 115 commits carry a checkpoint.</p><span class="lk"><a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Checkpoint, no login</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a><span class="chip c-mut">Trails need a login</span></span></div>
+<div class="stack" role="img" aria-label="115 non-merge commits on main on 2026-10-11: 77 carry an Entire checkpoint, 4 are setup commits before the first session, 34 are site commits without one"><i class="s1">77</i><i class="s2"></i><i class="s3">34</i></div>
+<ul class="legend"><li style="--sw:var(--c-en)"><span><b>77</b> with a checkpoint</span></li><li style="--sw:oklch(70% .04 290)"><span><b>4</b> setup commits</span></li><li style="--sw:oklch(88% .02 290)"><span><b>34</b> site commits</span></li><li><span>git log on main, 2026-10-11</span></li></ul>
+<ol class="sheet c6" data-set="entire">
+<li><a class="th" href="../assets/t-entire-checkpoint.webp" data-src="https://github.com/HighnessAtharva/firstrun/commit/3a0dcad1046646bb8c3ce106ded127cbea951570" aria-label="Open E1 full size"><img src="../assets/judges/th-en-checkpoint.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>E1</b></a><p>Commit 3a0dcad carries its checkpoint</p></li>
+<li><a class="th" href="../assets/t-entire-gate.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md" aria-label="Open E2 full size"><img src="../assets/judges/th-en-gate.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>E2</b></a><p>Trail 3 blocked merge on a high finding</p></li>
+<li><a class="th" href="../assets/t-entire-findings.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md" aria-label="Open E3 full size"><img src="../assets/judges/th-en-findings.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>E3</b></a><p>Trail 3 review: 1 high, 1 medium</p></li>
+<li><a class="th" href="../assets/t-entire-review.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md" aria-label="Open E4 full size"><img src="../assets/judges/th-en-review.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>E4</b></a><p>Inline review on recovery.py line 228</p></li>
+<li><a class="th" href="../assets/t-entire-board.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md" aria-label="Open E5 full size"><img src="../assets/judges/th-en-board.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>E5</b></a><p>Entire Trails board with trail #1</p></li>
+<li><a class="th" href="../assets/t-entire-analytics.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md" aria-label="Open E6 full size"><img src="../assets/judges/th-en-analytics.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>E6</b></a><p>Entire analytics after the first checkpoint</p></li>
+</ol>
 </div>
 
-<div class="tblock" id="cfoai">
-<div class="thead"><img src="../assets/logo-cfoai.webp" alt="" width="44" height="44" loading="lazy"><div><h3>cfo.ai</h3><p>Plan a business: priced each plan and set the agent's spending cap.</p></div></div>
-<div class="vis">
-<div class="tiers" role="group" aria-label="Pricing per plan">
-<div><h4>Free</h4><p class="pz">$0<small> a month</small></p><dl><dt>Runs</dt><dd>4</dd><dt>Cap a run</dt><dd>$0.01355</dd><dt>Margin, average run</dt><dd>no revenue</dd></dl></div>
-<div><h4>Team</h4><p class="pz">$49<small> a month</small></p><dl><dt>Runs</dt><dd>300</dd><dt>Cap a run</dt><dd>$0.04697</dd><dt>Margin, average run</dt><dd>87.8%</dd></dl></div>
-<div><h4>Scale</h4><p class="pz">$299<small> a month</small></p><dl><dt>Runs</dt><dd>3,000</dd><dt>Cap a run</dt><dd>$0.02787</dd><dt>Margin, average run</dt><dd>80.1%</dd></dl></div>
+<div class="tool" id="cfoai">
+<div class="th-head"><img src="../assets/logo-cfoai.webp" alt="" width="32" height="32" loading="lazy"><h3>cfo.ai</h3><p>The old $0.50 cap runs out of cash in month <b>14</b>.</p><span class="lk"><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model, no login</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">BUSINESS_PLAN.md</a></span></div>
+<div class="plan">
+<div class="tiers" role="group" aria-label="Pricing per plan, from unit_economics.json">
+<div><h4>Free</h4><p class="pz">$0</p><dl><dt>Cap a run</dt><dd>$0.01355</dd><dt>Margin</dt><dd>no revenue</dd></dl></div>
+<div><h4>Team</h4><p class="pz">$49</p><dl><dt>Cap a run</dt><dd>$0.04697</dd><dt>Margin</dt><dd>87.8%</dd></dl></div>
+<div><h4>Scale</h4><p class="pz">$299</p><dl><dt>Cap a run</dt><dd>$0.02787</dd><dt>Margin</dt><dd>80.1%</dd></dl></div>
 </div>
 <div class="cash">
-<svg class="wide" viewBox="0 0 660 270" role="img" aria-labelledby="cash-t cash-d">
+<svg viewBox="0 0 340 240" role="img" aria-labelledby="cash-t cash-d">
 <title id="cash-t">Cash on hand in the cfo.ai model, November 2026 to April 2028</title>
-<desc id="cash-d">Both lines start at $4,974. The Base plan grows to $16,685 by month 18. With the old $0.50 cap on every Scale run, cash goes below zero in month 14, December 2027, at minus $1,288, and ends at minus $12,212.</desc>
-<text class="t" x="56" y="18">Cash on hand, 18 months</text>
-<line class="g" x1="56" x2="540" y1="82.5" y2="82.5"/><line class="g" x1="56" x2="540" y1="213.8" y2="213.8"/><line class="z" x1="56" x2="540" y1="148.1" y2="148.1"/>
-<text x="48" y="87" text-anchor="end">$10k</text><text x="48" y="152" text-anchor="end">$0</text><text x="48" y="218" text-anchor="end">-$10k</text>
-<text x="56" y="262">Nov 2026</text><text x="540" y="262" text-anchor="end">Apr 2028</text>
-<path class="b" d="M56.0 115.5 L84.5 115.4 L112.9 115.0 L141.4 114.4 L169.9 113.6 L198.4 112.6 L226.8 111.1 L255.3 109.1 L283.8 105.2 L312.2 100.9 L340.7 96.3 L369.2 89.8 L397.6 83.1 L426.1 76.1 L454.6 67.4 L483.1 58.4 L511.5 49.4 L540.0 38.6"/>
-<path class="o" d="M56.0 115.5 L84.5 115.4 L112.9 115.0 L141.4 114.4 L169.9 113.6 L198.4 112.6 L226.8 111.1 L255.3 109.1 L283.8 114.7 L312.2 119.6 L340.7 123.9 L369.2 135.6 L397.6 146.5 L426.1 156.6 L454.6 173.9 L483.1 190.3 L511.5 205.7 L540.0 228.3"/>
-<circle cx="426.1" cy="156.6" r="6" fill="var(--panel)" stroke="var(--bad)" stroke-width="2.5"/>
-<text class="lo" x="414" y="182" text-anchor="end">Month 14: cash below $0</text>
-<text class="lb" x="550" y="36">$16,685</text><text class="lb" x="550" y="54">Base plan</text>
-<text class="lo" x="550" y="226">-$12,212</text><text class="lo" x="550" y="244">Old $0.50 cap</text>
-</svg>
-<svg class="narrow" viewBox="0 0 340 240" role="img" aria-labelledby="cash-t2 cash-d2">
-<title id="cash-t2">Cash on hand in the cfo.ai model, November 2026 to April 2028</title>
-<desc id="cash-d2">Both lines start at $4,974. The Base plan grows to $16,685 by month 18. With the old $0.50 cap on every Scale run, cash goes below zero in month 14, December 2027, and ends at minus $12,212.</desc>
+<desc id="cash-d">Both lines start at $4,974. The Base plan grows to $16,685 by month 18. With the old $0.50 cap on every Scale run, cash goes below zero in month 14, December 2027, and ends at minus $12,212.</desc>
 <text class="t" x="44" y="14">Cash on hand, 18 months</text>
 <line class="g" x1="44" x2="262" y1="73" y2="73"/><line class="g" x1="44" x2="262" y1="190.5" y2="190.5"/><line class="z" x1="44" x2="262" y1="131.8" y2="131.8"/>
 <text x="38" y="77" text-anchor="end">$10k</text><text x="38" y="136" text-anchor="end">$0</text><text x="38" y="195" text-anchor="end">-$10k</text>
@@ -525,41 +453,57 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 <text class="lo" x="198" y="162" text-anchor="end">Month 14: below $0</text>
 <text class="lb" x="268" y="32">$16,685</text><text class="lb" x="268" y="48">Base</text>
 <text class="lo" x="268" y="200">-$12,212</text><text class="lo" x="268" y="216">Old cap</text>
-</svg></div>
-<p class="src">Read from cfo.ai into <a href="https://github.com/HighnessAtharva/firstrun/blob/main/docs/data/cfo-model.json">cfo-model.json</a> and <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/unit_economics.json">unit_economics.json</a></p>
+</svg>
 </div>
-<ul class="yes">
-<li><span><b>Yes:</b> the plan is public and opens with no login. <a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model</a></span></li>
-<li><span><b>Yes:</b> every cost comes from 88 neatlogs traces, and each row names its trace. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">Cost file</a></span></li>
-<li><span><b>Yes:</b> the plan's cap stopped a live run at step 4. <a href="https://github.com/HighnessAtharva/firstrun/pull/15">Pull request 15</a></span></li>
-</ul>
-<details class="more" id="cfo-more"><summary><span>Show details</span></summary><div class="in">
-<p>Average cost per run is $0.01782 over 88 traces. 1 run in 20 costs $0.05286 or more. Each cap keeps a 70% margin: <code>price / runs per month x (1 - 0.70) - compute</code>. A Free run earns nothing, so its cap is the median run cost.</p>
-<div class="tbl"><table class="rt kv">
-<caption class="sr">Revenue and runway per scenario</caption>
-<thead><tr><th scope="col">Scenario, from $5,000 on 2026-11-01</th><th scope="col" class="n">Month 18 revenue a month</th><th scope="col" class="n">Month 18 cash</th><th scope="col">Runway</th></tr></thead>
+</div>
+<ol class="sheet" data-set="cfo.ai">
+<li><a class="th" href="../assets/t-cfo-drivers.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv" aria-label="Open C1 full size"><img src="../assets/judges/th-cf-drivers.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>C1</b></a><p>Costs measured from 88 traces</p></li>
+<li><a class="th" href="../assets/e-cfo-caps.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/business/unit_economics.json" aria-label="Open C2 full size"><img src="../assets/judges/th-cf-caps.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>C2</b></a><p>Caps written to the CLI, 2026-10-11</p></li>
+<li><a class="th" href="../assets/judges/receipt-full.webp" data-src="../receipts/FR-20261010-091740-help-accuknox-com.html" aria-label="Open C3 full size"><img src="../assets/judges/th-cf-receipt.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>C3</b></a><p>Receipt: $0.0453, 96.4% of Team cap</p></li>
+<li><a class="th" href="../assets/judges/plan-costcaps.webp" data-src="../plan/" aria-label="Open C4 full size"><img src="../assets/judges/th-cf-costcaps.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>C4</b></a><p>51 runs' cost against the 3 caps</p></li>
+<li><a class="th" href="../assets/judges/plan-alerts.webp" data-src="https://github.com/HighnessAtharva/firstrun/blob/main/docs/data/plan.json" aria-label="Open C5 full size"><img src="../assets/judges/th-cf-alerts.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>C5</b></a><p>Cap alerts fired 3 times in 2 days</p></li>
+</ol>
+</div>
+
+<details class="more" id="tools-more"><summary><span>Show details</span></summary><div class="in">
+<div><h4>neatlogs</h4>
+<p>An AI judge named the right failed step in 46 of 52 runs. The audit judge averaged 4.87 of 5 over 15 audits. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#two-launched-evals-scored-67-traces-and-found-where-the-agent-overclaims">Scores</a></p>
+<p>Investigate traced invented planner steps to the prompt, and <a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">commit 3ca6f11</a> fixed them. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs-investigation.md">Investigate result</a></p>
+<p class="note">N1, N2 and N5 to N7 come from the dashboard on Oct 10. The repo does not record their trace IDs.</p></div>
+<div><h4>cfo.ai</h4>
+<div class="tbl"><table class="rt">
+<thead><tr><th scope="col">Scenario, from $5,000</th><th scope="col" class="n">Month 18 cash</th><th scope="col">Runway</th></tr></thead>
 <tbody>
-<tr><th scope="row">Base</th><td class="n" data-l="Month 18 revenue">$2,069</td><td class="n" data-l="Month 18 cash">$16,685</td><td data-l="Runway">No limit, cash flow positive</td></tr>
-<tr><th scope="row">Costly month, every run at $0.05286</th><td class="n" data-l="Month 18 revenue">$2,069</td><td class="n" data-l="Month 18 cash">$12,503</td><td data-l="Runway">No limit</td></tr>
-<tr><th scope="row">Scale at $529</th><td class="n" data-l="Month 18 revenue">$2,875</td><td class="n" data-l="Month 18 cash">$21,146</td><td data-l="Runway">No limit</td></tr>
-<tr><th scope="row">Old cap, every Scale run at $0.50</th><td class="n" data-l="Month 18 revenue">$2,069</td><td class="n dn" data-l="Month 18 cash">-$12,212</td><td class="dn" data-l="Runway">Below $0 in month 14</td></tr>
+<tr><th scope="row">Base, $2,069 a month revenue</th><td class="n" data-l="Month 18 cash">$16,685</td><td data-l="Runway">No limit</td></tr>
+<tr><th scope="row">Every run at $0.05286</th><td class="n" data-l="Month 18 cash">$12,503</td><td data-l="Runway">No limit</td></tr>
+<tr><th scope="row">Scale at $529</th><td class="n" data-l="Month 18 cash">$21,146</td><td data-l="Runway">No limit</td></tr>
+<tr><th scope="row">Old $0.50 Scale cap</th><td class="n dn" data-l="Month 18 cash">-$12,212</td><td class="dn" data-l="Runway">Below $0, month 14</td></tr>
 </tbody></table></div>
-<p class="note">Revenue per run is $0.1633 on Team and $0.0997 on Scale. No customer has paid yet, so customer counts are assumptions. The PR 15 run stopped at the Free cap of the time, $0.0108. The full plan is <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">BUSINESS_PLAN.md</a>, and the <a href="../plan/">plan page</a> shows how each cap is set.</p>
+<p class="note">Average run $0.01782 over 88 traces. Each cap keeps a 70% margin. Revenue per run: Team $0.1633, Scale $0.0997. No customer has paid yet. The PR 15 run stopped at the Free cap of the time, $0.0108. <a href="https://github.com/HighnessAtharva/firstrun/pull/15">PR 15</a> <a href="https://github.com/HighnessAtharva/firstrun/blob/main/docs/data/cfo-model.json">cfo-model.json</a></p></div>
+<div class="w"><h4>Entire output from the repo</h4>
+<div class="out"><p><span>A checkpoint on the planner fix commit</span><a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">3ca6f11</a></p>
+<pre><span class="p">$ </span>git log -1 --format="%h %s%n%(trailers:key=Entire-Checkpoint)" 3ca6f11
+3ca6f11 Planner fix from neatlogs Investigate: copy commands only, guard against invented steps
+Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
+<div class="out" style="margin-top:8px"><p><span>entire-graph output, last line, trimmed</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a></p>
+<pre><span class="p">$ </span>tail -1 evidence/graph.ndjson
+{"record_type": "summary", "stats": {"files": 102, "symbols": 1587, "relations": 4644, "completeness_level": "ok"}}</pre></div>
+<p class="note" style="margin-top:8px">Of the 38 commits without a checkpoint, 4 came before the first session. On many of the 34 site commits the Entire hook hung and was stopped. Trail reviews found 3 real bugs, all fixed. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md#trails-reviewed-every-layer-and-the-runners-found-3-real-bugs">Findings</a>. The Entire judge plugin scored 3.93 of 5, integrity 5.0, and flags thin commit-to-session coverage. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/jury-selftest.txt">jury-selftest.txt</a></p></div>
 </div></details>
-</div>
 </div>
 </section>
 
 <section id="demo" class="band t-mist" aria-labelledby="demo-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>20%</b>Demo video</span></div>
-<p class="crit"><small>Official criterion</small><q>How clearly the demo video explains the agent and your use of neatlogs, Entire and cfo.ai.</q></p>
+<p class="crit"><b>20% Demo</b><q>How clearly the demo video explains the agent and your use of neatlogs, Entire and cfo.ai.</q></p>
 <h2 id="demo-h">The 2:59 Demo Gives Each Tool Its Own Chapter</h2>
-<div class="vis">
+<div class="demo gap">
+<a class="vid" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" aria-label="Watch the demo on YouTube, 2 minutes 59 seconds"><img src="../assets/vid-doctest.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"><span>2:59</span></a>
+<div>
 <nav class="tl" aria-label="Demo chapters, click to jump to that second">
-<a class="ag" style="flex:12" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=0s" title="0:00 Your quickstart broke, and you did not know" aria-label="0:00 Your quickstart broke"></a>
+<a class="ag" style="flex:12" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=0s" title="0:00 Your quickstart broke" aria-label="0:00 Your quickstart broke"></a>
 <a class="ag" style="flex:24" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=12s" title="0:12 How FirstRun works on the dbt guide" aria-label="0:12 How FirstRun works on the dbt guide"><span>Agent</span></a>
-<a class="ag" style="flex:21" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=36s" title="0:36 Docs Bisect finds the release that broke it" aria-label="0:36 Docs Bisect finds the release that broke it"><span>Bisect</span></a>
+<a class="ag" style="flex:21" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=36s" title="0:36 Docs Bisect" aria-label="0:36 Docs Bisect finds the release that broke it"><span>Bisect</span></a>
 <a class="ag" style="flex:10" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=57s" title="0:57 4 upstream pull requests" aria-label="0:57 4 upstream pull requests"></a>
 <a class="nl" style="flex:44" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=67s" aria-label="1:07 neatlogs chapter">neatlogs<small>1:07</small></a>
 <a class="en" style="flex:28" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=111s" aria-label="1:51 Entire chapter">Entire<small>1:51</small></a>
@@ -567,76 +511,54 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 <a class="ag" style="flex:16" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=163s" title="2:43 FirstRun on its own README" aria-label="2:43 FirstRun on its own README"></a>
 </nav>
 <div class="tlx" aria-hidden="true"><span>0:00</span><span>2:59</span></div>
-<ul class="legend">
-<li style="--sw:var(--c-ag2)">The agent and its results</li>
-<li style="--sw:var(--c-nl)">neatlogs, 44 s</li>
-<li style="--sw:var(--c-en)">Entire, 28 s</li>
-<li style="--sw:var(--c-cf)">cfo.ai, 24 s</li>
-</ul>
-<p class="watch"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></i>Watch on YouTube, 2:59</a></p>
+<p style="font-size:14px">Each tool: architecture, implementation, runtime, reasoning, result. <a href="#demo-more" style="font-weight:600">Times</a></p>
 </div>
-<ul class="yes">
-<li><span><b>Yes:</b> neatlogs, Entire and cfo.ai each get a chapter, at 1:07, 1:51 and 2:19.</span></li>
-<li><span><b>Yes:</b> each tool chapter covers architecture, implementation, runtime, reasoning and result. <a href="#demo-more">See the times</a></span></li>
-<li><span><b>Yes:</b> the agent fixes a real dbt guide before any tool chapter, from 0:12.</span></li>
-</ul>
+</div>
 <details class="more" id="demo-more"><summary><span>Show details</span></summary><div class="in">
-<div class="tbl"><table class="rt">
-<caption class="sr">Where each tool's architecture, implementation, runtime, reasoning and result appear in the video</caption>
+<div class="w tbl"><table class="rt">
 <thead><tr><th scope="col">Part</th><th scope="col">neatlogs</th><th scope="col">Entire</th><th scope="col">cfo.ai</th></tr></thead>
 <tbody>
-<tr><th scope="row">Architecture</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=70s">1:10</a>One run is one trace, every step a span.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=117s">1:57</a>Each commit carries a checkpoint with its prompt.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=142s">2:22</a>Cost per run comes from neatlogs traces.</td></tr>
-<tr><th scope="row">Implementation</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=76s">1:16</a>Setup is one init call.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=120s">2:00</a>One command, before the first commit.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=145s">2:25</a>Ari built the model with 6 Scenarios.</td></tr>
-<tr><th scope="row">Runtime</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=78s">1:18</a>A budget check runs before every recovery.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=123s">2:03</a>The planner fix session, prompt by prompt.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=151s">2:31</a>Every Scale run at the old $0.50 cap.</td></tr>
-<tr><th scope="row">Reasoning</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=85s">1:25</a>A 52.8x incident, cause named at 66%.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=128s">2:08</a>Trail reviews found 3 real bugs.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=154s">2:34</a>Cash runs out in month 14.</td></tr>
-<tr><th scope="row">Result</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=101s">1:41</a>Commit 2de852f fixed it.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=133s">2:13</a>68 checkpoints on GitHub.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=157s">2:37</a>A 2.8 cent cap stopped a live run.</td></tr>
+<tr><th scope="row">Architecture</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=70s">1:10</a>One run is one trace.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=117s">1:57</a>A checkpoint per commit.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=142s">2:22</a>Costs come from traces.</td></tr>
+<tr><th scope="row">Implementation</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=76s">1:16</a>One init call.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=120s">2:00</a>One command, before commit 1.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=145s">2:25</a>Ari built 6 Scenarios.</td></tr>
+<tr><th scope="row">Runtime</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=78s">1:18</a>A budget check before recovery.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=123s">2:03</a>The fix session, prompt by prompt.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=151s">2:31</a>Every Scale run at $0.50.</td></tr>
+<tr><th scope="row">Reasoning</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=85s">1:25</a>52.8x incident, cause at 66%.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=128s">2:08</a>Trails found 3 real bugs.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=154s">2:34</a>Cash runs out, month 14.</td></tr>
+<tr><th scope="row">Result</th><td data-l="neatlogs"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=101s">1:41</a>Commit 2de852f fixed it.</td><td data-l="Entire"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=133s">2:13</a>68 checkpoints on GitHub.</td><td data-l="cfo.ai"><a class="ts" href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=157s">2:37</a>A 2.8 cent cap stopped a run.</td></tr>
 </tbody></table></div>
-<p class="note">The chapters are the video's own YouTube chapters: 0:00 the problem, 0:12 the dbt guide, 0:36 Docs Bisect, 0:57 the 4 PRs, 1:07 neatlogs, 1:51 Entire, 2:19 cfo.ai, 2:43 FirstRun on its own README. The times in the table come from the captions. The video quotes 64 traces, the data behind the cfo.ai Scenarios.</p>
+<p class="note w">Chapters are the video's own: 0:00 problem, 0:12 dbt guide, 0:36 Docs Bisect, 0:57 the 4 PRs, 1:07 neatlogs, 1:51 Entire, 2:19 cfo.ai, 2:43 its own README. Times in the table come from the captions.</p>
 </div></details>
 </div>
 </section>
 
 <section id="public" class="band t-moss" aria-labelledby="public-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>15%</b>Building in public</span></div>
-<p class="crit"><small>Official criterion</small><q>How you shared your project with other people while you built it.</q></p>
+<p class="crit"><b>15% Public</b><q>How you shared your project with other people while you built it.</q></p>
 <h2 id="public-h">11 Posts Tagged #neatHack Show the Build as It Happened</h2>
-<div class="vis">
-<div class="pt" role="group" aria-label="When each tagged post went out, Saturday 10:00 to Sunday 08:00 IST">
+<div class="pt gap" role="group" aria-label="Tagged posts on a time axis, Saturday 10:00 to Sunday 08:00 IST. Click a dot to open a post.">
 <div class="ax">
 <span class="ko" style="left:11.4%"><span>12:30 kickoff</span></span>
-<a class="pre" style="left:3.4%;top:0" href="https://twitter.com/cultist_dev/status/2108788557670125946" title="Sat 10:45 IST: my neatlogs hackathon project has already caught doc issues" aria-label="Sat 10:45, post on X">X</a>
-<a class="pre" style="left:4.5%;top:34px" href="https://twitter.com/cultist_dev/status/2108792303611429152" title="Sat 11:00 IST: built this weekend at #neatHack" aria-label="Sat 11:00, post on X">X</a>
-<a style="left:11.5%;top:68px" href="https://twitter.com/cultist_dev/status/2108815318541844954" title="Sat 12:32 IST: #neatHack kickoff, 12:30 IST" aria-label="Sat 12:32, post on X">X</a>
-<a style="left:14.7%;top:0" href="https://twitter.com/cultist_dev/status/2108826005854937357" title="Sat 13:14 IST: #neatHack, day one. all three required tools are up" aria-label="Sat 13:14, post on X">X</a>
-<a style="left:15.6%;top:34px" href="https://twitter.com/cultist_dev/status/2108828983194206308" title="Sat 13:26 IST: your quickstart is the only part of your product" aria-label="Sat 13:26, video post on X">X</a>
-<a style="left:23.9%;top:68px" href="https://twitter.com/cultist_dev/status/2108856505566921210" title="Sat 15:15 IST: a quickstart breaks the way an agent breaks" aria-label="Sat 15:15, post on X">X</a>
-<a style="left:37.5%;top:0" href="https://twitter.com/cultist_dev/status/2108901819426431407" title="Sat 18:15 IST: send me your quickstart and FirstRun runs it" aria-label="Sat 18:15, post on X">X</a>
-<a style="left:38.1%;top:34px" href="https://twitter.com/cultist_dev/status/2108903653411021062" title="Sat 18:23 IST: 4 docs PRs opened on day one of #neatHack" aria-label="Sat 18:23, post on X">X</a>
-<a class="li" style="left:43.2%;top:68px" href="https://www.linkedin.com/feed/update/urn:li:share:7514686677714665473/" title="Sat 19:30 IST: Never let an AI agent fix every failure on its own" aria-label="Sat 19:30, post on LinkedIn">in</a>
-<a style="left:51.1%;top:0" href="https://twitter.com/cultist_dev/status/2108947112809378291" title="Sat 21:15 IST: an agent that heals every failure on its own drifts" aria-label="Sat 21:15, post on X">X</a>
-<a style="left:97.9%;top:34px" href="https://twitter.com/cultist_dev/status/2109102359779365016" title="Sun 07:32 IST: a maintainer who gets a PR from an agent asks one question" aria-label="Sun 07:32, post on X">X</a>
+<a class="pre" style="left:3.4%;top:0" href="https://twitter.com/cultist_dev/status/2108788557670125946" title="Sat 10:45 IST" aria-label="Sat 10:45, post on X">X</a>
+<a class="pre" style="left:4.5%;top:28px" href="https://twitter.com/cultist_dev/status/2108792303611429152" title="Sat 11:00 IST" aria-label="Sat 11:00, post on X">X</a>
+<a style="left:11.5%;top:56px" href="https://twitter.com/cultist_dev/status/2108815318541844954" title="Sat 12:32 IST" aria-label="Sat 12:32, post on X">X</a>
+<a style="left:14.7%;top:0" href="https://twitter.com/cultist_dev/status/2108826005854937357" title="Sat 13:14 IST" aria-label="Sat 13:14, post on X">X</a>
+<a style="left:15.6%;top:28px" href="https://twitter.com/cultist_dev/status/2108828983194206308" title="Sat 13:26 IST" aria-label="Sat 13:26, video post on X">X</a>
+<a style="left:23.9%;top:56px" href="https://twitter.com/cultist_dev/status/2108856505566921210" title="Sat 15:15 IST" aria-label="Sat 15:15, post on X">X</a>
+<a style="left:37.5%;top:0" href="https://twitter.com/cultist_dev/status/2108901819426431407" title="Sat 18:15 IST" aria-label="Sat 18:15, post on X">X</a>
+<a style="left:38.1%;top:28px" href="https://twitter.com/cultist_dev/status/2108903653411021062" title="Sat 18:23 IST" aria-label="Sat 18:23, post on X">X</a>
+<a class="li" style="left:43.2%;top:56px" href="https://www.linkedin.com/feed/update/urn:li:share:7514686677714665473/" title="Sat 19:30 IST" aria-label="Sat 19:30, post on LinkedIn">in</a>
+<a style="left:51.1%;top:0" href="https://twitter.com/cultist_dev/status/2108947112809378291" title="Sat 21:15 IST" aria-label="Sat 21:15, post on X">X</a>
+<a style="left:97.9%;top:28px" href="https://twitter.com/cultist_dev/status/2109102359779365016" title="Sun 07:32 IST" aria-label="Sun 07:32, post on X">X</a>
 <span class="ln"></span>
-<span class="tk l" style="left:0">Sat 10:00</span><span class="tk m" style="left:36.4%">Sat 18:00</span><span class="tk m" style="left:63.6%">Sun 00:00</span><span class="tk r" style="left:100%">Sun 08:00</span>
+<span class="tk l" style="left:0">Sat 10:00</span><span class="tk m" style="left:36.4%">Sat 18:00</span><span class="tk m" style="left:63.6%">Sun 00:00</span><span class="tk r" style="left:100%">Sun 08:00 IST</span>
 </div>
 </div>
-<ul class="legend">
-<li style="--sw:var(--c)">On X, after kickoff</li>
-<li style="--sw:oklch(45% .12 250)">On LinkedIn</li>
-<li style="--sw:oklch(62% .03 220)">Before kickoff</li>
-</ul>
-</div>
-<ul class="yes">
-<li><span><b>Yes:</b> 11 posts tagged #neatHack, 9 of them after the 12:30 IST kickoff. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/hackathon.md#built-in-public">The full log</a></span></li>
-<li><span><b>Yes:</b> each one opens with no login, 10 on X and 1 on LinkedIn. Click a dot to open it.</span></li>
-</ul>
+<p class="src">10 on X, 1 on LinkedIn. Green: after kickoff. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/hackathon.md#built-in-public">Full log</a></p>
 <details class="more" id="public-more"><summary><span>Show all 11 posts</span></summary><div class="in">
-<ol class="postlist">
+<ol class="postlist w">
 <li><time datetime="2026-10-10T10:45+05:30">Sat 10:45</time><q>my neatlogs hackathon project has already caught doc issues</q><a href="https://twitter.com/cultist_dev/status/2108788557670125946">X</a></li>
 <li><time datetime="2026-10-10T11:00+05:30">Sat 11:00</time><q>built this weekend at #neatHack</q><a href="https://twitter.com/cultist_dev/status/2108792303611429152">X</a></li>
 <li><time datetime="2026-10-10T12:32+05:30">Sat 12:32</time><q>#neatHack kickoff, 12:30 IST</q><a href="https://twitter.com/cultist_dev/status/2108815318541844954">X</a></li>
 <li><time datetime="2026-10-10T13:14+05:30">Sat 13:14</time><q>#neatHack, day one. all three required tools are up</q><a href="https://twitter.com/cultist_dev/status/2108826005854937357">X</a></li>
-<li><time datetime="2026-10-10T13:26+05:30">Sat 13:26</time><q>your quickstart is the only part of your product</q><a href="https://twitter.com/cultist_dev/status/2108828983194206308">X, video</a></li>
+<li><time datetime="2026-10-10T13:26+05:30">Sat 13:26</time><q>your quickstart is the only part of your product</q><a href="https://twitter.com/cultist_dev/status/2108828983194206308">X</a></li>
 <li><time datetime="2026-10-10T15:15+05:30">Sat 15:15</time><q>a quickstart breaks the way an agent breaks</q><a href="https://twitter.com/cultist_dev/status/2108856505566921210">X</a></li>
 <li><time datetime="2026-10-10T18:15+05:30">Sat 18:15</time><q>send me your quickstart and FirstRun runs it</q><a href="https://twitter.com/cultist_dev/status/2108901819426431407">X</a></li>
 <li><time datetime="2026-10-10T18:23+05:30">Sat 18:23</time><q>4 docs PRs opened on day one of #neatHack</q><a href="https://twitter.com/cultist_dev/status/2108903653411021062">X</a></li>
@@ -644,39 +566,30 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 <li><time datetime="2026-10-10T21:15+05:30">Sat 21:15</time><q>an agent that heals every failure on its own drifts</q><a href="https://twitter.com/cultist_dev/status/2108947112809378291">X</a></li>
 <li><time datetime="2026-10-11T07:32+05:30">Sun 07:32</time><q>a maintainer who gets a PR from an agent asks one question</q><a href="https://twitter.com/cultist_dev/status/2109102359779365016">X</a></li>
 </ol>
-<p class="note">Times are IST. The log also lists 2 untagged posts.</p>
 </div></details>
 </div>
 </section>
 
 <section id="useful" class="band t-sea" aria-labelledby="useful-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>10%</b>Usefulness and originality</span></div>
-<p class="crit"><small>Official criterion</small><q>Whether the agent solves a problem that people have, in a new way.</q></p>
+<p class="crit"><b>10% Useful</b><q>Whether the agent solves a problem that people have, in a new way.</q></p>
 <h2 id="useful-h">FirstRun Found 4 Real Docs Bugs and Sent 4 Upstream PRs</h2>
-<div class="tiles vis">
-<div class="tile"><b>4</b><span>upstream docs PRs, all open</span><a href="#useful-more">The PRs</a></div>
-<div class="tile"><b>76</b><span>receipts for runs and audits</span><a href="https://github.com/HighnessAtharva/firstrun/tree/main/docs/receipts">All receipts</a></div>
-<div class="tile"><b>7</b><span>repos audited for stale docs</span><a href="https://firstrun.atharvashah.com/doc-audit/">Doc-audit</a></div>
+<ol class="sheet c4 gap" data-set="Pull requests">
+<li><a class="th" href="../assets/pr-10149.webp" data-src="https://github.com/dbt-labs/docs.getdbt.com/pull/10149" aria-label="Open P1 full size"><img src="../assets/judges/th-pr-10149.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>P1</b></a><p><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">dbt #10149</a>: jafgen --years is gone</p></li>
+<li><a class="th" href="../assets/pr-10150.webp" data-src="https://github.com/dbt-labs/docs.getdbt.com/pull/10150" aria-label="Open P2 full size"><img src="../assets/judges/th-pr-10150.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>P2</b></a><p><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150">dbt #10150</a>: guide needs Python 3.12</p></li>
+<li><a class="th" href="../assets/pr-2724.webp" data-src="https://github.com/entireio/cli/pull/2724" aria-label="Open P3 full size"><img src="../assets/judges/th-pr-2724.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>P3</b></a><p><a href="https://github.com/entireio/cli/pull/2724">Entire #2724</a>: entire not on PATH</p></li>
+<li><a class="th" href="../assets/pr-671.webp" data-src="https://github.com/accuknox/help/pull/671" aria-label="Open P4 full size"><img src="../assets/judges/th-pr-671.webp" alt="" width="480" height="300" loading="lazy" decoding="async"><b>P4</b></a><p><a href="https://github.com/accuknox/help/pull/671">AccuKnox #671</a>: latest is 0.9.58, not 0.9.0</p></li>
+</ol>
+<div class="nums">
+<a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074"><b>$0</b>model calls to find the bad release</a>
+<a href="https://github.com/HighnessAtharva/firstrun/tree/main/docs/receipts"><b>76</b>checkable receipts</a>
+<a href="https://firstrun.atharvashah.com/doc-audit/"><b>7</b>repos audited</a>
 </div>
-<ul class="yes">
-<li><span><b>Yes, a real problem:</b> 4 broken quickstarts, each sent upstream as a pull request: <span class="prc"><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">dbt #10149</a><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150">dbt #10150</a><a href="https://github.com/entireio/cli/pull/2724">Entire #2724</a><a href="https://github.com/accuknox/help/pull/671">AccuKnox #671</a></span></span></li>
-<li><span><b>Yes, a new way:</b> Docs Bisect named the release that broke the dbt guide, for $0 in model calls. <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">The finding</a></span></li>
-<li><span><b>Yes, checkable:</b> every run ends with a priced receipt, and <code>firstrun receipt --check</code> verifies it. <a href="../receipts/FR-20261010-091740-help-accuknox-com.html">A sample</a></span></li>
-</ul>
 <details class="more" id="useful-more"><summary><span>Show details</span></summary><div class="in">
-<div class="tbl"><table class="rt">
-<caption class="sr">The 4 upstream pull requests</caption>
-<thead><tr><th scope="col">Pull request</th><th scope="col">What was wrong</th></tr></thead>
-<tbody>
-<tr><th scope="row"><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">dbt-labs/docs.getdbt.com #10149</a></th><td data-l="What was wrong"><code>jafgen --years 6</code> fails. jafgen 0.3.1 passes and 0.4.6 fails.</td></tr>
-<tr><th scope="row"><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150">dbt-labs/docs.getdbt.com #10150</a></th><td data-l="What was wrong">The guide needs Python 3.12 and named no version.</td></tr>
-<tr><th scope="row"><a href="https://github.com/entireio/cli/pull/2724">entireio/cli #2724</a></th><td data-l="What was wrong">After install, <code>entire</code> is not on <code>PATH</code> in a new shell.</td></tr>
-<tr><th scope="row"><a href="https://github.com/accuknox/help/pull/671">accuknox/help #671</a></th><td data-l="What was wrong">The page named 0.9.0 as latest while the installer fetched 0.9.58.</td></tr>
-</tbody></table></div>
-<p><b>Doc-audit Top 10 and team map.</b> Each of the 7 boards ranks the top 10 docs tasks and maps who works on each part, from 14 to 247 people. dbt-core shows 15 stale pages and 72 features with no docs. <a href="../doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">The dbt-core board</a></p>
-<p><b>Estimated audit costs.</b> The 7 audits from before cost tracking show an estimate marked "est.", from $0.0001 for fastapi/typer to $0.0055 for dbt-core. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/scripts/audit_cost_estimates.py">How it is measured</a></p>
-<p><b>Receipts.</b> <code>firstrun receipt --check</code> fails when a receipt or one of its evidence files changed after it was issued. <a href="../receipts/FR-audit-20261010-163620-dbt-labs-dbt-core.html">An audit receipt</a></p>
+<p>All 4 PRs are open. Each came from a run verified in a fresh container.</p>
+<p><code>firstrun receipt --check</code> fails when a receipt or its evidence changed. <a href="../receipts/FR-20261010-091740-help-accuknox-com.html">A run receipt</a> <a href="../receipts/FR-audit-20261010-163620-dbt-labs-dbt-core.html">An audit receipt</a></p>
+<p>Each Doc-audit board maps who works on what, from 14 to 247 people. dbt-core shows 15 stale pages and 72 features with no docs. <a href="../doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">dbt-core board</a></p>
+<p>Older audits show an estimated cost, $0.0001 to $0.0055. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/scripts/audit_cost_estimates.py">How it is measured</a></p>
 </div></details>
 </div>
 </section>
@@ -685,41 +598,43 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 <div class="wrap">
 <h2 id="broke-h">Five Things Broke While Building, and Each One Has a Number</h2>
 <ol class="broke">
-<li><span class="num">206 s</span><p>Git 2.33 hung the Entire hook and lost a checkpoint. Git 2.55.0 fixed it.</p></li>
-<li><span class="num">3</span><p>One run split into 3 traces. Each run is now one trace.</p></li>
-<li><span class="num">50</span><p>Each test run sent about 50 empty traces. It now sends 0.</p></li>
-<li><span class="num">39%</span><p>FirstRun counts cost 39% above neatlogs, so the cap stops a run early, never late.</p></li>
-<li><span class="num">2</span><p>On Dagster, 2 "docs bugs" were already covered. No PR went out.</p></li>
+<li><b>206 s</b>Git 2.33 hung the Entire hook.</li>
+<li><b>3</b>traces from one run, now one.</li>
+<li><b>50</b>empty traces per test run, now 0.</li>
+<li><b>39%</b>higher cost count than neatlogs.</li>
+<li><b>2</b>Dagster gaps already documented, no PR.</li>
 </ol>
-<p class="src"><a href="https://github.com/HighnessAtharva/firstrun#what-broke-while-building">What Broke While Building</a> and <a href="https://github.com/HighnessAtharva/firstrun/blob/main/docs/known-limits.md">known-limits.md</a> hold the full list.</p>
+<p class="src"><a href="https://github.com/HighnessAtharva/firstrun#what-broke-while-building">Full list</a> <a href="https://github.com/HighnessAtharva/firstrun/blob/main/docs/known-limits.md">known-limits.md</a></p>
 </div>
 </section>
 
 <section id="reproduce" class="band t-lake" aria-labelledby="repro-h">
 <div class="wrap">
 <h2 id="repro-h">Verify the Repo From Your Own Terminal</h2>
+<div class="codes">
 <div class="code" id="dated">
-<div class="code-h"><span>List the first commits with their dates</span><button type="button" class="cp" data-copy="dates" aria-describedby="cp-status">Copy</button></div>
+<div class="code-h"><span>First commits and their dates</span><button type="button" class="cp" data-copy="dates" aria-describedby="cp-status">Copy</button></div>
 <pre id="dates"><span class="p">$ </span>git clone https://github.com/HighnessAtharva/firstrun &amp;&amp; cd firstrun
 <span class="p">$ </span>git log --reverse --date=iso --format="%h %ad %s" | head -3</pre>
-<p class="note">The first line reads <code>96541a8 2026-10-10 12:34:51 +0530</code>. Kickoff was 12:30 IST. <a href="https://github.com/HighnessAtharva/firstrun/commits/main">All commits</a></p>
+<p class="note">First line: <code>96541a8 2026-10-10 12:34:51 +0530</code></p>
 </div>
 <div class="code">
-<div class="code-h"><span>Count the commits that carry a checkpoint</span><button type="button" class="cp" data-copy="trail" aria-describedby="cp-status">Copy</button></div>
+<div class="code-h"><span>Commits with a checkpoint</span><button type="button" class="cp" data-copy="trail" aria-describedby="cp-status">Copy</button></div>
 <pre id="trail"><span class="p">$ </span>git log --no-merges --format="%(trailers:key=Entire-Checkpoint,valueonly)" | grep -c .
 <span class="p">$ </span>git rev-list --no-merges --count HEAD</pre>
-<p class="note">75 and 113 on 2026-10-11. Both grow as commits land.</p>
+<p class="note">77 and 115 on main, 2026-10-11. Both grow.</p>
 </div>
 <div class="code">
-<div class="code-h"><span>Run the offline tests<span class="bdg">360 passed</span></span><button type="button" class="cp" data-copy="test" aria-describedby="cp-status">Copy</button></div>
+<div class="code-h"><span>Offline tests<span class="bdg">360 passed</span></span><button type="button" class="cp" data-copy="test" aria-describedby="cp-status">Copy</button></div>
 <pre id="test"><span class="p">$ </span>pip install -e ".[dev]" &amp;&amp; pytest -q</pre>
-<p class="note">No network, Docker or keys needed. 65 tests skip because they need a live setup or a human check. <a href="https://github.com/HighnessAtharva/firstrun/actions">GitHub Actions</a></p>
+<p class="note">No keys needed. 65 live tests skip. <a href="https://github.com/HighnessAtharva/firstrun/actions">Actions</a></p>
 </div>
 <div class="code">
-<div class="code-h"><span>Install and run on any quickstart</span><button type="button" class="cp" data-copy="run" aria-describedby="cp-status">Copy</button></div>
+<div class="code-h"><span>Run it on any quickstart</span><button type="button" class="cp" data-copy="run" aria-describedby="cp-status">Copy</button></div>
 <pre id="run"><span class="p">$ </span>pip install git+https://github.com/HighnessAtharva/firstrun
 <span class="p">$ </span>firstrun https://docs.example.com/quickstart</pre>
-<p class="note">Needs Python 3.11, Git, Docker and a Claude token. <a href="https://github.com/HighnessAtharva/firstrun#run-your-first-check-in-5-minutes">README</a></p>
+<p class="note">Python 3.11, Git, Docker, a Claude token. <a href="https://github.com/HighnessAtharva/firstrun#run-your-first-check-in-5-minutes">README</a></p>
+</div>
 </div>
 <p class="src" id="cp-status" role="status" aria-live="polite"></p>
 </div>
@@ -730,6 +645,10 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 <a class="home" href="../">Back to the FirstRun homepage</a>
 <nav aria-label="Footer"><a href="https://github.com/HighnessAtharva/firstrun">GitHub repo</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence index</a><a href="https://neatlogs.com/hackathon">neatHack</a></nav>
 </footer>
+
+<dialog class="lb" id="lb" aria-labelledby="lb-c">
+<figure><img id="lb-i" alt="" width="1400" height="800"><figcaption><b id="lb-n"></b><span id="lb-c"></span><a id="lb-s" href="#">Source</a><button type="button" id="lb-p" aria-label="Previous image">←</button><button type="button" id="lb-x" aria-label="Next image">→</button><button type="button" id="lb-close">Close</button></figcaption></figure>
+</dialog>
 
 <script>
 (function(){
@@ -747,6 +666,17 @@ document.querySelectorAll(".cp").forEach(function(b){
 function openFor(hash){if(!hash||hash.length<2)return;var el=document.getElementById(hash.slice(1));if(!el)return;var d=el.tagName==="DETAILS"?el:el.closest("details");if(d&&!d.open)d.open=true}
 openFor(location.hash);
 document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href^="#"]');if(a)openFor(a.getAttribute("href"))});
+/* lightbox: native dialog, Escape closes, arrows move within one sheet */
+var lb=document.getElementById("lb");if(!lb||!lb.showModal)return;
+var li=document.getElementById("lb-i"),ln=document.getElementById("lb-n"),lc=document.getElementById("lb-c"),ls=document.getElementById("lb-s"),set=[],at=0;
+function show(i){at=(i+set.length)%set.length;var a=set[at];li.src=a.getAttribute("href");li.alt=a.parentNode.querySelector("p").textContent;ln.textContent=a.querySelector("b").textContent;lc.textContent=li.alt;ls.href=a.getAttribute("data-src")||a.getAttribute("href")}
+document.querySelectorAll(".sheet a.th").forEach(function(a){a.addEventListener("click",function(e){if(e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;e.preventDefault();set=[].slice.call(a.closest(".sheet").querySelectorAll("a.th"));show(set.indexOf(a));lb.showModal()})});
+document.getElementById("lb-p").onclick=function(){show(at-1)};
+document.getElementById("lb-x").onclick=function(){show(at+1)};
+document.getElementById("lb-close").onclick=function(){lb.close()};
+lb.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"){e.preventDefault();show(at-1)}else if(e.key==="ArrowRight"){e.preventDefault();show(at+1)}});
+lb.addEventListener("click",function(e){if(e.target===lb)lb.close()});
+lb.addEventListener("close",function(){li.removeAttribute("src")});
 })();
 </script>
 </body>
