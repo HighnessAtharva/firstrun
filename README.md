@@ -17,6 +17,16 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 <br>
 
+<table>
+<tr>
+<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="280"></a><br><sub><b>DocTest demo</b>, 2:59</sub></td>
+<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="280"></a><br><sub><b>The dbt guide that never worked</b>, 0:36</sub></td>
+<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="280"></a><br><sub><b>DocAudit tour</b>, 0:57</sub></td>
+</tr>
+</table>
+
+<br>
+
 <video src="docs/assets/firstrun-launch.mp4" poster="docs/assets/launch-poster.jpg" width="860" muted loop playsinline controls>
 <img src="docs/assets/launch-poster.jpg" alt="FirstRun launch film: a quickstart fails at step 3 of 6" width="860">
 </video>

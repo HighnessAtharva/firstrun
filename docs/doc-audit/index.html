@@ -230,7 +230,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 
 <section id="start">
 <div class="lh-top"><span class="sn-tile t-audit" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg></span>
-<div><h1>Doc-audit</h1><p class="lede">Point it at a GitHub repo. It reads the git history and shows which docs pages the code changed underneath, and what to ship next.</p></div></div>
+<div><h1>Doc-audit</h1><p class="lede">Point it at a GitHub repo. It reads the git history and shows which docs pages the code changed underneath, and what to ship next.</p><p class="lede"><a href="https://www.youtube.com/watch?v=zo94agwRAXc" target="_blank" rel="noopener">Watch the 57 s tour</a></p></div></div>
 <div class="mode" role="group" aria-label="Repo type"><button type="button" id="m-pub" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Public repo</button><button type="button" id="m-priv" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Private repo</button></div>
 <form class="ask panel top" id="f"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg><label for="repo" class="sr">GitHub repo link</label><input id="repo" placeholder="Paste a GitHub link, for example github.com/fastapi/typer" autocomplete="off" spellcheck="false"><button class="btn pri" type="submit" id="go">Audit it</button></form>
 <p class="hint" id="hint">Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.</p>

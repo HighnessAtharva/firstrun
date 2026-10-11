@@ -156,6 +156,31 @@ figcaption b{color:var(--ink);display:block}
 .ctl button{min-height:36px;padding:0 16px;font-size:13px;color:var(--ink);background:oklch(99.7% .0015 255/.9);border:1px solid var(--line);box-shadow:var(--lift)}
 .ctl button:hover{background:var(--panel)}
 
+/* watch it work: three YouTube videos behind a click-to-load facade */
+.vids{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:18px;margin-top:40px}
+.vc{display:flex;flex-direction:column;overflow:hidden;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.vc:hover{transform:translateY(-4px);box-shadow:var(--lift-h)}
+.vc.big{grid-row:1/3}
+.vm{position:relative;aspect-ratio:16/9;background:var(--sunk);border-bottom:1px solid var(--line)}
+.vm img,.vm iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;object-fit:cover}
+.vp{position:absolute;inset:0;display:block;color:var(--ink);border-radius:0}
+.vp:hover{text-decoration:none}
+.vp:focus-visible{outline-offset:-4px;border-radius:0}
+.pi{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:oklch(99.7% .0015 255/.94);color:var(--test);display:grid;place-items:center;box-shadow:var(--lift);transition:transform .5s var(--ease),background .2s,color .2s}
+.pi svg{width:24px;height:24px;margin-left:4px}
+.vc.big .pi{width:84px;height:84px;margin:-42px 0 0 -42px}.vc.big .pi svg{width:30px;height:30px}
+.vp:hover .pi,.vp:focus-visible .pi{transform:scale(1.08);background:var(--test);color:oklch(99.7% .0015 255)}
+.dur{position:absolute;right:12px;bottom:12px;font:600 12.5px/1 var(--mono);color:oklch(99.7% .0015 255);background:oklch(22% .012 255/.82);border-radius:99px;padding:6px 10px}
+.vt{flex:1;display:flex;flex-direction:column;gap:4px;padding:14px 18px 16px}
+.vt h3{font-size:16px;letter-spacing:-.02em;line-height:1.25}
+.vc.big .vt{padding:20px 24px 22px;gap:6px}
+.vc.big .vt h3{font-size:clamp(19px,2vw,23px);letter-spacing:-.03em}
+.vt p{color:var(--mut);font-size:14px;max-width:44em}
+.vt .k{display:flex;gap:8px;align-items:center}
+@media(max-width:900px){.vids{grid-template-columns:1fr 1fr;grid-template-rows:none}.vc.big{grid-row:auto;grid-column:1/-1}}
+@media(max-width:560px){.vids{grid-template-columns:1fr}.vc.big .pi{width:68px;height:68px;margin:-34px 0 0 -34px}}
+@media(prefers-reduced-motion:reduce){.vc,.pi{transition:none}.vc:hover{transform:none}.vp:hover .pi{transform:none}}
+
 /* proof */
 .figs{display:grid;grid-template-columns:1.35fr .8fr 1.35fr .8fr;margin-top:40px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .fg{padding:26px 24px 28px;min-width:0}
@@ -483,6 +508,25 @@ html,body{overflow-x:clip}
 <div class="reel rv">
 <video id="reel" muted loop playsinline preload="metadata" poster="assets/launch-poster.jpg" aria-label="FirstRun launch film, 44 seconds, plays silently on a loop"><source src="assets/firstrun-launch.mp4" type="video/mp4"></video>
 <div class="ctl"><button type="button" id="pp">Pause</button><button type="button" id="mu">Sound on</button></div>
+</div>
+</section>
+
+<section id="watch" aria-labelledby="watch-h">
+<h2 id="watch-h">Watch FirstRun Catch a Broken Guide</h2>
+<p class="sub">Three short videos with sound. Each one plays a real run.</p>
+<div class="vids">
+<article class="vc big card">
+<div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" data-yt="JJNWWhSV9pc" aria-label="Play the DocTest demo, 2 minutes 59 seconds"><img src="assets/vid-doctest.webp" alt="FirstRun DocTest thumbnail: step 10 of a quickstart fails with no such option --years, then the fix passes 9 of 9 steps" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:59</span></a></div>
+<div class="vt"><p class="k">DocTest &middot; 2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3><p>A clean container runs the dbt guide, hits the step that breaks, fixes the page and passes a second run.</p></div>
+</article>
+<article class="vc card">
+<div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8" data-yt="jKL8Ocb0Ki8" aria-label="Play the teaser, 36 seconds"><img src="assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails because jafgen rejects the --years flag" width="800" height="450" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">0:36</span></a></div>
+<div class="vt"><p class="k">Teaser &middot; 0:36</p><h3>The dbt Guide That Never Worked</h3></div>
+</article>
+<article class="vc card">
+<div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=zo94agwRAXc" data-yt="zo94agwRAXc" aria-label="Play the DocAudit tour, 57 seconds"><img src="assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale after 29 commits changed the code" width="800" height="450" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">0:57</span></a></div>
+<div class="vt"><p class="k">DocAudit &middot; 0:57</p><h3>Docs Rot Quietly. FirstRun DocAudit Finds It</h3></div>
+</article>
 </div>
 </section>
 
@@ -826,7 +870,7 @@ fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
 /* reveal: each block fades and rises once as it enters, staggered inside its group */
 (function(){
  var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
- var groups=[".apps>.app","#steps .row",".shots>figure",".anno ol>li",".tools>.tool",".shelf>.pr","#about .about"];
+ var groups=[".apps>.app",".vids>.vc","#steps .row",".shots>figure",".anno ol>li",".tools>.tool",".shelf>.pr","#about .about"];
  groups.forEach(function(q){Array.prototype.forEach.call(document.querySelectorAll(q),function(el,i){el.classList.add("rv");el.style.transitionDelay=Math.min(i,5)*80+"ms"})});
  var els=document.querySelectorAll(".rv");
  if(rm||!("IntersectionObserver" in window)){Array.prototype.forEach.call(els,function(e){e.classList.add("in")});return}
@@ -858,6 +902,24 @@ fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
  v.addEventListener("play",sync);v.addEventListener("pause",sync);sync();
  if("IntersectionObserver" in window){new IntersectionObserver(function(en){if(en[0].isIntersecting){if(!held)play()}else v.pause()},{threshold:.35}).observe(v)}
  else if(!held)play();
+})();
+
+/* watch it work: nothing from YouTube loads until a click swaps in the player */
+(function(){
+ Array.prototype.forEach.call(document.querySelectorAll(".vp[data-yt]"),function(a){
+  function load(e){
+   if(e){if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1)return;e.preventDefault()}
+   var f=document.createElement("iframe");
+   f.src="https://www.youtube-nocookie.com/embed/"+a.dataset.yt+"?autoplay=1&rel=0&modestbranding=1";
+   f.title=a.getAttribute("aria-label").replace(/^Play /,"");
+   f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+   f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";
+   a.parentNode.replaceChild(f,a);f.focus();
+   var v=$("reel"),pp=$("pp");if(v&&pp&&!v.paused)pp.click();
+  }
+  a.addEventListener("click",load);
+  a.addEventListener("keydown",function(e){if(e.key===" "){load(e)}});
+ });
 })();
 
 /* PR shelf: arrows step one card */
