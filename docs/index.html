@@ -67,12 +67,12 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 .stage{--s0:oklch(10.5% .02 278);--s1:oklch(14.5% .03 278);--s2:oklch(22% .05 282);--s-ink:oklch(97.5% .006 275);--s-mut:oklch(83% .018 275);--s-dim:oklch(72% .02 275);
  position:relative;isolation:isolate;overflow:hidden;padding:0;display:flex;flex-direction:column;min-height:min(100svh,980px);text-align:center;color:var(--s-ink);
- background:radial-gradient(70% 52% at 50% -4%,var(--s2),transparent 72%),radial-gradient(55% 45% at 50% 74%,oklch(16.5% .04 272),transparent 74%),linear-gradient(180deg,var(--s1),var(--s0) 72%)}
+ background:radial-gradient(70% 50% at 50% -6%,oklch(21% .05 278),transparent 70%),linear-gradient(180deg,oklch(13.5% .03 278),oklch(10% .022 278) 75%)}
 .stage :focus-visible{outline-color:oklch(80% .12 256)}
 .st-c{position:relative;z-index:3;width:100%;max-width:1080px;margin:0 auto;padding:clamp(104px,14.5vh,150px) 24px 0}
 .st-c h1{color:var(--s-ink);max-width:13em;margin:0 auto;font-size:clamp(38px,5.3vw,68px);text-wrap:balance}
 .sub{margin:18px auto 0;font-size:clamp(17px,1.75vw,20px);line-height:1.5;max-width:31em;color:var(--s-mut);text-wrap:balance}
-.st-room{flex:1 0 clamp(300px,40vh,440px)}
+.st-room{flex:1 0 clamp(340px,44vh,470px)}
 /* the input with its two routes */
 .cap{display:flex;align-items:center;gap:6px;margin:30px auto 0;max-width:700px;padding:6px 6px 6px 20px;border-radius:18px;text-align:left;background:oklch(98.6% .004 275);
  box-shadow:0 0 0 1px oklch(100% 0 0/.1),0 18px 50px -16px oklch(4% .03 278/.9),0 0 90px -24px oklch(72% .12 268/.45);transition:box-shadow .3s var(--ease)}
@@ -120,19 +120,39 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .hint .hb.au{color:oklch(82% .13 298)}
 .hint .hb:hover{background:none;text-decoration-thickness:2px}
 /* the scene layers */
-.st-sky{position:absolute;inset:0;z-index:0;pointer-events:none;-webkit-mask-image:linear-gradient(#000 40%,transparent 92%);mask-image:linear-gradient(#000 40%,transparent 92%)}
-.st-sky i{position:absolute;inset:-160px}
-.st-sky .s1{background-image:radial-gradient(circle at 17px 23px,oklch(96% .02 270/.9) 0 1px,transparent 1.7px),radial-gradient(circle at 91px 61px,oklch(96% .02 270/.55) 0 .7px,transparent 1.3px),radial-gradient(circle at 154px 12px,oklch(96% .03 250/.8) 0 1px,transparent 1.7px),radial-gradient(circle at 203px 98px,oklch(96% .02 270/.45) 0 .7px,transparent 1.3px),radial-gradient(circle at 46px 141px,oklch(96% .02 300/.7) 0 .9px,transparent 1.5px),radial-gradient(circle at 128px 187px,oklch(96% .02 270/.5) 0 .7px,transparent 1.3px),radial-gradient(circle at 188px 212px,oklch(97% .02 270/.85) 0 1.1px,transparent 1.8px),radial-gradient(circle at 70px 233px,oklch(96% .02 270/.5) 0 .7px,transparent 1.3px);background-size:233px 251px;animation:sky 160s linear infinite}
-.st-sky .s2{opacity:.65;background-image:radial-gradient(circle at 33px 77px,oklch(96% .02 270/.7) 0 .6px,transparent 1.2px),radial-gradient(circle at 151px 29px,oklch(96% .02 270/.6) 0 .6px,transparent 1.2px),radial-gradient(circle at 282px 140px,oklch(96% .03 250/.7) 0 .7px,transparent 1.3px),radial-gradient(circle at 355px 62px,oklch(96% .02 270/.5) 0 .6px,transparent 1.2px),radial-gradient(circle at 97px 260px,oklch(96% .02 300/.6) 0 .6px,transparent 1.2px),radial-gradient(circle at 214px 301px,oklch(96% .02 270/.5) 0 .6px,transparent 1.2px),radial-gradient(circle at 321px 288px,oklch(96% .02 270/.7) 0 .7px,transparent 1.3px),radial-gradient(circle at 250px 205px,oklch(96% .02 270/.4) 0 .5px,transparent 1.1px);background-size:389px 353px;animation:sky 260s linear infinite reverse}
-@keyframes sky{to{transform:translate3d(-233px,-251px,0)}}
+/* the backdrop: a dark room lit by the scene. A cool halo stands behind the prism, the spectrum
+   bleeds color onto the wall where it lands, the failures glow warm on the left, and a hairline
+   floor recedes under the prism. Soft light only, no stars. prism.js sets the --p* anchors;
+   the defaults place the light for the no-JS still. Motion is transform and opacity only. */
+.st-sky{--pcx:50vw;--pcy:calc(min(100svh,980px)*.74);--pfx:77vw;--pby:calc(min(100svh,980px)*.86);position:absolute;inset:0;z-index:0;pointer-events:none}
+/* placed with translate, so moving an anchor never counts as a layout shift */
+.st-sky i{position:absolute;left:0;top:0;display:block;pointer-events:none}
+.st-sky .halo{translate:calc(var(--pcx) - 560px) calc(var(--pcy) - 430px);width:1120px;height:860px;background:radial-gradient(closest-side,oklch(40% .13 272/.55),oklch(30% .1 276/.22) 50%,transparent);animation:bg-breathe 13s cubic-bezier(.45,0,.55,1) infinite alternate}
+.st-sky .bleed{translate:calc(var(--pfx) - 380px) calc(var(--pcy) - 390px);width:840px;height:780px;
+ background:linear-gradient(180deg,transparent 4%,oklch(58% .2 28/.42) 22%,oklch(72% .16 70/.34) 38%,oklch(70% .17 150/.26) 56%,oklch(60% .16 245/.34) 74%,oklch(52% .2 290/.42) 90%,transparent);
+ -webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent);animation:bg-drift 17s cubic-bezier(.45,0,.55,1) infinite alternate}
+.st-sky .warm,.st-sky .warm-a{translate:-280px calc(var(--pcy) - 300px);width:780px;height:560px;animation:bg-sway 19s cubic-bezier(.45,0,.55,1) infinite alternate;transition:opacity .6s var(--ease)}
+.st-sky .warm{background:radial-gradient(closest-side,oklch(40% .13 30/.38),transparent)}
+.st-sky .warm-a{opacity:0;background:radial-gradient(closest-side,oklch(46% .11 72/.34),transparent)}
+.stage[data-mode=audit] .st-sky .warm{opacity:0}.stage[data-mode=audit] .st-sky .warm-a{opacity:1}
+.st-sky .floor{left:-60%;right:-60%;translate:0 calc(var(--pby) - 118px);height:720px;transform-origin:50% 0;transform:perspective(520px) rotateX(74deg);
+ background-image:linear-gradient(oklch(85% .05 275/.17) 1px,transparent 1px),linear-gradient(90deg,oklch(85% .05 275/.17) 1px,transparent 1px);background-size:72px 72px;background-position:50% 0;
+ -webkit-mask-image:radial-gradient(12% 80% at 50% 0,#000 15%,transparent);mask-image:radial-gradient(12% 80% at 50% 0,#000 15%,transparent)}
+.stage.live .st-sky .bleed{animation:bg-in 1.6s .9s var(--ease) both,bg-drift 17s 2.5s cubic-bezier(.45,0,.55,1) infinite alternate}
+.stage.idle .st-sky i,.stage.paused .st-sky i{animation-play-state:paused}
+@keyframes bg-breathe{to{transform:scale(1.07)}}
+@keyframes bg-drift{to{transform:translate3d(-14px,22px,0) scale(1.05)}}
+@keyframes bg-sway{to{transform:translate3d(36px,-14px,0)}}
+@keyframes bg-in{from{opacity:0}}
 .st-scene{position:absolute;inset:0;z-index:1;pointer-events:none}
 .st-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
-.st-svg{position:absolute;left:0;bottom:92px;width:100%;height:34%;display:none}
+.st-svg{position:absolute;left:0;bottom:104px;width:100%;height:29%;display:none}
 html:not(.js) .st-svg{display:block}
 .st-fx{position:absolute;inset:0;background:radial-gradient(125% 95% at 50% 42%,transparent 55%,oklch(6% .02 278/.6))}
 .st-fx:after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .st-in,.st-out{list-style:none;padding:0;margin:0}
 .st-in li{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity}
+.st-in li.off{display:none}
 .st-in span{display:inline-block;font:500 12.5px/1.2 var(--mono);color:oklch(85% .085 28);background:oklch(19% .04 25/.94);box-shadow:inset 0 0 0 1px oklch(70% .16 28/.34),0 0 26px -8px oklch(62% .2 28/.55);border-radius:99px;padding:8px 14px;white-space:nowrap;transition:color .4s,background-color .4s,box-shadow .4s}
 .stage[data-mode=audit] .st-in span{color:oklch(88% .1 78);background:oklch(20% .035 70/.94);box-shadow:inset 0 0 0 1px oklch(80% .14 78/.34),0 0 26px -8px oklch(76% .15 78/.5)}
 .st-out li{position:absolute;left:0;top:0;display:flex;align-items:center;gap:11px;opacity:0;text-align:left;text-shadow:0 1px 14px oklch(8% .02 278)}
@@ -487,7 +507,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
  .reel{aspect-ratio:16/9}.ctl{right:20px;bottom:6%}
  .tl{grid-template-columns:minmax(0,1fr);padding:0 0 0 40px}.tl li:nth-child(n){grid-column:auto}}
 @media(max-width:560px){.vids{grid-template-columns:1fr}.vc.big .pi{width:68px;height:68px;margin:-34px 0 0 -34px}.rcpt{padding:22px 18px 34px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.st-sky i{animation:none}.pop,.lx>span,.st-in span{transition:none}html.js .rv{opacity:1;transform:none;transition:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.st-sky i{animation:none!important}.pop,.lx>span,.st-in span{transition:none}html.js .rv{opacity:1;transform:none;transition:none}
  .pr,.vc,.pi,button,.btn{transition:none}.pr:hover,.vc:hover{transform:none}.vp:hover .pi{transform:none}.tw.vid{animation:none}}
 </style>
 </head>
@@ -506,7 +526,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <script src="assets/prism.js" defer></script>
 <main>
 <section id="hero" class="stage" data-nav="dark" data-mode="test" aria-labelledby="hero-h">
-<div class="st-sky" id="stSky" aria-hidden="true"><i class="s1"></i><i class="s2"></i></div>
+<div class="st-sky" id="stSky" aria-hidden="true"><i class="halo"></i><i class="warm"></i><i class="warm-a"></i><i class="bleed"></i><i class="floor"></i></div>
 <div class="st-c" id="stC">
 <h1 id="hero-h">Find the Broken Step Before Your Users Do</h1>
 <p class="sub">FirstRun runs your docs on a clean machine, fixes the step that breaks, and proves the fix.</p>
