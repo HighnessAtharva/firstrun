@@ -333,6 +333,105 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;
 .board{display:block;max-width:940px;margin:clamp(40px,5vw,56px) auto 0;padding:10px;text-decoration:none}
 .board img{display:block;width:100%;height:auto;border-radius:10px}
 
+/* Doc-audit team map: a deeper indigo world under the Doc-audit band. People on the left, parts of the
+   code on the right, a ribbon per pair. assets/team-map.js draws it from a real board, loaded on approach. */
+.b-team{--tint:oklch(94.6% .032 284);--glow:oklch(90% .07 282/.75);--dot:oklch(46% .2 283/.15);--edge:oklch(87.5% .05 284);--c:oklch(48% .2 283);--cd:oklch(40% .17 283);--link:oklch(40% .17 283)}
+#team{--line2:oklch(94.6% .005 255);--faint:oklch(52% .012 255);--po:oklch(70% .01 255);
+ --p0:oklch(62% .15 295);--p1:oklch(62% .15 256);--p2:oklch(62% .15 195);--p3:oklch(62% .15 150);--p4:oklch(62% .15 78);--p5:oklch(62% .15 35);
+ --p6:oklch(62% .15 340);--p7:oklch(62% .15 220);--p8:oklch(62% .15 120);--p9:oklch(62% .15 10);--p10:oklch(62% .15 270);--p11:oklch(62% .15 170)}
+#team .eyebrow .tile svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tmh{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:clamp(20px,2.4vw,28px);align-items:start;margin-top:clamp(36px,4.5vw,52px);min-height:620px}
+.tmh-card{padding:20px 22px 14px;min-width:0;text-align:left}
+.tmh-top{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;font-size:13.5px;color:var(--mut)}
+.tmh-top img{width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:var(--sunk)}
+.tmh-top b{font:600 13.5px var(--mono);color:var(--ink)}
+.tmh-say{margin-top:10px;font-size:17px;line-height:1.45;letter-spacing:-.01em;color:oklch(34% .012 255);min-height:2.9em;text-wrap:pretty}
+.tmh-say b{color:var(--ink);font-weight:650}
+.tmh-say .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--pc);margin:0 6px 1px 1px;vertical-align:middle}
+.tmh-map{display:grid;grid-template-columns:minmax(196px,29%) minmax(110px,1fr) minmax(160px,26%);margin-top:12px}
+.tmh-hd{font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);padding:0 0 9px 8px;border-bottom:1px solid var(--line2);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmh-hd.r{padding-left:12px}
+.tmh-col{display:flex;flex-direction:column;min-width:0}
+.tmh-sv{position:relative;min-width:0}
+#team .tm-svg{display:block;width:100%;overflow:visible}
+.tmh-p,.tmh-a{position:relative;display:grid;align-items:center;height:40px;margin:3px 0;width:100%;min-height:0;padding:0;border:0;border-radius:11px;background:none;color:var(--ink);font-weight:400;font-size:inherit;text-align:left;white-space:nowrap;cursor:pointer;transition:background .18s var(--ease),opacity .18s var(--ease),box-shadow .18s var(--ease)}
+.tmh-p{grid-template-columns:30px minmax(0,1fr) auto;gap:0 10px;padding:0 8px 0 5px}
+.tmh-a{grid-template-columns:minmax(0,1fr);padding:0 8px 0 12px}
+.tmh-p:hover,.tmh-a:hover{background:var(--hover)}
+.tmh-p[aria-pressed=true],.tmh-a[aria-pressed=true]{background:var(--tc,var(--audit-bg));box-shadow:inset 0 0 0 1.5px var(--pc,var(--audit))}
+.tmh-p .nm,.tmh-a .nm{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.25;overflow:hidden;text-overflow:ellipsis}
+.tmh-p .sb{display:block;font-size:12px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.tmh-a .pth{display:block;font:11px/1.3 var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left}
+.tmh-a .pth bdi{direction:ltr;unicode-bidi:isolate}
+.tmh-p .pk{white-space:nowrap;font-size:11px;font-weight:650;color:var(--cd);background:oklch(95% .03 284);border-radius:99px;padding:2px 7px;font-variant-numeric:tabular-nums}
+.tmh-o{cursor:default}.tmh-o:hover{background:none}
+.tmh-ev{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1.5px dashed oklch(76% .01 255);font-size:11px;font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
+/* one person, one area or one task lights up; the rest steps back */
+.tmh-card.f .tmh-p:not(.hi),.tmh-card.f .tmh-a:not(.hi),.tmh-card.f .tmh-ar:not(.hi){opacity:.4}
+#team .rb{fill-opacity:.3;mix-blend-mode:multiply;transition:fill-opacity .25s var(--ease)}
+#team .tm-svg.f .rb{fill-opacity:.06}
+#team .tm-svg.f .rb.hi{fill-opacity:.82}
+/* the resting state lights the top task but keeps the rest of the map readable */
+.tmh-card.feat .tmh-p:not(.hi),.tmh-card.feat .tmh-a:not(.hi),.tmh-card.feat .tmh-ar:not(.hi){opacity:.66}
+#team .tm-svg.feat .rb{fill-opacity:.15}
+#team .tm-svg.feat .nd:not(.hi){opacity:.5}
+#team .tm-svg .nd{transition:opacity .25s var(--ease)}
+#team .tm-svg.f .nd:not(.hi){opacity:.25}
+#team .tm-svg.pre .rb{opacity:0}
+#team .tm-svg.in .rb{animation:tmh-in .7s var(--ease) both;animation-delay:calc(var(--i)*14ms);transform-box:view-box;transform-origin:0 50%}
+@keyframes tmh-in{from{opacity:0;transform:scaleX(.12)}to{opacity:1;transform:none}}
+/* avatars: a ring in the person's color, initials under the photo */
+.tmh-av{position:relative;display:inline-grid;place-items:center;flex:none;width:var(--s,30px);height:var(--s,30px);border-radius:50%;background:var(--panel);box-shadow:0 0 0 2px var(--pc,var(--po))}
+.tmh-av .ini{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;background:var(--dc,oklch(46% .015 255));color:oklch(99% .004 255);font-size:calc(var(--s,30px)*.36);font-weight:650;line-height:1}
+.tmh-av img{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;object-fit:cover;background:var(--panel);transition:opacity .2s var(--ease)}
+/* By area: the list view, the default under 760 px */
+.tmh-list{list-style:none;padding:0;margin:10px 0 0;display:none}
+.tmh-list li+li{border-top:1px solid var(--line2)}
+.tmh-ar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;width:100%;min-height:0;padding:12px 6px;border:0;border-radius:12px;background:none;color:var(--ink);font-weight:400;font-size:inherit;text-align:left;white-space:normal;cursor:pointer;transition:background .18s var(--ease),opacity .18s var(--ease)}
+.tmh-ar:hover{background:var(--hover)}
+.tmh-ar[aria-pressed=true]{background:var(--audit-bg);box-shadow:inset 0 0 0 1.5px var(--audit)}
+.tmh-ar .nm{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tmh-ar .pth{display:block;font:11px/1.3 var(--mono);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tmh-sbar{grid-column:1/-1;display:flex;height:10px;border-radius:99px;overflow:hidden;gap:2px;background:var(--line2)}
+.tmh-sbar i{display:block;height:100%;background:var(--pc);transition:opacity .18s var(--ease)}
+.tmh-card.f .tmh-sbar i:not(.hi){opacity:.2}
+.tmh-ows{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px}
+.tmh-ows span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:oklch(36% .012 255);font-variant-numeric:tabular-nums}
+.tmh-bdg{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:99px;font-size:11.5px;font-weight:650;white-space:nowrap;background:var(--sunk);color:var(--mut)}
+.tmh-bdg.warn{background:var(--gold-bg);color:var(--gold-d)}
+.tmh-more{display:none}
+.tmh-list~.tmh-more{margin:6px auto 2px;min-height:38px;font-size:14px;background:var(--panel);color:var(--ink);border-color:var(--line)}
+.tmh-more:hover{background:var(--hover)}
+/* the top tasks and who they go to */
+.tmh-next{text-align:left;min-width:0}
+.tmh-next h3{font-size:15px;letter-spacing:-.01em;color:var(--cd);margin:2px 0 12px 4px}
+.tmh-nx{list-style:none;padding:0;margin:0;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift);overflow:hidden}
+.tmh-nx li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 10px;padding:16px 18px 16px 14px;transition:box-shadow .25s var(--ease),opacity .25s var(--ease),background .25s var(--ease)}
+.tmh-nx li+li{border-top:1px solid var(--line2)}
+.tmh-nx li.lit{background:var(--tc);box-shadow:inset 0 0 0 1.5px var(--pc)}
+.tmh-nx li.dim{opacity:.6}
+.tmh-nx .n{font-size:22px;font-weight:700;line-height:1;letter-spacing:-.03em;color:var(--cd);font-variant-numeric:tabular-nums;padding-top:1px}
+.tmh-nx a{display:block;font-size:15.5px;font-weight:650;line-height:1.35;letter-spacing:-.012em;color:var(--ink);overflow-wrap:anywhere;text-decoration-color:oklch(70% .02 284)}
+.tmh-nx a:hover{text-decoration-color:currentColor}
+.tmh-who{grid-column:2;display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:start;margin-top:6px;font-size:13.5px;line-height:1.4;color:oklch(36% .012 255)}
+.tmh-who b{color:var(--ink);font-weight:650}
+.tmh-who .tmh-av{margin-top:-1px}
+.tmh-foot{text-align:center;color:var(--mut);font-size:14px;margin-top:clamp(28px,3.5vw,40px);text-wrap:balance}
+#team .rlinks{margin-top:14px}
+.tmh-fail{grid-column:1/-1;text-align:center;color:var(--mut);padding:24px 0}
+.tmh-still{display:block;width:100%;max-width:1248px;height:auto;margin:clamp(16px,3vw,32px) auto 0}
+html:not(.js) .tmh{display:none}
+@media(max-width:1099px){.tmh{grid-template-columns:minmax(0,1fr);max-width:860px;margin-left:auto;margin-right:auto;min-height:960px}
+ .tmh-next h3{margin-left:2px}}
+@media(max-width:899px){.tmh-p .pk,.tmh-hd span{display:none}}
+@media(max-width:759.98px){.tmh{min-height:1040px}
+ .tmh-card{padding:16px 14px 10px;border-radius:16px}
+ .tmh-say{font-size:15.5px;min-height:4.4em}
+ .tmh-map{display:none}.tmh-list{display:block}.tmh-list~.tmh-more{display:flex}
+ .tmh-nx li{padding:14px 14px 14px 10px}.tmh-nx a{font-size:15px}}
+@media(max-width:439px){.tmh-ows span:nth-child(n+3){display:none}}
+@media(prefers-reduced-motion:reduce){#team .tm-svg.in .rb{animation:none}#team .tm-svg.pre .rb{opacity:1}.tmh-p,.tmh-a,.tmh-ar,.tmh-nx li,#team .rb,#team .tm-svg .nd,.tmh-sbar i{transition:none}}
+
 /* receipt */
 .rc{display:grid;grid-template-columns:minmax(0,380px) minmax(0,360px);justify-content:center;align-items:center;gap:clamp(32px,6vw,80px);margin-top:clamp(40px,5vw,60px)}
 .rw{filter:drop-shadow(0 2px 3px oklch(40% .05 70/.10)) drop-shadow(0 18px 30px oklch(40% .06 70/.18))}
@@ -702,6 +801,33 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <p><b class="cu" id="n-stale">102</b>stale pages found</p>
 </div>
 <p class="cta"><a class="btn au" href="doc-audit/">Audit a repo</a></p>
+</div>
+</section>
+
+<!-- DOC-AUDIT TEAM MAP: deeper indigo world. assets/team-map.js and the board JSON load when the band nears the viewport.
+     Without JS the still image below shows the same map. -->
+<section id="team" class="band b-team" aria-labelledby="team-h">
+<div class="wrap wide">
+<p class="eyebrow"><span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M15.5 14.2a4.6 4.6 0 0 1 5 4.8"/></svg></span>Doc-audit</p>
+<h2 id="team-h">Each Fix Goes to the Person Who Knows the Code</h2>
+<div class="tmh rv" id="tmh" data-id="audit-20261010-163411-altimateai-altimate-code">
+<div class="tmh-card card" id="tmh-card">
+<p class="tmh-top"><img src="https://github.com/AltimateAI.png?size=48" alt="" width="24" height="24" loading="lazy" decoding="async"><b>AltimateAI/altimate-code</b><span>14 people, 619 commits in 12 months</span></p>
+<p class="tmh-say" id="tmh-say" aria-live="polite"></p>
+<div class="tmh-map" id="tmh-map">
+<p class="tmh-hd">People<span> &middot; share of their work</span></p><p class="tmh-hd" aria-hidden="true"></p><p class="tmh-hd r">Code<span> &middot; share of each part</span></p>
+<div class="tmh-col" id="tmh-ppl" role="group" aria-label="People"></div>
+<div class="tmh-sv" id="tmh-sv"></div>
+<div class="tmh-col" id="tmh-ars" role="group" aria-label="Parts of the code"></div>
+</div>
+<ul class="tmh-list" id="tmh-list" aria-label="Parts of the code"></ul>
+<table class="sr" id="tmh-tab"></table>
+</div>
+<div class="tmh-next"><h3>Top 3 Tasks on This Board</h3><ol class="tmh-nx" id="tmh-nx"></ol></div>
+</div>
+<noscript><img class="tmh-still" src="assets/team-map-altimate-code.webp" alt="Who works on what in AltimateAI/altimate-code. Ribbons link 9 named people and everyone else to 7 parts of the code. anandgupta42 made most of the commits. Haider holds 35% of src/altimate, so the top task, Write a page for workspace, goes to Haider." width="1248" height="671" loading="lazy" decoding="async"></noscript>
+<p class="tmh-foot">Built from public commits in the last 12 months. Suggestions, not assignments.</p>
+<p class="rlinks"><a href="doc-audit/?id=audit-20261010-163411-altimateai-altimate-code">Open the full board</a><a href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">See the dbt-core team</a></p>
 </div>
 </section>
 
@@ -1171,6 +1297,174 @@ fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
  sel(0);fromHash(false);
  if(/^#tools-/.test(location.hash))addEventListener("load",function(){fromHash(true)});
  addEventListener("hashchange",function(){fromHash(true)});
+})();
+
+/* Doc-audit team map. Nothing loads until the band nears the viewport: then assets/team-map.js and one
+   board JSON arrive together. Hover or focus a person, a part of the code or a task, and the rest steps
+   back. Click pins it, Escape clears it. Under 760 px the map becomes the By-area list. */
+(function(){
+ var S=$("team"),box=$("tmh");if(!S||!box)return;
+ var ID=box.getAttribute("data-id")||"";if(!/^[a-z0-9-]+$/.test(ID))return;
+ var card=$("tmh-card"),F=null,T=null,NX=[],FEAT=null,HOV=null,PIN=null,featOn=RM,SVG=null,entered=false,RO=null;
+ var KINDS={document:1,refresh:1,release:1,announce:1,quickstart:1};
+ function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+ function pct(x){return Math.round(100*x)+"%"}
+ function first(n){return String(n||"").split(/\s+/)[0]}
+ function colorize(n,p){var h=p&&p.slot>=0?F.HUE[p.slot]:null;
+  n.style.setProperty("--pc",h==null?"var(--po)":"oklch(62% .15 "+h+")");
+  n.style.setProperty("--dc",h==null?"oklch(46% .015 255)":"oklch(46% .14 "+h+")");
+  n.style.setProperty("--tc",h==null?"var(--sunk)":"oklch(96.8% .026 "+h+")")}
+ /* the photo comes only from a validated GitHub id or login; initials sit under it */
+ function face(p,size){var w=el("span","tmh-av");w.setAttribute("aria-hidden","true");w.style.setProperty("--s",size+"px");
+  colorize(w,p);w.appendChild(el("span","ini",p.ini));var s=F.avSrc(p);
+  if(s){var im=el("img");im.alt="";im.loading="lazy";im.decoding="async";im.width=size;im.height=size;im.style.opacity="0";
+   im.addEventListener("load",function(){im.style.opacity=""});im.addEventListener("error",function(){im.remove()});im.src=s;w.appendChild(im)}
+  return w}
+ function areaPeople(a){var out=[];T.rowsP.forEach(function(p){var w=T.M[p.i+"|"+a.i];if(w)out.push({p:p,s:w/T.colSum[a.i]})});return out.sort(function(x,y){return y.s-x.s})}
+ function inArea(pid,aid){var a=T.aById[aid],p=pid==="others"?T.rowsP.filter(function(x){return x.i<0})[0]:T.byId[pid];return !!(a&&p&&T.M[p.i+"|"+a.i])}
+ function picks(id){return NX.filter(function(x){return x.owner===id}).length}
+ /* the board's ranked tasks, in the order its page shows them, so #c=N opens the same one */
+ function tasks(a){var n=a.next&&Array.isArray(a.next.items)?a.next.items.slice(0,30):[];
+  return n.filter(function(x){return x&&typeof x==="object"&&KINDS[x.kind]}).map(function(x,i){var o=x.owner&&typeof x.owner==="object"&&T.byId[x.owner.p]?x.owner:null;
+   return {rank:Number.isInteger(x.rank)&&x.rank>0?x.rank:i+1,title:typeof x.title==="string"&&x.title?x.title.slice(0,240):"Untitled",
+    area:typeof x.area==="string"&&T.aById[x.area]?x.area:null,owner:o?o.p:null,why:o&&typeof o.why==="string"?o.why.slice(0,240):""}})
+   .sort(function(x,y){return x.rank-y.rank}).map(function(x,k){x.k=k;return x})}
+ function onMap(id){return T.rowsP.some(function(p){return p.id===id})}
+
+ /* the one sentence under the repo name */
+ function say(s){
+  var P=$("tmh-say");P.textContent="";
+  function t(x){P.appendChild(document.createTextNode(x))}
+  function who(p){if(p&&p.i>=0){var d=el("span","dot");colorize(d,p);d.setAttribute("aria-hidden","true");P.appendChild(d)}P.appendChild(el("b",null,p?p.name:"Everyone else"))}
+  function ar(a){P.appendChild(el("b",null,a.label))}
+  if(!s){var lead=T.rowsP[0];if(lead.i>=0&&lead.topA){who(lead);t(" works most on ");ar(lead.topA);t(". ")}t("Hover a name to see where they work.");return}
+  if(s.k!=null){var x=NX[s.k],op=T.byId[x.owner];P.appendChild(el("b",null,x.title));t(" goes to ");who(op);t(". ");
+   if(x.why)t(x.why.replace(/\.$/,"")+".");else if(op.topA){t(first(op.name)+" works most on ");ar(op.topA);t(".")}return}
+  if(s.t==="p"){
+   if(s.id==="others"){t(T.O.people+" other people made ");P.appendChild(el("b",null,pct(T.O.share)));t(" of the work.");return}
+   var p=T.byId[s.id];who(p);if(p.topA){t(" works most on ");ar(p.topA);t(".")}else t(" made "+p.commits+" commits in the last year.");
+   var n=picks(p.id);t(n?" Suggested for "+n+(n===1?" task":" tasks")+" on the board.":" No task on the board is suggested for them yet.");return}
+  if(s.t==="pa"){var pp=s.p==="others"?null:T.byId[s.p],aa=T.aById[s.a],row=pp||T.rowsP.filter(function(r){return r.i<0})[0],w=T.M[row.i+"|"+aa.i];who(pp);
+   t(" holds "+pct(w/T.colSum[aa.i])+" of ");ar(aa);t(", which is "+pct(w/T.rowSum[row.i])+" of their recent work.");return}
+  if(s.t==="a"){var a=T.aById[s.id];ar(a);t(": ");
+   var ps=areaPeople(a),shown=ps.filter(function(o){return o.p.i>=0}).slice(0,3),rest=1;
+   shown.forEach(function(o,j){if(j)t(", ");t(first(o.p.name)+" "+pct(o.s));rest-=o.s});
+   var left=ps.length-shown.length;if(rest>.005&&left>0)t(", "+(left===1?"1 other ":left+" others ")+pct(rest));
+   t(". "+(a.single?"One person holds this area.":a.bus===1?"One person holds half the work.":a.bus+" people hold half the work."))}
+ }
+
+ /* one state drives the map, the list, the tasks and the sentence */
+ function cur(){return HOV||PIN||(featOn?FEAT:null)}
+ function apply(){
+  if(!T)return;var s=cur(),on=!!s,ft=on&&s===FEAT;card.classList.toggle("f",on);card.classList.toggle("feat",ft);if(SVG){SVG.classList.toggle("f",on);SVG.classList.toggle("feat",ft)}
+  var sp=s&&s.k!=null?{t:"pa",p:NX[s.k].owner,a:NX[s.k].area}:s;
+  function hitP(pid){if(!sp)return false;if(sp.t==="p")return pid===sp.id;if(sp.t==="pa")return pid===sp.p;return inArea(pid,sp.id)}
+  function hitA(aid){if(!sp)return false;if(sp.t==="a")return aid===sp.id;if(sp.t==="pa")return sp.a?aid===sp.a:inArea(sp.p,aid);return inArea(sp.id,aid)}
+  if(SVG)Array.prototype.forEach.call(SVG.querySelectorAll("[data-p]"),function(x){var p=x.getAttribute("data-p"),a=x.getAttribute("data-a"),h=false;
+   if(sp){if(sp.t==="p")h=p===sp.id;else if(sp.t==="a")h=a===sp.id||(!a&&hitP(p));else h=p===sp.p&&(!sp.a||!a||a===sp.a)}x.classList.toggle("hi",h)});
+  Array.prototype.forEach.call(card.querySelectorAll(".tmh-p"),function(r){r.classList.toggle("hi",hitP(r.dataset.p))});
+  Array.prototype.forEach.call(card.querySelectorAll(".tmh-a,.tmh-ar"),function(r){r.classList.toggle("hi",hitA(r.dataset.a))});
+  Array.prototype.forEach.call(card.querySelectorAll(".tmh-sbar i"),function(i){var h=false;if(sp){if(sp.t==="a")h=i.parentNode.parentNode.dataset.a===sp.id;else h=i.dataset.p===(sp.t==="p"?sp.id:sp.p)}i.classList.toggle("hi",h)});
+  Array.prototype.forEach.call($("tmh-nx").children,function(li){var x=NX[+li.dataset.k],m=false;
+   if(s){if(s.k!=null)m=s.k===x.k;else if(s.t==="p")m=x.owner===s.id;else if(s.t==="pa")m=x.owner===s.p;else m=x.area===s.id}
+   li.classList.toggle("lit",m);li.classList.toggle("dim",!!s&&!m)});
+  say(s);
+ }
+ function sync(){Array.prototype.forEach.call(card.querySelectorAll("button[data-p],button[data-a]"),function(b){
+  b.setAttribute("aria-pressed",String(!!PIN&&(PIN.t==="p"?b.dataset.p===PIN.id:b.dataset.a===PIN.id)))})}
+ function pin(s){PIN=PIN&&PIN.t===s.t&&PIN.id===s.id?null:s;sync();apply()}
+ function wire(n,s){
+  n.addEventListener("mouseenter",function(){HOV=s;apply()});n.addEventListener("mouseleave",function(){HOV=null;apply()});
+  n.addEventListener("focus",function(){HOV=s;apply()});n.addEventListener("blur",function(){HOV=null;apply()});
+  if(n.tagName==="BUTTON")n.addEventListener("click",function(){pin(s)})}
+ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&PIN){PIN=null;sync();apply()}});
+
+ /* ribbons: left end = share of the person's work, right end = share of the area */
+ function draw(){
+  var host=$("tmh-sv");if(!T||!host.offsetParent)return;
+  var svg=F.ribbons(T,{W:Math.max(110,Math.round(host.clientWidth)),pitch:46,bar:30,clip:"tmhc"});
+  $("tmh-ppl").style.paddingTop=svg._oP+"px";$("tmh-ars").style.paddingTop=svg._oA+"px";
+  svg.addEventListener("mouseover",function(e){var x=e.target;if(x.classList&&x.classList.contains("rb")){HOV={t:"pa",p:x.getAttribute("data-p"),a:x.getAttribute("data-a")};apply()}});
+  svg.addEventListener("mouseleave",function(){HOV=null;apply()});
+  if(!entered&&!RM)svg.classList.add("pre");
+  host.textContent="";host.appendChild(svg);SVG=svg;
+ }
+ /* entrance once, when the card is on screen: every ribbon grows in, then the top task lights up */
+ function enter(){
+  if(RM){entered=featOn=true;apply();return}
+  var go=function(){entered=true;if(SVG){SVG.classList.remove("pre");SVG.classList.add("in")}setTimeout(function(){featOn=true;apply()},SVG?1300:500)};
+  if(!("IntersectionObserver" in window))return go();
+  var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){io.disconnect();go()}},{threshold:.3});io.observe(card);
+ }
+
+ function mount(a){
+  F=window.FRTeam;T=F&&F.model(a&&a.team);if(!T)return fail();
+  NX=tasks(a);
+  var t=a.team,top=box.querySelector(".tmh-top span");
+  if(top&&Number.isInteger(t.total_people)&&Number.isInteger(t.commits))top.textContent=t.total_people+" people, "+t.commits.toLocaleString("en-US")+" commits in 12 months";
+  var PL=$("tmh-ppl"),AL=$("tmh-ars"),LI=$("tmh-list");
+  T.rowsP.forEach(function(p){
+   if(p.i<0){var d=el("div","tmh-p tmh-o");d.dataset.p="others";d.appendChild(el("span","tmh-ev","+"+Math.min(999,p.others.people)));
+    var tx=el("span");tx.appendChild(el("span","nm","Everyone else"));tx.appendChild(el("span","sb",p.others.people+(p.others.people===1?" person, ":" people, ")+pct(p.others.share)+" of the work"));d.appendChild(tx);
+    wire(d,{t:"p",id:"others"});PL.appendChild(d);return}
+   var b=el("button","tmh-p");b.type="button";b.dataset.p=p.id;b.setAttribute("aria-pressed","false");colorize(b,p);
+   var k=picks(p.id);
+   b.setAttribute("aria-label",p.name+", "+p.commits+" commits in the last year"+(p.topA?", works most on "+p.topA.label:"")+(k?", suggested for "+k+(k===1?" task":" tasks"):""));
+   b.appendChild(face(p,30));var tx2=el("span");tx2.appendChild(el("span","nm",p.name));tx2.appendChild(el("span","sb",p.commits+(p.commits===1?" commit":" commits")));b.appendChild(tx2);
+   if(k){var pk=el("span","pk",k+(k===1?" task":" tasks"));pk.setAttribute("aria-hidden","true");b.appendChild(pk)}
+   wire(b,{t:"p",id:p.id});PL.appendChild(b)});
+  function areaLabel(x){return x.label+": "+areaPeople(x).slice(0,3).map(function(o){return (o.p.i<0?"everyone else":o.p.name)+" "+pct(o.s)}).join(", ")+(x.single?". One owner.":". "+x.bus+(x.bus===1?" person holds":" people hold")+" half the work.")}
+  T.A.forEach(function(x){var b=el("button","tmh-a");b.type="button";b.dataset.a=x.id;b.setAttribute("aria-pressed","false");b.setAttribute("aria-label",areaLabel(x));
+   var tx=el("span");tx.appendChild(el("span","nm",x.label));var pth=el("span","pth");pth.appendChild(el("bdi",null,x.path));tx.appendChild(pth);b.appendChild(tx);
+   wire(b,{t:"a",id:x.id});AL.appendChild(b)});
+  /* By area: biggest part first, a stacked ownership bar, the top owners and a badge */
+  var byShare=T.A.slice().sort(function(x,y){return y.share-x.share});
+  byShare.forEach(function(x,j){var li=el("li"),b=el("button","tmh-ar");b.type="button";b.dataset.a=x.id;b.setAttribute("aria-pressed","false");b.setAttribute("aria-label",areaLabel(x));
+   if(j>=4)li.hidden=true;
+   var ps=areaPeople(x),tx=el("span");tx.appendChild(el("span","nm",x.label));tx.appendChild(el("span","pth",x.path));b.appendChild(tx);
+   b.appendChild(x.single?el("span","tmh-bdg warn","1 owner"):x.bus>1?el("span","tmh-bdg",x.bus+" hold half"):el("span"));
+   var bar=el("span","tmh-sbar");bar.setAttribute("aria-hidden","true");
+   ps.slice().sort(function(u,v){return (u.p.i<0?99:u.p.i)-(v.p.i<0?99:v.p.i)}).forEach(function(o){var i=el("i");i.dataset.p=o.p.id;colorize(i,o.p.i<0?null:o.p);i.style.width=(100*o.s)+"%";bar.appendChild(i)});
+   b.appendChild(bar);
+   var ow=el("span","tmh-ows");ow.setAttribute("aria-hidden","true");
+   ps.filter(function(o){return o.p.i>=0}).slice(0,3).forEach(function(o){var sp=el("span");sp.appendChild(face(o.p,22));sp.appendChild(document.createTextNode(first(o.p.name)+" "+pct(o.s)));ow.appendChild(sp)});
+   b.appendChild(ow);wire(b,{t:"a",id:x.id});li.appendChild(b);LI.appendChild(li)});
+  if(byShare.length>4){var mo=el("button","tmh-more","Show all "+byShare.length+" parts");mo.type="button";
+   mo.addEventListener("click",function(){Array.prototype.forEach.call(LI.children,function(li){li.hidden=false});mo.remove();LI.children[4].querySelector("button").focus()});LI.parentNode.insertBefore(mo,LI.nextSibling)}
+  /* the text equivalent of the map */
+  var tb=$("tmh-tab");tb.appendChild(el("caption",null,"Share of each part of the code, by person, in "+(typeof a.repo==="string"?a.repo.slice(0,100):"this repo")));
+  var th=el("thead"),hr=el("tr"),h0=el("th",null,"Person");h0.scope="col";hr.appendChild(h0);T.A.forEach(function(x){var c=el("th",null,x.label);c.scope="col";hr.appendChild(c)});th.appendChild(hr);tb.appendChild(th);
+  var bd=el("tbody");T.rowsP.forEach(function(p){var tr=el("tr"),h=el("th",null,p.i<0?"Everyone else":p.name);h.scope="row";tr.appendChild(h);
+   T.A.forEach(function(x){var w=T.M[p.i+"|"+x.i];tr.appendChild(el("td",null,w?pct(w/T.colSum[x.i])+" of area":"none"))});bd.appendChild(tr)});tb.appendChild(bd);
+  /* the top 3 tasks whose suggested owner is on the map */
+  var ol=$("tmh-nx"),shown=NX.filter(function(x){return x.owner&&onMap(x.owner)}).slice(0,3);
+  shown.forEach(function(x){var li=el("li"),op=T.byId[x.owner];li.dataset.k=x.k;colorize(li,op);
+   li.appendChild(el("span","n",String(x.k+1)));
+   var d=el("div"),ln=el("a",null,x.title);ln.href="doc-audit/?id="+ID+"#c="+x.k;d.appendChild(ln);li.appendChild(d);
+   var w=el("p","tmh-who");w.appendChild(face(op,24));var wt=el("span"),why=x.why.replace(/\.$/,"");
+   if(why&&why.indexOf(op.name)===0){wt.appendChild(el("b",null,op.name));wt.appendChild(document.createTextNode(why.slice(op.name.length)+"."))}
+   else{wt.appendChild(document.createTextNode("Suggested: "));wt.appendChild(el("b",null,op.name));if(why)wt.appendChild(document.createTextNode(". "+why+"."))}
+   w.appendChild(wt);li.appendChild(w);
+   var s={t:"task",k:x.k};
+   li.addEventListener("mouseenter",function(){HOV=s;apply()});li.addEventListener("mouseleave",function(){HOV=null;apply()});
+   li.addEventListener("focusin",function(){HOV=s;apply()});li.addEventListener("focusout",function(){HOV=null;apply()});
+   ol.appendChild(li)});
+  var f=shown[0];FEAT=f?{t:"task",k:f.k}:null;
+  draw();
+  if("ResizeObserver" in window){var tm;RO=new ResizeObserver(function(){clearTimeout(tm);if(!SVG||!SVG.isConnected){draw();apply();return}tm=setTimeout(function(){draw();apply()},120)});RO.observe($("tmh-sv"))}
+  addEventListener("resize",function(){if(!RO){draw();apply()}});
+  apply();enter();
+ }
+ /* if the data cannot load, show the same still image the no-JS page gets */
+ function fail(){box.textContent="";box.style.minHeight="0";box.style.display="block";
+  var ns=S.querySelector("noscript"),im=null;try{im=new DOMParser().parseFromString(ns.textContent,"text/html").querySelector("img.tmh-still")}catch(e){}
+  if(im){im=document.adoptNode(im);im.style.marginTop="0";box.appendChild(im)}else box.appendChild(el("p","tmh-fail","The team map could not load here."))}
+ var started=false;
+ function load(){if(started)return;started=true;
+  var js=window.FRTeam?Promise.resolve():new Promise(function(ok,no){var s=document.createElement("script");s.src="assets/team-map.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+  Promise.all([js,fetch("audits/"+ID+".json").then(function(r){if(!r.ok)throw 0;return r.json()})]).then(function(v){
+   try{mount(v[1])}catch(e){console.warn("team map skipped",e);fail()}}).catch(fail)}
+ if("IntersectionObserver" in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){io.disconnect();load()}},{rootMargin:"1200px 0px"});io.observe(S)}else load();
 })();
 
 /* reveal: each block fades and rises once as it enters, staggered inside its group */
