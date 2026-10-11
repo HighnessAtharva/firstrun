@@ -29,6 +29,9 @@ from firstrun.tracing import set_io
 
 JEV_URL = "https://api.typesafe.ai/v1/systemone"
 JEV_MODEL = "jev-latest"
+# TypeSafe bills Jev input at $0.042 per million tokens and output at nothing.
+JEV_USD_PER_TOKEN = 0.042 / 1_000_000
+_JEV_USE = {"calls": 0, "input_tokens": 0}
 HISTORY_MAX = 20000
 PAGES_MAX = 400
 FEATURE_WINDOW_DAYS = 120
@@ -284,6 +287,20 @@ def analyze_pages(commits: list[dict], docs: list[str], texts: dict[str, str], n
     return pages
 
 
+
+def _note_jev(body: dict) -> dict:
+    """Count one answered Jev call and its input tokens. Returns the body unchanged."""
+    _JEV_USE["calls"] += 1
+    _JEV_USE["input_tokens"] += int((body.get("usage") or {}).get("input_tokens") or 0)
+    return body
+
+
+def jev_cost() -> dict:
+    t = _JEV_USE["input_tokens"]
+    return {"jev_calls": _JEV_USE["calls"], "jev_input_tokens": t, "jev_usd": round(t * JEV_USD_PER_TOKEN, 6),
+            "basis": "TypeSafe list price, $0.042 per million input tokens, output free. The clone and the analysis are free."}
+
+
 def _jev_stale_batch(key: str, cand: list[dict], texts: dict[str, str]) -> dict[int, float] | None:
     state = {str(i): {"docs_page": p["path"], "page_excerpt": (texts.get(p["path"]) or "")[:1500],
                       "commits_since_last_edit": [e["subject"] for e in p["evidence"]]}
@@ -295,7 +312,7 @@ def _jev_stale_batch(key: str, cand: list[dict], texts: dict[str, str]) -> dict[
         r = httpx.post(JEV_URL, json={"model": JEV_MODEL, "state": state, "questions": q},
                        headers={"Authorization": f"Bearer {key}"}, timeout=90)
         r.raise_for_status()
-        ans = r.json()["answers"]
+        ans = _note_jev(r.json())["answers"]
         return {i: float(ans[f"s{i}"]["noul"]) for i in range(len(cand)) if f"s{i}" in ans}
     except Exception:  # noqa: BLE001 - Jev is optional
         return None
@@ -395,7 +412,7 @@ def jev_sort(subjects: list[str]) -> dict[int, str]:
     try:
         r = httpx.post(JEV_URL, json=body, headers={"Authorization": f"Bearer {key}"}, timeout=60)
         r.raise_for_status()
-        answers = r.json()["answers"]
+        answers = _note_jev(r.json())["answers"]
         out = {}
         for i in range(len(subjects)):
             probs = answers[f"c{i}"]["probabilities"]
@@ -458,7 +475,7 @@ def jev_features(feats: list[dict], excerpts: list[str]) -> dict[int, tuple[str,
         r = httpx.post(JEV_URL, json={"model": JEV_MODEL, "state": state, "questions": q},
                        headers={"Authorization": f"Bearer {key}"}, timeout=90)
         r.raise_for_status()
-        ans = r.json()["answers"]
+        ans = _note_jev(r.json())["answers"]
         out = {}
         for i in range(len(feats)):
             probs = ans[f"k{i}"]["probabilities"]
@@ -747,6 +764,7 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
     """docs_repo: a second repo that holds the docs site, when the docs do not live next to the code."""
     now = datetime.now(timezone.utc)
     url, name = resolve_target(target)
+    _JEV_USE.update(calls=0, input_tokens=0)
     tmp = Path(tempfile.mkdtemp(prefix="firstrun-audit-"))
     try:
         with neatlogs.trace("audit.clone", kind="TOOL") as span:
@@ -794,7 +812,7 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
             "docs_repo": docs_repo or "", "docs_url": docs_url,
             "generated_at": now.isoformat(timespec="seconds"), "stale_days": stale_days,
             "history": {"commits": len(commits), "since": commits[-1]["date"].date().isoformat(),
-                        "capped": len(commits) >= HISTORY_MAX},
+                        "capped": len(commits) >= HISTORY_MAX, "head": commits[0]["sha"]},
             "summary": {**_summary(pages), "features": len(feats), "uncovered": sum(1 for f in feats if not f["covered"]),
                         "cards": len(cards)},
             "pages": pages[:PAGES_MAX],
@@ -802,6 +820,7 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
             "features": feats[:40], "cards": cards[:30],
             "drafts": {"release_notes": notes, "highlights": highlights},
             "jev": bool(use_jev and os.environ.get("TYPESAFE_API_KEY")),
+            "cost": jev_cost(),
         }
         return result
     finally:
@@ -857,7 +876,8 @@ def audit_sitemap(site: str, stale_days: int = 180) -> dict:
             "mode": "sitemap", "history": {"commits": 0, "since": "", "capped": False},
             "summary": {**_summary(pages), "features": 0, "uncovered": 0, "cards": len(cards)},
             "pages": pages[:PAGES_MAX], "release": {"name": "", "previous": "", "date": "", "commits": 0},
-            "features": [], "cards": cards, "drafts": {"release_notes": "", "highlights": []}, "jev": False}
+            "features": [], "cards": cards, "drafts": {"release_notes": "", "highlights": []}, "jev": False,
+            "cost": {"jev_calls": 0, "jev_input_tokens": 0, "jev_usd": 0.0, "basis": "A sitemap audit makes no model call."}}
 
 
 # ----------------------------------------------------------------------------- output

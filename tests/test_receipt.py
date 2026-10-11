@@ -75,3 +75,48 @@ def test_markdown_patch_table_stays_one_line_per_row(tmp_path):
     md = receipt.render_md(receipt.build(s, _run_dir(tmp_path, s), ECON))
     rows = [ln for ln in md.splitlines() if ln.startswith("| 2 |")]
     assert len(rows) == 1 and "\\|" in rows[0]
+
+
+def _audit(cost=True) -> dict:
+    a = {
+        "id": "audit-20261011-000000-acme-widgets", "repo": "acme/widgets", "url": "https://github.com/acme/widgets",
+        "docs_repo": "", "generated_at": "2026-10-11T00:00:00+00:00",
+        "history": {"commits": 120, "since": "2026-01-01", "capped": False, "head": "abcdef1234567"},
+        "summary": {"pages": 4, "fresh": 3, "aging": 0, "stale": 1, "quiet": 0, "features": 2, "uncovered": 1},
+        "cards": [{"kind": "document", "evidence": [{"sha": "abc"}]}, {"kind": "automate", "evidence": []}],
+        "jev": True,
+    }
+    if cost:
+        a["cost"] = {"jev_calls": 2, "jev_input_tokens": 10_000, "jev_usd": 0.00042, "basis": "list price"}
+    return a
+
+
+def test_audit_receipt_prices_the_jev_calls_and_counts_cited_cards(tmp_path):
+    (tmp_path / "audit.json").write_text("{}", encoding="utf-8")
+    r = receipt.build_audit(_audit(), tmp_path)
+    assert r["price"]["recorded"] and r["price"]["usd"] == 0.00042
+    assert r["proof"]["cards_citing_evidence"] == 1 and not r["proof"]["all_cited"]
+    assert "abcdef123" in r["proof"]["claim"]
+    assert r["limits"]["dollar_cap_per_audit"] is None
+    path = receipt.write(tmp_path, r, with_html=True)[0]
+    assert receipt.check(path) == []
+    (tmp_path / "audit.json").write_text('{"x":1}', encoding="utf-8")
+    assert any("audit.json changed" in p for p in receipt.check(path))
+
+
+def test_an_audit_without_cost_says_it_was_not_recorded(tmp_path):
+    r = receipt.build_audit(_audit(cost=False), tmp_path)
+    assert r["price"]["recorded"] is False and r["price"]["usd"] is None
+    assert "not recorded" in receipt.render_audit_md(r)
+    assert "Not recorded" in receipt.render_audit_html(r)
+
+
+def test_jev_usage_counts_answered_calls_only():
+    from firstrun import audit
+
+    audit._JEV_USE.update(calls=0, input_tokens=0)
+    audit._note_jev({"usage": {"input_tokens": 1000}})
+    audit._note_jev({"answers": {}})
+    c = audit.jev_cost()
+    assert c["jev_calls"] == 2 and c["jev_input_tokens"] == 1000
+    assert c["jev_usd"] == round(1000 * 0.042 / 1_000_000, 6)
