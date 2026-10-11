@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import re
@@ -92,9 +93,108 @@ def friendly(reason: str) -> str:
     return reason
 
 
-def _setup_exit(message: str):
+def _setup_exit(message: str, code: str = ""):
     click.echo(f"✗ {message}")
+    _json_error(code or error_code(message) or "setup_failed", message)
     sys.exit(2)
+
+
+# --- --json for agents ---------------------------------------------------------
+# With --json a command prints ONE JSON object on stdout. Every human line goes to stderr.
+# The keys are documented in docs/agent.md. Add keys freely, never rename or drop one.
+
+# (reason prefix or fragment, machine code). The first match wins.
+ERROR_CODES = (
+    ("docker unavailable", "docker_unavailable"), ("docker is not running", "docker_unavailable"),
+    ("model auth failed", "auth_missing"), ("claude auth is missing", "auth_missing"),
+    ("docs unreachable", "docs_unreachable"), ("no runnable steps", "no_runnable_steps"),
+    ("out of scope", "out_of_scope"), ("planner failed", "planner_failed"),
+    ("budget spent", "budget_spent"), ("needs_human", "needs_human"), ("secret", "needs_secret"),
+    ("timed out", "step_timeout"), ("clone failed", "clone_failed"), ("unknown run id", "unknown_run_id"),
+    ("no audit found", "not_found"), ("no runs found", "not_found"), ("no verified run", "not_found"),
+)
+
+_JSON: dict | None = None  # the object a --json command is building, or None
+
+
+def error_code(reason: str) -> str:
+    low = (reason or "").lower()
+    return next((code for frag, code in ERROR_CODES if frag in low), "")
+
+
+def _json_error(code: str, message: str, fix: str = "") -> None:
+    if _JSON is not None and not _JSON.get("error"):
+        _JSON["error"] = {"code": code, "message": message, "fix": fix}
+
+
+@contextlib.contextmanager
+def _json_out(command: str, enabled: bool):
+    """Yield the dict to fill. Human output goes to stderr. The dict is printed on exit, also on an error exit."""
+    global _JSON
+    if not enabled:
+        yield {}
+        return
+    _JSON = {"ok": True, "command": command, "exit_code": 0, "error": None}
+    real, code = sys.stdout, 0
+    try:
+        with contextlib.redirect_stdout(sys.stderr):
+            yield _JSON
+    except SystemExit as exc:
+        code = exc.code if isinstance(exc.code, int) else (0 if exc.code is None else 1)
+        raise
+    except click.ClickException as exc:
+        code = exc.exit_code
+        _json_error(error_code(exc.format_message()) or "error", exc.format_message())
+        raise
+    except BaseException as exc:
+        code = 1
+        _json_error("internal", f"{exc.__class__.__name__}: {exc}"[:300])
+        raise
+    finally:
+        out, _JSON = _JSON, None
+        out["exit_code"] = code
+        if code and not out["error"]:  # a failed run carries its own error. Lift the first one to the top.
+            out["error"] = next((r["error"] for r in out.get("runs", []) if r.get("error")), None)
+        out["ok"] = code == 0 and not out["error"]
+        real.write(json.dumps(out, ensure_ascii=False, default=str) + "\n")
+        real.flush()
+
+
+def run_json(run_id: str, cached: bool = False) -> dict:
+    """The --json record of one run folder, read back from disk."""
+    from firstrun import state as state_io
+    from firstrun.report import reported_failed_step
+
+    d = state_io.run_dir(run_id).resolve()
+    st = state_io.load_state(run_id)
+    try:
+        steps = [s for s in state_io.load_runbook(run_id).steps if not s.skipped_out_of_scope]
+    except (OSError, ValueError):
+        steps = []
+    files = {name: str(d / name) if (d / name).exists() else None
+             for name in ("state.json", "runbook.json", "report.md", "patch.diff", "pr_body.md", "receipt.json")}
+    share_url = None
+    try:
+        from firstrun import share
+
+        share_url = share.link_for_run(d)[0]
+    except Exception:  # noqa: BLE001 - the share link is optional
+        pass
+    rec = {
+        "run_id": st.run_id, "source_url": st.source_url, "target": state_io.target_name(st.source_url),
+        "status": st.status.value, "stop_reason": st.stop_reason, "cached": cached,
+        "steps_total": len(steps), "steps_passed": sum(1 for s in st.step_status.values() if s.value == "passed"),
+        "first_failed_step": st.first_failed_step, "reported_failed_step": reported_failed_step(st),
+        "patches": len(st.patches), "verified": st.status == RunStatus.VERIFIED,
+        "time_to_first_success_s": st.time_to_first_success_s, "elapsed_s": _elapsed_s(st),
+        "cost_usd": round(st.usage.cost_usd, 6), "run_dir": str(d), "files": files, "share_url": share_url,
+        "error": None,
+    }
+    if st.status == RunStatus.FAILED:
+        why = st.stop_reason or _first_error_line(st)
+        code = error_code(why) or ("step_failed" if reported_failed_step(st) is not None else "failed")
+        rec["error"] = {"code": code, "message": why, "fix": friendly(why) if friendly(why) != why else ""}
+    return rec
 
 
 def _quiet_logs() -> None:
@@ -241,7 +341,24 @@ def cli() -> None:
 @click.option("--no-recover", is_flag=True, help="Layer 1 only: stop at the first failed step.")
 @click.option("--fresh", is_flag=True, help="Ignore a cached result and run again.")
 @click.option("--tier", help="Cap spend per run at this plan tier's cap from business/unit_economics.json.")
-def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh, tier) -> None:
+@click.option("--json", "as_json", is_flag=True, help="Print one JSON object on stdout. Logs go to stderr.")
+def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh, tier, as_json) -> None:
+    with _json_out("run", as_json) as out:
+        out["runs"] = []
+        _run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh, tier, out["runs"])
+
+
+def _record(records: list, run_id: str, cached: bool = False) -> None:
+    """Add a run's --json record. Only in --json mode, and a failure to read it back never breaks the run."""
+    if _JSON is None:
+        return
+    try:
+        records.append(run_json(run_id, cached))
+    except Exception as exc:  # noqa: BLE001
+        records.append({"run_id": run_id, "error": {"code": "unreadable", "message": str(exc)[:200], "fix": ""}})
+
+
+def _run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh, tier, records: list) -> None:
     if offline:
         os.environ["FIRSTRUN_OFFLINE"] = "1"
     if not (url or targets or resume_id):
@@ -277,6 +394,7 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh
                 click.echo(cache.describe(hit))
                 click.echo(f"report: {state_io.run_dir(hit) / 'report.md'}")
                 _echo_share(state_io.run_dir(hit))
+                _record(records, hit, cached=True)
             else:
                 todo.append(u)
         urls = todo
@@ -290,9 +408,11 @@ def run_cmd(url, targets, resume_id, tags, offline, no_verify, no_recover, fresh
     try:
         if resume_id:
             final = _run_one("", list(tags), resume_id, not no_verify, not no_recover, budget)
+            _record(records, final.run_id)
             worst = exit_code(final)
         for u in urls:
             final = _run_one(u, list(tags), None, not no_verify, not no_recover, budget)
+            _record(records, final.run_id)
             worst = max(worst, exit_code(final))
     except Exception as exc:  # noqa: BLE001 - setup failures get one sentence, not a traceback
         from firstrun import llm, planner
@@ -336,8 +456,26 @@ def report_cmd(html) -> None:
               help="Verify a receipt.json and the run files beside it. Writes nothing.")
 @click.option("--all-published", "all_published", is_flag=True,
               help="Write a receipt into docs/receipts for every run and audit the site lists.")
-def receipt_cmd(run_id, tier, html, check_path, all_published) -> None:
+@click.option("--json", "as_json", is_flag=True, help="Print one JSON object on stdout. Logs go to stderr.")
+def receipt_cmd(run_id, tier, html, check_path, all_published, as_json) -> None:
     """Write receipt.json and receipt.md for a run or a doc audit: work, price, caps or limits, proof and file hashes."""
+    with _json_out("receipt", as_json) as out:
+        _receipt_cmd(run_id, tier, html, check_path, all_published, out)
+
+
+def _receipt_fields(r: dict, files: list) -> dict:
+    """The --json record of one written receipt."""
+    audit = r.get("kind") == "audit"
+    price = r["price"]["usd"] if audit else round(r["price"]["model_cost_usd"] + r["price"].get("compute_per_run_usd", 0), 6)
+    return {"receipt_id": r["receipt_id"], "kind": "audit" if audit else "run", "hash": r["hash"],
+            "price_usd": price, "price_basis": r["price"].get("basis", ""),
+            "verified": None if audit else bool(r["proof"]["verified"]),
+            "cards": r["proof"].get("cards") if audit else None,
+            "cards_citing_evidence": r["proof"].get("cards_citing_evidence") if audit else None,
+            "files": [str(Path(f).resolve()) for f in files]}
+
+
+def _receipt_cmd(run_id, tier, html, check_path, all_published, out: dict) -> None:
     from firstrun import econ, receipt, state as state_io
 
     if all_published:
@@ -351,12 +489,18 @@ def receipt_cmd(run_id, tier, html, check_path, all_published) -> None:
                    + (f", redrew {done['redrawn']} more" if done["redrawn"] else ""))
         for item in done["skipped"]:
             click.echo(f"skipped {item}: no run folder or no unit economics")
+        out.update(mode="all_published", **{k: done[k] for k in ("runs", "audits", "redrawn", "skipped")})
         return
     if check_path:
         problems = receipt.check(Path(check_path))
         for p in problems:
             click.echo(f"FAIL: {p}")
+        hash_ok = not any("hash does not match" in p for p in problems)
+        out.update(mode="check", path=str(check_path), valid=not problems, hash_ok=hash_ok, problems=problems)
         if problems:
+            _json_error("receipt_invalid", "; ".join(problems), "" if not hash_ok else
+                        "The receipt itself is unchanged. Its run files are not next to it: "
+                        "check it inside the run folder, or set FIRSTRUN_RUNS_DIR to the folder that holds the run.")
             sys.exit(1)
         click.echo("ok: the receipt and its evidence files are untouched")
         return
@@ -369,8 +513,10 @@ def receipt_cmd(run_id, tier, html, check_path, all_published) -> None:
     if (run_dir / "audit.json").exists():
         a = json.loads((run_dir / "audit.json").read_text(encoding="utf-8"))
         r = receipt.build_audit(a, run_dir)
-        for f in receipt.write(run_dir, r, with_html=html):
+        written = receipt.write(run_dir, r, with_html=html)
+        for f in written:
             click.echo(f"wrote {f}")
+        out.update(mode="write", **_receipt_fields(r, written))
         cost = r["price"]["usd"]
         click.echo(f"{r['receipt_id']}: {'cost not recorded' if cost is None else f'${cost:.6f} Jev cost'}, "
                    f"{r['proof']['cards_citing_evidence']} of {r['proof']['cards']} cards cited, hash {r['hash'][:19]}")
@@ -393,8 +539,10 @@ def receipt_cmd(run_id, tier, html, check_path, all_published) -> None:
     if plan.exists():
         cfo_url = (json.loads(plan.read_text(encoding="utf-8")).get("cfo") or {}).get("model", "")
     r = receipt.build(state, run_dir, data, bills=tier, cfo_url=cfo_url, steps_total=steps)
-    for f in receipt.write(run_dir, r, with_html=html):
+    written = receipt.write(run_dir, r, with_html=html)
+    for f in written:
         click.echo(f"wrote {f}")
+    out.update(mode="write", **_receipt_fields(r, written))
     click.echo(f"{r['receipt_id']}: ${r['price']['model_cost_usd']:.4f} model cost, "
                f"{'verified' if r['proof']['verified'] else 'not verified'}, hash {r['hash'][:19]}")
 
@@ -426,8 +574,34 @@ def share_cmd(run_id) -> None:
 @click.option("--no-publish", is_flag=True, help="Do not write docs/audits for the site.")
 @click.option("--docs-repo", help="A second repo that holds the docs, when they do not live next to the code.")
 @click.option("--no-team", is_flag=True, help="Leave out the team map and the suggested owners. FIRSTRUN_TEAM=0 does the same.")
-def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team) -> None:
+@click.option("--json", "as_json", is_flag=True, help="Print one JSON object on stdout. Logs go to stderr.")
+def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team, as_json) -> None:
     """Audit a repo's docs: stale pages, features with no docs, and proposal cards. TARGET is owner/repo, a GitHub URL, a git folder, or a docs site with a sitemap."""
+    with _json_out("audit", as_json) as out:
+        _audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team, out)
+
+
+def audit_json(result: dict, out_dir: Path, top: int = 10) -> dict:
+    """The --json record of one audit: counts, cost, the top tasks with their suggested owner, and the files."""
+    people = {p["id"]: p for p in ((result.get("team") or {}).get("people") or [])}
+
+    def owner(o):
+        p = people.get((o or {}).get("p", ""))
+        return {"name": p["name"], "login": p.get("login") or "", "why": o.get("why", "")} if p else None
+
+    tasks = [{"rank": x.get("rank"), "kind": x.get("kind"), "title": x.get("title"), "path": x.get("path") or "",
+              "score": x.get("score"), "effort": x.get("effort"), "action": x.get("action", ""),
+              "rationale": x.get("rationale", ""), "owner": owner(x.get("owner"))}
+             for x in ((result.get("next") or {}).get("items") or [])[:top]]
+    return {"audit_id": result["id"], "repo": result.get("repo"), "url": result.get("url"),
+            "docs_repo": result.get("docs_repo") or "", "mode": result.get("mode", "repo"),
+            "summary": result["summary"], "jev": bool(result.get("jev")), "cost": result.get("cost"),
+            "team": bool(people), "top_tasks": tasks, "run_dir": str(out_dir),
+            "files": {"audit_json": str(out_dir / "audit.json"), "audit_md": str(out_dir / "audit.md")},
+            "published": None}
+
+
+def _audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team, out: dict) -> None:
     from firstrun import audit as audit_mod, tracing
 
     tracing.init_tracing(tags=["audit"])
@@ -442,6 +616,8 @@ def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team) -> Non
         raise click.ClickException(str(e)) from e
     out_dir = Path(config.RUNS_DIR) / result["id"]
     md = audit_mod.save(result, out_dir)
+    if _JSON is not None:
+        out.update(audit_json(result, out_dir.resolve()))
     s = result["summary"]
     click.echo(f"{s['pages']} pages: {s['stale']} stale, {s['quiet']} quiet, {s['aging']} aging, {s['fresh']} fresh"
                + (f", {s['unchecked']} unchecked" if s.get("unchecked") else "") + f". Oldest {s['oldest_days']} days.")
@@ -451,8 +627,9 @@ def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo, no_team) -> Non
     if not no_publish:
         site = audit_mod.find_audit_site()
         if site:
-            click.echo(f"site log: {audit_mod.publish(result, site, out_dir)} "
-                       "(commit docs/audits and docs/receipts to show it on the site)")
+            published = audit_mod.publish(result, site, out_dir)
+            out["published"] = str(published)
+            click.echo(f"site log: {published} (commit docs/audits and docs/receipts to show it on the site)")
     tracing.close_tracing()
 
 
@@ -630,10 +807,14 @@ def pr_cmd(run_id, as_json) -> None:
 @click.argument("run_id", required=False)
 @click.option("--no-prove", is_flag=True, help="Derive and print the block only. Start no container.")
 @click.option("--rounds", default=2, show_default=True, help="Proof rounds. A failure that names a missing tool adds it.")
-def prereqs_cmd(run_id, no_prove, rounds) -> None:
+@click.option("--json", "as_json", is_flag=True, help="Print one JSON object on stdout. Logs go to stderr.")
+def prereqs_cmd(run_id, no_prove, rounds, as_json) -> None:
     """Print the Prerequisites a run revealed and prove them in a fresh container (default: newest verified run)."""
-    import json
+    with _json_out("prereqs", as_json) as out:
+        _prereqs_cmd(run_id, no_prove, rounds, out)
 
+
+def _prereqs_cmd(run_id, no_prove, rounds, out: dict) -> None:
     import neatlogs
 
     from firstrun import prereqs, state as state_io
@@ -662,10 +843,12 @@ def prereqs_cmd(run_id, no_prove, rounds) -> None:
                 result = prereqs.prove(run_id, rounds=rounds)
         derived = {k: v for k, v in result.items() if k != "proof"}
         click.echo(prereqs.to_markdown(derived, runbook.title))
+        out.update(run_id=run_id, prereqs=derived, proof=result.get("proof"), files={})
         if no_prove:
             return
         click.echo(prereqs.proof_line(result))
         click.echo(f"wrote {state_io.run_dir(run_id) / 'prereqs.md'}")
+        out["files"] = {n: str(state_io.run_dir(run_id) / n) for n in ("prereqs.json", "prereqs.md")}
     except Exception as exc:  # noqa: BLE001
         from firstrun.sandbox import DockerUnavailable
 
@@ -674,6 +857,35 @@ def prereqs_cmd(run_id, no_prove, rounds) -> None:
         raise
     finally:
         close_tracing()
+
+
+@cli.command("doctor")
+@click.option("--for", "tool", type=click.Choice(["all", "test", "audit"]), default="all", show_default=True,
+              help="Which tool must be ready for exit code 0: Doc-test, Doc-audit or both.")
+@click.option("--json", "as_json", is_flag=True, help="Print one JSON object on stdout.")
+def doctor_cmd(tool, as_json) -> None:
+    """Check that this machine can run FirstRun: Python, git, Docker, keys and network. Prints no key value."""
+    from firstrun import doctor
+
+    with _json_out("doctor", as_json) as out:
+        result = doctor.run()
+        out.update(result)
+        marks = {"pass": "✓", "warn": "!", "fail": "✗"}
+        for c in result["checks"]:
+            click.echo(f"{marks[c['status']]} {c['name']}: {c['detail']}")
+            if c["fix"]:
+                click.echo(f"    fix: {c['fix']}")
+        can = result["can_run"]
+        click.echo(f"env file: {result['env_file']['path']} ({'found' if result['env_file']['exists'] else 'not found'})")
+        click.echo(f"Doc-test can run: {'yes' if can['doc_test'] else 'no'}. "
+                   f"Doc-audit can run: {'yes' if can['doc_audit'] else 'no'}. "
+                   "A hosted audit and the public data need no setup.")
+        if not doctor.ready(result, tool):
+            failed = [c["name"] for c in result["checks"]
+                      if c["status"] == "fail" and (tool == "all" or tool in c["required_for"])]
+            _json_error("not_ready", "these checks failed: " + ", ".join(failed),
+                        "Apply the fix line under each failed check, then run firstrun doctor again.")
+            sys.exit(1)
 
 
 @cli.command("econ")

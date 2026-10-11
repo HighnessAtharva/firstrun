@@ -42,6 +42,20 @@ pip install git+https://github.com/HighnessAtharva/firstrun
 firstrun https://docs.example.com/quickstart
 ```
 
+## Any Coding Agent Can Start From agent.md
+
+Give Claude Code, Cursor, Codex or your own agent this one line:
+
+```text
+Read https://firstrun.atharvashah.com/agent.md and follow it.
+```
+
+- [docs/agent.md](docs/agent.md) holds the preflight, the install, a recipe for each task, the JSON keys, the exit and error codes, and the safety rules.
+- [llms.txt](https://firstrun.atharvashah.com/llms.txt) lists the agent files, and [llms-full.txt](https://firstrun.atharvashah.com/llms-full.txt) puts them in one file.
+- `firstrun run`, `audit`, `receipt` and `prereqs` take `--json`, which prints one JSON object on stdout. `firstrun doctor --json` checks Python, git, Docker, the keys and the network, and prints no key value.
+- [AGENTS.md](AGENTS.md) tells a coding agent how to build and test this repo.
+- [skills/firstrun](skills/firstrun/SKILL.md) is an Agent Skill. Copy the folder into `.claude/skills/` in a project, or into `~/.claude/skills/` for every project, and Claude Code loads it.
+
 ## Break, Fix, Prove Takes 195 Seconds
 
 <div align="center">

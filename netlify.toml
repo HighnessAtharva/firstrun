@@ -22,3 +22,60 @@
   to = "/doc-audit/"
   status = 301
   force = true
+
+
+# Agent files: UTF-8 text, readable from any origin, cached for 5 minutes. See docs/agent.md.
+[[headers]]
+  for = "/agent.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[headers]]
+  for = "/llms.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[headers]]
+  for = "/llms-full.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[headers]]
+  for = "/architecture.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/known-limits.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/share-format.md"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Access-Control-Allow-Origin = "*"
+
+# The public data an agent reads: any origin may fetch it.
+[[headers]]
+  for = "/audits/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/runs/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/receipts/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
