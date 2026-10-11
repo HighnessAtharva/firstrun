@@ -15,7 +15,7 @@ html.ar-lock.ar-gut{scrollbar-gutter:stable}
 .ar-dlg[data-task=receipt]{--ar-acc:var(--sn-ink);--ar-acc-d:var(--sn-ink);--ar-acc-bg:oklch(96.6% .006 255)}
 .ar-dlg *{box-sizing:border-box}
 .ar-dlg :where(h2,h3,p,ol,ul,li,pre,figure,fieldset,legend,details,summary){margin:0;padding:0}
-.ar-dlg :where(button){font:inherit;color:inherit;min-height:0;letter-spacing:normal;text-transform:none;box-shadow:none}
+.ar-dlg :where(button){font:inherit;color:inherit;min-height:0;min-width:0;padding:0;border:0;letter-spacing:normal;text-transform:none;text-decoration:none;box-shadow:none;transition:none}
 .ar-dlg a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .ar-dlg code,.ar-dlg pre,.ar-mono{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .ar-dlg code{font-size:inherit;background:none;border:0;border-radius:0;padding:0}
@@ -37,7 +37,7 @@ html.ar-lock.ar-gut{scrollbar-gutter:stable}
 .ar-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
 .ar-tabs{display:flex;gap:4px;margin-top:16px}
 .ar-tab{position:relative;height:42px;padding:0 12px;border:0;background:none;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--sn-mut);border-radius:10px 10px 0 0;transition:color .2s}
-.ar-tab:hover{color:var(--sn-ink)}
+.ar-tab:hover{color:var(--sn-ink);background:none}
 .ar-tab[aria-selected=true]{color:var(--sn-ink)}
 .ar-tab[aria-selected=true]:after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2.5px;border-radius:2px;background:var(--sn-ink)}
 .ar-tab .ar-mono{font-weight:500;font-size:13.5px}
@@ -73,6 +73,7 @@ html.ar-lock.ar-gut{scrollbar-gutter:stable}
 .ar-os{display:inline-flex;gap:2px;padding:2px;border-radius:10px;background:oklch(95.6% .006 255)}
 .ar-os button{height:30px;padding:0 11px;border:0;border-radius:8px;background:none;font-size:13px;font-weight:550;color:var(--sn-mut);cursor:pointer}
 .ar-os button[aria-pressed=true]{background:var(--sn-panel);color:var(--sn-ink);box-shadow:0 1px 2px oklch(30% .02 255/.12)}
+.ar-os button:not([aria-pressed=true]):hover{background:none;color:var(--sn-ink)}
 
 /* c. the steps */
 .ar-steps{list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:ar}
@@ -85,7 +86,7 @@ html.ar-lock.ar-gut{scrollbar-gutter:stable}
 .ar-cmd{position:relative;margin-top:7px;border-radius:12px;background:var(--ar-code);border:1px solid oklch(93% .006 255)}
 .ar-cmd pre{margin:0;padding:11px 52px 11px 14px;max-height:none;font-size:13px;line-height:1.6;color:var(--sn-ink);white-space:pre;overflow-x:auto;background:none;border:0;word-break:normal;overflow-wrap:normal}
 .ar-ic{position:absolute;top:6px;right:6px;display:inline-grid;place-items:center;width:34px;height:34px;border:0;border-radius:9px;background:var(--sn-panel);color:var(--sn-mut);cursor:pointer;box-shadow:0 0 0 1px oklch(91% .007 255);transition:color .2s,background-color .2s}
-.ar-ic:hover{color:var(--sn-ink)}
+.ar-ic:hover{color:var(--sn-ink);background:var(--sn-panel)}
 .ar-ic.done,.ar-copy.done{color:oklch(99% .003 256);background:var(--sn-ok)}
 .ar-ic.done{box-shadow:none}
 
