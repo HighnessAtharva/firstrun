@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01MmRhSJzbSVuepV41CUMRL4",
+  "agent_id": "af89594989dfade04",
+  "task_description": "Build the judges proof-map page",
+  "token_usage": {
+    "input_tokens": 206,
+    "cache_creation_tokens": 334982,
+    "cache_read_tokens": 25459457,
+    "output_tokens": 74388,
+    "api_call_count": 103
+  },
+  "started_at": "2026-10-11T15:27:30.5952708+05:30",
+  "completed_at": "2026-10-11T15:45:11.5790896+05:30"
+}

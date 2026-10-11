@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01SdF7Sg9zD9rfeq7fgGM2Ne",
+  "agent_id": "a898be48d0f6e119d",
+  "task_description": "Receipt bill design and buttons",
+  "token_usage": {
+    "input_tokens": 216,
+    "cache_creation_tokens": 322225,
+    "cache_read_tokens": 27296127,
+    "output_tokens": 97945,
+    "api_call_count": 108
+  },
+  "started_at": "2026-10-11T15:01:15.403437+05:30",
+  "completed_at": "2026-10-11T15:21:10.7228186+05:30"
+}

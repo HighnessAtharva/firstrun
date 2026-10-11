@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01EE6RRCQ8FWGmauykW6hzQE",
+  "agent_id": "aeb8f620d5eb96f47",
+  "task_description": "Open 12 upstream docs PRs",
+  "token_usage": {
+    "input_tokens": 70,
+    "cache_creation_tokens": 142119,
+    "cache_read_tokens": 3981754,
+    "output_tokens": 19627,
+    "api_call_count": 35
+  },
+  "started_at": "2026-10-11T15:00:56.6264267+05:30",
+  "completed_at": "2026-10-11T15:05:45.511774+05:30"
+}
