@@ -328,6 +328,54 @@ def report_cmd(html) -> None:
         click.echo(f"html: {out}")
 
 
+@cli.command("receipt")
+@click.argument("run_id", required=False)
+@click.option("--tier", help="The plan tier that bills this run. It is marked on the receipt.")
+@click.option("--html", "html", is_flag=True, help="Also write receipt.html.")
+@click.option("--check", "check_path", type=click.Path(exists=True, dir_okay=False),
+              help="Verify a receipt.json and the run files beside it. Writes nothing.")
+def receipt_cmd(run_id, tier, html, check_path) -> None:
+    """Write receipt.json and receipt.md for a run: work, price, tier caps, proof and file hashes."""
+    from firstrun import econ, receipt, state as state_io
+
+    if check_path:
+        problems = receipt.check(Path(check_path))
+        for p in problems:
+            click.echo(f"FAIL: {p}")
+        if problems:
+            sys.exit(1)
+        click.echo("ok: the receipt and its evidence files are untouched")
+        return
+    if not run_id:
+        dirs = sorted(d.name for d in Path(config.RUNS_DIR).glob("*") if (d / "state.json").exists())
+        if not dirs:
+            raise click.ClickException("no runs found")
+        run_id = dirs[-1]
+    run_dir = state_io.run_dir(run_id)
+    if not (run_dir / "state.json").exists():
+        raise click.ClickException(f"unknown run id: {run_id}")
+    econ_path = econ.BUSINESS / "unit_economics.json"
+    if not econ_path.exists():
+        raise click.ClickException(f"{econ_path} not found. Run firstrun econ first.")
+    data = json.loads(econ_path.read_text(encoding="utf-8"))
+    if tier and tier.lower() not in {k.lower() for k in data["tiers"]}:
+        raise click.ClickException(f"unknown tier {tier!r}. Known: {', '.join(data['tiers'])}")
+    state = state_io.load_state(run_id)
+    try:
+        steps = sum(1 for s in state_io.load_runbook(run_id).steps if not s.skipped_out_of_scope)
+    except (OSError, ValueError):
+        steps = None
+    plan = Path("docs") / "data" / "plan.json"
+    cfo_url = ""
+    if plan.exists():
+        cfo_url = (json.loads(plan.read_text(encoding="utf-8")).get("cfo") or {}).get("model", "")
+    r = receipt.build(state, run_dir, data, bills=tier, cfo_url=cfo_url, steps_total=steps)
+    for f in receipt.write(run_dir, r, with_html=html):
+        click.echo(f"wrote {f}")
+    click.echo(f"{r['receipt_id']}: ${r['price']['model_cost_usd']:.4f} model cost, "
+               f"{'verified' if r['proof']['verified'] else 'not verified'}, hash {r['hash'][:19]}")
+
+
 @cli.command("share")
 @click.argument("run_id", required=False)
 def share_cmd(run_id) -> None:
