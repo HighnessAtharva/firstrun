@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01CJaZRJgVNma5PB6rm5c63S",
+  "agent_id": "a2d197c2a6a296955",
+  "task_description": "Restore per-tool evidence on homepage",
+  "token_usage": {
+    "input_tokens": 198,
+    "cache_creation_tokens": 287895,
+    "cache_read_tokens": 22542808,
+    "output_tokens": 75292,
+    "api_call_count": 99
+  },
+  "started_at": "2026-10-11T15:40:27.2927736+05:30",
+  "completed_at": "2026-10-11T16:08:01.5982263+05:30"
+}

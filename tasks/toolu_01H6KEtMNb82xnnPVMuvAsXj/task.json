@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01H6KEtMNb82xnnPVMuvAsXj",
+  "agent_id": "a9ab727480efb798e",
+  "task_description": "Build team map and top-10 backend",
+  "token_usage": {
+    "input_tokens": 190,
+    "cache_creation_tokens": 475246,
+    "cache_read_tokens": 26513071,
+    "output_tokens": 157022,
+    "api_call_count": 95
+  },
+  "started_at": "2026-10-11T16:04:10.0407936+05:30",
+  "completed_at": "2026-10-11T16:43:04.1053605+05:30"
+}

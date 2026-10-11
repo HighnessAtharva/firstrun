@@ -1,0 +1,357 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4NB0RM0G1HDH28V2QEGBG5Q",
+  "session_id": "8af02350-7a0b-4c1e-859f-73dd272ab4c3",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T11:19:36.7937449Z",
+  "branch": "integration/launch",
+  "checkpoints_count": 5,
+  "save_step_count": 18,
+  "files_touched": [
+    "docs/audits/audit-20261010-163257-fastapi-typer.json",
+    "docs/audits/audit-20261010-163411-altimateai-altimate-code.json",
+    "docs/audits/audit-20261010-163526-entireio-cli.json",
+    "docs/audits/audit-20261010-163620-dbt-labs-dbt-core.json",
+    "docs/audits/audit-20261011-050011-orchestratorinc-agent-orchestrator.json",
+    "docs/audits/audit-20261011-050359-neatlogs-neatlogs.json"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "33b6836393dd",
+  "checkpoint_transcript_start": 2364,
+  "transcript_lines_at_start": 2364,
+  "compact_transcript_start": 377,
+  "token_usage": {
+    "input_tokens": 106,
+    "cache_creation_tokens": 77899,
+    "cache_read_tokens": 31070238,
+    "output_tokens": 34880,
+    "api_call_count": 48,
+    "subagent_tokens": {
+      "input_tokens": 384,
+      "cache_creation_tokens": 622457,
+      "cache_read_tokens": 54159312,
+      "output_tokens": 262390,
+      "api_call_count": 192
+    }
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01SnftQfswQC7UTrm6euEtDb",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "agent-reach"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "aff5dfd949b2",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 670,
+        "end": 671,
+        "entry_ids": [
+          "4e8c93bc-7e11-449c-b7f3-abfdb5157661"
+        ],
+        "tool_use_id": "toolu_01SnftQfswQC7UTrm6euEtDb"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01SnftQfswQC7UTrm6euEtDb"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: agent-reach",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01LN7a2GXLT7S34XVvB1F66Z",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "aff5dfd949b2",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1522,
+        "end": 1523,
+        "entry_ids": [
+          "340356a5-de44-41b1-a350-c696cbbb5576"
+        ],
+        "tool_use_id": "toolu_01LN7a2GXLT7S34XVvB1F66Z"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LN7a2GXLT7S34XVvB1F66Z"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 35
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T11:19:34.2093479Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 18,
+    "human_modified": 10,
+    "human_removed": 0,
+    "total_committed": 18,
+    "total_lines_changed": 47,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 512,
+      "user_lines_removed": 11,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        ".github/ISSUE_TEMPLATE/audit-request.yml": 26,
+        ".github/workflows/audit-request.yml": 62,
+        "docs/doc-audit/index.html": 50,
+        "docs/doc-test/index.html": 43,
+        "scripts/audit_intake.py": 100,
+        "src/firstrun/cli.py": 43,
+        "src/firstrun/intake.py": 80,
+        "tests/test_intake.py": 55
+      },
+      "user_removed_per_file": {
+        "docs/doc-audit/index.html": 7,
+        "docs/doc-test/index.html": 4
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 462,
+      "agent_lines_removed": 12,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 137,
+      "user_lines_removed": 84,
+      "agent_lines_added": 108,
+      "agent_lines_removed": 72,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        "business/drivers.csv": 23,
+        "business/unit_economics.json": 61
+      },
+      "user_removed_per_file": {
+        "business/drivers.csv": 23,
+        "business/unit_economics.json": 61
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 221,
+      "user_lines_removed": 0,
+      "agent_lines_added": 85,
+      "agent_lines_removed": 85,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        "docs/data/plan.json": 97,
+        "scripts/plan_snapshot.py": 71
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 82,
+      "agent_lines_removed": 8,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 7,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "push-j.log": 7
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 85,
+      "agent_lines_removed": 11,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 85,
+      "agent_lines_removed": 11,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 85,
+      "agent_lines_removed": 11,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 56,
+      "user_lines_removed": 3,
+      "agent_lines_added": 85,
+      "agent_lines_removed": 11,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        "docs/audits/audit-20261010-163620-dbt-labs-dbt-core.json": 1,
+        "docs/audits/audit-20261011-050011-orchestratorinc-agent-orchestrator.json": 1,
+        "docs/audits/audit-20261011-050359-neatlogs-neatlogs.json": 1
+      },
+      "user_removed_per_file": {
+        "docs/audits/audit-20261010-163620-dbt-labs-dbt-core.json": 1,
+        "docs/audits/audit-20261011-050011-orchestratorinc-agent-orchestrator.json": 1,
+        "docs/audits/audit-20261011-050359-neatlogs-neatlogs.json": 1
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 88,
+      "agent_lines_removed": 14,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 88,
+      "agent_lines_removed": 14,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 99,
+      "user_lines_removed": 10,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53,
+        "README.md": 35,
+        "docs/audits/audit-20261010-163257-fastapi-typer.json": 1,
+        "docs/audits/audit-20261010-163411-altimateai-altimate-code.json": 1,
+        "docs/audits/audit-20261010-163526-entireio-cli.json": 1,
+        "docs/audits/audit-20261010-163620-dbt-labs-dbt-core.json": 1,
+        "docs/audits/audit-20261011-050011-orchestratorinc-agent-orchestrator.json": 1,
+        "docs/audits/audit-20261011-050359-neatlogs-neatlogs.json": 1,
+        "docs/audits/audit-20261011-054325-accuknox-help.json": 1,
+        "evidence/README.md": 4
+      },
+      "user_removed_per_file": {
+        "README.md": 3,
+        "docs/audits/audit-20261010-163257-fastapi-typer.json": 1,
+        "docs/audits/audit-20261010-163411-altimateai-altimate-code.json": 1,
+        "docs/audits/audit-20261010-163526-entireio-cli.json": 1,
+        "docs/audits/audit-20261010-163620-dbt-labs-dbt-core.json": 1,
+        "docs/audits/audit-20261011-050011-orchestratorinc-agent-orchestrator.json": 1,
+        "docs/audits/audit-20261011-050359-neatlogs-neatlogs.json": 1,
+        "docs/audits/audit-20261011-054325-accuknox-help.json": 1
+      }
+    }
+  ]
+}

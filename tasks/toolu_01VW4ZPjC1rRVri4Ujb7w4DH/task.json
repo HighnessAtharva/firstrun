@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01VW4ZPjC1rRVri4Ujb7w4DH",
+  "agent_id": "a505b078138f8d270",
+  "task_description": "Build team map and top-10 frontend",
+  "token_usage": {
+    "input_tokens": 180,
+    "cache_creation_tokens": 298017,
+    "cache_read_tokens": 22265165,
+    "output_tokens": 114243,
+    "api_call_count": 90
+  },
+  "started_at": "2026-10-11T16:04:28.3497984+05:30",
+  "completed_at": "2026-10-11T16:26:58.1767441+05:30"
+}
