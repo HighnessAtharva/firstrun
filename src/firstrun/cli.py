@@ -456,11 +456,12 @@ def report_cmd(html) -> None:
               help="Verify a receipt.json and the run files beside it. Writes nothing.")
 @click.option("--all-published", "all_published", is_flag=True,
               help="Write a receipt into docs/receipts for every run and audit the site lists.")
+@click.option("--hash-only", is_flag=True, help="With --check: check the receipt hash only, for a receipt fetched from the site.")
 @click.option("--json", "as_json", is_flag=True, help="Print one JSON object on stdout. Logs go to stderr.")
-def receipt_cmd(run_id, tier, html, check_path, all_published, as_json) -> None:
+def receipt_cmd(run_id, tier, html, check_path, all_published, hash_only, as_json) -> None:
     """Write receipt.json and receipt.md for a run or a doc audit: work, price, caps or limits, proof and file hashes."""
     with _json_out("receipt", as_json) as out:
-        _receipt_cmd(run_id, tier, html, check_path, all_published, out)
+        _receipt_cmd(run_id, tier, html, check_path, all_published, out, hash_only)
 
 
 def _receipt_fields(r: dict, files: list) -> dict:
@@ -475,7 +476,7 @@ def _receipt_fields(r: dict, files: list) -> dict:
             "files": [str(Path(f).resolve()) for f in files]}
 
 
-def _receipt_cmd(run_id, tier, html, check_path, all_published, out: dict) -> None:
+def _receipt_cmd(run_id, tier, html, check_path, all_published, out: dict, hash_only: bool = False) -> None:
     from firstrun import econ, receipt, state as state_io
 
     if all_published:
@@ -493,16 +494,19 @@ def _receipt_cmd(run_id, tier, html, check_path, all_published, out: dict) -> No
         return
     if check_path:
         problems = receipt.check(Path(check_path))
+        if hash_only:  # a receipt fetched from the site has no run files beside it
+            problems = [p for p in problems if "hash does not match" in p]
         for p in problems:
             click.echo(f"FAIL: {p}")
         hash_ok = not any("hash does not match" in p for p in problems)
-        out.update(mode="check", path=str(check_path), valid=not problems, hash_ok=hash_ok, problems=problems)
+        out.update(mode="check", path=str(check_path), valid=not problems, hash_ok=hash_ok, hash_only=hash_only,
+                   problems=problems)
         if problems:
             _json_error("receipt_invalid", "; ".join(problems), "" if not hash_ok else
-                        "The receipt itself is unchanged. Its run files are not next to it: "
-                        "check it inside the run folder, or set FIRSTRUN_RUNS_DIR to the folder that holds the run.")
+                        "The receipt itself is unchanged, but its run files are missing or differ. For a receipt from "
+                        "the site, add --hash-only. Otherwise check it inside the run folder.")
             sys.exit(1)
-        click.echo("ok: the receipt and its evidence files are untouched")
+        click.echo("ok: the receipt hash matches" if hash_only else "ok: the receipt and its evidence files are untouched")
         return
     if not run_id:
         dirs = sorted(d.name for d in Path(config.RUNS_DIR).glob("*") if (d / "state.json").exists())

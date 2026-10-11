@@ -184,6 +184,23 @@ def test_receipt_check_json_edited(tmp_runs_dir):
     assert out["valid"] is False and out["hash_ok"] is False and out["error"]["code"] == "receipt_invalid"
 
 
+def test_receipt_check_hash_only_for_a_site_receipt(tmp_runs_dir):
+    from firstrun import receipt
+
+    r = {"receipt_id": "FR-x", "price": {"model_cost_usd": 0.01}, "proof": {"verified": True},
+         "audit": {"run_id": "gone", "evidence_sha256": {"state.json": "sha256:00"}}}
+    r["hash"] = receipt.body_hash(r)
+    p = tmp_runs_dir / "site" / "FR-x.json"
+    p.parent.mkdir()
+    p.write_text(json.dumps(r), encoding="utf-8")
+    full = CliRunner().invoke(cli, ["receipt", "--check", str(p), "--json"])
+    assert full.exit_code == 1 and _one_json(full)["hash_ok"] is True
+    res = CliRunner().invoke(cli, ["receipt", "--check", str(p), "--hash-only", "--json"])
+    assert res.exit_code == 0, res.output
+    out = _one_json(res)
+    assert out["valid"] is True and out["hash_only"] is True and out["problems"] == []
+
+
 def test_receipt_unknown_run_json(tmp_runs_dir):
     res = CliRunner().invoke(cli, ["receipt", "nope", "--json"])
     assert res.exit_code == 1

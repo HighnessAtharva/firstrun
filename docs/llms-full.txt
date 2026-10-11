@@ -24,7 +24,7 @@ FirstRun checks documentation by running it. Doc-test runs a docs quickstart in 
 
 ## 2. Run the Preflight Before You Install
 
-Run these 3 checks. Each one prints a version or fails.
+Run these 3 checks. Each one prints a version. A missing tool prints "not found" or "not recognized".
 
 ```bash
 python3 --version
@@ -43,7 +43,7 @@ wsl -d Ubuntu-22.04 docker info --format '{{.ServerVersion}}'
 - Python must be 3.11 or newer. If it is missing, ask the human to install Python 3.11.
 - git must be on PATH. The install and `firstrun audit` both need it. If it is missing, ask the human to install git.
 - Docker is needed for Doc-test only. If Docker fails, ask the human to start it, for example with `wsl -d Ubuntu-22.04 sudo service docker start`. Doc-audit works without Docker.
-FirstRun reads keys from `.env` in the folder you run it from. Set `FIRSTRUN_ENV_FILE` to use another file. A key that is already in the environment wins over `.env`. `firstrun doctor` names the file it read in `env_file.path`.
+FirstRun reads keys from `.env` in the folder you run it from. Set `FIRSTRUN_ENV_FILE` to use another file. A key that is already in the environment wins over `.env`. `firstrun doctor` names the file it read in `env_file.path`. For a run with no keys at all, point `FIRSTRUN_ENV_FILE` at an empty file.
 
 | Variable | Needed for | Required | Without it |
 |---|---|---|---|
@@ -100,11 +100,11 @@ A URL tested in the last 24 hours returns the saved result with `"cached": true`
 **B. Audit a repo.** `--no-publish` keeps the audit on your disk. The fastapi/typer audit took 97 seconds on 2026-10-11. Give the tool call a timeout of 20 minutes for a large repo.
 
 ```bash
-firstrun audit fastapi/typer --no-publish --json > audit.json
+firstrun audit fastapi/typer --no-publish --json > audit-result.json
 ```
 
 ```bash
-firstrun audit dbt-labs/dbt-core --docs-repo dbt-labs/docs.getdbt.com --no-publish --json > audit.json
+firstrun audit dbt-labs/dbt-core --docs-repo dbt-labs/docs.getdbt.com --no-publish --json > audit-result.json
 ```
 
 - `--docs-repo` reads the docs from a second repo.
@@ -112,7 +112,7 @@ firstrun audit dbt-labs/dbt-core --docs-repo dbt-labs/docs.getdbt.com --no-publi
 - With Jev, a candidate page that Jev did not read shows as `unchecked`.
 - `--no-team` leaves out people.
 
-Read `top_tasks` for the ranked work list. It holds up to 10 tasks and can hold fewer, so report the real count when the human asks for more. Each task has `rank`, `title`, `score` from 0 to 100, `effort` of S, M or L, `action` and `owner`. `owner` is null when no person stands out. Present an owner to the human as a suggestion, because anyone can take any task.
+Read `top_tasks` for the ranked work list. It holds up to 10 tasks and can hold fewer. When the human asks for more tasks than exist, report the real count and say that the audit ranked no more. Each task has `rank`, `title`, `score` from 0 to 100, `effort` of S, M or L, `action` and `owner`. `owner` is null when no person stands out. Present an owner to the human as a suggestion, because anyone can take any task.
 
 To draft a GitHub issue for the docs team, run `firstrun audit-issue <audit_id> --json`. It writes `issue.md` to `body_file` and returns the `gh` command in `commands`. It opens nothing. The command targets the audited repo, so section 8 applies.
 
@@ -132,11 +132,11 @@ A GitHub Action audits the repo in about 2 minutes and comments the board link o
 |---|---|
 | `audits/index.json` | `audits[]`: one row per audit with `id`, `repo`, `ts`, `pages`, `stale`, `quiet`, `uncovered`, `cards`, `receipt`, `receipt_usd` |
 | `audits/<audit_id>.json` | One full board: `summary`, `pages[]`, `cards[]`, `next.items[]` (the ranked tasks), `team.people[]`, `drafts`, `cost` |
-| `runs/index.json` | `runs[]`: one row per Doc-test run with `id`, `url`, `status`, `passed`, `total`, `fixes`, `seconds`, `cost`, `receipt` |
+| `runs/index.json` | `runs[]`: one row per Doc-test run with `id`, `url`, `status`, `passed`, `total`, `fixes`, `seconds`, `cost`, `fixture`, `receipt`. A `fixture: true` row tests a known-broken sample page, not a real product, so leave it out of counts about real docs. |
 | `runs/<run_id>.txt` | The run as a share code: base64url of gzip of JSON, fields in `share-format.md` |
 | `receipts/<receipt_id>.json` | `work`, `price`, `caps` (runs) or `limits` (audits), `proof`, `hash` |
 
-In `next.items[]`, `owner.p` is the `id` of a person in `team.people[]`. Decode a run share code with this command:
+Rows can carry more keys than the table lists. In `next.items[]`, `owner.p` is the `id` of a person in `team.people[]`. Decode a run share code with this command:
 
 ```bash
 curl -s https://firstrun.atharvashah.com/runs/20261010-174858-docs-litestar-dev.txt | python3 -c "import sys,gzip,base64,json;c=sys.stdin.read().strip();print(json.dumps(json.loads(gzip.decompress(base64.urlsafe_b64decode(c+'='*(-len(c)%4)))),indent=1))"
@@ -150,7 +150,12 @@ firstrun receipt <run_id or audit_id> --json
 firstrun receipt --check runs/<id>/receipt.json --json
 ```
 
-`--check` exits 0 when the receipt hash and every evidence file match. A run receipt from `receipts/` on the site carries no run files, so its check reports them missing. `"hash_ok": true` still proves the receipt itself is unchanged.
+`--check` exits 0 when the receipt hash and every evidence file match. A receipt from `receipts/` on the site has no run or audit files beside it. Save it in an empty folder and add `--hash-only`, which checks the receipt hash alone:
+
+```bash
+mkdir -p site-receipt && curl -sSfo site-receipt/receipt.json https://firstrun.atharvashah.com/receipts/FR-audit-20261010-163257-fastapi-typer.json
+firstrun receipt --check site-receipt/receipt.json --hash-only --json
+```
 
 ## 5. Read the Result From the Status and the Files
 
@@ -160,6 +165,7 @@ firstrun receipt --check runs/<id>/receipt.json --json
 | `verified` | A step broke, FirstRun patched it, and a second clean container passed every step with no model calls. |
 | `unverified` | FirstRun patched a step, but the second clean container did not pass. Treat the patch as unproven. |
 | `failed` | A step gave up, a budget ran out, or the run stopped before step 1. Read `error.code`. |
+| `running` or `verifying` | The run has not finished, or it stopped without a final write. Resume it or ignore it. |
 
 | File in the run folder | Holds |
 |---|---|
@@ -176,7 +182,7 @@ Every `--json` object has `ok`, `command`, `exit_code` and `error`. `error` is n
 
 - **`run`** adds `runs[]`. Each run has `run_id`, `source_url`, `target`, `status`, `stop_reason`, `cached`, `steps_total`, `steps_passed`, `first_failed_step`, `reported_failed_step`, `patches`, `verified`, `time_to_first_success_s`, `elapsed_s`, `cost_usd`, `run_dir`, `share_url`, `error` and `files`. `files` maps `state.json`, `runbook.json`, `report.md`, `patch.diff`, `pr_body.md` and `receipt.json` to a path or null.
 - **`audit`** adds `audit_id`, `repo`, `url`, `docs_repo`, `mode`, `summary`, `jev`, `cost`, `team`, `top_tasks[]`, `run_dir`, `files` and `published`. `summary` counts `pages`, `fresh`, `aging`, `stale`, `quiet` and `unchecked`, plus `ancient` (pages 730 days old or older, also counted under their status), `median_age_days`, `oldest_days`, `features`, `uncovered` and `cards`. A task has `rank`, `kind`, `title`, `path`, `score`, `effort`, `action`, `rationale` and `owner` (`{"name", "login", "why"}` or null).
-- **`receipt`** adds `mode`. With `"mode": "write"` it adds `receipt_id`, `kind`, `hash`, `price_usd`, `price_basis`, `verified`, `cards`, `cards_citing_evidence` and `files`. With `"mode": "check"` it adds `path`, `valid`, `hash_ok` and `problems[]`.
+- **`receipt`** adds `mode`. With `"mode": "write"` it adds `receipt_id`, `kind`, `hash`, `price_usd`, `price_basis`, `verified`, `cards`, `cards_citing_evidence` and `files`. With `"mode": "check"` it adds `path`, `valid`, `hash_ok`, `hash_only` and `problems[]`.
 - **`prereqs`** adds `run_id`, `prereqs`, `proof` and `files`.
 - **`doctor`** adds `env_file`, `docker_cmd`, `can_run` and `checks[]`. A check has `name`, `status` (`pass`, `warn` or `fail`), `required_for`, `detail` and `fix`.
 
@@ -205,7 +211,7 @@ Every `--json` object has `ok`, `command`, `exit_code` and `error`. `error` is n
 | `failed`, `setup_failed`, `error` | No more specific code matched. | Read `error.message` and `report.md`. |
 | `clone_failed` | The repo is private or the name is wrong. | Check `owner/repo`. For a private repo, the human runs the audit with a git login that can read it. |
 | `unknown_run_id`, `not_found` | No run or audit folder with that id in `FIRSTRUN_RUNS_DIR`. | Run from the folder that holds `runs/`, or pass the right id. |
-| `receipt_invalid` | The receipt was edited, or an evidence file changed or is missing. | `hash_ok` false means the receipt changed. Report it. |
+| `receipt_invalid` | The receipt was edited, or an evidence file changed or is missing. | `hash_ok` false means the receipt changed, so report it. `hash_ok` true means only the files beside it differ. Check a site receipt with `--hash-only`. |
 | `not_ready` | `firstrun doctor` found a failed required check. | Apply each `fix`, then run `firstrun doctor --json` again. |
 | `internal` | An unexpected exception. | Run again with `FIRSTRUN_DEBUG=1` and report stderr to the human. |
 
