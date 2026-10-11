@@ -64,6 +64,38 @@ The Public API cannot assign an AI evaluator to a form question, so each form an
 
 Screenshots: [run judge](nl-eval-run-result.png) and [audit judge](nl-eval-audit-result.png).
 
+## Two Launched Evals Scored 67 Traces and Found Where the Agent Overclaims
+
+Atharva launched both evals from the dashboard on 2026-10-11, with the AI judge as the only reviewer. Both finished at 100%. The scores come from `neatlogs evals responses`.
+
+**FirstRun run review** (`15b7ef6b`) judged 52 real runs, tagged `radar`, `real`, `real2`, `v1` and `v2`.
+
+| Question | Result |
+|---|---|
+| Reported first failed step is the real one | 46 of 52 |
+| Run's failure class matches the container output | 38 of 52 |
+| Every patch backed by a passing verify rerun | 34 of 52 |
+| Overall score, 1 to 5 | mean 3.69. 23 runs scored 5, 17 scored 1 or 2 |
+
+The judge's own failure classes were environment 28, none 12, docs bug 9 and needs secret 3.
+
+The 17 low scores show 3 patterns:
+
+1. Runs that stopped before a clean rerun get no proof. Five Dagster runs stopped after `create-dagster: command not found` and `no such option: --group`. Flask and Litestar server steps timed out with exit 124, before the server-step fix landed.
+2. A missing API key counted as a docs bug. Two runs that failed with `No API key provided` reported `docs_bug`, and the judge said `needs_secret`.
+3. One run stopped at `read_docs` with `Insufficient credits`, so it had no steps to judge.
+
+**FirstRun audit review** (`14dfda88`) judged the 15 newest audits.
+
+| Question | Result |
+|---|---|
+| Root summary matches the page and feature outputs | 14 of 15 |
+| Every evidence card cites a commit or PR | 15 of 15 |
+| Stale pages whose commits do not fit the topic | 0 in all 15 |
+| Overall score, 1 to 5 | mean 4.87. 14 audits scored 5 |
+
+**The detection behind the runs.** "docs step broke" flagged 78 tool spans, all on Oct 10 and 11, from a baseline of 0. [Screenshot](nl-detection-docs-step-broke.png).
+
 **A radar batch for the evaluations to judge.** `scripts/radar.py` ranked 70 Exa results with Jev, and FirstRun ran the top 18 official quickstarts in 3 parallel lanes, tagged `radar`, under the Team cost cap. Two runs exposed a FirstRun bug: a dev server step (`flask --app hello run`, `litestar run`) never exits, so it timed out. The fix passes a server step once its output says it listens. The `radar-v2` rerun took Flask from 0 of 4 steps to verified 4 of 4.
 
 ## The Integration Check Passed the Organizer's Gates
