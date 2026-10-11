@@ -51,24 +51,32 @@ function layout(){
   var hm=Math.min(H*.66,W*.52);G.h=hm;G.w=hm*1.1547;G.cx=W*.46;G.ay=(H-hm)*.5;
   G.fx=W-2;G.top=12;G.bot=H-12;G.ly=[];for(var m=0;m<6;m++)G.ly.push(lerp(H*.2,H*.86,m/5));
   G.y0=null;lanes=[];
-  chips.concat(labs).forEach(function(li){["transform","opacity","left","top"].forEach(function(p){li.style.removeProperty(p)})});
+  chips.concat(labs).forEach(function(li){li.classList.remove("off");["transform","opacity","left","top"].forEach(function(p){li.style.removeProperty(p)})});
  }else{
-  var S=st.getBoundingClientRect(),h1=rel(st.querySelector("h1").getBoundingClientRect(),S),fm=rel(document.getElementById("f").getBoundingClientRect(),S),hn=rel(document.getElementById("hint").getBoundingClientRect(),S);
-  var top=hn.b+22,bot=H-96,sh=Math.max(160,bot-top);
-  var h=cl(sh*.9,150,Math.min(400,W*.3));G.h=h;G.w=h*1.1547;G.cx=W/2;G.ay=top+(sh-h)*.42;G.top=top;G.bot=bot;
-  var lw=0;labs.forEach(function(li){lw=Math.max(lw,li.offsetWidth)});
+  var S=st.getBoundingClientRect(),h1=rel(st.querySelector("h1").getBoundingClientRect(),S),fm=rel(document.getElementById("f").getBoundingClientRect(),S),hn=rel(document.getElementById("hint").getBoundingClientRect(),S),ch=rel(document.getElementById("chips").getBoundingClientRect(),S);
+  /* vertical rhythm: a clear gap under the helper text, then the prism, then a margin above
+     the horizon curve. A short stage shrinks the prism instead of letting it climb. */
+  var hz=document.querySelector(".hz"),hzT=hz?rel(hz.getBoundingClientRect(),S).t:H-62;
+  var gap=cl(H*.075,56,80),top=hn.b+gap,bot=hzT-cl(H*.05,36,56),sh=Math.max(120,bot-top);
+  var h=cl(sh,120,Math.min(360,W*.26));G.h=h;G.w=h*1.1547;G.cx=W/2;G.ay=top+(sh-h)*.45;G.top=top;G.bot=bot;
+  var lw=0,lh=0;labs.forEach(function(li){lw=Math.max(lw,li.offsetWidth);lh=Math.max(lh,li.offsetHeight)});
   G.fx=Math.min(Math.max(G.cx+G.w*.5+70,W*.75),W-lw-34);
-  /* labels: a column on the right. Start beside the input when that column is clear of it */
-  var lx=G.fx+12,clear=lx>fm.r+24;
-  var y0=clear?fm.b+30:top+8,y1=bot-10,tight=(y1-y0)/5<46;
+  /* labels: a column on the right. Start beside the input when that column is clear of it,
+     else below the input when it clears the example chips and the hint, else under the hint */
+  var lx=G.fx+12,y0=lx>fm.r+24||lx>Math.max(ch.r,hn.r)+24?fm.b+30:hn.b+30;
+  var y1=bot-lh/2,tight=(y1-y0)/5<46;
   outL.classList.toggle("tight",tight);
-  var sp=cl((y1-y0)/5,tight?30:46,92),mid=(y0+y1)/2;
-  if(!clear)mid=Math.max(mid,top+8+sp*2.5);
+  if(tight){lh=0;labs.forEach(function(li){lh=Math.max(lh,li.offsetHeight)});y1=bot-lh/2}
+  var sp=cl((y1-y0)/5,tight?26:46,92),mid=Math.min((y0+y1)/2,y1-sp*2.5);
   G.ly=[];for(var i=0;i<6;i++)G.ly.push(mid+(i-2.5)*sp);G.sp=sp;
   labs.forEach(function(li,k){li.style.left=lx+"px";li.style.top=(G.ly[k]-li.offsetHeight/2)+"px"});
   G.cl=Math.min(h1.l,fm.l);G.ct=h1.t;G.cb=hn.b;
  }
  geo(0,0);
+ /* anchor the backdrop light to the scene: the halo on the prism, the bleed where the rays land */
+ if(sky){var so=rel(cv.getBoundingClientRect(),st.getBoundingClientRect());
+  [["--pcx",so.l+G.cx],["--pcy",so.t+G.ay+G.h*.62],["--pby",so.t+G.ay+G.h],["--pfx",so.l+(mob?W*.86:G.fx)]].forEach(function(v){sky.style.setProperty(v[0],Math.round(v[1])+"px")})}
+ cone();
  /* chip lanes: start in the left column, curve down into the beam */
  lanes=[];
  if(!mob){
@@ -76,7 +84,12 @@ function layout(){
      gutter between the chips and the text, then merge into the beam farther along. */
   /* the calmer composition won: chips live in the band below the text, beside the beam.
      Set wideL to true to let them climb beside the headline on very wide screens. */
-  var n=chips.length,wideL=false,yA=wideL?Math.max(G.ct+26,120):G.top+6,yB=G.bot-14,xs=[0,38,12,52,22],wi=0;
+  /* lane centers stay one chip height plus a margin apart. A short band shows fewer chips. */
+  var chH=chips[0].offsetHeight||31,minSp=chH+12;
+  var wideL=false,yA=wideL?Math.max(G.ct+26,120):G.cb+cl((G.top-G.cb)*.7,36,52)+chH/2,yB=G.bot-chH/2,xs=[0,38,12,52,22],wi=0;
+  var bc0=beamY(Math.max(16,W*.034)+150),gp0=bc0-28>yA&&bc0+28<yB?56:0;
+  var n=Math.max(1,Math.min(chips.length,Math.floor((yB-yA-gp0)/minSp)+1));
+  chips.forEach(function(li,j){li.classList.toggle("off",j>=n)});
   G.gut=wideL?G.cl-82:1e4;
   for(var j=0;j<n;j++){
    /* spread the lanes evenly, skipping a band around the beam so no chip sits on it */
@@ -91,6 +104,22 @@ function layout(){
  if(still||paused||!raf)frame(now||performance.now());
 }
 function beamY(x){return lerp(G.y0,G.Pin.y,x/G.Pin.x)}
+/* the haze the beam lights on its way in: drawn once per layout at 1/12 scale, so the upscale
+   blurs it for free. Each frame only blits the band around the beam. */
+var vc=document.createElement("canvas"),v=vc.getContext("2d"),VB=null;
+function cone(){
+ var s=1/12,P=G.Pin,y0=G.y0,a=G.h*.3,b=G.h*.2,x1=P.x+G.w*.05;
+ vc.width=Math.max(2,Math.ceil(W*s));vc.height=Math.max(2,Math.ceil(H*s));
+ v.setTransform(s,0,0,s,0,0);
+ var g=v.createLinearGradient(0,0,x1,0);g.addColorStop(0,"rgba(214,222,255,0)");g.addColorStop(.5,"rgba(214,222,255,.28)");g.addColorStop(.92,"rgba(236,240,255,.75)");g.addColorStop(1,"rgba(236,240,255,0)");
+ v.fillStyle=g;v.beginPath();v.moveTo(0,y0-a);v.lineTo(P.x,P.y-b);v.lineTo(x1,P.y);v.lineTo(P.x,P.y+b);v.lineTo(0,y0+a);v.closePath();v.fill();
+ var t=Math.max(0,Math.min(y0,P.y)-a-24),bt=Math.min(H,Math.max(y0,P.y)+a+24);VB={x:0,y:t,w:Math.min(W,x1+24),h:bt-t,s:s};
+}
+function drawCone(k,fl){
+ if(!VB||k<=0)return;var B=VB;
+ c.save();c.globalCompositeOperation="lighter";c.globalAlpha=.16*k*fl;
+ c.drawImage(vc,B.x*B.s,B.y*B.s,B.w*B.s,B.h*B.s,B.x,B.y,B.w,B.h);c.restore();
+}
 /* prism geometry under the current tilt */
 function geo(th,dy){
  var h=G.h,w=G.w,cx=G.cx,ay=G.ay+dy,gy=ay+h*2/3,cs=Math.cos(th),sn=Math.sin(th);
@@ -302,13 +331,14 @@ function frame(t){
  chipsFrame(t);
  drawFunnels();
  if(fanK>0)drawFan(t,fanK,shift);
+ drawCone(beamK,still?1:.9+.1*Math.sin(t/1700));
  drawBeam(t,beamK);
  drawPrism(t,prismK);
  drawBlooms(t,beamK,fanK);
  if(!still&&fanK>=1)spawn(t);
  drawParts(still?0:dt,shift);
  /* labels arrive as their ray reaches them */
- if(!mob){var lk=still?1:fanK;labs.forEach(function(li,i){var a=cl((lk-.55-i*.06)/.25,0,1);li.style.opacity=a.toFixed(3);li.style.transform="translate3d("+(ptr.x*-3).toFixed(1)+"px,"+shift.toFixed(1)+"px,0)"})}
+ if(!mob){var lk=still?1:fanK;labs.forEach(function(li,i){var a=cl((lk-.4-i*.07)/.25,0,1);li.style.opacity=a.toFixed(3);li.style.transform="translate3d("+(ptr.x*-3).toFixed(1)+"px,"+shift.toFixed(1)+"px,0)"})}
  if(sky&&!still)sky.style.transform="translate3d("+(ptr.x*-8).toFixed(1)+"px,"+(ptr.y*-6).toFixed(1)+"px,0)";
 }
 function loop(t){
@@ -324,7 +354,7 @@ st.addEventListener("pointermove",onPtr,{passive:true});
 st.addEventListener("pointerleave",function(){ptr.tx=0;ptr.ty=0});
 var lay=0;function relayout(){if(lay)return;lay=requestAnimationFrame(function(){lay=0;layout()})}
 if("ResizeObserver" in window)new ResizeObserver(relayout).observe(st);else addEventListener("resize",relayout);
-if("IntersectionObserver" in window)new IntersectionObserver(function(en){vis=en[0].isIntersecting;if(vis)start();else stop()},{threshold:0}).observe(st);
+if("IntersectionObserver" in window)new IntersectionObserver(function(en){vis=en[0].isIntersecting;st.classList.toggle("idle",!vis);if(vis)start();else stop()},{threshold:0}).observe(st);
 document.addEventListener("visibilitychange",function(){if(document.hidden)stop();else start()});
 function setStill(v){still=v;st.classList.toggle("still",v);if(pz)pz.hidden=v;if(v){stop();parts=[];pulses=[];frame(performance.now())}else{t0=performance.now()-4000;start()}}
 if(RMQ.addEventListener)RMQ.addEventListener("change",function(e){setStill(e.matches)});
