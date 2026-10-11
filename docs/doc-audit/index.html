@@ -296,7 +296,7 @@ var COLS=[
 var KL={document:"Document this",refresh:"Refresh this page",feature:"Feature this",content:"Create content",automate:"Ready for you",quickstart:"Prove it runs",highlights:"Ready for you"};
 
 /* start view */
-function repoOf(v){v=String(v||"").trim().replace(/^https?:\/\/github\.com\//i,"").replace(/\.git$/,"").replace(/\/+$/,"");var m=/^([\w.-]+)\/([\w.-]+)/.exec(v);return m?m[1]+"/"+m[2]:""}
+function repoOf(v){v=String(v||"").trim().replace(/^(?:https?:\/\/)?(?:www\.)?github\.com\//i,"");var m=/^([\w.-]+)\/([\w.-]+)/.exec(v);return m?m[1]+"/"+m[2].replace(/\.git$/i,""):""}
 var MODE="pub",AUD=[],LOG="https://github.com/HighnessAtharva/firstrun/issues/new";
 var HINT={pub:"Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.",
   priv:"Private repos are audited on your machine with your own git login. Nothing leaves it unless you choose to submit."};
