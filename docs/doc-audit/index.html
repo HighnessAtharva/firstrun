@@ -336,7 +336,7 @@ $("f").addEventListener("submit",function(e){e.preventDefault();var r=repoOf($("
   }
 });
 function listAudits(){
-  fetch("../audits/index.json").then(function(r){return r.json()}).then(function(j){
+  return fetch("../audits/index.json").then(function(r){return r.json()}).then(function(j){
     AUD=j.audits||[];var ol=$("audits");(j.audits||[]).forEach(function(a){
       var li=el("li"),x=el("a");x.href="./?id="+encodeURIComponent(a.id);
       var img=el("img","av");img.alt="";img.width=40;img.height=40;avatar(img,a.repo);x.appendChild(img);
@@ -517,9 +517,14 @@ function render(a){
   var m=/#c=(\d+)/.exec(location.hash);if(m&&ITEMS[+m[1]])openItem(+m[1]);
 }
 $("r-more").addEventListener("click",function(){allPages=true;paintPages()});
-var id=new URLSearchParams(location.search).get("id");
+var QS=new URLSearchParams(location.search),id=QS.get("id");
 if(id&&/^[a-z0-9-]+$/i.test(id)){fetch("../audits/"+id+".json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(render).catch(function(){listAudits()})}
-else listAudits();
+else{
+  /* ?repo=owner/repo, from the home page. repoOf keeps only owner/repo characters, and it lands in .value, never in HTML */
+  var pre=repoOf(QS.get("repo"));
+  var ready=listAudits();
+  if(pre){$("repo").value=pre;Promise.resolve(ready).then(function(){$("f").dispatchEvent(new Event("submit",{cancelable:true}))})}
+}
 })();
 </script>
 </body>

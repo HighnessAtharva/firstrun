@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="assets/site-nav.css">
 <meta name="description" content="Docs break quietly, and a new user finds out first. Doc-test runs your quickstart in a clean container and proves the fix. Doc-audit finds the pages your code left behind.">
 <meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0c0d17">
 <script>document.documentElement.className="js"</script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="FirstRun: Docs that work (literally).">
@@ -58,24 +59,127 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .btn.au{background:var(--audit);border-color:var(--audit)}.btn.au:hover{background:var(--audit-d)}
 .cta{text-align:center;margin-top:40px}
 
-/* hero */
-#hero{text-align:center;padding-top:clamp(28px,5vw,64px);position:relative;isolation:isolate}
-#hero:before{content:"";position:absolute;z-index:-1;left:50%;top:-140px;width:min(1400px,140vw);height:760px;transform:translateX(-50%);pointer-events:none;background:radial-gradient(34% 42% at 28% 34%,oklch(84% .09 256/.42),transparent 72%),radial-gradient(30% 38% at 74% 28%,oklch(84% .1 295/.34),transparent 72%),radial-gradient(28% 34% at 52% 78%,oklch(90% .08 85/.32),transparent 72%)}
-#hero .wrap>*{animation:rise 1s var(--ease) both}#hero .wrap>:nth-child(2){animation-delay:.06s}#hero .wrap>:nth-child(3){animation-delay:.12s}#hero .wrap>:nth-child(4){animation-delay:.18s}#hero .wrap>:nth-child(n+5){animation-delay:.24s}
-@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-#hero h1{max-width:13em;margin:0 auto;text-wrap:balance}
-.lede{margin:18px auto 0;font-size:clamp(18px,2vw,21px);line-height:1.45;max-width:36em;color:var(--ink);text-wrap:balance}
-.what{margin:8px auto 0;font-size:clamp(16px,1.7vw,18px);color:var(--mut);max-width:32em;text-wrap:balance}
-.box{display:flex;gap:8px;align-items:center;margin:32px auto 0;max-width:640px;border-radius:16px;padding:7px 7px 7px 20px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--lift)}
-.box:focus-within{border-color:var(--test);box-shadow:0 0 0 3px var(--test-bg),var(--lift)}
-.box input{flex:1;min-width:0;font:inherit;font-size:17px;border:0;background:none;color:var(--ink);padding:10px 0;outline:0}
-.box input::placeholder{color:oklch(58% .01 255)}
-.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:12px}
-.chips .lbl{color:var(--mut);font-size:14px;align-self:center;margin-right:2px}
-.chips button{background:var(--panel);color:var(--ink);border:1px solid var(--line);font-weight:500;font-size:14px;min-height:34px;padding:0 13px;border-radius:99px}
-.chips button:hover{background:var(--hover);color:var(--test-d)}
-.hint{color:var(--mut);font-size:13.5px;margin-top:8px;min-height:1.45em}
-.hint.cached{color:var(--ok-d);font-weight:500}
+/* hero: one dark stage. Broken steps drift in on the left, a white beam strikes a glass prism,
+   and the spectrum fans out to the proof on the right. assets/prism.js paints the scene. */
+#sitenav{height:0}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.stage{--s0:oklch(10.5% .02 278);--s1:oklch(14.5% .03 278);--s2:oklch(22% .05 282);--s-ink:oklch(97.5% .006 275);--s-mut:oklch(83% .018 275);--s-dim:oklch(72% .02 275);
+ position:relative;isolation:isolate;overflow:hidden;padding:0;display:flex;flex-direction:column;min-height:min(100svh,980px);text-align:center;color:var(--s-ink);
+ background:radial-gradient(70% 52% at 50% -4%,var(--s2),transparent 72%),radial-gradient(55% 45% at 50% 74%,oklch(16.5% .04 272),transparent 74%),linear-gradient(180deg,var(--s1),var(--s0) 72%)}
+.stage :focus-visible{outline-color:oklch(80% .12 256)}
+.st-c{position:relative;z-index:3;width:100%;max-width:1080px;margin:0 auto;padding:clamp(104px,14.5vh,150px) 24px 0}
+.st-c h1{color:var(--s-ink);max-width:13em;margin:0 auto;font-size:clamp(38px,5.3vw,68px);text-wrap:balance}
+.sub{margin:18px auto 0;font-size:clamp(17px,1.75vw,20px);line-height:1.5;max-width:31em;color:var(--s-mut);text-wrap:balance}
+.st-room{flex:1 0 clamp(300px,40vh,440px)}
+/* the input with its two routes */
+.cap{display:flex;align-items:center;gap:6px;margin:30px auto 0;max-width:700px;padding:6px 6px 6px 20px;border-radius:18px;text-align:left;background:oklch(98.6% .004 275);
+ box-shadow:0 0 0 1px oklch(100% 0 0/.1),0 18px 50px -16px oklch(4% .03 278/.9),0 0 90px -24px oklch(72% .12 268/.45);transition:box-shadow .3s var(--ease)}
+.cap:has(input:focus){box-shadow:0 0 0 3px oklch(70% .15 256/.6),0 18px 50px -16px oklch(4% .03 278/.9),0 0 90px -24px oklch(72% .12 268/.5)}
+.cap input{flex:1;min-width:0;font:inherit;font-size:17px;border:0;background:none;color:var(--ink);padding:11px 0;outline:0}
+.cap input::placeholder{color:oklch(50% .012 270)}
+.routes{display:flex;gap:6px;flex:none}
+.rt{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px 0 15px;border-radius:13px;font-weight:600;font-size:15px;letter-spacing:-.005em;color:oklch(99.4% .003 270);text-decoration:none;white-space:nowrap;cursor:pointer;transition:background .2s,box-shadow .35s var(--ease)}
+.rt:hover{text-decoration:none}
+.rt svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rt-test{background:var(--test)}.rt-test:hover,.rt-test.on{background:var(--test-d);box-shadow:0 6px 18px -6px oklch(55% .19 256/.7)}
+.rt-audit{background:var(--audit)}.rt-audit:hover,.rt-audit.on{background:var(--audit-d);box-shadow:0 6px 18px -6px oklch(52% .2 295/.7)}
+.rt:focus-visible{outline:2px solid var(--test);outline-offset:3px;border-radius:13px}
+.rt-audit:focus-visible{outline-color:var(--audit)}
+/* the route explainers: one per button, on hover, focus or tap */
+.pop{position:absolute;z-index:6;top:0;left:0;display:grid;grid-template-columns:minmax(0,1fr) 236px;gap:0 18px;align-items:start;width:min(640px,calc(100vw - 32px));padding:18px;border-radius:20px;text-align:left;background:oklch(20% .03 278);color:var(--s-ink);
+ box-shadow:0 0 0 1px oklch(100% 0 0/.11),0 1px 0 oklch(100% 0 0/.08) inset,0 32px 70px -22px oklch(3% .03 278/.95);
+ opacity:0;visibility:hidden;transform:translateY(-6px);pointer-events:none;transition:opacity .2s var(--ease),transform .35s var(--ease),visibility 0s .35s}
+.pop.on{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .2s var(--ease),transform .35s var(--ease)}
+.pop:before{content:"";position:absolute;top:-6px;left:var(--ax,50%);width:12px;height:12px;margin-left:-6px;background:inherit;border-radius:2px;transform:rotate(45deg);box-shadow:-1px -1px 0 oklch(100% 0 0/.11)}
+.pop-t{--pc:oklch(74% .14 256)}.pop-a{--pc:oklch(74% .15 298)}
+.pop-h{display:flex;align-items:center;gap:12px}
+.pt{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none;color:oklch(99.4% .003 270)}
+.pop-t .pt{background:var(--test)}.pop-a .pt{background:var(--audit)}
+.pt svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pop-h b{display:block;font-size:18px;letter-spacing:-.02em;line-height:1.2}
+.pop-h small{display:block;font-size:13px;color:var(--pc);font-weight:500}
+.pop-s{margin-top:12px;font-size:14.5px;line-height:1.5;color:var(--s-mut)}
+.pop-k{margin-top:12px;font-size:12px;font-weight:600;color:var(--s-dim)}
+.pop-g{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:5px;font-size:14px;line-height:1.4}
+.pop-g li{display:grid;grid-template-columns:16px 1fr;gap:9px}
+.pop-g li:before{content:"";width:10px;height:5.5px;margin:5px 0 0 3px;border:solid var(--pc);border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.pop-x{margin-top:0;align-self:stretch;align-content:start;padding:12px 13px 12px;border-radius:12px;background:oklch(14% .022 278);box-shadow:0 0 0 1px oklch(100% 0 0/.06) inset;display:grid;gap:3px;font:500 12.5px/1.5 var(--mono);color:var(--s-ink);overflow-wrap:anywhere}
+.pop-x .k{font:500 12px/1.4 Geist,sans-serif;color:var(--s-dim);margin-bottom:3px}
+.pop-x .er{color:oklch(79% .13 28)}.pop-x .ok{color:oklch(83% .15 150)}
+/* examples and the live hint */
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px}
+.chips .lbl{color:var(--s-dim);font-size:14px;align-self:center;margin-right:2px}
+.chips button{background:oklch(100% 0 0/.05);color:var(--s-ink);border:1px solid oklch(100% 0 0/.15);font-weight:500;font-size:14px;min-height:34px;padding:0 13px;border-radius:99px}
+.chips button:hover{background:oklch(100% 0 0/.12)}
+.hint{color:var(--s-dim);font-size:13.5px;margin-top:10px;min-height:1.5em;text-wrap:balance}
+.hint.cached{color:oklch(85% .14 150);font-weight:500}
+.hint.warn{color:var(--s-ink)}
+.hint .hb{display:inline;background:none;border:0;min-height:0;padding:0 2px;font:inherit;font-weight:600;color:oklch(82% .12 256);text-decoration:underline;text-underline-offset:3px;white-space:normal}
+.hint .hb.au{color:oklch(82% .13 298)}
+.hint .hb:hover{background:none;text-decoration-thickness:2px}
+/* the scene layers */
+.st-sky{position:absolute;inset:0;z-index:0;pointer-events:none;-webkit-mask-image:linear-gradient(#000 40%,transparent 92%);mask-image:linear-gradient(#000 40%,transparent 92%)}
+.st-sky i{position:absolute;inset:-160px}
+.st-sky .s1{background-image:radial-gradient(circle at 17px 23px,oklch(96% .02 270/.9) 0 1px,transparent 1.7px),radial-gradient(circle at 91px 61px,oklch(96% .02 270/.55) 0 .7px,transparent 1.3px),radial-gradient(circle at 154px 12px,oklch(96% .03 250/.8) 0 1px,transparent 1.7px),radial-gradient(circle at 203px 98px,oklch(96% .02 270/.45) 0 .7px,transparent 1.3px),radial-gradient(circle at 46px 141px,oklch(96% .02 300/.7) 0 .9px,transparent 1.5px),radial-gradient(circle at 128px 187px,oklch(96% .02 270/.5) 0 .7px,transparent 1.3px),radial-gradient(circle at 188px 212px,oklch(97% .02 270/.85) 0 1.1px,transparent 1.8px),radial-gradient(circle at 70px 233px,oklch(96% .02 270/.5) 0 .7px,transparent 1.3px);background-size:233px 251px;animation:sky 160s linear infinite}
+.st-sky .s2{opacity:.65;background-image:radial-gradient(circle at 33px 77px,oklch(96% .02 270/.7) 0 .6px,transparent 1.2px),radial-gradient(circle at 151px 29px,oklch(96% .02 270/.6) 0 .6px,transparent 1.2px),radial-gradient(circle at 282px 140px,oklch(96% .03 250/.7) 0 .7px,transparent 1.3px),radial-gradient(circle at 355px 62px,oklch(96% .02 270/.5) 0 .6px,transparent 1.2px),radial-gradient(circle at 97px 260px,oklch(96% .02 300/.6) 0 .6px,transparent 1.2px),radial-gradient(circle at 214px 301px,oklch(96% .02 270/.5) 0 .6px,transparent 1.2px),radial-gradient(circle at 321px 288px,oklch(96% .02 270/.7) 0 .7px,transparent 1.3px),radial-gradient(circle at 250px 205px,oklch(96% .02 270/.4) 0 .5px,transparent 1.1px);background-size:389px 353px;animation:sky 260s linear infinite reverse}
+@keyframes sky{to{transform:translate3d(-233px,-251px,0)}}
+.st-scene{position:absolute;inset:0;z-index:1;pointer-events:none}
+.st-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.st-svg{position:absolute;left:0;bottom:92px;width:100%;height:34%;display:none}
+html:not(.js) .st-svg{display:block}
+.st-fx{position:absolute;inset:0;background:radial-gradient(125% 95% at 50% 42%,transparent 55%,oklch(6% .02 278/.6))}
+.st-fx:after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.st-in,.st-out{list-style:none;padding:0;margin:0}
+.st-in li{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity}
+.st-in span{display:inline-block;font:500 12.5px/1.2 var(--mono);color:oklch(85% .085 28);background:oklch(19% .04 25/.94);box-shadow:inset 0 0 0 1px oklch(70% .16 28/.34),0 0 26px -8px oklch(62% .2 28/.55);border-radius:99px;padding:8px 14px;white-space:nowrap;transition:color .4s,background-color .4s,box-shadow .4s}
+.stage[data-mode=audit] .st-in span{color:oklch(88% .1 78);background:oklch(20% .035 70/.94);box-shadow:inset 0 0 0 1px oklch(80% .14 78/.34),0 0 26px -8px oklch(76% .15 78/.5)}
+.st-out li{position:absolute;left:0;top:0;display:flex;align-items:center;gap:11px;opacity:0;text-align:left;text-shadow:0 1px 14px oklch(8% .02 278)}
+.st-out i{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c);box-shadow:0 0 14px var(--c),0 0 3px var(--c)}
+.lx{display:grid}.lx>span{grid-area:1/1;transition:opacity .45s var(--ease),transform .5s var(--ease)}
+.lx .a{opacity:0;transform:translateY(5px)}
+.stage[data-mode=audit] .lx .t{opacity:0;transform:translateY(-5px)}.stage[data-mode=audit] .lx .a{opacity:1;transform:none}
+.st-out b{display:block;font-size:15px;font-weight:600;letter-spacing:-.015em;color:var(--s-ink);white-space:nowrap}
+.st-out small{display:block;font-size:12.5px;color:var(--s-mut);margin-top:1px;white-space:nowrap}
+.st-pz{position:absolute;z-index:4;right:20px;bottom:46px;width:36px;height:36px;min-height:0;padding:0;border-radius:50%;background:oklch(100% 0 0/.06);border:1px solid oklch(100% 0 0/.16);color:var(--s-mut)}
+.st-pz:hover{background:oklch(100% 0 0/.13);color:var(--s-ink)}
+.st-pz svg{width:14px;height:14px;fill:currentColor;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.st-pz[hidden]{display:none}.st-pz .pl{display:none}.stage.paused .st-pz .pa{display:none}.stage.paused .st-pz .pl{display:block}
+/* the hand-off: the light page rises as a curved horizon, rim-lit by the spectrum */
+.hz,.hz-glow{position:absolute;left:50%;width:max(240%,2600px);height:640px;border-radius:50%;transform:translateX(-50%);pointer-events:none}
+.hz{z-index:3;top:calc(100% - 62px);background:var(--bg);box-shadow:0 -1px 0 oklch(100% 0 0/.5),0 -10px 34px -8px oklch(86% .07 270/.55)}
+.hz-glow{z-index:2;top:calc(100% - 82px);filter:blur(22px);background:linear-gradient(90deg,transparent 30%,oklch(66% .15 256/.55) 40%,oklch(66% .17 300/.55) 47%,oklch(75% .16 30/.5) 54%,oklch(84% .15 80/.55) 60%,transparent 70%)}
+@media(min-width:900px){
+ .stage:not(.live) .st-in{position:absolute;left:3%;top:52%;display:grid;gap:10px;justify-items:start}
+ .stage:not(.live) .st-out{position:absolute;right:4%;top:50%;display:grid;gap:12px}
+ .stage:not(.live) .st-in li,.stage:not(.live) .st-out li{position:static;opacity:1}
+ .stage:not(.live) .lx .a{display:none}
+ .st-out.tight small{display:none}}
+/* below 900 px the scene stacks under the text: broken steps, then the prism, then the proof */
+@media(max-width:899px){
+ .stage{min-height:0}
+ .st-room{display:none}
+ .st-scene{position:relative;inset:auto;display:grid;gap:16px;padding:28px 16px 100px}
+ .st-cv{position:relative;height:clamp(220px,52vw,340px);order:2;margin:0 -16px;width:calc(100% + 32px);-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+ .st-in{order:1;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;transition:opacity .2s}
+ .st-in.swap{opacity:0}
+ .st-in li{position:static;opacity:1}.st-in li:nth-child(n+4){display:none}
+ .st-out{order:3;display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;max-width:520px;margin:0 auto;width:100%}
+ .st-out li{position:static;opacity:1;align-items:flex-start;gap:9px}
+ .st-out i{margin-top:5px;width:9px;height:9px}
+ .st-out b,.st-out small{white-space:normal}
+ .st-svg{position:relative;bottom:auto;height:auto;order:2}
+ .st-pz{bottom:64px;right:16px}
+ .st-fx{display:none}}
+@media(max-width:759px){
+ .st-c{padding:92px 16px 0}
+ .st-c h1{font-size:clamp(34px,10vw,44px)}
+ .cap{flex-wrap:wrap;padding:8px;gap:8px}
+ .cap input{flex:1 1 100%;padding:8px 10px}
+ .routes{flex:1 1 100%}.rt{flex:1 1 0;padding:0 12px}
+ .st-in span{font-size:11.5px;padding:6px 11px}
+ .st-out b{font-size:14px}.st-out small{font-size:12px}
+ .pop{grid-template-columns:minmax(0,1fr)}.pop-x{margin-top:14px}
+ .hz{top:calc(100% - 46px)}.hz-glow{top:calc(100% - 64px)}}
 
 /* generated prompt */
 #out{padding-top:28px}
@@ -376,13 +480,12 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 @media(max-width:720px){
  .wrap{padding:0 16px}footer{padding-left:16px;padding-right:16px}
  .strip{grid-template-columns:1fr 1fr}
- .box{flex-wrap:wrap;padding:8px}.box input{flex:1 1 100%;padding:8px 10px}.box button{width:100%}
  .tabs{flex-wrap:wrap}.tabs .sp{display:none}.tabs .cp{margin:0 0 6px auto}.hit-act .btn{width:100%}
  .track{--g:16px}
  .reel{aspect-ratio:16/9}.ctl{right:20px;bottom:6%}
  .tl{grid-template-columns:minmax(0,1fr);padding:0 0 0 40px}.tl li:nth-child(n){grid-column:auto}}
 @media(max-width:560px){.vids{grid-template-columns:1fr}.vc.big .pi{width:68px;height:68px;margin:-34px 0 0 -34px}.rcpt{padding:22px 18px 34px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}#hero .wrap>*{animation:none}html.js .rv{opacity:1;transform:none;transition:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.st-sky i{animation:none}.pop,.lx>span,.st-in span{transition:none}html.js .rv{opacity:1;transform:none;transition:none}
  .pr,.vc,.pi,button,.btn{transition:none}.pr:hover,.vc:hover{transform:none}.vp:hover .pi{transform:none}.tw.vid{animation:none}}
 </style>
 </head>
@@ -398,22 +501,75 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 </svg>
 <div id="sitenav"></div>
 <script src="assets/site-nav.js" data-cur="home" defer></script>
+<script src="assets/prism.js" defer></script>
 <main>
-<section id="hero">
-<div class="wrap">
-<h1>Find the Broken Step Before Your Users Do</h1>
-<p class="lede">Docs break quietly. The first person to find out is a new user, and that user leaves.</p>
-<p class="what">FirstRun runs your docs on a clean machine, fixes the step that breaks, and proves the fix.</p>
-<form class="box" id="f" autocomplete="off">
-<input id="u" type="text" inputmode="url" spellcheck="false" placeholder="Paste your docs URL" aria-label="Docs URL, or the name of a tool">
-<button type="submit">Test my docs</button>
+<section id="hero" class="stage" data-nav="dark" data-mode="test" aria-labelledby="hero-h">
+<div class="st-sky" id="stSky" aria-hidden="true"><i class="s1"></i><i class="s2"></i></div>
+<div class="st-c" id="stC">
+<h1 id="hero-h">Find the Broken Step Before Your Users Do</h1>
+<p class="sub">FirstRun runs your docs on a clean machine, fixes the step that breaks, and proves the fix.</p>
+<form class="cap" id="f" action="doc-test/" autocomplete="off">
+<label class="sr" for="u">Docs URL, GitHub repo, or the name of a tool</label>
+<input id="u" type="text" inputmode="url" spellcheck="false" placeholder="Paste your docs URL or repo">
+<div class="routes">
+<a class="rt rt-test" id="goT" href="doc-test/" aria-describedby="popT-s"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg>Test docs</a>
+<a class="rt rt-audit" id="goA" href="doc-audit/" aria-describedby="popA-s"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg>Audit docs</a>
+</div>
 </form>
+<div class="pop pop-t" id="popT" role="tooltip">
+<div class="pop-m">
+<div class="pop-h"><span class="pt" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg></span><div><b>Doc-test</b><small>Takes a docs URL</small></div></div>
+<p class="pop-s" id="popT-s">Runs your quickstart in a clean container, fixes the step that breaks, and proves it in a second run.</p>
+<p class="pop-k">You get</p>
+<ul class="pop-g"><li>The first broken step, named</li><li>A docs fix that passed a clean rerun</li><li>A pull request, opened after your yes</li></ul>
+</div>
+<div class="pop-x"><span class="k">dbt + DuckDB guide, step 10</span><code>$ jafgen --years 6</code><code class="er">No such option: --years</code><code class="ok">Fixed: jafgen 6</code><code class="ok">9 of 9 steps passed</code></div>
+</div>
+<div class="pop pop-a" id="popA" role="tooltip">
+<div class="pop-m">
+<div class="pop-h"><span class="pt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg></span><div><b>Doc-audit</b><small>Takes a GitHub repo</small></div></div>
+<p class="pop-s" id="popA-s">Reads a repo's git history and lists the stale pages and the shipped features with no docs.</p>
+<p class="pop-k">You get</p>
+<ul class="pop-g"><li>Stale pages, with the commits behind each one</li><li>Features that shipped with no docs</li><li>A board of what to ship next</li></ul>
+</div>
+<div class="pop-x"><span class="k">dbt-core, 11,552 commits read</span><code>project-flags.md</code><code>last edit 453 days ago</code><code class="er">29 code changes since</code><code class="ok">15 stale pages</code><code class="ok">72 features with no docs</code></div>
+</div>
 <div class="chips" id="chips"><span class="lbl">Try</span>
 <button type="button" data-u="https://docs.getdbt.com/guides/duckdb">dbt + DuckDB</button>
 <button type="button" data-u="https://docs.dagster.io/getting-started/quickstart">Dagster</button>
 <button type="button" data-u="https://www.mkdocs.org/getting-started/">MkDocs</button></div>
-<p class="hint" id="hint" data-d="A partial URL works. So does a tool name. Nothing leaves your browser.">A partial URL works. So does a tool name. Nothing leaves your browser.</p>
+<p class="hint" id="hint" aria-live="polite" data-d="A partial URL works. So does a tool name. Nothing leaves your browser.">A partial URL works. So does a tool name. Nothing leaves your browser.</p>
 </div>
+<div class="st-room"></div>
+<div class="st-scene" id="stScene" aria-hidden="true">
+<svg class="st-svg" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="svB" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="svG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22273a"/><stop offset="1" stop-color="#05060c"/></linearGradient><linearGradient id="svR" gradientUnits="userSpaceOnUse" x1="525" y1="0" x2="915" y2="0"><stop offset="0" stop-color="#5ad7ff" stop-opacity=".2"/><stop offset=".3" stop-color="#926cff"/><stop offset=".55" stop-color="#ff4fd8"/><stop offset=".8" stop-color="#ff9e24"/><stop offset="1" stop-color="#ffde3c"/></linearGradient><linearGradient id="svF" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".7" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="svM"><rect x="830" y="0" width="290" height="400" fill="url(#svF)"/></mask><filter id="svBl" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="10"/></filter></defs>
+<path d="M0 262L613 222" stroke="url(#svB)" stroke-width="2.4" fill="none"/>
+<g mask="url(#svM)"><g filter="url(#svBl)" opacity=".9"><path d="M837 240L1110 118V162L837 241z" fill="#ff4842"/><path d="M837 241.6L1110 163V207L837 243z" fill="#ff9e24"/><path d="M837 243.2L1110 208V252L837 244.6z" fill="#ffde3c"/><path d="M837 244.8L1110 253V297L837 246.2z" fill="#3ed66e"/><path d="M837 246.4L1110 298V342L837 247.8z" fill="#40a6ff"/><path d="M837 248L1110 343V387L837 249.4z" fill="#926cff"/></g>
+<g opacity=".55"><path d="M837 240L1110 118V162L837 241z" fill="#ff4842"/><path d="M837 241.6L1110 163V207L837 243z" fill="#ff9e24"/><path d="M837 243.2L1110 208V252L837 244.6z" fill="#ffde3c"/><path d="M837 244.8L1110 253V297L837 246.2z" fill="#3ed66e"/><path d="M837 246.4L1110 298V342L837 247.8z" fill="#40a6ff"/><path d="M837 248L1110 343V387L837 249.4z" fill="#926cff"/></g></g>
+<path d="M720 40L525 378H915z" fill="url(#svG)" stroke="#fff" stroke-opacity=".45"/><path d="M720 40L525 378" stroke="#fff" stroke-opacity=".9" stroke-width="1.4"/><path d="M525 378H915" stroke="url(#svR)" stroke-width="2.6"/>
+<circle cx="613" cy="222" r="46" fill="#fff" opacity=".22" filter="url(#svBl)"/></svg>
+<canvas class="st-cv" id="pz"></canvas>
+<div class="st-fx"></div>
+<ul class="st-in" id="stIn">
+<li><span>No such option: --years</span></li><li><span>entire: command not found</span></li><li><span>Migration guide link: 404</span></li><li><span>Python version never stated</span></li><li><span>No module named 'typer'</span></li>
+</ul>
+<ul class="st-out" id="stOut">
+<li style="--c:oklch(65% .23 28)"><i></i><span class="lx"><span class="t"><b>Failure found</b><small>The first broken step, named</small></span><span class="a"><b>Stale pages</b><small>15 in dbt-core, commits cited</small></span></span></li>
+<li style="--c:oklch(78% .17 62)"><i></i><span class="lx"><span class="t"><b>Fix patched</b><small>A small change to the docs</small></span><span class="a"><b>Features with no docs</b><small>72 shipped, never explained</small></span></span></li>
+<li style="--c:oklch(90% .18 100)"><i></i><span class="lx"><span class="t"><b>Proven clean</b><small>A second fresh container passes</small></span><span class="a"><b>What to ship next</b><small>24 cards on one board</small></span></span></li>
+<li style="--c:oklch(76% .2 150)"><i></i><span class="lx"><span class="t"><b>PR opened</b><small>After you approve once</small></span><span class="a"><b>Release notes drafted</b><small>v2.0.5, ready to edit</small></span></span></li>
+<li style="--c:oklch(68% .16 245)"><i></i><span class="lx"><span class="t"><b>Run traced</b><small>Every step in neatlogs</small></span><span class="a"><b>Evidence cited</b><small>The commits behind every card</small></span></span></li>
+<li style="--c:oklch(62% .2 290)"><i></i><span class="lx"><span class="t"><b>Session recorded</b><small>An Entire checkpoint</small></span><span class="a"><b>History read</b><small>11,552 commits since 2016</small></span></span></li>
+</ul>
+</div>
+<div class="sr">
+<p>How Doc-test works. Broken steps go in. Real ones FirstRun found: jafgen --years 6 failed with No such option in the dbt guide. entire: command not found after the Entire install. A migration guide link that returns 404. A dbt guide that never states it needs Python 3.12. No module named typer. curl: command not found. AccuKnox docs that say 0.9.0 while the installer fetches 0.9.58. KeyError NEATLOGS_API_KEY.</p>
+<p>What comes out: the failure found, the fix patched, the fix proven clean in a second fresh container, a PR opened after you approve once, the run traced in neatlogs, and the session recorded as an Entire checkpoint.</p>
+<p>How Doc-audit works, on dbt-labs/dbt-core. The project flags page was last edited 453 days ago, with 29 code changes since. The infer-configs page is 709 days old. 15 of 1,405 pages are stale. 72 shipped features have no docs. AccuKnox/help has 87 stale pages, and its oldest page is 1,100 days old.</p>
+<p>What comes out: stale pages with the commits cited, features with no docs, 24 cards of what to ship next, release notes for v2.0.5, and the history read, 11,552 commits since 2016.</p>
+</div>
+<button type="button" class="st-pz" id="stPause" aria-pressed="false" aria-label="Pause the animation" hidden><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button>
+<div class="hz-glow" aria-hidden="true"></div><div class="hz" aria-hidden="true"></div>
 </section>
 
 <section id="out" hidden>
@@ -796,13 +952,81 @@ function show(){
 }
 /* live hint: say so as soon as a typed URL or name has a saved run */
 function hintNow(){
- var h=lookup($("u").value),el=$("hint");
- if(h){el.textContent="Saved run found: "+(h.title||h.name)+". Press Enter to watch it.";el.className="hint cached"}
- else{el.textContent=el.getAttribute("data-d");el.className="hint"}
+ var h=lookup($("u").value),el=$("hint"),t,c;
+ if(h){t="Saved run found: "+(h.title||h.name)+". Press Enter to watch it.";c="hint cached"}
+ else{t=el.getAttribute("data-d");c="hint"}
+ if(el.textContent!==t||el.className!==c){el.textContent=t;el.className=c}
 }
 $("u").addEventListener("input",hintNow);
 $("u").addEventListener("paste",function(){setTimeout(hintNow,0)});
-$("f").addEventListener("submit",function(e){e.preventDefault();show()});
+
+/* two routes from one input. Enter runs Doc-test. Doc-audit opens with the repo filled in. */
+function repoOf(s){
+ s=clean(s);var m=/^(?:https?:\/\/)?(?:www\.)?github\.com\/([A-Za-z0-9-]+)\/([\w.-]+?)(?:\.git)?(\/.*)?$/i.exec(s);
+ if(m)return{repo:m[1]+"/"+m[2],deep:!!(m[3]&&!/^\/(tree\/[^\/]+\/?)?$/.test(m[3]))};
+ m=/^([A-Za-z0-9-]+)\/([\w.-]+?)(?:\.git)?$/.exec(s);
+ return m?{repo:m[1]+"/"+m[2],deep:false}:null;
+}
+function say(parts,cls){
+ /* parts: strings and [label, fn, audit?] buttons. Built with DOM calls, never HTML */
+ var el=$("hint");el.textContent="";el.className="hint "+(cls||"warn");
+ parts.forEach(function(p){
+  if(typeof p==="string"){el.appendChild(document.createTextNode(p));return}
+  var b=document.createElement("button");b.type="button";b.className="hb"+(p[2]?" au":"");b.textContent=p[0];b.addEventListener("click",p[1]);el.appendChild(b);
+ });
+}
+function toAudit(r){location.href="doc-audit/"+(r?"?repo="+encodeURIComponent(r):"")}
+function route(kind){
+ var s=clean($("u").value),r=s?repoOf(s):null;
+ if(kind==="audit"){
+  if(!s)return toAudit("");
+  if(r)return toAudit(r.repo);
+  if(norm(s).q)return say(["Doc-audit reads a GitHub repo, like dbt-labs/dbt-core. ",["Test the docs for “"+s.slice(0,40)+"” instead",function(){show()}]]);
+  return say(["Doc-audit reads a GitHub repo, not a docs page. ",["Test this page instead",function(){show()}]]);
+ }
+ if(!s){$("u").focus();return}
+ if(r&&!r.deep)return say(["That looks like a GitHub repo. ",["Audit "+r.repo,function(){toAudit(r.repo)},1]," or ",["test its README",function(){show()}],"."]);
+ show();
+}
+$("f").addEventListener("submit",function(e){e.preventDefault();route("test")});
+
+/* route buttons and their explainers. Hover, focus or tap shows one. The stage behind follows. */
+(function(){
+ var B={test:$("goT"),audit:$("goA")},P={test:$("popT"),audit:$("popA")},cur=null,tm=0,touch=false,was=false;
+ B.test.setAttribute("role","button");
+ function place(k){
+  var b=B[k].getBoundingClientRect(),c=$("stC").getBoundingClientRect(),f=$("f").getBoundingClientRect(),p=P[k],w=p.offsetWidth,vw=document.documentElement.clientWidth;
+  /* centered under the input, so the chips on the left and the proof on the right stay in view */
+  var mid=b.left+b.width/2,x=Math.max(12,Math.min(vw-w-12,f.left+f.width/2-w/2));
+  p.style.left=(x-c.left)+"px";p.style.top=(f.bottom-c.top+14)+"px";p.style.setProperty("--ax",Math.max(22,Math.min(w-22,mid-x))+"px");
+ }
+ function stage(k){var h=$("hero");if(h.getAttribute("data-mode")!==k){h.setAttribute("data-mode",k);if(window.FRPrism)FRPrism.mode(k)}}
+ function open(k){clearTimeout(tm);if(cur&&cur!==k)shut(cur,true);cur=k;place(k);P[k].classList.add("on");B[k].classList.add("on");stage(k)}
+ function shut(k,swap){P[k].classList.remove("on");B[k].classList.remove("on");if(cur===k)cur=null;if(!swap)stage("test")}
+ function later(k){clearTimeout(tm);tm=setTimeout(function(){if(cur===k&&document.activeElement!==B[k])shut(k)},200)}
+ ["test","audit"].forEach(function(k){
+  var b=B[k],p=P[k];
+  b.addEventListener("pointerdown",function(e){touch=e.pointerType!=="mouse";was=cur===k});
+  b.addEventListener("mouseenter",function(){clearTimeout(tm);tm=setTimeout(function(){open(k)},cur?0:70)});
+  b.addEventListener("mouseleave",function(){later(k)});
+  p.addEventListener("mouseenter",function(){clearTimeout(tm)});
+  p.addEventListener("mouseleave",function(){later(k)});
+  b.addEventListener("focus",function(){open(k)});
+  b.addEventListener("blur",function(){later(k)});
+  b.addEventListener("click",function(e){
+   e.preventDefault();
+   /* on a touch screen with nothing pasted, the first tap explains and the second acts */
+   if(touch&&!clean($("u").value)&&!was){open(k);touch=false;was=true;return}
+   touch=false;route(k);
+  });
+  b.addEventListener("keydown",function(e){if(e.key===" "&&k==="test"){e.preventDefault();route(k)}});
+ });
+ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&cur){shut(cur)}});
+ document.addEventListener("pointerdown",function(e){if(cur&&!B[cur].contains(e.target)&&!P[cur].contains(e.target))shut(cur)});
+ addEventListener("resize",function(){if(cur)place(cur)});
+})();
+/* arriving at #hero from another page: put the cursor in the box */
+if(location.hash==="#hero")setTimeout(function(){$("u").focus({preventScroll:true})},60);
 $("chips").addEventListener("click",function(e){var u=e.target.getAttribute&&e.target.getAttribute("data-u");if(u){$("u").value=u;hintNow();show()}});
 var tb=document.querySelector(".tabs");
 tb.addEventListener("click",function(e){var i=e.target.getAttribute&&e.target.getAttribute("data-i");if(i!==null&&i!==undefined){cur=+i;render()}});
