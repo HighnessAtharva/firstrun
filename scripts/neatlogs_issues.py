@@ -30,6 +30,16 @@ WATCH = ("docs step broke", "planner invented a step", "Budget Limit Exceeded Al
          "Documentation Unreachable Alert", "Verification Error Monitor", "Prerequisite Validation Error Monitor",
          "Execution Failed")
 GUARDRAILS = ("firstrun p95 run cost above Scale cap", "firstrun budget guardrail tripped")
+# These hits show FirstRun working as designed: it caught broken docs in the pages it tested, or a guardrail
+# stopped a run. They stay in neatlogs for review, but no issue is opened for them. An open one is closed.
+EXPECTED = ("docs step broke", "Execution Failed", "Prerequisite Validation Error Monitor",
+            "Documentation Unreachable Alert", "Verification Error Monitor", "Missing API Key Detector",
+            "Budget Limit Exceeded Alert")
+EXPECTED_GUARDRAILS = ("firstrun budget guardrail tripped",)
+# Hits before these times came from a detection that was wrong. "planner invented a step" matched the docs text
+# the planner echoes back, until its regex was narrowed to each step's command field on 2026-10-11.
+# That update re-scored 5 older spans at 06:08 UTC, so the floor sits after it.
+COUNT_FROM = {"planner invented a step": "2026-10-11T06:10:00Z"}
 MARK = "<!-- neatlogs-issues -->"
 
 
@@ -110,18 +120,23 @@ def main() -> None:
 
     wanted: dict[str, tuple[str, str]] = {}  # title -> (body, "open"|"close")
     for det in nl("detections", "list")["detections"]:
-        if det["displayName"] not in WATCH or not det.get("isActive"):
+        if det["displayName"] not in WATCH or not det.get("isActive") or det["displayName"] in EXPECTED:
             continue
+        floor = max(since, COUNT_FROM.get(det["displayName"], ""))
         hits = [h for h in nl("detections", "hits", det["id"], "--all", "--max-items", "500").get("hits", [])
-                if h.get("detectedAt", "") >= since]
+                if h.get("detectedAt", "") >= floor]
         title = f"neatlogs detection: {det['displayName']}"
         wanted[title] = (body_for_detection(det, hits, since[:10]), "open") if hits else ("", "close")
     fires: dict[str, list[dict]] = {}
     for f in nl("alerts", "history").get("alertHistory", []):
-        if f.get("ruleName") in GUARDRAILS and f.get("firedAt", "") >= since:
+        if f.get("ruleName") in GUARDRAILS and f.get("ruleName") not in EXPECTED_GUARDRAILS and f.get("firedAt", "") >= since:
             fires.setdefault(f["ruleName"], []).append(f)
     for rule, fs in fires.items():
         wanted[f"neatlogs alert: {rule}"] = (body_for_guardrail(rule, fs), "open")
+    for name in EXPECTED:
+        wanted[f"neatlogs detection: {name}"] = ("", "expected")
+    for rule in EXPECTED_GUARDRAILS:
+        wanted[f"neatlogs alert: {rule}"] = ("", "expected")
 
     existing = {i["title"]: i for i in json.loads(gh("issue", "list", "-R", REPO, "--label", LABEL, "--state", "all",
                                                        "--limit", "100", "--json", "number,title,state"))}
@@ -130,12 +145,20 @@ def main() -> None:
            "--description", "Opened from neatlogs detections and alerts")
     for title, (body, want) in wanted.items():
         cur = existing.get(title)
+        if want == "expected":
+            if cur and cur["state"] == "OPEN":
+                print(f"close  #{cur['number']} {title} (expected behavior)")
+                if a.apply:
+                    gh("issue", "close", str(cur["number"]), "-R", REPO, "--comment",
+                       "Expected behavior: FirstRun caught broken docs in a page it tested, or a guardrail stopped a run. "
+                       "The hits stay in neatlogs. scripts/neatlogs_issues.py no longer opens an issue for this one.")
+            continue
         if want == "close":
             if cur and cur["state"] == "OPEN":
                 print(f"close  #{cur['number']} {title}")
                 if a.apply:
                     gh("issue", "close", str(cur["number"]), "-R", REPO, "--comment",
-                       f"No neatlogs hit in the last {a.days} days. Closed by scripts/neatlogs_issues.py.")
+                       f"No counted neatlogs hit in the last {a.days} days. Closed by scripts/neatlogs_issues.py.")
             continue
         if cur:
             print(f"update #{cur['number']} {title}")
