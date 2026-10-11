@@ -52,7 +52,7 @@ def test_pages_point_agents_at_agent_md():
     for page in ("doc-test/index.html", "doc-audit/index.html"):
         html = (DOCS / page).read_text(encoding="utf-8")
         assert "Read https://firstrun.atharvashah.com/agent.md and follow it." in html, page
-    assert '<a href="agent.md">For agents</a>' in (DOCS / "index.html").read_text(encoding="utf-8")
+    assert '<a href="/agent.md">For agents</a>' in (DOCS / "index.html").read_text(encoding="utf-8")
 
 
 def test_skill_frontmatter():

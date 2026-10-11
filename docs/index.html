@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FirstRun: Docs that work (literally)</title>
 <link rel="stylesheet" href="assets/site-nav.css">
+<link rel="stylesheet" href="/assets/site-footer.css">
 <link rel="alternate" type="text/markdown" href="/agent.md" title="FirstRun agent quickstart">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
 <meta name="description" content="Docs break quietly, and a new user finds out first. Doc-test runs your quickstart in a clean container and proves the fix. Doc-audit finds the pages your code left behind.">
@@ -634,10 +635,6 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 .about h2{font-size:clamp(24px,3vw,30px)}
 .about p{color:var(--mut);font-size:16px;max-width:34em}
 .links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;font-weight:600;font-size:15px}
-footer{max-width:1080px;margin:var(--pad) auto 0;padding:24px 24px 44px;border-top:1px solid var(--line);color:var(--mut);font-size:13.5px;display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;align-items:center}
-footer .wm{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--ink)}
-footer .wm svg{width:22px;height:22px}
-footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 
 @media(max-width:900px){
  .beats{grid-template-columns:minmax(0,1fr);max-width:460px;margin-left:auto;margin-right:auto}
@@ -645,7 +642,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
  .rc{grid-template-columns:minmax(0,380px);justify-items:center}.keys{max-width:380px}
  .vids{grid-template-columns:1fr 1fr;grid-template-rows:none}.vc.big{grid-row:auto;grid-column:1/-1}}
 @media(max-width:720px){
- .wrap{padding:0 16px}footer{padding-left:16px;padding-right:16px}
+ .wrap{padding:0 16px}
  .strip{grid-template-columns:1fr 1fr}
  .tabs{flex-wrap:wrap}.tabs .sp{display:none}.tabs .cp{margin:0 0 6px auto}.hit-act .btn{width:100%}
  .track{--g:16px}
@@ -1079,7 +1076,11 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 </div>
 </section>
 </main>
-<footer><a class="wm" href="#hero"><svg aria-hidden="true"><use href="#lg"/></svg>FirstRun</a><span>Made for neatHack 2026 by neatlogs</span><nav aria-label="Footer"><a href="judges/">For judges</a><a href="agent.md">For agents</a><a href="https://neatlogs.com/hackathon">neatHack</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://x.com/cultist_dev">X</a></nav></footer>
+<footer class="sf"><div class="sf-in">
+<div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
+</div></footer>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)};

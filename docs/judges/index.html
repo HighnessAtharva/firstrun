@@ -8,6 +8,7 @@
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
+<link rel="stylesheet" href="/assets/site-footer.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
@@ -252,9 +253,6 @@ dialog.lb figcaption b{font:600 12px var(--mono);background:oklch(25% .02 230);c
 dialog.lb figcaption span{flex:1}
 dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min-width:34px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 
-footer{max-width:1120px;margin:0 auto;padding:24px 24px 36px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;color:var(--mut);font-size:14px}
-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px}
-footer .home{font-weight:650}
 
 @media(max-width:980px){
  .sheet,.sheet.c6{--cols:4}
@@ -641,10 +639,11 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 </section>
 </main>
 
-<footer>
-<a class="home" href="../">Back to the FirstRun homepage</a>
-<nav aria-label="Footer"><a href="https://github.com/HighnessAtharva/firstrun">GitHub repo</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence index</a><a href="https://neatlogs.com/hackathon">neatHack</a></nav>
-</footer>
+<footer class="sf"><div class="sf-in">
+<div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
+</div></footer>
 
 <dialog class="lb" id="lb" aria-labelledby="lb-c">
 <figure><img id="lb-i" alt="" width="1400" height="800"><figcaption><b id="lb-n"></b><span id="lb-c"></span><a id="lb-s" href="#">Source</a><button type="button" id="lb-p" aria-label="Previous image">←</button><button type="button" id="lb-x" aria-label="Next image">→</button><button type="button" id="lb-close">Close</button></figcaption></figure>
