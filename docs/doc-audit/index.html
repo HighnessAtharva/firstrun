@@ -57,6 +57,22 @@ h2{font-size:19px;letter-spacing:-.02em;font-weight:650}
 .ask{display:flex;gap:8px;align-items:center;margin-top:22px;max-width:640px;padding:6px 6px 6px 16px}
 .ask svg.i{color:var(--mut)}
 .ask input{flex:1;min-width:0;font:inherit;font-size:15.5px;border:0;background:none;color:var(--ink);padding:8px 0;outline:0}
+.mode{display:inline-flex;gap:4px;margin-top:22px;padding:4px;border-radius:12px;background:var(--sunk);border:1px solid var(--line)}
+.mode button{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border:0;border-radius:9px;background:none;font-weight:600;font-size:13.5px;color:var(--mut);cursor:pointer}
+.mode button svg.i{width:15px;height:15px}
+.mode button[aria-pressed=true]{background:var(--panel);color:var(--ink);box-shadow:var(--sh)}
+.ask.top{margin-top:10px}
+.hint{font-size:13px;color:var(--mut);margin-top:8px;max-width:640px}
+.steps{list-style:none;padding:0;margin-top:12px;max-width:760px;display:grid;gap:8px}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:12px 14px}
+.steps .n{grid-row:1/span 3;width:26px;height:26px;border-radius:99px;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--vio-bg);color:var(--vio)}
+.steps b{font-size:14.5px}
+.steps span{font-size:13px;color:var(--mut)}
+.steps .opt{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--vio);margin-left:8px}
+.steps .dw-acts{margin-top:6px}
+.code{display:flex;align-items:center;gap:8px;margin-top:4px;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:6px 6px 6px 12px;font:12.5px var(--mono);overflow-x:auto}
+.code code{flex:1;white-space:pre}
+.code .btn{height:30px;padding:0 10px;flex:none}
 .cmd{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;margin-top:10px;max-width:640px;padding:12px 12px 12px 16px;font-size:13px}
 .cmd code{white-space:pre;overflow-x:auto}
 .flow{padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:14px;overflow:hidden}
@@ -205,6 +221,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 <symbol id="i-clone" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="9" r="2.2"/><path d="M6 8.2v7.6M18 11.2c0 3.5-4 3-9.5 5.6"/></symbol>
 <symbol id="i-match" viewBox="0 0 24 24"><path d="M4 7h7M4 12h5M4 17h7"/><circle cx="16.5" cy="12" r="3.5"/><path d="M19 14.5l2.5 2.5"/></symbol>
 <symbol id="i-board" viewBox="0 0 24 24"><rect x="3.5" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="11" rx="1.5"/><rect x="15.5" y="4" width="5" height="7" rx="1.5"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
 <symbol id="i-repo" viewBox="0 0 24 24"><path d="M6 3.5h11.5v14H7.5A1.5 1.5 0 0 0 6 19z"/><path d="M6 19a1.5 1.5 0 0 0 1.5 1.5h10"/></symbol>
 </svg>
 <div id="sitenav"></div>
@@ -214,10 +231,12 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 <section id="start">
 <div class="lh-top"><span class="sn-tile t-audit" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg></span>
 <div><h1>Doc-audit</h1><p class="lede">Point it at a GitHub repo. It reads the git history and shows which docs pages the code changed underneath, and what to ship next.</p></div></div>
-<form class="ask panel" id="f"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg><label for="repo" class="sr">GitHub repo</label><input id="repo" placeholder="owner/repo, for example fastapi/typer" autocomplete="off" spellcheck="false"><button class="btn pri" type="submit">Get the command</button></form>
-<div class="cmd panel" id="cmdbox" hidden><code id="cmd"></code><button class="btn" type="button" id="cpcmd"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div>
+<div class="mode" role="group" aria-label="Repo type"><button type="button" id="m-pub" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Public repo</button><button type="button" id="m-priv" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Private repo</button></div>
+<form class="ask panel top" id="f"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg><label for="repo" class="sr">GitHub repo link</label><input id="repo" placeholder="Paste a GitHub link, for example github.com/fastapi/typer" autocomplete="off" spellcheck="false"><button class="btn pri" type="submit" id="go">Audit it</button></form>
+<p class="hint" id="hint">Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.</p>
+<ol class="steps" id="steps" hidden></ol>
 <ol class="flow panel" aria-label="How the audit works">
-<li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-clone"/></svg></span><div><b>Clone</b><span>One blobless clone on your machine. $0 in model calls.</span></div></li>
+<li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-clone"/></svg></span><div><b>Clone</b><span>One blobless clone, on GitHub Actions or on your machine. $0 in model calls.</span></div></li>
 <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-match"/></svg></span><div><b>Match</b><span>Each commit is matched to the docs pages on its topic.</span></div></li>
 <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg></span><div><b>Board</b><span>Stale pages and missing docs land on one board.</span></div></li>
 </ol>
@@ -278,12 +297,36 @@ var KL={document:"Document this",refresh:"Refresh this page",feature:"Feature th
 
 /* start view */
 function repoOf(v){v=String(v||"").trim().replace(/^https?:\/\/github\.com\//i,"").replace(/\.git$/,"").replace(/\/+$/,"");var m=/^([\w.-]+)\/([\w.-]+)/.exec(v);return m?m[1]+"/"+m[2]:""}
-$("f").addEventListener("submit",function(e){e.preventDefault();var r=repoOf($("repo").value);
-  $("cmd").textContent=r?"pip install git+https://github.com/HighnessAtharva/firstrun\nfirstrun audit "+r:"Type a GitHub repo as owner/repo.";$("cmdbox").hidden=false});
-$("cpcmd").addEventListener("click",function(){copy($("cmd").textContent,"Command copied")});
+var MODE="pub",AUD=[],LOG="https://github.com/HighnessAtharva/firstrun/issues/new";
+var HINT={pub:"Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.",
+  priv:"Private repos are audited on your machine with your own git login. Nothing leaves it unless you choose to submit."};
+function reqUrl(r){return LOG+"?template=audit-request.yml&title="+encodeURIComponent("Audit request: "+r)+"&repo="+encodeURIComponent(r)}
+function setMode(m){MODE=m;$("m-pub").setAttribute("aria-pressed",m==="pub");$("m-priv").setAttribute("aria-pressed",m==="priv");
+  $("go").textContent=m==="pub"?"Audit it":"Get the commands";$("hint").textContent=HINT[m];$("steps").hidden=true}
+$("m-pub").addEventListener("click",function(){setMode("pub")});$("m-priv").addEventListener("click",function(){setMode("priv")});
+function step(n,title,sub,code,opt){var li=el("li","panel");li.appendChild(el("span","n",String(n)));var b=el("b",null,title);if(opt)b.appendChild(el("span","opt","optional"));li.appendChild(b);
+  if(sub)li.appendChild(el("span",null,sub));
+  if(code){var c=el("div","code");c.appendChild(el("code",null,code));var cb=el("button","btn");cb.type="button";cb.setAttribute("aria-label","Copy");cb.appendChild(ic("copy"));cb.addEventListener("click",function(){copy(code,"Command copied")});c.appendChild(cb);li.appendChild(c)}
+  return li}
+function link(href,label,icon,pri){var a=el("a","btn"+(pri?" pri":""));a.href=href;if(/^https:/.test(href)){a.target="_blank";a.rel="noopener"}a.appendChild(ic(icon));a.appendChild(document.createTextNode(label));return a}
+function acts(){var w=el("div","dw-acts");for(var i=0;i<arguments.length;i++)w.appendChild(arguments[i]);return w}
+$("f").addEventListener("submit",function(e){e.preventDefault();var r=repoOf($("repo").value),S=$("steps");S.textContent="";S.hidden=false;
+  if(!r){S.appendChild(step("!","Paste a GitHub repo","Write it as owner/repo or paste the github.com link."));return}
+  var have=AUD.filter(function(a){return String(a.repo).toLowerCase()===r.toLowerCase()})[0];
+  if(MODE==="pub"){
+    if(have){var l0=step(1,r+" is already on the board","Audited "+fmt(have.ts)+". Open it, or ask for a fresh audit.");l0.appendChild(acts(link("./?id="+encodeURIComponent(have.id),"Open the board","board",true),link(reqUrl(r),"Audit it again","refresh")));S.appendChild(l0);return}
+    var l1=step(1,"Open the request on GitHub","Click Submit new issue. The repo is already filled in.");l1.appendChild(acts(link(reqUrl(r),"Request the audit of "+r,"gh",true)));S.appendChild(l1);
+    S.appendChild(step(2,"GitHub Actions audits it","One blobless clone, about 2 minutes, $0 in model calls."));
+    S.appendChild(step(3,"The board link lands on the issue","The audit also joins the list below."));
+  }else{
+    S.appendChild(step(1,"Install FirstRun","Python 3.11 or newer.","pip install git+https://github.com/HighnessAtharva/firstrun"));
+    S.appendChild(step(2,"Audit it on your machine","Uses your own git login. The report stays in runs/ on your disk.","firstrun audit "+r));
+    S.appendChild(step(3,"Add it to this board","Uploads audit.json to a secret gist and opens the request. A maintainer reviews it before it goes live. Needs the GitHub CLI.","firstrun audit-submit --open",true));
+  }
+});
 function listAudits(){
   fetch("../audits/index.json").then(function(r){return r.json()}).then(function(j){
-    var ol=$("audits");(j.audits||[]).forEach(function(a){
+    AUD=j.audits||[];var ol=$("audits");(j.audits||[]).forEach(function(a){
       var li=el("li"),x=el("a");x.href="./?id="+encodeURIComponent(a.id);
       var img=el("img","av");img.alt="";img.width=40;img.height=40;avatar(img,a.repo);x.appendChild(img);
       var nm=el("div","nm",a.repo);nm.appendChild(el("small",null,a.pages+" docs pages, audited "+fmt(a.ts)));
