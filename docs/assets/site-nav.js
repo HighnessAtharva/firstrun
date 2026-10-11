@@ -15,6 +15,7 @@ var I={
  plus:'<path d="M12 5v14M5 12h14"/>',repo:'<path d="M6 3.5h11.5v14H7.5A1.5 1.5 0 0 0 6 19v-15.5zM6 19a1.5 1.5 0 0 0 1.5 1.5h10"/>',
  rcpt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',watch:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/>',
  cmp:'<path d="M4 6h16M4 12h16M4 18h16"/><path d="M9 4v16"/>',plan:'<path d="M4 19V9M10 19V5M16 19v-7M21 19H3"/>',
+ agent:'<path d="M3.5 8.5l4 3.5-4 3.5M10.5 17.5h6"/><path class="sn-spark" d="M18.5 2.8l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1z"/>',
  car:'<path d="M3 4.5l3 3 3-3"/>',burger:'<path d="M4 8h16M4 16h16"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>'
 };
 function svg(n,vb,cls){return '<svg'+(cls?' class="'+cls+'"':"")+' viewBox="'+(vb||"0 0 24 24")+'" aria-hidden="true">'+I[n]+"</svg>"}
@@ -28,11 +29,16 @@ function app(k,label){return '<button type="button" class="sn-app a-'+k+'" id="s
 var links=[["Receipts","#receipt","rcpt","What a run cost, and the proof"],["Watch","#watch","watch","Three short demos"],["Compare","#compare","cmp","FirstRun next to the usual tools"],["Plan","plan/","plan","What each plan may spend"],["For judges","judges/","ok","Each claim and its proof"]];
 function href(l){return l[1].charAt(0)==="#"?(HOME?l[1]:BASE+l[1]):BASE+l[1]}
 function curLink(l){return l[1]===CUR+"/"}
+/* Agent Ready sits right after Compare. It is a link to agent.md that opens a dialog instead, so it still works if the dialog code fails to load. */
+var AG=BASE+"agent.md";
+function agent(cls,inner){return '<a class="'+cls+' sn-ag" href="'+AG+'" role="button" aria-haspopup="dialog" aria-expanded="false">'+inner+"</a>"}
+var AGBAR=agent("sn-lk sn-agent",svg("agent","0 0 24 24","sn-agi")+"Agent Ready");
+var AGMENU=agent("sn-it",svg("agent")+"<b>Agent Ready</b><small>One prompt for Claude Code, Cursor or Codex</small>");
 host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
  '<a class="sn-wm" href="'+BASE+'" aria-label="FirstRun home"'+(HOME?' aria-current="page"':"")+">"+LOGO+"<span>FirstRun</span></a>"+
  '<span class="sn-apps">'+app("test","Doc-test")+app("audit","Doc-audit")+"</span>"+
  '<span class="sn-sep" aria-hidden="true"></span><span class="sn-links">'+
- links.map(function(l){return '<a class="sn-lk" data-k="'+l[1]+'" href="'+href(l)+'"'+(curLink(l)?' aria-current="page"':"")+'>'+l[0]+"</a>"}).join("")+
+ links.map(function(l){return '<a class="sn-lk" data-k="'+l[1]+'" href="'+href(l)+'"'+(curLink(l)?' aria-current="page"':"")+'>'+l[0]+"</a>"+(l[1]==="#compare"?AGBAR:"")}).join("")+
  '</span><span class="sn-sp"></span><a class="sn-gh" href="https://github.com/HighnessAtharva/firstrun" aria-label="FirstRun on GitHub">'+GH+"</a>"+
  '<a class="sn-try" id="sn-try" href="'+BASE+'#hero">Try it</a>'+
  '<button type="button" class="sn-burger" id="sn-b-more" aria-label="Menu" aria-expanded="false" aria-controls="sn-m-more">'+svg("burger","0 0 24 24","sn-ib")+svg("x","0 0 24 24","sn-ix")+"</button></div>"+
@@ -56,7 +62,7 @@ host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
   '<div class="sn-h">The two tools</div>'+
   '<a class="sn-big b-test" href="'+T+'"'+(CUR==="test"?' aria-current="page"':"")+">"+tile("test")+"<b>Doc-test</b><small>Run a quickstart, fix it, prove it</small></a>"+
   '<a class="sn-big b-audit" href="'+A+'"'+(CUR==="audit"?' aria-current="page"':"")+">"+tile("audit")+"<b>Doc-audit</b><small>Find the docs your code outgrew</small></a>"+
-  '<div class="sn-h">On this site</div>'+links.map(function(l){return it(href(l),l[2],l[0],l[3])}).join("")+
+  '<div class="sn-h">On this site</div>'+links.map(function(l){return it(href(l),l[2],l[0],l[3])+(l[1]==="#compare"?AGMENU:"")}).join("")+
   it("https://github.com/HighnessAtharva/firstrun","repo","GitHub","The public repo")+"</div></div></nav>";
 
 var $=function(i){return document.getElementById(i)},nav=host.firstChild,open=null,timer;
@@ -89,6 +95,40 @@ $("sn-try").addEventListener("click",function(e){
   var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
   x.scrollIntoView({behavior:rm?"auto":"smooth",block:ids[i]==="u"?"center":"center"});
   setTimeout(function(){x.focus({preventScroll:true})},rm?0:420);if(open)set(open,false);return}}
+});
+
+/* Agent Ready: load the dialog code on first use, so no page loads it up front.
+   If it fails to load, or the browser has no <dialog>, the link opens agent.md as a page. */
+var agP=null;
+function agLoad(){
+ if(agP)return agP;
+ agP=new Promise(function(ok,no){
+  var n=2,l=document.createElement("link"),s=document.createElement("script");
+  function one(){if(--n===0)window.FRAgent?ok(window.FRAgent):no()}
+  l.rel="stylesheet";l.href=BASE+"assets/agent-modal.css";l.onload=one;l.onerror=no;
+  s.src=BASE+"assets/agent-modal.js";s.async=true;s.onload=one;s.onerror=no;
+  document.head.appendChild(l);document.head.appendChild(s);
+ });
+ agP.catch(function(){agP=null});
+ return agP;
+}
+var agBtns=host.querySelectorAll(".sn-ag");
+function agState(on){Array.prototype.forEach.call(agBtns,function(b){b.setAttribute("aria-expanded",on?"true":"false")})}
+Array.prototype.forEach.call(agBtns,function(b){
+ b.addEventListener("pointerenter",function(){if(window.HTMLDialogElement)agLoad()});
+ b.addEventListener("focus",function(){if(window.HTMLDialogElement)agLoad()});
+ b.addEventListener("keydown",function(e){if(e.key===" "){e.preventDefault();b.click()}});
+ b.addEventListener("click",function(e){
+  if(!window.HTMLDialogElement||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
+  e.preventDefault();
+  var back=b.closest(".sn-mm")?$("sn-b-more"):b,gone=false;
+  if(open)set(open,false);
+  agState(true);
+  var t=setTimeout(function(){gone=true;location.href=AG},6000);
+  agLoad().then(function(m){clearTimeout(t);if(gone)return;
+   m.open({base:BASE,back:back,onclose:function(){agState(false)}});
+  },function(){clearTimeout(t);if(!gone)location.href=AG});
+ });
 });
 
 /* dark bar over a dark section: watch a thin strip at the top of the viewport */

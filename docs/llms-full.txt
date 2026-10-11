@@ -240,7 +240,7 @@ The full list is at https://firstrun.atharvashah.com/known-limits.md.
 ## 10. Find the Repo, the Site and the Data at These Links
 
 - Repo: https://github.com/HighnessAtharva/firstrun
-- Site: https://firstrun.atharvashah.com/
+- Site: https://firstrun.atharvashah.com/. A human opens Agent Ready in the site navigation to copy the prompt for you.
 - Doc-test page: https://firstrun.atharvashah.com/doc-test/
 - Doc-audit page: https://firstrun.atharvashah.com/doc-audit/
 - Judges page: https://firstrun.atharvashah.com/judges/

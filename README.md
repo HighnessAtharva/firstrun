@@ -50,6 +50,7 @@ Give Claude Code, Cursor, Codex or your own agent this one line:
 Read https://firstrun.atharvashah.com/agent.md and follow it.
 ```
 
+- Open Agent Ready in the site navigation to copy the prompt. It adds an example task and shows the 6 steps your agent runs.
 - [docs/agent.md](docs/agent.md) holds the preflight, the install, a recipe for each task, the JSON keys, the exit and error codes, and the safety rules.
 - [llms.txt](https://firstrun.atharvashah.com/llms.txt) lists the agent files, and [llms-full.txt](https://firstrun.atharvashah.com/llms-full.txt) puts them in one file.
 - `firstrun run`, `audit`, `receipt` and `prereqs` take `--json`, which prints one JSON object on stdout. `firstrun doctor --json` checks Python, git, Docker, the keys and the network, and prints no key value.

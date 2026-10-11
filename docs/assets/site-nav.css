@@ -27,6 +27,14 @@ html{scroll-padding-top:88px}
 .sn-app.a-audit[aria-current=page]:after,.sn-app.a-audit.is-here:after{background:var(--sn-audit)}
 .sn-app[aria-current=page]:after{left:calc(50% + 17px)}.sn-app.is-here:after{left:calc(50% + 17px)}
 .sn-lk.is-here{color:var(--bi)}
+/* Agent Ready: a link that opens a dialog. The violet spark marks it as new. Pressed while its dialog is open. */
+.sn-nav .sn-agent{gap:6px;padding:0 11px 0 9px}
+.sn-agi{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sn-spark{fill:var(--sn-audit);stroke:none}
+.sn-nav.dark .sn-agi .sn-spark{fill:oklch(80% .12 295)}
+.sn-nav .sn-agent[aria-expanded=true]{color:var(--bi);background:var(--bh);box-shadow:inset 0 0 0 1px var(--sn-line)}
+.sn-nav.dark .sn-agent[aria-expanded=true]{box-shadow:inset 0 0 0 1px oklch(100% 0 0/.18)}
+.sn-it.sn-ag[aria-expanded=true]{background:var(--sn-hover)}
 .sn-tile{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;color:oklch(99.5% .003 256);flex:none}
 .sn-tile svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .t-test{background:var(--sn-test)}.t-audit{background:var(--sn-audit)}
@@ -84,6 +92,11 @@ html{scroll-padding-top:88px}
  .sn-mm.mm-more.on{transform:none}
 }
 @media(min-width:1080px){.sn-mm.mm-more{display:none}}
+/* 1080 to 1239 px: Agent Ready makes the bar about 1050 px wide, so the links pack tighter */
+@media(min-width:1080px) and (max-width:1239px){
+ .sn-nav .sn-lk{padding:0 8px}.sn-nav .sn-agent{padding:0 8px 0 7px}
+ .sn-sep{margin:0 5px}.sn-wm{margin-right:4px}
+}
 /* below 760 px the two tools move into the menu too, so the bar is brand, Try it, menu */
 @media(max-width:759px){
  #sitenav{height:72px}
