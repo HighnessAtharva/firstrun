@@ -948,7 +948,7 @@ function issueBody(x,k,nEv,cut){
     x.evidence.slice(0,nEv).forEach(function(e){var cu=safeUrl(commitUrl(e.sha)),pu=e.pr?safeUrl(prUrl(e.pr)):"",id="`"+e.sha.slice(0,9)+"`";
       L.push("- "+(cu?"["+id+"]("+cu+")":id)+" "+trim(e.subject)+(e.date?" ("+e.date+")":"")+(e.pr?", "+(pu?"[PR #"+e.pr+"]("+pu+")":"PR #"+e.pr):""))});
     var more=total-Math.min(nEv,x.evidence.length);if(more>0)L.push("- +"+more+" more");L.push("")}
-  if(own)L.push("**Suggested owner:** "+(own.login?"@"+own.login+" ("+own.name+")":own.name)+". A suggestion from public commits, not an assignment.","");
+  if(own)L.push("**Suggested owner:** "+(own.login?own.name+" ("+own.login+")":own.name)+". A suggestion from public commits, not an assignment.","");
   L.push("---","Found by [FirstRun Doc-audit]("+SITE+"?id="+encodeURIComponent(A.id||"")+"#c="+k+")");
   return L.join("\n")}
 function issueUrl(x,k){
