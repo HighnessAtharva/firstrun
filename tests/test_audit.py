@@ -15,14 +15,14 @@ from firstrun import audit
 NOW = datetime.now(timezone.utc)
 
 
-def _commit(repo: Path, files: dict[str, str], msg: str, days_ago: int) -> None:
+def _commit(repo: Path, files: dict[str, str], msg: str, days_ago: int, author: tuple[str, str] = ("a", "a@x")) -> None:
     for name, text in files.items():
         p = repo / name
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(text, encoding="utf-8")
     when = (NOW - timedelta(days=days_ago)).strftime("%Y-%m-%dT%H:%M:%S+00:00")
     env = {**os.environ, "GIT_AUTHOR_DATE": when, "GIT_COMMITTER_DATE": when,
-           "GIT_AUTHOR_NAME": "a", "GIT_AUTHOR_EMAIL": "a@x", "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@x"}
+           "GIT_AUTHOR_NAME": author[0], "GIT_AUTHOR_EMAIL": author[1], "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@x"}
     subprocess.run(["git", "-C", str(repo), "add", "-A"], check=True, env=env)
     subprocess.run(["git", "-C", str(repo), "commit", "-q", "-m", msg], check=True, env=env)
 
@@ -94,7 +94,10 @@ def test_features_coverage_momentum_and_cards(repo):
     assert feats["--format"]["covered"] is False
     kinds = {c["kind"] for c in a["cards"]}
     assert {"document", "refresh", "automate", "quickstart"} <= kinds
-    assert any(c["kind"] == "content" for c in a["cards"])  # export has 3+ commits in the window
+    assert "content" not in kinds  # momentum now raises a score in `next` instead of making its own card
+    items = a["next"]["items"]
+    assert items and [i["rank"] for i in items] == list(range(1, len(items) + 1))
+    assert any(i["kind"] == "refresh" and i["path"] == "docs/export.md" for i in items)
     assert a["release"]["name"] == "v1.1" and a["release"]["previous"] == "v1.0"
     notes = a["drafts"]["release_notes"]
     assert "## New" in notes and "--format" in notes and "bump deps" not in notes
@@ -151,7 +154,8 @@ def test_issue_lists_cards_and_never_opens_anything(repo):
     a["repo"] = "acme/proj"
     data = audit.issue(a)
     assert data["title"].startswith("Docs audit:")
-    assert "- [ ] **Refresh docs/export.md**" in data["body"]
+    assert "- [ ] **Update Export** (`docs/export.md`)" in data["body"]
+    assert "@" not in data["body"].split("<details>")[0]  # logins go in without @, so nobody is pinged
     assert data["commands"] == [f'gh issue create --repo acme/proj --title "{data["title"]}" --body-file issue.md']
 
 
@@ -175,8 +179,7 @@ def test_undocumented_features_in_one_area_become_one_card():
     docs = [c for c in cards if c["kind"] == "document"]
     assert len(docs) == 1 and docs[0]["title"] == "Document the `workspace` feature" and docs[0]["count"] == 4
     assert "docs/cli.md" in docs[0]["action"]
-    content = [c for c in cards if c["kind"] == "content"]
-    assert content and "no docs page yet" in content[0]["why"]
+    assert not [c for c in cards if c["kind"] == "content"]
 
 
 def test_common_words_never_mark_a_page_stale():

@@ -224,3 +224,15 @@ def test_publishing_an_audit_writes_its_receipt(tmp_path):
     row = json.loads((tmp_path / "docs" / "audits" / "index.json").read_text(encoding="utf-8"))["audits"][0]
     assert row["receipt"] == f"FR-{a['id']}" and row["receipt_usd"] == 0.00042
     assert (tmp_path / "docs" / "receipts" / f"FR-{a['id']}.html").exists()
+
+
+def test_an_estimated_audit_cost_is_labeled_everywhere(tmp_path):
+    a = _audit()
+    a["cost"] = {**a["cost"], "estimated": True, "basis": "Estimate. Re-run on 2026-10-11."}
+    r = receipt.build_audit(a, tmp_path)
+    assert r["price"]["estimated"] is True
+    assert receipt.index_fields(r) == {"receipt": r["receipt_id"], "receipt_usd": 0.00042, "receipt_est": True}
+    assert "Total (estimated)" in receipt.render_audit_html(r)
+    assert "(estimated)" in receipt.render_audit_md(r)
+    measured = receipt.build_audit(_audit(), tmp_path)
+    assert measured["price"]["estimated"] is False and "receipt_est" not in receipt.index_fields(measured)

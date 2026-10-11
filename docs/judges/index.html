@@ -276,7 +276,7 @@ footer .home{font-weight:650;font-size:16px}
 <li class="tool">
 <div class="who"><img src="../assets/logo-entire.webp" alt="" width="52" height="52" loading="lazy"><h3>Entire</h3><p>Recorded the session behind each agent commit, and reviewed every layer.</p></div>
 <ul class="proof">
-<li><span>74 of 88 normal commits carry an <code>Entire-Checkpoint:</code> trailer, counted with <code>git log</code> on 2026-10-11. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">entire.md</a></span></li>
+<li><span>75 of 113 non-merge commits carry an <code>Entire-Checkpoint:</code> trailer, counted with <code>git log</code> on the launch branch on 2026-10-11, before the commit that records it. The 38 without are the 4 setup commits and site commits from 2026-10-10 and 2026-10-11; on many of those the Entire commit hook hung and was stopped so the commit could land. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">entire.md</a></span></li>
 <li><span>The planner fix commit opens its whole session with no login, checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Entire commit page</a></span></li>
 <li><span>Trails 3 to 12 reviewed every layer. The runners found 3 real bugs, and all 3 are fixed. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md#trails-reviewed-every-layer-and-the-runners-found-3-real-bugs">Trail findings</a></span></li>
 <li><span>The build agents searched the repo through Entire Graph: 10 calls saved about 56,254 tokens. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a></span></li>
@@ -353,7 +353,7 @@ footer .home{font-weight:650;font-size:16px}
 <ol class="claims col">
 <li><b>The agent improved.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a><span class="note">8 neatlogs traces, 4 before the fix and 4 after. Cost is list price, not billed.</span></li>
 <li><b>neatlogs was used.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">evidence/neatlogs.md</a><span class="note">Trace pages need a neatlogs login. The IDs and one exported trace are in the repo.</span></li>
-<li><b>Entire was used.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">evidence/entire.md</a><span class="note">74 of 88 normal commits carry a checkpoint trailer. The 4 setup commits before the first agent session carry none.</span></li>
+<li><b>Entire was used.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">evidence/entire.md</a><span class="note">75 of 113 non-merge commits carry a checkpoint trailer. The other 38 are the 4 setup commits and site commits made when the commit hook hung.</span></li>
 <li><b>cfo.ai was used.</b><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">The public cfo.ai model</a><span class="note">Opens with no login. The plan and every assumption are in business/BUSINESS_PLAN.md.</span></li>
 <li><b>Recovery is shown.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">trace-recovered-entire-v2.md</a><span class="note">The trace status reads ERROR because a failed step rolls up to the trace. The run itself ended verified.</span></li>
 <li><b>The build happened in public.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/hackathon.md#built-in-public">The Built in Public table</a><span class="note">11 of 13 published posts carry #neatHack.</span></li>
@@ -389,7 +389,7 @@ footer .home{font-weight:650;font-size:16px}
 <div class="code-h"><span>Run the offline tests, no network, Docker or keys</span><button type="button" class="cp" data-copy="test" aria-describedby="cp-status">Copy</button></div>
 <pre id="test"><span class="p">$ </span>git clone https://github.com/HighnessAtharva/firstrun
 <span class="p">$ </span>cd firstrun &amp;&amp; pip install -e ".[dev]" &amp;&amp; pytest -q</pre>
-<p class="note">The README records 295 passing tests on CI on 2026-10-11. The suite has grown since: a run on this page's commit passed 314, skipped 64 that need <code>FIRSTRUN_LIVE=1</code> or a human check, and had 1 expected failure. <a href="https://github.com/HighnessAtharva/firstrun/actions">GitHub Actions</a></p>
+<p class="note">The README badge records 360 offline tests. A run on the launch branch on 2026-10-11 passed 360, skipped 65 that need <code>FIRSTRUN_LIVE=1</code> or a human check, and had 1 expected failure. <a href="https://github.com/HighnessAtharva/firstrun/actions">GitHub Actions</a></p>
 </div>
 <p class="src" id="cp-status" role="status" aria-live="polite"></p>
 </div>

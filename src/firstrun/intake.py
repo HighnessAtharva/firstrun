@@ -47,7 +47,8 @@ def submission_url(repo: str, gist: str) -> str:
 
 
 def parse_issue(body: str) -> dict:
-    """Read the issue form: {"repo": owner/repo or "", "gist": gist id or ""}."""
+    """Read the issue form: {"repo": owner/repo or "", "gist": gist id or "", "team": False when the requester
+    ticked "Leave out the team map"}."""
     fields: dict[str, str] = {}
     parts = _FIELD.split(body or "")
     for label, value in zip(parts[1::2], parts[2::2]):
@@ -55,7 +56,8 @@ def parse_issue(body: str) -> dict:
         fields[label.strip().lower()] = "" if v in ("_No response_", "None") else v.splitlines()[0].strip() if v else ""
     repo = next((repo_name(v) for k, v in fields.items() if "repo" in k and repo_name(v)), "")
     gist = next((gist_id(v) for k, v in fields.items() if "gist" in k and gist_id(v)), "")
-    return {"repo": repo, "gist": gist}
+    team = not re.search(r"^\s*-\s*\[[xX]\]\s*Leave out the team map", body or "", re.M)
+    return {"repo": repo, "gist": gist, "team": team}
 
 
 def validate(doc: object) -> dict:
@@ -77,4 +79,6 @@ def validate(doc: object) -> dict:
         if doc.get(key) and not str(doc[key]).startswith("https://github.com/"):
             doc[key] = ""
     doc["source"] = "submitted"
-    return doc
+    from firstrun.team import sanitize
+
+    return sanitize(doc)

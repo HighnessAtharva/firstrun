@@ -10,10 +10,10 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 [![Live site](https://img.shields.io/badge/site-firstrun.atharvashah.com-0A66D6?style=for-the-badge)](https://firstrun.atharvashah.com/)
 [![neatHack 2026](https://img.shields.io/badge/built%20for-%23neatHack%202026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
-[![Tests](https://img.shields.io/badge/tests-295%20offline-1B8A3A?style=for-the-badge)](.github)
+[![Tests](https://img.shields.io/badge/tests-360%20offline-1B8A3A?style=for-the-badge)](.github)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
 
-[**Watch the 3-minute demo**](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**Follow the build on X**](https://x.com/cultist_dev)
+[**Watch the 3-minute demo**](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
 
 <br>
 
@@ -98,10 +98,21 @@ One blobless clone gives the whole history. The audit then works offline and cos
 - **Oldest first.** Every page, ranked by the date of its last edit.
 - **Stale or quiet.** A page is stale when product commits on its topic landed after its last edit, and the report names those commits. An old page that nothing changed under is quiet, so the team can leave it alone.
 - **Features with no docs.** Each user-facing commit in 120 days is checked against the docs text. A flag or name that no page mentions becomes a "Document this" card.
-- **Proposal cards.** Document this, refresh this page, feature this, create content around a feature with 3 or more commits, and automate the release notes.
+- **Proposal cards.** Document this, refresh this page, feature this, and automate the release notes.
+- **What to ship next.** One ranked list of up to 30 tasks. Each task has a score from 0 to 100, an effort of S, M or L, and one sentence that cites the commits and dates behind it. The score adds reader impact, urgency, evidence, whether Jev checked it, and ease, with fixed weights you can recompute by hand.
+- **Who works on what.** A map of the people who made the last 12 months of commits and the parts of the code they work on. Each task suggests an owner and gives the reason, such as "Maya made 14 of the last 20 commits to docs/use-cases/".
 - **Drafts.** Release notes for the newest stable tag and up to 3 product highlights, written from commit subjects and pull request numbers.
 
-`firstrun audit-issue` turns the newest audit into `issue.md`, one checkbox per card, and prints the `gh issue create` command. It opens nothing on its own.
+`firstrun audit-issue` turns the newest audit into `issue.md`, one checkbox for each of the top 10 tasks, and prints the `gh issue create` command. It opens nothing on its own. A suggested owner appears as a name and a login without the @, so nobody gets a GitHub notification.
+
+**Team map and privacy.** The map reads public commits: author names, GitHub logins and avatars, commit counts and dates. It never shows an email, raw or hashed. Emails stay in memory to join one person's commits, and a sanitizer drops any email before a board is written.
+
+Bots are left out. A commit counts by the files it changed, never by lines, and a commit 90 days old counts half. Every owner is a suggestion, not an assignment. Four opt-outs turn the map off or hide one person:
+
+- Run `firstrun audit --no-team`, or set `FIRSTRUN_TEAM=0`.
+- A repo owner adds `team: false` to `.github/firstrun.yml` or `.firstrun.yml`.
+- An audit request ticks "Leave out the team map" on the issue form. `firstrun audit-submit` leaves the map out unless you add `--with-team`.
+- A person adds `sha256:<hex>` of their lowercase login or name to `hidden` in [`docs/audits/team-optout.json`](docs/audits/team-optout.json). Their work moves into "Everyone else" and no task suggests them.
 
 To audit every week, copy [`examples/github-action/firstrun-audit.yml`](examples/github-action/firstrun-audit.yml) into `.github/workflows/`. Each Monday it audits the repo and updates one issue labeled `firstrun-audit`, so the docs team gets a fresh work list without anyone running a command.
 
@@ -120,7 +131,7 @@ A DevRel team ships a quickstart once and a dependency moves the week after. The
 firstrun https://docs.example.com/quickstart
 ```
 
-A clean pass ends as `passed`. A break ends as `verified` once a second container proves the fix. The nightly check costs $0.0167 per run on average over 64 runs, measured by neatlogs at list price.
+A clean pass ends as `passed`. A break ends as `verified` once a second container proves the fix. The nightly check costs $0.0178 per run on average over 88 runs, measured by neatlogs at list price.
 
 </details>
 
@@ -300,7 +311,7 @@ The integration check read 3 real runs back from persisted traces. See [docs/nea
 </tr>
 </table>
 
-- **Checkpoints:** 74 of 88 normal commits carry an `Entire-Checkpoint:` trailer, counted with `git log` on 2026-10-11. The 4 setup commits before the first agent session and 10 site commits carry none. Merge commits carry none, because Entire's hook skips merges. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
+- **Checkpoints:** 75 of 113 non-merge commits carry an `Entire-Checkpoint:` trailer, counted with `git log` on the launch branch on 2026-10-11, before the commit that records it. The 38 without are the 4 setup commits before the first agent session and site commits from 2026-10-10 and 2026-10-11. On many of those the Entire commit hook hung and was stopped so the commit could land. Merge commits carry none, because Entire's hook skips merges. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
 - **Trail reviews:** Entire runners reviewed every layer on Trails 3 to 7. They raised 2 real bugs on Layer 1, a secret retry loop and a Windows-only Docker default, both fixed in e2aacb7.
 - **Trails:** [Trail 1](https://entire.io/gh/HighnessAtharva/firstrun/trails/1) covers Layer 1. Trail pages need an entire.io login. The commit and session pages open without one.
 - **Graph:** the build agents searched the repo through the graph. 4 graph calls saved about 11,662 tokens.
@@ -328,6 +339,27 @@ The [plan page](https://firstrun.atharvashah.com/plan/) shows the caps, the meas
 </td>
 </tr>
 </table>
+
+### Every Run and Audit Ends With a Receipt
+
+A receipt turns one unit of agent work into a priced, capped, verified and checkable record. [A sample bill](docs/receipts/FR-20261010-091740-help-accuknox-com.html) for the AccuKnox knoxctl run shows the parts:
+
+- **Priced.** Model usage $0.0453 plus compute $0.0020 gives a total of $0.0473. The prices are list prices, not billed.
+- **Capped.** Bars show the run against each tier's cap from the cfo.ai plan. The model cost is 96.4% of the Team cap and over the Scale and Free caps.
+- **Proven.** A stamp says whether a second clean container reran the patched steps with no model calls. A run that ended any other way says "Not verified".
+- **Checkable.** The receipt carries its own hash and the SHA-256 of `state.json`, `runbook.json` and `report.md`.
+
+```bash
+firstrun receipt RUN_ID --html
+```
+
+```bash
+firstrun receipt --check runs/RUN_ID/receipt.json
+```
+
+`--check` fails when the receipt or one of its evidence files changed after it was issued. `firstrun receipt --all-published` writes a receipt for every run and audit on the site, and publishing a run or an audit writes its receipt too. The Doc-test and Doc-audit pages show a "View receipt" button with the amount on every row.
+
+A doc audit prices its Jev reads at TypeSafe's list price of $0.042 per million input tokens, and the clone and the analysis cost nothing. New audits record their Jev calls and tokens. The 7 audits published before cost tracking show an estimate, marked "est.", measured by re-running each one with [`scripts/audit_cost_estimates.py`](scripts/audit_cost_estimates.py). The estimates run from $0.0001 (fastapi/typer) to $0.0055 (dbt-core).
 
 ## The Build Happened in Public on X
 
@@ -519,7 +551,7 @@ Known limits are listed in [docs/known-limits.md](docs/known-limits.md). Example
 
 - **Build:** a lead session planned the work and ran worker agents in parallel, one track each: fixtures, planner, executor, recovery, verification, report page, then edge cases. All agents ran on Sonnet 5.5 at medium effort.
 - **Review:** each layer is an Entire Trail, so Entire runners reviewed every commit since kickoff. They found 3 real bugs, all fixed: a secret retry loop, a Windows-only Docker default, and a cd guard that was written but never called.
-- **CI:** GitHub Actions runs the offline suite on every push and pull request. The run on main on 2026-10-11 passed 295 tests. It skipped 59 tests that need `FIRSTRUN_LIVE=1` or a human check, and 1 test is an expected failure.
+- **CI:** GitHub Actions runs the offline suite on every push and pull request. On the launch branch on 2026-10-11 the offline suite gave 360 passed, 65 skipped (they need `FIRSTRUN_LIVE=1` or a human check) and 1 expected failure.
 - **Jury self-test:** the Entire judge plugin, run on this repo with the real start time, ranked it with no excluded work: 3.93 of 5, authenticity 4.5, integrity 5.0. The report is [evidence/jury-selftest.txt](evidence/jury-selftest.txt).
 
 Planning happened before the event in a private repo. The build log is [hackathon.md](hackathon.md).
