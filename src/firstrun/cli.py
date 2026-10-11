@@ -334,10 +334,24 @@ def report_cmd(html) -> None:
 @click.option("--html", "html", is_flag=True, help="Also write receipt.html.")
 @click.option("--check", "check_path", type=click.Path(exists=True, dir_okay=False),
               help="Verify a receipt.json and the run files beside it. Writes nothing.")
-def receipt_cmd(run_id, tier, html, check_path) -> None:
-    """Write receipt.json and receipt.md for a run: work, price, tier caps, proof and file hashes."""
+@click.option("--all-published", "all_published", is_flag=True,
+              help="Write a receipt into docs/receipts for every run and audit the site lists.")
+def receipt_cmd(run_id, tier, html, check_path, all_published) -> None:
+    """Write receipt.json and receipt.md for a run or a doc audit: work, price, caps or limits, proof and file hashes."""
     from firstrun import econ, receipt, state as state_io
 
+    if all_published:
+        from firstrun import publish
+
+        site = publish.find_site_dir()
+        if site is None:
+            raise click.ClickException("docs/runs not found. Run this inside the firstrun checkout or set FIRSTRUN_SITE_DIR.")
+        done = receipt.publish_all(site.parent, Path(config.RUNS_DIR))
+        click.echo(f"wrote {done['runs']} run receipts and {done['audits']} audit receipts to {site.parent / 'receipts'}"
+                   + (f", redrew {done['redrawn']} more" if done["redrawn"] else ""))
+        for item in done["skipped"]:
+            click.echo(f"skipped {item}: no run folder or no unit economics")
+        return
     if check_path:
         problems = receipt.check(Path(check_path))
         for p in problems:
@@ -352,6 +366,15 @@ def receipt_cmd(run_id, tier, html, check_path) -> None:
             raise click.ClickException("no runs found")
         run_id = dirs[-1]
     run_dir = state_io.run_dir(run_id)
+    if (run_dir / "audit.json").exists():
+        a = json.loads((run_dir / "audit.json").read_text(encoding="utf-8"))
+        r = receipt.build_audit(a, run_dir)
+        for f in receipt.write(run_dir, r, with_html=html):
+            click.echo(f"wrote {f}")
+        cost = r["price"]["usd"]
+        click.echo(f"{r['receipt_id']}: {'cost not recorded' if cost is None else f'${cost:.6f} Jev cost'}, "
+                   f"{r['proof']['cards_citing_evidence']} of {r['proof']['cards']} cards cited, hash {r['hash'][:19]}")
+        return
     if not (run_dir / "state.json").exists():
         raise click.ClickException(f"unknown run id: {run_id}")
     econ_path = econ.BUSINESS / "unit_economics.json"
@@ -427,7 +450,8 @@ def audit_cmd(target, stale_days, no_jev, no_publish, docs_repo) -> None:
     if not no_publish:
         site = audit_mod.find_audit_site()
         if site:
-            click.echo(f"site log: {audit_mod.publish(result, site)} (commit docs/audits to show it on the site)")
+            click.echo(f"site log: {audit_mod.publish(result, site, out_dir)} "
+                       "(commit docs/audits and docs/receipts to show it on the site)")
     tracing.close_tracing()
 
 

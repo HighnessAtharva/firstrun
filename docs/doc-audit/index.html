@@ -84,7 +84,17 @@ h2{font-size:19px;letter-spacing:-.02em;font-weight:650}
 .alist{list-style:none;padding:0;overflow:hidden}
 .alist li+li{border-top:1px solid var(--line2)}
 .alist a{display:grid;grid-template-columns:40px minmax(0,1fr) 220px auto;gap:4px 16px;align-items:center;padding:14px 18px;color:inherit;text-decoration:none}
-.alist a:hover{background:var(--hover)}
+.alist li:hover{background:var(--hover)}
+.alist .rcpw{padding:0 18px 14px 74px;margin-top:-4px}
+.alist a.rcp,.rcp{display:inline-flex;grid-template-columns:none;align-items:center;gap:7px;min-height:30px;padding:3px 13px 3px 10px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;box-shadow:var(--sh);transition:border-color .15s,color .15s,background .15s}
+.rcp svg.i{width:15px;height:15px;color:var(--vio)}
+.rcp .lbl{text-decoration:underline;text-decoration-color:oklch(80% .08 295);text-underline-offset:3px}
+.rcp .sep{color:var(--faint);font-weight:400}
+.rcp .amt{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.rcp .nc{font-weight:400;color:var(--mut)}
+.alist a.rcp:hover,.rcp:hover{border-color:var(--vio);color:var(--vio);background:var(--vio-bg)}
+.rcp:hover .lbl{text-decoration-color:currentColor}
+.rh .acts .rcp{height:36px;min-height:36px;border-radius:10px;padding:0 14px 0 12px}
 .alist .nm{font-weight:650;font-size:15.5px;letter-spacing:-.01em}
 .alist .nm small{display:block;font-weight:400;font-size:12.5px;color:var(--mut)}
 .alist .go{color:var(--vio);font-weight:600;font-size:13.5px;display:inline-flex;gap:4px;align-items:center}
@@ -222,6 +232,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 <symbol id="i-match" viewBox="0 0 24 24"><path d="M4 7h7M4 12h5M4 17h7"/><circle cx="16.5" cy="12" r="3.5"/><path d="M19 14.5l2.5 2.5"/></symbol>
 <symbol id="i-board" viewBox="0 0 24 24"><rect x="3.5" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="11" rx="1.5"/><rect x="15.5" y="4" width="5" height="7" rx="1.5"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+<symbol id="i-rcp" viewBox="0 0 24 24"><path d="M5.5 3h13v18l-2.2-1.5-2.2 1.5-2.1-1.5-2.2 1.5-2.1-1.5L5.5 21z"/><path d="M9 8h6M9 12h6M9 16h3.5"/></symbol>
 <symbol id="i-repo" viewBox="0 0 24 24"><path d="M6 3.5h11.5v14H7.5A1.5 1.5 0 0 0 6 19z"/><path d="M6 19a1.5 1.5 0 0 0 1.5 1.5h10"/></symbol>
 </svg>
 <div id="sitenav"></div>
@@ -247,7 +258,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 <section id="report" hidden aria-live="polite">
 <a class="back" href="./"><svg class="i" aria-hidden="true"><use href="#i-l"/></svg>All audits</a>
 <div class="rh"><img class="av" id="r-av" alt="" width="40" height="40"><div><h1 id="r-title"></h1><p class="meta" id="r-meta"></p></div>
-<div class="acts"><a class="btn" id="r-gh" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Open the repo</a></div></div>
+<div class="acts"><a class="rcp" id="r-rcp" hidden></a><a class="btn" id="r-gh" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Open the repo</a></div></div>
 <div class="health panel" id="r-health"><div class="bar" id="r-bar" role="img"></div><div class="hrow" id="r-hrow"></div></div>
 
 <div class="sec"><div class="sec-h"><h2>What to Ship Next</h2><p>Pick a card to see the commits behind it.</p></div>
@@ -337,10 +348,19 @@ function listAudits(){
       [["stale",a.stale],["quiet",a.quiet],["fresh",Math.max(0,a.pages-a.stale-a.quiet)]].forEach(function(p){if(!p[1])return;var i=el("i","b-"+p[0]);i.style.width=(100*p[1]/tot)+"%";bar.appendChild(i)});
       bar.setAttribute("role","img");bar.setAttribute("aria-label",a.stale+" stale, "+a.quiet+" quiet");bw.appendChild(bar);x.appendChild(bw);
       var go=el("span","go","Open board");go.appendChild(ic("r"));x.appendChild(go);
-      li.appendChild(x);ol.appendChild(li)});
+      li.appendChild(x);
+      if(a.receipt){var rw=el("div","rcpw"),rp=el("a","rcp");rcpFill(rp,a.receipt,a.receipt_usd);rw.appendChild(rp);li.appendChild(rw)}
+      ol.appendChild(li)});
     if(!ol.children.length)ol.appendChild(el("li",null,"No published audit yet."));
   }).catch(function(){});
 }
+/* receipts: docs/receipts/<receipt id>.html. Old audits carry no recorded cost. */
+function usd(v){v=+v;return "$"+(v>0&&v<0.001?v.toFixed(6):v.toFixed(4))}
+function rcpFill(x,id,amt){x.textContent="";x.href="../receipts/"+encodeURIComponent(id)+".html";x.appendChild(ic("rcp"));x.appendChild(el("span","lbl","View receipt"));
+  if(amt!=null&&isFinite(+amt)){var s=el("span","sep","·");s.setAttribute("aria-hidden","true");x.appendChild(s);x.appendChild(el("span","amt",usd(amt)))}else x.appendChild(el("span","nc","no cost recorded"))}
+function paintReceipt(a){var id="FR-"+a.id,b=$("r-rcp");
+  fetch("../receipts/"+encodeURIComponent(id)+".json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+    var p=j.price||{};rcpFill(b,j.receipt_id||id,p.recorded&&p.usd!=null?p.usd:null);b.hidden=false}).catch(function(){b.hidden=true})}
 function chip(cls,text,icon){var c=el("span","chip c-"+cls);c.appendChild(ic(icon||cls));c.appendChild(document.createTextNode(text));return c}
 
 /* report */
@@ -484,6 +504,7 @@ function render(a){
   $("start").hidden=true;$("report").hidden=false;
   $("r-title").textContent=a.repo;avatar($("r-av"),a.repo);
   if(safeUrl(a.url))$("r-gh").href=a.url;else $("r-gh").hidden=true;
+  if(a.id&&/^[a-z0-9-]+$/i.test(a.id))paintReceipt(a);
   var meta=["Audited "+fmt(a.generated_at)];
   if(a.history&&a.history.commits)meta.push(a.history.commits.toLocaleString()+" commits since "+fmt(a.history.since));
   if(a.release&&a.release.name)meta.push("newest release "+a.release.name);

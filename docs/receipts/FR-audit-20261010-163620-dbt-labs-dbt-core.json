@@ -1,0 +1,61 @@
+{
+ "kind": "audit",
+ "receipt_id": "FR-audit-20261010-163620-dbt-labs-dbt-core",
+ "issued_at": "2026-10-11T09:40:40Z",
+ "work": {
+  "repo": "dbt-labs/dbt-core",
+  "docs_repo": "dbt-labs/docs.getdbt.com",
+  "url": "https://github.com/dbt-labs/dbt-core",
+  "audited_at": "2026-10-10T16:36:20+00:00",
+  "head": "",
+  "commits_read": 11552,
+  "since": "2016-03-10",
+  "history_capped": false,
+  "pages": 1405,
+  "fresh": 870,
+  "aging": 162,
+  "stale": 15,
+  "quiet": 332,
+  "features": 179,
+  "uncovered": 72,
+  "cards": {
+   "document": 8,
+   "refresh": 6,
+   "content": 4,
+   "feature": 4,
+   "automate": 1,
+   "quickstart": 1
+  },
+  "judged_by_jev": true
+ },
+ "price": {
+  "recorded": false,
+  "jev_calls": null,
+  "jev_input_tokens": null,
+  "usd": null,
+  "basis": "This audit ran before cost tracking, so its cost was not recorded."
+ },
+ "limits": {
+  "dollar_cap_per_audit": null,
+  "jev_stale_pages_max": 200,
+  "jev_commit_sorts_max": 80,
+  "jev_batch_size": 40,
+  "history_commits_max": 20000,
+  "note": "The plan sets no dollar cap per audit. Jev reads are limited by the counts below."
+ },
+ "proof": {
+  "cards": 24,
+  "cards_citing_evidence": 22,
+  "all_cited": false,
+  "claim": "22 of 24 cards cite commits or pages you can open. This audit did not record the commit it read."
+ },
+ "audit": {
+  "audit_id": "audit-20261010-163620-dbt-labs-dbt-core",
+  "evidence_sha256": {
+   "audit.json": "sha256:9c21b39fd549abf095d414984a05d5b904a5e6f76bbfd07d134add938dc0c6ea",
+   "audit.md": "sha256:e8e8d37b44bcf00723efe9fde222cc14804b09a9789a020bcc10ba6df81dda2b"
+  },
+  "generated_by": "firstrun audit"
+ },
+ "hash": "sha256:ecc0f49f96d12b5482b6edf67619c0bba08b829f7c47c591da54cd36b724a06d"
+}

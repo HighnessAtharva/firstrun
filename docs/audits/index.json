@@ -15,7 +15,9 @@
    "uncovered": 0,
    "cards": 16,
    "release": "cdr-test",
-   "docs_repo": ""
+   "docs_repo": "",
+   "receipt": "FR-audit-20261011-054325-accuknox-help",
+   "receipt_usd": null
   },
   {
    "id": "audit-20261011-050359-neatlogs-neatlogs",
@@ -32,7 +34,9 @@
    "uncovered": 16,
    "cards": 18,
    "release": "v1.4.26",
-   "docs_repo": ""
+   "docs_repo": "",
+   "receipt": "FR-audit-20261011-050359-neatlogs-neatlogs",
+   "receipt_usd": null
   },
   {
    "id": "audit-20261011-050011-orchestratorinc-agent-orchestrator",
@@ -49,7 +53,9 @@
    "uncovered": 90,
    "cards": 18,
    "release": "v0.13.7",
-   "docs_repo": ""
+   "docs_repo": "",
+   "receipt": "FR-audit-20261011-050011-orchestratorinc-agent-orchestrator",
+   "receipt_usd": null
   },
   {
    "id": "audit-20261010-163620-dbt-labs-dbt-core",
@@ -66,7 +72,9 @@
    "uncovered": 72,
    "cards": 24,
    "release": "v2.0.5",
-   "docs_repo": "dbt-labs/docs.getdbt.com"
+   "docs_repo": "dbt-labs/docs.getdbt.com",
+   "receipt": "FR-audit-20261010-163620-dbt-labs-dbt-core",
+   "receipt_usd": null
   },
   {
    "id": "audit-20261010-163526-entireio-cli",
@@ -83,7 +91,9 @@
    "uncovered": 82,
    "cards": 18,
    "release": "v0.11.4",
-   "docs_repo": ""
+   "docs_repo": "",
+   "receipt": "FR-audit-20261010-163526-entireio-cli",
+   "receipt_usd": null
   },
   {
    "id": "audit-20261010-163411-altimateai-altimate-code",
@@ -100,7 +110,9 @@
    "uncovered": 47,
    "cards": 18,
    "release": "v0.12.6",
-   "docs_repo": ""
+   "docs_repo": "",
+   "receipt": "FR-audit-20261010-163411-altimateai-altimate-code",
+   "receipt_usd": null
   },
   {
    "id": "audit-20261010-163257-fastapi-typer",
@@ -117,7 +129,9 @@
    "uncovered": 0,
    "cards": 2,
    "release": "0.27.3",
-   "docs_repo": ""
+   "docs_repo": "",
+   "receipt": "FR-audit-20261010-163257-fastapi-typer",
+   "receipt_usd": null
   }
  ]
 }

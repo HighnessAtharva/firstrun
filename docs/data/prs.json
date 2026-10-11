@@ -1,0 +1,46 @@
+[
+ {
+  "repo": "dbt-labs/docs.getdbt.com",
+  "number": 10149,
+  "url": "https://github.com/dbt-labs/docs.getdbt.com/pull/10149",
+  "title": "Fix the jafgen command in the DuckDB quickstart",
+  "page": "https://docs.getdbt.com/guides/duckdb",
+  "fix": "jafgen --years 6 fails with No such option. The fix is jafgen 6.",
+  "state": "open",
+  "shot": "assets/pr-10149.webp",
+  "replay": "doc-test/?s=10#ex=dbt"
+ },
+ {
+  "repo": "dbt-labs/docs.getdbt.com",
+  "number": 10150,
+  "url": "https://github.com/dbt-labs/docs.getdbt.com/pull/10150",
+  "title": "State the Python version the DuckDB quickstart needs",
+  "page": "https://docs.getdbt.com/guides/duckdb",
+  "fix": "The repo pins networkx 3.7, which needs Python 3.12. The guide named no version.",
+  "state": "open",
+  "shot": "assets/pr-10150.webp",
+  "replay": "doc-test/?s=3#ex=dbt"
+ },
+ {
+  "repo": "entireio/cli",
+  "number": 2724,
+  "url": "https://github.com/entireio/cli/pull/2724",
+  "title": "Say where install.sh puts entire on Linux",
+  "page": "https://docs.entire.io/installation",
+  "fix": "After a good install, entire version says command not found. The page now names the PATH step.",
+  "state": "open",
+  "shot": "assets/pr-2724.webp",
+  "replay": "doc-test/?s=2#ex=entire"
+ },
+ {
+  "repo": "accuknox/help",
+  "number": 671,
+  "url": "https://github.com/accuknox/help/pull/671",
+  "title": "knoxctl install: point at the latest release and list APT prerequisites",
+  "page": "https://help.accuknox.com/knoxctl/",
+  "fix": "The page named 0.9.0 as latest while the installer fetches 0.9.58, and skipped curl, gnupg and sudo.",
+  "state": "open",
+  "shot": "assets/pr-671.webp",
+  "replay": "doc-test/?s=2#ex=accuknox"
+ }
+]

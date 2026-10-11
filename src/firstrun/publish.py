@@ -1,4 +1,4 @@
-"""Publish a run to the public site log: docs/runs/<run id>.txt plus one row in docs/runs/index.json.
+"""Publish a run to the public site log: docs/runs/<run id>.txt, one row in docs/runs/index.json, and its receipt.
 
 The repo is public and Netlify serves docs/, so a committed row is a run anyone can replay.
 """
@@ -86,6 +86,23 @@ def row_for(payload: dict, cost: float | None = None) -> dict:
     }
 
 
+def _receipt(run_dir: Path, site: Path, run_id: str) -> dict:
+    """Write the run's receipt into docs/receipts. Returns the index fields, or nothing when it cannot be built."""
+    from firstrun import receipt
+
+    docs = site.parent
+    econ, cfo = receipt.load_econ(docs)
+    if econ is None:
+        return {}
+    try:
+        out = docs / "receipts"
+        r = receipt.for_run(run_dir, econ, receipt.billed_tier(out, f"FR-{run_id}"), cfo)
+        receipt.publish_site(r, out)
+        return receipt.index_fields(r)
+    except Exception:  # noqa: BLE001 - a receipt failure never blocks the run log
+        return {}
+
+
 def publish_run(run_dir, site_dir: Path | None = None) -> Path | None:
     """Write the replay file and upsert the index row. Returns the replay file, or None off-site."""
     site = site_dir or find_site_dir()
@@ -103,7 +120,9 @@ def publish_run(run_dir, site_dir: Path | None = None) -> Path | None:
     except (OSError, ValueError):
         doc = {}
     rows = [r for r in doc.get("runs", []) if r.get("id") != run_id]
-    rows.append(row_for(payload, _cost(run_dir)))
+    row = row_for(payload, _cost(run_dir))
+    row.update(_receipt(run_dir, site, run_id))
+    rows.append(row)
     rows.sort(key=lambda r: r.get("ts", ""), reverse=True)
     idx_path.write_text(json.dumps({"runs": rows}, indent=1) + "\n", encoding="utf-8")
     return out
