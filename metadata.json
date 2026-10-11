@@ -3,12 +3,13 @@
   "checkpoint_id": "01M4NDZNE7R4EA2K9P7BY2M9BZ",
   "strategy": "manual-commit",
   "branch": "feat/agent-friendly",
-  "checkpoints_count": 3,
+  "checkpoints_count": 6,
   "files_touched": [
     "docs/doc-audit/index.html",
     "docs/doc-test/index.html",
     "docs/index.html",
-    "netlify.toml"
+    "netlify.toml",
+    "src/firstrun/cli.py"
   ],
   "sessions": [
     {
@@ -17,13 +18,27 @@
       "compact_transcript": "/0/transcript.jsonl",
       "content_hash": "/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/1/metadata.json",
+      "transcript": "/1/full.jsonl",
+      "compact_transcript": "/1/transcript.jsonl",
+      "content_hash": "/1/content_hash.txt",
+      "prompt": "/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 0,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 0,
-    "output_tokens": 0,
-    "api_call_count": 0
+    "input_tokens": 26,
+    "cache_creation_tokens": 25990,
+    "cache_read_tokens": 9298863,
+    "output_tokens": 12507,
+    "api_call_count": 12,
+    "subagent_tokens": {
+      "input_tokens": 976,
+      "cache_creation_tokens": 1761800,
+      "cache_read_tokens": 127563367,
+      "output_tokens": 423848,
+      "api_call_count": 485
+    }
   }
 }
