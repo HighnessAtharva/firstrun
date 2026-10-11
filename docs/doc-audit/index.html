@@ -277,6 +277,55 @@ div.nx-o{cursor:default}
 .nx-more{display:flex;justify-content:center;margin-top:18px}
 .nx-ag{max-width:980px;margin:0 auto 12px}
 
+/* GitHub issues: one per card, or a walk through the selected ones */
+.imp{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 7px;border-radius:99px;font-size:11.5px;font-weight:650;white-space:nowrap;background:var(--sunk);color:var(--ink2);border:1px solid var(--line)}
+.imp:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.imp.i-high{background:var(--vio-bg);border-color:oklch(88% .06 295);color:oklch(42% .19 295)}.imp.i-high:before{background:var(--vio)}
+.imp.i-medium:before{background:oklch(68% .12 295)}
+.gi{position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px 0 9px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:12.5px;font-weight:600;text-decoration:none;white-space:nowrap;box-shadow:var(--sh);transition:border-color .15s,background .15s,color .15s}
+.gi:hover{border-color:var(--vio);color:oklch(42% .19 295);background:var(--vio-bg)}
+.gi svg.i{width:14px;height:14px}
+.gi.done{color:var(--ok);background:var(--ok-bg);border-color:transparent;box-shadow:none}
+.gh-bar{position:relative;display:flex;justify-content:center;max-width:980px;margin:-8px auto 18px}
+.gh-bar>.btn[aria-expanded=true]{border-color:var(--vio);background:var(--vio-bg);color:oklch(42% .19 295)}
+.gh-bar .cv{width:14px;height:14px;transition:transform .2s var(--ease)}
+.gh-bar>.btn[aria-expanded=true] .cv{transform:rotate(180deg)}
+.ghp{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);z-index:40;width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh2);padding:16px;display:grid;gap:14px;text-align:left}
+.ghp h3{font-size:15px;font-weight:650;letter-spacing:-.01em}
+.ghp h3 span{font:500 12.5px var(--mono);color:var(--mut);display:block;margin-top:2px;overflow-wrap:anywhere}
+.ghp fieldset{border:0;padding:0;min-width:0}
+.ghp legend{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);margin-bottom:8px;padding:0}
+.ghf{display:flex;flex-wrap:wrap;gap:6px}
+.ghf label{position:relative;display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px 0 10px;border-radius:99px;border:1px solid var(--line);background:var(--panel);font-size:13px;font-weight:600;cursor:pointer;user-select:none}
+.ghf label b{font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
+.ghf input{appearance:none;-webkit-appearance:none;margin:0;width:15px;height:15px;border-radius:4px;border:1.5px solid oklch(72% .01 255);background:var(--panel);display:grid;place-items:center;cursor:pointer}
+.ghf input:checked{background:var(--vio);border-color:var(--vio)}
+.ghf input:checked:after{content:"";width:7px;height:4px;border:2px solid oklch(99% .005 295);border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+.ghf input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.ghf label:has(input:checked){border-color:oklch(80% .08 295);background:var(--vio-bg)}
+.ghf label:has(input:checked) b{color:oklch(42% .19 295)}
+.ghf label:has(input:disabled){opacity:.5;cursor:default}
+.ghs{display:grid;gap:6px}
+.ghs p{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.ghs p b{color:var(--ink)}
+.ghs .tr{height:4px;border-radius:99px;background:var(--line2);overflow:hidden}
+.ghs .tr i{display:block;height:100%;width:0;background:var(--vio);border-radius:99px;transition:width .3s var(--ease)}
+.ghl{list-style:none;padding:0;margin:0;max-height:248px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;overscroll-behavior:contain}
+.ghl li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px 8px 12px;font-size:13.5px}
+.ghl li+li{border-top:1px solid var(--line2)}
+.ghl .n{font-size:12px;font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
+.ghl a{color:var(--ink);text-decoration:underline;text-decoration-color:oklch(80% .02 295);text-underline-offset:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;border-radius:4px}
+.ghl a:hover{color:oklch(42% .19 295);text-decoration-color:currentColor}
+.ghl li.nx-now{background:var(--vio-bg)}
+.ghl li.done a{color:var(--mut)}
+.ghl .ok{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:650;color:var(--ok)}
+.ghl .ok svg.i{width:13px;height:13px}
+.ghl .em{padding:14px 12px;color:var(--mut);display:block}
+.gha{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gha .btn[disabled]{opacity:.5;cursor:default}
+.gha .lk{margin-left:auto;border:0;background:none;padding:4px 2px;font-size:12.5px;color:var(--mut);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.ghp .nt{font-size:12.5px;color:var(--mut);line-height:1.45}
+
 /* drawer: why it ranks, suggested owner */
 .rk-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .rk-h .lab{margin:0}
@@ -365,6 +414,8 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
  .nx>li{grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:16px 16px 16px 12px}
  .nx-m{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:10px}
  .nx-n{font-size:19px}.nx-sc{width:24px}
+ .ghp{left:0;right:0;transform:none;width:auto}
+ .gha .btn{flex:1 1 auto;justify-content:center}.gha .lk{margin-left:0}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -400,7 +451,10 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 <symbol id="i-rows" viewBox="0 0 24 24"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></symbol>
 <symbol id="i-one" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol>
 <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M15.5 14.2a4.6 4.6 0 0 1 5 4.8"/></symbol>
-<symbol id="i-repo" viewBox="0 0 24 24"><path d="M6 3.5h11.5v14H7.5A1.5 1.5 0 0 0 6 19z"/><path d="M6 19a1.5 1.5 0 0 0 1.5 1.5h10"/></symbol>
+<symbol id="i-issue" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="1.6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-repo"viewBox="0 0 24 24"><path d="M6 3.5h11.5v14H7.5A1.5 1.5 0 0 0 6 19z"/><path d="M6 19a1.5 1.5 0 0 0 1.5 1.5h10"/></symbol>
 </svg>
 <div id="sitenav"></div>
 <script src="../assets/site-nav.js" data-cur="audit" defer></script>
@@ -451,6 +505,17 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 </section>
 
 <div class="sec" id="r-next"><h2 class="hc">What to Ship Next</h2>
+<div class="gh-bar" id="gh-bar" hidden>
+<button class="btn" type="button" id="gh-all" aria-expanded="false" aria-controls="gh-pop" aria-haspopup="true"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Open all issues on GitHub<svg class="i cv" aria-hidden="true"><use href="#i-down"/></svg></button>
+<div class="ghp" id="gh-pop" role="group" aria-labelledby="gh-h" hidden>
+<h3 id="gh-h">File issues on GitHub<span id="gh-repo"></span></h3>
+<fieldset><legend>Impact</legend><div class="ghf" id="gh-f"></div></fieldset>
+<div class="ghs"><p><span id="gh-prog" aria-live="polite"></span><span id="gh-sel"></span></p><span class="tr" aria-hidden="true"><i id="gh-bar-i"></i></span></div>
+<ol class="ghl" id="gh-list" aria-label="Selected issues"></ol>
+<div class="gha"><button class="btn pri" type="button" id="gh-next"></button><button class="btn" type="button" id="gh-copy"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg>Copy all links</button><button class="lk" type="button" id="gh-clear" hidden>Clear opened marks</button></div>
+<p class="nt">Each link opens a filled-in issue form on GitHub. You check it and submit it there. This page sends nothing.</p>
+</div>
+</div>
 <div class="nx-f" id="nx-f" hidden></div>
 <div class="nx-ag" id="nx-ag" hidden></div>
 <ol class="nx panel" id="r-nx"></ol>
@@ -826,7 +891,8 @@ function nextRow(x,k,i){
     var t=el("span");t.appendChild(el("small",null,"Suggested"));t.appendChild(el("b",null,own.name));ob.appendChild(t);
     ob.addEventListener("click",function(){togglePin({t:"p",id:own.id})});m.appendChild(ob)}
   else if(T&&!x.fb){var nb=el("div","nx-o none");nb.appendChild(face(null,28));var t2=el("span");t2.appendChild(el("small",null,"Suggested"));t2.appendChild(el("b",null,"No clear owner"));nb.appendChild(t2);m.appendChild(nb)}
-  var mr=el("div","nx-mr");if(x.effort)mr.appendChild(effortPill(x));if(x.why_now)mr.appendChild(el("span","nx-w",x.why_now));if(mr.childNodes.length)m.appendChild(mr);
+  var mr=el("div","nx-mr");if(x.parts&&isNum(x.parts.impact)){var ib=el("span","imp i-"+impactOf(x),IMPL[impactOf(x)]+" impact");ib.title="Reader impact "+pct(x.parts.impact);mr.appendChild(ib)}if(x.effort)mr.appendChild(effortPill(x));if(x.why_now)mr.appendChild(el("span","nx-w",x.why_now));if(mr.childNodes.length)m.appendChild(mr);
+  if(GHOK)m.appendChild(issueLink(x,k));
   li.appendChild(m);
   function hov(){if(!T)return;var s={t:"pa",p:own?own.id:null,a:x.area||null,src:"list"};if(!s.p&&!s.a)return;if(!s.p){s={t:"a",id:s.a,src:"list"}}HOV=s;apply()}
   li.addEventListener("mouseenter",hov);li.addEventListener("mouseleave",function(){if(HOV&&HOV.src==="list"){HOV=null;apply()}});
@@ -839,6 +905,7 @@ function paintNext(){
     ok.appendChild(el("p",null,"No stale page and no shipped feature without docs. The docs keep up with the code."));ag.appendChild(ok);ag.hidden=false}else ag.hidden=true;
   NX.forEach(function(x,k){var i=ITEMS.length;ITEMS.push({next:x});var li=nextRow(x,k,i);ITEMS[i].btn=li.querySelector(".nx-open");ol.appendChild(li)});
   ol.hidden=!NX.length;
+  ghOpen(false);$("gh-bar").hidden=!(GHOK&&NX.length);if(GHOK)$("gh-repo").textContent=ghRepo(A.url)+(ghRepo(A.docs_url)&&ghRepo(A.docs_url)!==ghRepo(A.url)?" and "+ghRepo(A.docs_url):"");
   filterNext();
 }
 function filterNext(){
@@ -857,6 +924,89 @@ function filterNext(){
   syncPressed();
 }
 $("nx-all").addEventListener("click",function(){SHOWALL=true;filterNext();var r=$("r-nx").querySelector("li:nth-child(11) .nx-open");if(r)r.focus()});
+
+/* ---------- GitHub issues: prefilled new-issue links. The visitor submits on GitHub; this page sends nothing ---------- */
+var SITE="https://firstrun.atharvashah.com/doc-audit/",GH_MAX=7500,GHOK=false,OPENED={},LV=["high","medium","low"];
+var IMPL={high:"High",medium:"Medium",low:"Low"},GHSEL={high:true,medium:true,low:false};
+function ghRepo(u){var m=/^https:\/\/github\.com\/([\w.-]+)\/([\w.-]+?)(?:\.git)?\/?$/i.exec(u||"");return m?m[1]+"/"+m[2]:""}
+/* impact comes from the ranker's reader-impact part: 0.75 and up is high, under 0.5 is low */
+function impactOf(x){var v=x.parts&&isNum(x.parts.impact)?x.parts.impact:null;return v==null?"medium":v>=.75?"high":v>=.5?"medium":"low"}
+/* a docs fix goes to the repo that holds the docs; release, announce and quickstart go to the code repo */
+function issueRepo(x){var d=ghRepo(A.docs_url),c=ghRepo(A.url);return (x.kind==="document"||x.kind==="refresh")&&d?d:c}
+function itemPath(x){var fp=x.path||"";if(!fp&&x.kind==="document"){var m=/(\S+?\.(?:mdx?|rst|txt|adoc))\b/.exec(x.action);if(m)fp=m[1]}return fp}
+function oneLine(s){return String(s||"").replace(/\s+/g," ").trim()}
+function issueBody(x,k,nEv,cut){
+  var L=[],own=x.owner&&T?T.byId[x.owner.p]:null,fp=itemPath(x),fu=fp?safeUrl(fileUrl(fp)):"";
+  function trim(s){s=oneLine(s);return cut&&s.length>cut?s.slice(0,cut)+"...":s}
+  L.push("**"+NK[x.kind].l+":** "+oneLine(x.title),"");
+  if(x.rationale)L.push(trim(x.rationale),"");
+  if(fp)L.push("**Page:** "+(fu?"["+fp+"]("+fu+")":"`"+fp+"`"));
+  if(x.action)L.push("**What to do:** "+trim(x.action));
+  L.push("**Impact:** "+IMPL[impactOf(x)]+(x.effort?" · **Effort:** "+EFF[x.effort][0]:"")+" · **Rank:** "+x.rank+" of "+NX.length,"");
+  var total=Math.max(x.count||0,x.evidence.length);
+  if(total){L.push("**Evidence** ("+total+(total===1?" commit)":" commits)"));
+    x.evidence.slice(0,nEv).forEach(function(e){var cu=safeUrl(commitUrl(e.sha)),pu=e.pr?safeUrl(prUrl(e.pr)):"",id="`"+e.sha.slice(0,9)+"`";
+      L.push("- "+(cu?"["+id+"]("+cu+")":id)+" "+trim(e.subject)+(e.date?" ("+e.date+")":"")+(e.pr?", "+(pu?"[PR #"+e.pr+"]("+pu+")":"PR #"+e.pr):""))});
+    var more=total-Math.min(nEv,x.evidence.length);if(more>0)L.push("- +"+more+" more");L.push("")}
+  if(own)L.push("**Suggested owner:** "+(own.login?"@"+own.login+" ("+own.name+")":own.name)+". A suggestion from public commits, not an assignment.","");
+  L.push("---","Found by [FirstRun Doc-audit]("+SITE+"?id="+encodeURIComponent(A.id||"")+"#c="+k+")");
+  return L.join("\n")}
+function issueUrl(x,k){
+  var base="https://github.com/"+issueRepo(x)+"/issues/new?title="+encodeURIComponent(oneLine(x.title))+"&labels=documentation&body=",u;
+  /* stay under about 7,500 characters: drop commits first, then shorten the long lines */
+  for(var n=x.evidence.length;n>=0;n--){u=base+encodeURIComponent(issueBody(x,k,n));if(u.length<=GH_MAX)return u}
+  for(var c=400;c>=60;c-=85){u=base+encodeURIComponent(issueBody(x,k,0,c));if(u.length<=GH_MAX)return u}
+  return u}
+function ghKey(x){return x.kind+":"+x.title}
+function ghLoad(){OPENED={};try{var v=JSON.parse(localStorage.getItem("fr-gh-"+(A.id||A.repo))||"{}");if(v&&typeof v==="object")OPENED=v}catch(e){}}
+function ghSave(){try{localStorage.setItem("fr-gh-"+(A.id||A.repo),JSON.stringify(OPENED))}catch(e){}}
+function isOpened(x){return OPENED[ghKey(x)]===1}
+/* after the link's own click runs, so the new tab still opens */
+function markOpened(x){setTimeout(function(){OPENED[ghKey(x)]=1;ghSave();paintGhMarks()},0)}
+function fillGi(g,x){var d=isOpened(x);g.textContent="";g.classList.toggle("done",d);g.appendChild(ic(d?"check":"issue"));g.appendChild(document.createTextNode(d?"Issue opened":"Open issue on GitHub"));
+  g.setAttribute("aria-label",(d?"Issue form already opened. Open it again for: ":"Open a GitHub issue for: ")+x.title+". Opens in a new tab.")}
+function issueLink(x,k){var g=el("a","gi");g.href=issueUrl(x,k);g.target="_blank";g.rel="noopener";g.dataset.k=k;fillGi(g,x);g.addEventListener("click",function(){markOpened(x)});return g}
+function paintGhMarks(){[].forEach.call(document.querySelectorAll("#r-nx .gi"),function(g){var x=NX[+g.dataset.k];if(x)fillGi(g,x)});if(!$("gh-pop").hidden)paintGhList()}
+function ghSelected(){return NX.filter(function(x){return GHSEL[impactOf(x)]})}
+function paintGhPop(){
+  var F=$("gh-f"),cnt={high:0,medium:0,low:0};F.textContent="";NX.forEach(function(x){cnt[impactOf(x)]++});
+  LV.forEach(function(lv){var lb=el("label"),cb=el("input");cb.type="checkbox";cb.value=lv;cb.disabled=!cnt[lv];cb.checked=!!GHSEL[lv]&&!!cnt[lv];
+    cb.addEventListener("change",function(){GHSEL[lv]=cb.checked;paintGhList()});
+    lb.appendChild(cb);lb.appendChild(document.createTextNode(IMPL[lv]));lb.appendChild(el("b",null,String(cnt[lv])));lb.appendChild(el("span","sr",cnt[lv]===1?" issue":" issues"));F.appendChild(lb)});
+  paintGhList()}
+function paintGhList(){
+  var sel=ghSelected(),L=$("gh-list"),done=0,nx=-1;L.textContent="";
+  sel.forEach(function(x,j){var d=isOpened(x),k=NX.indexOf(x);if(d)done++;else if(nx<0)nx=j;
+    var li=el("li",d?"done":null);li.appendChild(el("span","n",String(x.rank)));
+    var a=el("a",null,x.title);a.href=issueUrl(x,k);a.target="_blank";a.rel="noopener";a.title=x.title;a.setAttribute("aria-label","Rank "+x.rank+": "+x.title+(d?", already opened":"")+". Opens in a new tab.");
+    a.addEventListener("click",function(){markOpened(x)});li.appendChild(a);
+    if(d){var s=el("span","ok");s.appendChild(ic("check"));s.appendChild(document.createTextNode("Opened"));li.appendChild(s)}else li.appendChild(el("span","imp i-"+impactOf(x),IMPL[impactOf(x)]));
+    L.appendChild(li)});
+  if(nx>=0)L.children[nx].classList.add("nx-now");
+  if(!sel.length){var e=el("li"),s2=el("span","em","Pick at least one impact level.");s2.style.gridColumn="1/-1";e.appendChild(s2);L.appendChild(e)}
+  $("gh-prog").textContent=done+" of "+sel.length+" opened";
+  $("gh-sel").textContent=nx>=0?"Next: rank "+sel[nx].rank:"";
+  $("gh-bar-i").style.width=(sel.length?100*done/sel.length:0)+"%";
+  var b=$("gh-next");b.textContent="";b.appendChild(ic("ext"));
+  b.appendChild(document.createTextNode(!sel.length?"Open next":nx<0?"All opened":"Open next ("+(done+1)+" of "+sel.length+")"));b.disabled=!sel.length||nx<0;
+  $("gh-copy").disabled=!sel.length;
+  $("gh-clear").hidden=!NX.some(isOpened)}
+function ghOpen(on){var p=$("gh-pop"),b=$("gh-all");p.hidden=!on;b.setAttribute("aria-expanded",String(on));
+  if(on){paintGhPop();var f=p.querySelector("input:not(:disabled)");if(f)f.focus()}}
+$("gh-all").addEventListener("click",function(){ghOpen($("gh-pop").hidden)});
+document.addEventListener("click",function(e){if(!$("gh-pop").hidden&&!$("gh-bar").contains(e.target))ghOpen(false)});
+$("gh-pop").addEventListener("keydown",function(e){
+  if(e.key==="Escape"){e.preventDefault();e.stopPropagation();ghOpen(false);$("gh-all").focus();return}
+  var boxes=[].slice.call($("gh-f").querySelectorAll("input:not(:disabled)")),bi=boxes.indexOf(document.activeElement);
+  if(bi>=0&&(e.key==="ArrowRight"||e.key==="ArrowLeft")){e.preventDefault();boxes[(bi+(e.key==="ArrowRight"?1:boxes.length-1))%boxes.length].focus();return}
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){var f=[].slice.call($("gh-pop").querySelectorAll("input:not(:disabled),a[href],button:not(:disabled)")).filter(function(n){return n.offsetParent}),i=f.indexOf(document.activeElement);
+    if(i<0)return;e.preventDefault();f[Math.max(0,Math.min(f.length-1,i+(e.key==="ArrowDown"?1:-1)))].focus()}});
+/* browsers allow one new tab per click, so Open next walks the list one click at a time */
+$("gh-next").addEventListener("click",function(){var x=ghSelected().filter(function(y){return !isOpened(y)})[0];if(!x)return;
+  window.open(issueUrl(x,NX.indexOf(x)),"_blank","noopener");markOpened(x)});
+$("gh-copy").addEventListener("click",function(){var sel=ghSelected();if(!sel.length)return;
+  copy(sel.map(function(x){return "#"+x.rank+" "+oneLine(x.title)+"\n"+issueUrl(x,NX.indexOf(x))}).join("\n\n"),sel.length+(sel.length===1?" link copied":" links copied"))});
+$("gh-clear").addEventListener("click",function(){OPENED={};ghSave();paintGhMarks();$("gh-next").focus()});
 function paintReady(){
   var R=$("r-ready");R.textContent="";
   var notes=(A.drafts&&A.drafts.release_notes)||"",hl=(A.drafts&&A.drafts.highlights)||[];
@@ -927,6 +1077,7 @@ function paintNextDrawer(B,x){
   var notes=(A.drafts&&A.drafts.release_notes)||"";
   if(x.kind==="release"&&notes){var cn=el("button","btn pri");cn.type="button";cn.appendChild(ic("copy"));cn.appendChild(document.createTextNode("Copy the release notes"));cn.addEventListener("click",function(){copy(notes,"Release notes copied")});acts2.appendChild(cn)}
   if(x.kind==="quickstart"){var dt=el("a","btn pri");dt.href="../doc-test/";dt.appendChild(ic("quickstart"));dt.appendChild(document.createTextNode("Open doc-test"));acts2.appendChild(dt)}
+  if(GHOK){var gk=NX.indexOf(x),gb=el("a","btn");gb.href=issueUrl(x,gk);gb.target="_blank";gb.rel="noopener";gb.appendChild(ic("issue"));gb.appendChild(document.createTextNode(isOpened(x)?"Open the issue again":"Open issue on GitHub"));gb.addEventListener("click",function(){markOpened(x)});acts2.appendChild(gb)}
   if(acts2.childNodes.length)B.appendChild(acts2);
   if(x.evidence.length){var e=el("div");e.appendChild(el("p","lab","The commits behind it ("+Math.max(x.count,x.evidence.length)+")"));e.appendChild(evList(x.evidence));B.appendChild(e)}
 }
@@ -999,6 +1150,9 @@ function render(a){
   paintHealth(a.summary);
   try{T=teamModel(a.team)}catch(e){T=null}
   NX=nextItems(a);
+  GHOK=!!ghRepo(safeUrl(a.url));ghLoad();
+  /* default to high and medium; if neither exists, select low */
+  GHSEL={high:true,medium:true,low:!NX.some(function(x){return impactOf(x)!=="low"})};
   paintTeam(a);paintNext();paintReady();paintPages();
   $("r-foot").textContent=a.jev?"Jev read each stale page against the commits and sorted commits that have no conventional prefix.":"Commits were sorted by their subject line. Set TYPESAFE_API_KEY to let Jev read the pages.";
   var h=/#(who|area)=([pa]\d{1,4})\b/.exec(location.hash);
