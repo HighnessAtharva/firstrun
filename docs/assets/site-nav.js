@@ -171,7 +171,7 @@ if("IntersectionObserver" in window){
  }
  /* home page: mark the part of the page you are reading */
  if(HOME){
-  var spy={steps:"sn-b-test",audit:"sn-b-audit",receipt:"sn-b-proof",watch:"sn-b-proof",compare:"sn-b-proof"};
+  var spy={steps:"sn-b-test",team:"sn-b-audit",audit:"sn-b-audit",receipt:"sn-b-proof",watch:"sn-b-proof",compare:"sn-b-proof"};
   var els=[];Object.keys(spy).forEach(function(id){var s=$(id);if(s)els.push(s)});
   var here=null;
   var so=new IntersectionObserver(function(en){en.forEach(function(e){

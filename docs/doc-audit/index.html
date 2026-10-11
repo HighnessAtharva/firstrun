@@ -112,6 +112,8 @@ h2{font-size:var(--t-h2);line-height:1.15;letter-spacing:-.03em;font-weight:700}
 .demo-play svg{width:30px;height:30px;fill:currentColor;margin-left:4px}
 .demo-cap{position:absolute;left:20px;bottom:16px;font-weight:650;font-size:15px;text-decoration:underline;text-underline-offset:3px}
 .demo:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.demo.has-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}.demo.has-img .demo-play{position:relative;z-index:1}
+.demo-sub{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:14px;font-size:15px;color:var(--mut)}.demo-sub>a{font-weight:650;color:var(--vio)}
 .alist{list-style:none;padding:0;overflow:hidden}
 .alist li+li{border-top:1px solid var(--line2)}
 .alist a{display:grid;grid-template-columns:40px minmax(0,1fr) 220px auto;gap:4px 16px;align-items:center;padding:14px 18px;color:inherit;text-decoration:none}
@@ -511,7 +513,8 @@ pre.draft{white-space:pre-wrap;font:13px/1.55 var(--mono);background:var(--sunk)
 <p class="hint" id="hint"><span id="hint-t">Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.</span> Agents can read <a href="../agent.md">agent.md</a>.</p>
 </div>
 <div class="hero-r">
-<a class="demo" href="https://www.youtube.com/watch?v=zo94agwRAXc" target="_blank" rel="noopener" aria-label="Watch the 57 s tour"><span class="demo-ic" aria-hidden="true"><span class="tile"><svg class="i"><use href="#i-clone"/></svg></span><span class="tile"><svg class="i"><use href="#i-match"/></svg></span><span class="tile"><svg class="i"><use href="#i-board"/></svg></span></span><span class="demo-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span><span class="demo-cap">Watch the 57 s tour</span></a>
+<a class="demo has-img" href="https://www.youtube.com/watch?v=2vZb6pZAF8Q" target="_blank" rel="noopener" aria-label="Watch the Doc-audit journey, 1 minute 56 seconds"><img src="../assets/vid-docaudit-journey.webp" alt="Doc-audit video thumbnail: 15 stale pages found in dbt-core, each fix goes to the person who knows the code" width="1280" height="720" decoding="async"><span class="demo-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span></a>
+<p class="demo-sub"><a href="https://www.youtube.com/watch?v=2vZb6pZAF8Q" target="_blank" rel="noopener">Watch the Doc-audit journey, 1:56</a><span>Short on time? <a href="https://www.youtube.com/watch?v=zo94agwRAXc" target="_blank" rel="noopener">The 57 s tour</a></span></p>
 <ol class="flow" aria-label="How the audit works">
 <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-clone"/></svg></span><div><b>Clone</b><span>One blobless clone, on GitHub Actions or on your machine. $0 in model calls.</span></div></li>
 <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-match"/></svg></span><div><b>Match</b><span>Each commit is matched to the docs pages on its topic.</span></div></li>
