@@ -4,8 +4,8 @@ Entire recorded the agent session behind every commit, reviewed every layer on a
 
 ## Every Commit Carries the Session That Wrote It
 
-- 68 checkpoint refs are on GitHub (counted 2026-10-11) under `refs/entire/checkpoints/*`. Check with `git ls-remote origin 'refs/entire/checkpoints/*'`.
-- 75 of 113 non-merge commits carry an `Entire-Checkpoint:` trailer, counted with `git log` on the launch branch on 2026-10-11, before the commit that records it. The 38 without are the 4 setup commits before the first agent session and site commits from 2026-10-10 and 2026-10-11. On many of those the Entire commit hook hung and was stopped so the commit could land. Merge commits carry none, because Entire's hook skips merges.
+- 87 checkpoint refs are on GitHub (counted 2026-10-11, after the launch merge) under `refs/entire/checkpoints/*`. Check with `git ls-remote origin 'refs/entire/checkpoints/*'`.
+- 91 of 129 non-merge commits on main up to `b88bcc9` carry an `Entire-Checkpoint:` trailer, counted with `git log --no-merges` on 2026-10-11. The 38 without are the 4 setup commits before the first agent session and site commits from 2026-10-10 and 2026-10-11. On many of those the Entire commit hook hung and was stopped so the commit could land. Merge commits carry none, because Entire's hook skips merges.
 - The neatlogs fix commit shows its whole session, from the MCP calls to the green tests: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
 - One checkpoint was lost: Git 2.33 hung the post-commit hook for 206 s on the scaffold commit. Git 2.55 fixed it, and no checkpoint was lost after that.
 
