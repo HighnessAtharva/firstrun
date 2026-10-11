@@ -221,6 +221,7 @@ def build_audit(a: dict, audit_dir: Path | None) -> dict:
         },
         "price": {
             "recorded": cost is not None,
+            "estimated": bool((cost or {}).get("estimated")),
             "jev_calls": (cost or {}).get("jev_calls"),
             "jev_input_tokens": (cost or {}).get("jev_input_tokens"),
             "usd": (cost or {}).get("jev_usd"),
@@ -249,7 +250,8 @@ def build_audit(a: dict, audit_dir: Path | None) -> dict:
 
 def render_audit_md(r: dict) -> str:
     w, p, lim, pf, a = r["work"], r["price"], r["limits"], r["proof"], r["audit"]
-    cost = (f"Jev cost {_usd(p['usd'], 6)} ({p['jev_calls']} calls, {p['jev_input_tokens']:,} input tokens). {p['basis']}"
+    cost = (f"Jev cost {'(estimated) ' if p.get('estimated') else ''}{_usd(p['usd'], 6)} "
+            f"({p['jev_calls']} calls, {p['jev_input_tokens']:,} input tokens). {p['basis']}"
             if p["recorded"] else p["basis"])
     out = [f"# Receipt {r['receipt_id']}", "",
            f"Issued {r['issued_at']}. Hash `{r['hash']}`.", "",
@@ -630,6 +632,8 @@ def render_audit_html(r: dict) -> str:
             sub.append(f"{p['jev_calls']} calls")
         if p.get("jev_input_tokens") is not None:
             sub.append(f"{p['jev_input_tokens']:,} input tokens")
+        if p.get("estimated"):
+            sub.append("estimated from a re-run")
         jev = f'<tr><td><b>Jev reads</b><span>{e(", ".join(sub))}</span></td><td class="amt">{money(p["usd"])}</td></tr>'
     else:
         jev = ('<tr><td><b>Jev reads</b><span>Calls and tokens were not counted.</span></td>'
@@ -637,7 +641,8 @@ def render_audit_html(r: dict) -> str:
     rows = ('<tr><td><b>Clone and history scan</b><span>One blobless clone. No model call.</span></td>'
             f'<td class="amt">{money(0.0)}</td></tr>' + jev)
     items = (f'<table class="items"><thead><tr><th>Item</th><th class="amt">Amount</th></tr></thead><tbody>{rows}</tbody>'
-             f'<tfoot><tr><th>Total</th><td class="amt{" nr" if total is None else ""}">{money(total)}</td></tr></tfoot></table>'
+             f'<tfoot><tr><th>Total{" (estimated)" if p.get("estimated") else ""}</th>'
+             f'<td class="amt{" nr" if total is None else ""}">{money(total)}</td></tr></tfoot></table>'
              f'<p class="basis">{e(str(p.get("basis") or ""))}</p>')
 
     read, cap = w.get("commits_read"), lim.get("history_commits_max")
@@ -734,7 +739,10 @@ def billed_tier(receipts_dir: Path, receipt_id: str) -> str | None:
 
 def index_fields(r: dict) -> dict:
     """What a site index row needs for the View receipt button."""
-    return {"receipt": r["receipt_id"], "receipt_usd": total_usd(r)}
+    fields = {"receipt": r["receipt_id"], "receipt_usd": total_usd(r)}
+    if _g(r, "price", "estimated", default=False):
+        fields["receipt_est"] = True
+    return fields
 
 
 def publish_site(r: dict, receipts_dir: Path) -> Path:

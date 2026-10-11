@@ -92,6 +92,7 @@ h2{font-size:19px;letter-spacing:-.02em;font-weight:650}
 .rcp .sep{color:var(--faint);font-weight:400}
 .rcp .amt{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .rcp .nc{font-weight:400;color:var(--mut)}
+.rcp .est{font-weight:500;color:var(--mut);font-size:.92em}
 .alist a.rcp:hover,.rcp:hover{border-color:var(--vio);color:var(--vio);background:var(--vio-bg)}
 .rcp:hover .lbl{text-decoration-color:currentColor}
 .rh .acts .rcp{height:36px;min-height:36px;border-radius:10px;padding:0 14px 0 12px}
@@ -349,18 +350,18 @@ function listAudits(){
       bar.setAttribute("role","img");bar.setAttribute("aria-label",a.stale+" stale, "+a.quiet+" quiet");bw.appendChild(bar);x.appendChild(bw);
       var go=el("span","go","Open board");go.appendChild(ic("r"));x.appendChild(go);
       li.appendChild(x);
-      if(a.receipt){var rw=el("div","rcpw"),rp=el("a","rcp");rcpFill(rp,a.receipt,a.receipt_usd);rw.appendChild(rp);li.appendChild(rw)}
+      if(a.receipt){var rw=el("div","rcpw"),rp=el("a","rcp");rcpFill(rp,a.receipt,a.receipt_usd,a.receipt_est);rw.appendChild(rp);li.appendChild(rw)}
       ol.appendChild(li)});
     if(!ol.children.length)ol.appendChild(el("li",null,"No published audit yet."));
   }).catch(function(){});
 }
-/* receipts: docs/receipts/<receipt id>.html. Old audits carry no recorded cost. */
+/* receipts: docs/receipts/<receipt id>.html. Old audits carry an estimated cost, measured by re-running them. */
 function usd(v){v=+v;return "$"+(v>0&&v<0.001?v.toFixed(6):v.toFixed(4))}
-function rcpFill(x,id,amt){x.textContent="";x.href="../receipts/"+encodeURIComponent(id)+".html";x.appendChild(ic("rcp"));x.appendChild(el("span","lbl","View receipt"));
-  if(amt!=null&&isFinite(+amt)){var s=el("span","sep","·");s.setAttribute("aria-hidden","true");x.appendChild(s);x.appendChild(el("span","amt",usd(amt)))}else x.appendChild(el("span","nc","no cost recorded"))}
+function rcpFill(x,id,amt,est){x.textContent="";x.href="../receipts/"+encodeURIComponent(id)+".html";x.appendChild(ic("rcp"));x.appendChild(el("span","lbl","View receipt"));
+  if(amt!=null&&isFinite(+amt)){var s=el("span","sep","·");s.setAttribute("aria-hidden","true");x.appendChild(s);if(est)x.appendChild(el("span","est","est."));x.appendChild(el("span","amt",usd(amt)))}else x.appendChild(el("span","nc","no cost recorded"))}
 function paintReceipt(a){var id="FR-"+a.id,b=$("r-rcp");
   fetch("../receipts/"+encodeURIComponent(id)+".json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
-    var p=j.price||{};rcpFill(b,j.receipt_id||id,p.recorded&&p.usd!=null?p.usd:null);b.hidden=false}).catch(function(){b.hidden=true})}
+    var p=j.price||{};rcpFill(b,j.receipt_id||id,p.recorded&&p.usd!=null?p.usd:null,p.estimated);b.hidden=false}).catch(function(){b.hidden=true})}
 function chip(cls,text,icon){var c=el("span","chip c-"+cls);c.appendChild(ic(icon||cls));c.appendChild(document.createTextNode(text));return c}
 
 /* report */
