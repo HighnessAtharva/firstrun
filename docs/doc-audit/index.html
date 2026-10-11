@@ -8,6 +8,8 @@
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
+<link rel="alternate" type="text/markdown" href="/agent.md" title="FirstRun agent quickstart">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -410,6 +412,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 <div class="mode" role="group" aria-label="Repo type"><button type="button" id="m-pub" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Public repo</button><button type="button" id="m-priv" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Private repo</button></div>
 <form class="ask panel top" id="f"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg><label for="repo" class="sr">GitHub repo link</label><input id="repo" placeholder="Paste a GitHub link, for example github.com/fastapi/typer" autocomplete="off" spellcheck="false"><button class="btn pri" type="submit" id="go">Audit it</button></form>
 <p class="hint" id="hint">Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.</p>
+<p class="hint">Using an agent? Give it <a href="../agent.md">agent.md</a>.</p>
 <ol class="steps" id="steps" hidden></ol>
 <ol class="flow panel" aria-label="How the audit works">
 <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-clone"/></svg></span><div><b>Clone</b><span>One blobless clone, on GitHub Actions or on your machine. $0 in model calls.</span></div></li>
@@ -511,6 +514,11 @@ function step(n,title,sub,code,opt){var li=el("li","panel");li.appendChild(el("s
   return li}
 function link(href,label,icon,pri){var a=el("a","btn"+(pri?" pri":""));a.href=href;if(/^https:/.test(href)){a.target="_blank";a.rel="noopener"}a.appendChild(ic(icon));a.appendChild(document.createTextNode(label));return a}
 function acts(){var w=el("div","dw-acts");for(var i=0;i<arguments.length;i++)w.appendChild(arguments[i]);return w}
+/* the prompt for a coding agent: agent.md first, then the task */
+function agentPrompt(r){return "Read https://firstrun.atharvashah.com/agent.md and follow it.\nAudit the GitHub repo "+r+" with Doc-audit (Recipe B). Tell me the top 3 tasks and the suggested owner of each. Ask me before you open any PR or issue."}
+function agentStep(n,r){var li=step(n,"Or hand it to your coding agent","Claude Code, Cursor or Codex reads agent.md and runs the audit for you.",null,true);
+  var b=el("button","btn");b.type="button";b.appendChild(ic("copy"));b.appendChild(document.createTextNode("Copy the agent prompt"));
+  b.addEventListener("click",function(){copy(agentPrompt(r),"Prompt copied")});li.appendChild(acts(b));return li}
 $("f").addEventListener("submit",function(e){e.preventDefault();var r=repoOf($("repo").value),S=$("steps");S.textContent="";S.hidden=false;
   if(!r){S.appendChild(step("!","Paste a GitHub repo","Write it as owner/repo or paste the github.com link."));return}
   var have=AUD.filter(function(a){return String(a.repo).toLowerCase()===r.toLowerCase()})[0];
@@ -519,10 +527,12 @@ $("f").addEventListener("submit",function(e){e.preventDefault();var r=repoOf($("
     var l1=step(1,"Open the request on GitHub","Click Submit new issue. The repo is already filled in.");l1.appendChild(acts(link(reqUrl(r),"Request the audit of "+r,"gh",true)));S.appendChild(l1);
     S.appendChild(step(2,"GitHub Actions audits it","One blobless clone, about 2 minutes, $0 in model calls."));
     S.appendChild(step(3,"The board link lands on the issue","The audit also joins the list below."));
+    S.appendChild(agentStep(4,r));
   }else{
     S.appendChild(step(1,"Install FirstRun","Python 3.11 or newer.","pip install git+https://github.com/HighnessAtharva/firstrun"));
     S.appendChild(step(2,"Audit it on your machine","Uses your own git login. The report stays in runs/ on your disk.","firstrun audit "+r));
     S.appendChild(step(3,"Add it to this board","Uploads audit.json to a secret gist and opens the request. A maintainer reviews it before it goes live. Needs the GitHub CLI.","firstrun audit-submit --open",true));
+    S.appendChild(agentStep(4,r));
   }
 });
 function listAudits(){

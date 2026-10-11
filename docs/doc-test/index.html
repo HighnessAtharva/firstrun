@@ -14,6 +14,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
+<link rel="alternate" type="text/markdown" href="/agent.md" title="FirstRun agent quickstart">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
@@ -651,6 +653,7 @@ html{scroll-padding-top:170px}
 <div><h1 id="inH">Doc-test</h1><p class="lede">FirstRun runs a docs quickstart in a clean container. When a step breaks, it fixes the step and proves the fix in a second clean run. Each row is one docs page and its best result.</p><a class="demo-v" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" target="_blank" rel="noopener"><img src="../assets/vid-doctest.webp" alt="" width="72" height="40" loading="lazy" decoding="async"><span><b>Watch the 3 minute demo</b><small>DocTest on YouTube, 2:59</small></span></a></div></div>
 <form class="go" id="goF" autocomplete="off"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg><label for="goU" class="sr">Docs URL or share code</label><input id="goU" spellcheck="false" placeholder="Paste a docs URL or a share code from your terminal"><button class="b pri" type="submit">Test it</button></form>
 <p class="gohint" id="goH">A docs URL shows its saved result or the command to test it. A share code opens the replay. Nothing leaves your browser.</p>
+<p class="gohint">Using an agent? Give it <a href="../agent.md">agent.md</a>.</p>
 <p id="err" class="err hide" role="alert"></p>
 <ol class="gosteps" id="goS" hidden></ol>
 <div class="tally" id="tally" role="group" aria-label="Filter by result"></div>
@@ -1591,6 +1594,9 @@ function isCode(v){return /^H4sI/.test(v)||/#r=H4sI/.test(v)}
 function gostep(n,title,sub,code){var li=el("li");li.appendChild(el("span","n",String(n)));li.appendChild(el("b",null,title));if(sub)li.appendChild(el("span","s",sub));
   if(code){var c=el("div","code");c.appendChild(el("code",null,code));var cb=btn("","copy","sm");cb.setAttribute("aria-label","Copy");cb.addEventListener("click",function(){copyText(code,"Command copied",cb)});c.appendChild(cb);li.appendChild(c)}
   return li}
+/* the prompt for a coding agent: agent.md first, then the task */
+function agentPrompt(u){return "Read https://firstrun.atharvashah.com/agent.md and follow it.\nTest the quickstart at "+u+" with Doc-test (Recipe A). Tell me which step broke, the fix, and whether a clean container verified it. Ask me before you open any PR or issue."}
+function agentBtn(u){var b=el("button","b","Copy the agent prompt");b.type="button";b.addEventListener("click",function(){copyText(agentPrompt(u),"Prompt copied",b)});return b}
 function normUrl(v){v=v.trim();if(!v)return"";if(!/^https?:\/\//i.test(v)&&/^[\w-]+(\.[\w-]+)+(\/|$)/.test(v))v="https://"+v;return v}
 $("goF").addEventListener("submit",function(e){
   e.preventDefault();var v=$("goU").value.trim(),S=$("goS");S.textContent="";S.hidden=true;
@@ -1602,12 +1608,12 @@ $("goF").addEventListener("submit",function(e){
   S.hidden=false;
   if(g&&g.v!=="open"){
     var li=gostep("✓",g.best.title+": "+VL[g.v],g.best.summary);var a=el("div","acts"),o=el("a","b pri","Open the replay");o.href="#ex="+encodeURIComponent(g.best.id);a.appendChild(o);li.appendChild(a);S.appendChild(li);
-    S.appendChild(gostep(2,"Test it again yourself","Needs Docker and a Claude Code token.","firstrun "+(g.best.url||u)));return}
+    var l2=gostep(2,"Test it again yourself","Needs Docker and a Claude Code token.","firstrun "+(g.best.url||u));var a2=el("div","acts");a2.appendChild(agentBtn(g.best.url||u));l2.appendChild(a2);S.appendChild(l2);return}
   if(!/^https?:\/\//i.test(u)){S.appendChild(gostep("!","Paste the docs page link","For example https://docs.getdbt.com/guides/duckdb, or a share code that starts with H4sI."));return}
   S.appendChild(gostep(1,"Install FirstRun","Python 3.11 or newer. Docker must be running.","pip install git+https://github.com/HighnessAtharva/firstrun"));
   S.appendChild(gostep(2,"Test the page","A clean container runs every step. A broken step gets a fix and a second clean run.","firstrun "+u));
   var l3=gostep(3,"Paste the share code here","The run prints a line that starts with share:. Paste it in the bar above to replay it.");
-  var a3=el("div","acts"),h=el("a","b","Or let your coding agent run it");h.href="../#hero";a3.appendChild(h);l3.appendChild(a3);S.appendChild(l3);
+  var a3=el("div","acts"),h=el("a","b","Or let your coding agent run it");h.href="../#hero";a3.appendChild(agentBtn(u));a3.appendChild(h);l3.appendChild(a3);S.appendChild(l3);
 });
 
 
