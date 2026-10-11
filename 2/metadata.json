@@ -1,0 +1,50 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4NFA6HNR02VBDAV2ZBKGAX6",
+  "session_id": "cade4f7e-0d0e-4298-a87a-0b3cb22d6fda",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T12:34:37.2709732Z",
+  "branch": "feat/agent-friendly",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md",
+    "docs/judges/index.html"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "df5a00b00040",
+  "checkpoint_transcript_start": 29,
+  "transcript_lines_at_start": 29,
+  "compact_transcript_start": 1,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-11T12:34:37.2277159Z",
+    "agent_lines": 552,
+    "agent_removed": 274,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 552,
+    "total_lines_changed": 826,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 29,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 29
+      }
+    }
+  ]
+}
