@@ -3,8 +3,39 @@
   "checkpoint_id": "01M4NE45FC6Q91RYZ6G2WRHBVC",
   "strategy": "manual-commit",
   "branch": "site/judges-evidence",
-  "checkpoints_count": 6,
-  "files_touched": null,
+  "checkpoints_count": 7,
+  "files_touched": [
+    "docs/assets/judges/nl-eval-audit.webp",
+    "docs/assets/judges/plan-alerts.webp",
+    "docs/assets/judges/plan-costcaps.webp",
+    "docs/assets/judges/receipt-full.webp",
+    "docs/assets/judges/th-cf-alerts.webp",
+    "docs/assets/judges/th-cf-caps.webp",
+    "docs/assets/judges/th-cf-costcaps.webp",
+    "docs/assets/judges/th-cf-drivers.webp",
+    "docs/assets/judges/th-cf-receipt.webp",
+    "docs/assets/judges/th-en-analytics.webp",
+    "docs/assets/judges/th-en-board.webp",
+    "docs/assets/judges/th-en-checkpoint.webp",
+    "docs/assets/judges/th-en-findings.webp",
+    "docs/assets/judges/th-en-gate.webp",
+    "docs/assets/judges/th-en-review.webp",
+    "docs/assets/judges/th-nl-analysis.webp",
+    "docs/assets/judges/th-nl-analytics.webp",
+    "docs/assets/judges/th-nl-bisect.webp",
+    "docs/assets/judges/th-nl-detection.webp",
+    "docs/assets/judges/th-nl-eval-audit.webp",
+    "docs/assets/judges/th-nl-eval-run.webp",
+    "docs/assets/judges/th-nl-flagged.webp",
+    "docs/assets/judges/th-nl-investigate.webp",
+    "docs/assets/judges/th-nl-recovery.webp",
+    "docs/assets/judges/th-nl-trace.webp",
+    "docs/assets/judges/th-pr-10149.webp",
+    "docs/assets/judges/th-pr-10150.webp",
+    "docs/assets/judges/th-pr-2724.webp",
+    "docs/assets/judges/th-pr-671.webp",
+    "docs/judges/index.html"
+  ],
   "sessions": [
     {
       "metadata": "/0/metadata.json",
@@ -19,6 +50,13 @@
       "compact_transcript": "/1/transcript.jsonl",
       "content_hash": "/1/content_hash.txt",
       "prompt": "/1/prompt.txt"
+    },
+    {
+      "metadata": "/2/metadata.json",
+      "transcript": "/2/full.jsonl",
+      "compact_transcript": "/2/transcript.jsonl",
+      "content_hash": "/2/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
