@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4NCRS1C9Z70C3JB46XF1RK4",
   "strategy": "manual-commit",
   "branch": "site/hero-polish",
-  "checkpoints_count": 47,
+  "checkpoints_count": 50,
   "files_touched": [
     "docs/index.html"
   ],
@@ -13,6 +13,13 @@
       "transcript": "/0/full.jsonl",
       "compact_transcript": "/0/transcript.jsonl",
       "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    },
+    {
+      "metadata": "/1/metadata.json",
+      "transcript": "/1/full.jsonl",
+      "compact_transcript": "/1/transcript.jsonl",
+      "content_hash": "/1/content_hash.txt",
       "prompt": ""
     }
   ],
