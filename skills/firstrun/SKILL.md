@@ -43,7 +43,7 @@ Parse stdout only. It holds one JSON object with `ok`, `command`, `exit_code` an
 - **Doc-audit:** read `top_tasks[]`. It holds up to 10 tasks and can hold fewer, so report the real count. Each task has `rank`, `title`, `score`, `effort`, `action` and `owner`. An owner is `{"name", "login", "why"}` or null. Present the owner as a suggestion.
 - **Exit codes:** 0 means done, 1 means a step failed or the command hit an error, and 2 means setup failed before step 1.
 
-Give the tool call a timeout of 30 minutes for `firstrun run` and 20 minutes for `firstrun audit`.
+Give the tool call a timeout of 30 minutes for `firstrun run`. A small repo audits in about 2 minutes. A large docs set can run past 30 minutes, so run it as a background job.
 
 ## Obey the Safety Rules
 

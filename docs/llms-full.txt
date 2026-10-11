@@ -97,7 +97,7 @@ firstrun run https://docs.example.com/quickstart --json > result.json
 
 A URL tested in the last 24 hours returns the saved result with `"cached": true`. Add `--fresh` to run it again. Read `runs[0].status`, then `runs[0].files["report.md"]`. A stopped run resumes with `firstrun run --resume <run_id> --json`.
 
-**B. Audit a repo.** `--no-publish` keeps the audit on your disk. The fastapi/typer audit took 97 seconds on 2026-10-11. Give the tool call a timeout of 20 minutes for a large repo.
+**B. Audit a repo.** `--no-publish` keeps the audit on your disk. The fastapi/typer audit took 97 seconds on 2026-10-11. A large docs set takes much longer: dbt-core with its docs repo ran for more than 30 minutes on Windows. Run a large audit as a background job, or use the hosted audit in Recipe D.
 
 ```bash
 firstrun audit fastapi/typer --no-publish --json > audit-result.json
