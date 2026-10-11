@@ -25,9 +25,9 @@ var GH='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .8a7.2 7.2 0 0 0
 var LOGO='<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="15" fill="#0A66D6"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></svg>';
 function app(k,label){return '<button type="button" class="sn-app a-'+k+'" id="sn-b-'+k+'" aria-expanded="false" aria-controls="sn-m-'+k+'"'+(CUR===k?' aria-current="page"':"")+">"+tile(k)+"<b>"+label+"</b>"+svg("car","0 0 12 12","sn-car")+"</button>"}
 /* the section links name what is on the home page, in page order. [label, target, icon, subtitle] */
-var links=[["Receipts","#receipt","rcpt","What a run cost, and the proof"],["Watch","#watch","watch","Three short demos"],["Compare","#compare","cmp","FirstRun next to the usual tools"],["Plan","plan/","plan","What each plan may spend"]];
+var links=[["Receipts","#receipt","rcpt","What a run cost, and the proof"],["Watch","#watch","watch","Three short demos"],["Compare","#compare","cmp","FirstRun next to the usual tools"],["Plan","plan/","plan","What each plan may spend"],["For judges","judges/","ok","Each claim and its proof"]];
 function href(l){return l[1].charAt(0)==="#"?(HOME?l[1]:BASE+l[1]):BASE+l[1]}
-function curLink(l){return CUR==="plan"&&l[1]==="plan/"}
+function curLink(l){return l[1]===CUR+"/"}
 host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
  '<a class="sn-wm" href="'+BASE+'" aria-label="FirstRun home"'+(HOME?' aria-current="page"':"")+">"+LOGO+"<span>FirstRun</span></a>"+
  '<span class="sn-apps">'+app("test","Doc-test")+app("audit","Doc-audit")+"</span>"+

@@ -79,9 +79,10 @@ function layout(){
   var n=chips.length,wideL=false,yA=wideL?Math.max(G.ct+26,120):G.top+6,yB=G.bot-14,xs=[0,38,12,52,22],wi=0;
   G.gut=wideL?G.cl-82:1e4;
   for(var j=0;j<n;j++){
-   var sy=lerp(yA,yB,n>1?j/(n-1):.5),sx=Math.max(16,W*.034)+xs[j%xs.length],wide=wideL&&sy<G.cb+6;
-   /* keep every chip off the beam itself */
-   var gap=sy-beamY(sx+130);if(Math.abs(gap)<28)sy+=gap<0?-(28+gap):28-gap;
+   /* spread the lanes evenly, skipping a band around the beam so no chip sits on it */
+   var sx=Math.max(16,W*.034)+xs[j%xs.length],bc=beamY(sx+130),hasGap=bc-28>yA&&bc+28<yB,span=(yB-yA)-(hasGap?56:0);
+   var sy=yA+span*(n>1?j/(n-1):.5);if(hasGap&&sy>bc-28)sy+=56;
+   var wide=wideL&&sy<G.cb+6;
    var bx=lerp(Math.min(G.Pin.x-80,W*.41),Math.min(G.Pin.x-120,W*.29),n>1?j/(n-1):.5),by=beamY(bx);
    lanes.push({S:{x:sx,y:sy},C:{x:sx+(bx-sx)*.62,y:sy},B:{x:bx,y:by},ph:j/n+.07*Math.sin(j*2.3),w:0,q:-1,wide:wide,drop:wide?G.cl-34-14*(wi++):0});
   }
