@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01M7STzSYoXgbhDqvdqM8jzV",
+  "agent_id": "a51b4591b6665978a",
+  "task_description": "Hero shows three angles clearly",
+  "token_usage": {
+    "input_tokens": 246,
+    "cache_creation_tokens": 345975,
+    "cache_read_tokens": 32806172,
+    "output_tokens": 125013,
+    "api_call_count": 123
+  },
+  "started_at": "2026-10-11T17:34:02.7812294+05:30",
+  "completed_at": "2026-10-11T18:13:22.7396945+05:30"
+}
