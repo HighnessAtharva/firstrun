@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_019yUqsnK6JD1aoVgx84LiWG",
+  "agent_id": "a486150176ba7d6bf",
+  "task_description": "Make FirstRun agent-friendly with agent.md",
+  "token_usage": {
+    "input_tokens": 372,
+    "cache_creation_tokens": 972501,
+    "cache_read_tokens": 49396021,
+    "output_tokens": 122676,
+    "api_call_count": 186
+  },
+  "started_at": "2026-10-11T17:11:22.8116475+05:30",
+  "completed_at": "2026-10-11T18:02:26.7309479+05:30"
+}
