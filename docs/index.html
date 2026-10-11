@@ -809,7 +809,7 @@ fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
 /* reveal: each block fades and rises once as it enters, staggered inside its group */
 (function(){
  var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
- var groups=[".apps>.app","#steps .row",".shots>figure",".anno ol>li",".tools>.tool",".shelf>.pr",".tl>li","#about .about"];
+ var groups=[".apps>.app","#steps .row",".shots>figure",".anno ol>li",".tools>.tool",".shelf>.pr","#about .about"];
  groups.forEach(function(q){Array.prototype.forEach.call(document.querySelectorAll(q),function(el,i){el.classList.add("rv");el.style.transitionDelay=Math.min(i,5)*80+"ms"})});
  var els=document.querySelectorAll(".rv");
  if(rm||!("IntersectionObserver" in window)){Array.prototype.forEach.call(els,function(e){e.classList.add("in")});return}
