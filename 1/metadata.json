@@ -1,0 +1,104 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4ND4PYCET73MJBMZQGKF51R",
+  "session_id": "8af02350-7a0b-4c1e-859f-73dd272ab4c3",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-11T11:56:38.1374804Z",
+  "branch": "site/judges-evidence",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-5-5",
+  "turn_id": "757114c48651",
+  "checkpoint_transcript_start": 2922,
+  "transcript_lines_at_start": 2922,
+  "compact_transcript_start": 468,
+  "token_usage": {
+    "input_tokens": 30,
+    "cache_creation_tokens": 23956,
+    "cache_read_tokens": 11293727,
+    "output_tokens": 11742,
+    "api_call_count": 15
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01SnftQfswQC7UTrm6euEtDb",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "agent-reach"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "aff5dfd949b2",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 670,
+        "end": 671,
+        "entry_ids": [
+          "4e8c93bc-7e11-449c-b7f3-abfdb5157661"
+        ],
+        "tool_use_id": "toolu_01SnftQfswQC7UTrm6euEtDb"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01SnftQfswQC7UTrm6euEtDb"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: agent-reach",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01LN7a2GXLT7S34XVvB1F66Z",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "impeccable"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "aff5dfd949b2",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1522,
+        "end": 1523,
+        "entry_ids": [
+          "340356a5-de44-41b1-a350-c696cbbb5576"
+        ],
+        "tool_use_id": "toolu_01LN7a2GXLT7S34XVvB1F66Z"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LN7a2GXLT7S34XVvB1F66Z"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: impeccable",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 44
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 53,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/launch.json": 53
+      }
+    }
+  ]
+}
