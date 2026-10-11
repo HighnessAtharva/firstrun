@@ -123,6 +123,20 @@ main{flex:1}
 .tagf{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);border-radius:5px;padding:0 5px}
 .empty{padding:36px 0;text-align:center;color:var(--mut)}
 .opennote{margin:0 0 12px;padding:12px 16px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);font-size:13.5px;color:var(--ink2);line-height:1.5}
+.go{display:flex;gap:8px;align-items:center;margin-top:20px;max-width:720px;padding:6px 6px 6px 14px;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--sh)}
+.go:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg)}
+.go>svg.i{color:var(--mut)}
+.go input{flex:1;min-width:0;font:inherit;font-size:15.5px;border:0;background:none;color:var(--ink);padding:9px 0;outline:0}
+.go .b{height:40px;padding:0 18px;font-size:14px}
+.gohint{font-size:13px;color:var(--mut);margin-top:8px;max-width:720px}
+.gosteps{list-style:none;padding:0;margin-top:12px;max-width:820px;display:grid;gap:8px}
+.gosteps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--sh)}
+.gosteps .n{grid-row:1/span 3;width:26px;height:26px;border-radius:99px;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--acc-bg);color:var(--acc)}
+.gosteps b{font-size:14.5px}
+.gosteps span.s{font-size:13px;color:var(--mut)}
+.gosteps .code{display:flex;align-items:center;gap:8px;margin-top:4px;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:6px 6px 6px 12px;font:12.5px var(--mono);overflow-x:auto}
+.gosteps .code code{flex:1;white-space:pre}
+.gosteps .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .pastebox{margin-top:28px;font-size:14px}
 .pastebox summary{cursor:pointer;color:var(--mut)}
 .pastebox summary:hover{color:var(--ink)}
@@ -613,16 +627,17 @@ html{scroll-padding-top:170px}
 <section id="input" class="intro hide" aria-labelledby="inH">
 <div class="lh-top"><span class="sn-tile t-test" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg></span>
 <div><h1 id="inH">Doc-test</h1><p class="lede">FirstRun runs a docs quickstart in a clean container. When a step breaks, it fixes the step and proves the fix in a second clean run. Each row is one docs page and its best result.</p></div></div>
+<form class="go" id="goF" autocomplete="off"><svg class="i" aria-hidden="true"><use href="#i-term"/></svg><label for="goU" class="sr">Docs URL or share code</label><input id="goU" spellcheck="false" placeholder="Paste a docs URL or a share code from your terminal"><button class="b pri" type="submit">Test it</button></form>
+<p class="gohint" id="goH">A docs URL shows its saved result or the command to test it. A share code opens the replay. Nothing leaves your browser.</p>
+<p id="err" class="err hide" role="alert"></p>
+<ol class="gosteps" id="goS" hidden></ol>
 <div class="tally" id="tally" role="group" aria-label="Filter by result"></div>
 <div class="ltools"><label for="q" class="sr">Search</label><input type="search" id="q" placeholder="Search a docs site, a title or an error" autocomplete="off">
 <label class="chk"><input type="checkbox" id="fx"> Show test fixtures</label></div>
 <p class="opennote hide" id="opennote">FirstRun stopped on these pages before it proved a fix. A stop can come from the docs, the container, or a step that needs a login or a browser, so these runs make no claim that the docs are wrong.</p>
 <ol class="rl" id="rl"></ol>
 <p class="empty hide" id="none">No page matches.</p>
-<details class="pastebox"><summary>Have a share code from your terminal? Paste it here.</summary>
-<div class="paste"><label for="code" class="sr">Share code</label><textarea id="code" spellcheck="false" autocomplete="off" placeholder="H4sIAAAAAAAC..."></textarea>
-<div class="pf"><span>Starts with <span class="mono">H4sI</span>, or paste the whole link with <span class="mono">#r=</span></span><button type="button" class="b pri" id="dec">Decode<kbd>Ctrl &#8629;</kbd></button></div></div>
-<p id="err" class="err hide" role="alert"></p></details>
+<div hidden><label for="code" class="sr">Share code</label><textarea id="code" spellcheck="false" autocomplete="off"></textarea><button type="button" id="dec">Decode</button></div>
 </section>
 
 <section id="load" class="wrap hide" aria-busy="true" aria-label="Loading the run"><div class="skel"><i style="width:30%"></i><i style="width:55%;height:26px"></i><i style="width:90%;height:64px;margin-top:20px"></i><i style="width:70%"></i><i style="width:80%"></i></div></section>
@@ -1534,6 +1549,30 @@ fetch("../examples/index.json").then(function(r){if(!r.ok)throw 0;return r.json(
   (j&&Array.isArray(j.runs)?j.runs:[]).forEach(function(r){if(r&&r.summary)SUM[r.example]=String(r.summary)});if(S.d)renderVerdict(S.d);
 }).catch(function(){});
 $("q").addEventListener("input",paintList);$("fx").addEventListener("change",paintList);
+/* the top bar: a share code decodes, a docs URL shows its saved result or the command */
+function isCode(v){return /^H4sI/.test(v)||/#r=H4sI/.test(v)}
+function gostep(n,title,sub,code){var li=el("li");li.appendChild(el("span","n",String(n)));li.appendChild(el("b",null,title));if(sub)li.appendChild(el("span","s",sub));
+  if(code){var c=el("div","code");c.appendChild(el("code",null,code));var cb=btn("","copy","sm");cb.setAttribute("aria-label","Copy");cb.addEventListener("click",function(){copyText(code,"Command copied",cb)});c.appendChild(cb);li.appendChild(c)}
+  return li}
+function normUrl(v){v=v.trim();if(!v)return"";if(!/^https?:\/\//i.test(v)&&/^[\w-]+(\.[\w-]+)+(\/|$)/.test(v))v="https://"+v;return v}
+$("goF").addEventListener("submit",function(e){
+  e.preventDefault();var v=$("goU").value.trim(),S=$("goS");S.textContent="";S.hidden=true;
+  var x=$("err");x.textContent="";x.classList.add("hide");
+  if(!v){$("goU").focus();return}
+  if(isCode(v)){$("code").value=v;$("dec").click();return}
+  var u=normUrl(v),k=pageKey(u),g=GROUP[k];
+  if(!g){for(var key in GROUP){if(key.indexOf(k)===0||k.indexOf(key)===0){g=GROUP[key];break}}}
+  S.hidden=false;
+  if(g&&g.v!=="open"){
+    var li=gostep("✓",g.best.title+": "+VL[g.v],g.best.summary);var a=el("div","acts"),o=el("a","b pri","Open the replay");o.href="#ex="+encodeURIComponent(g.best.id);a.appendChild(o);li.appendChild(a);S.appendChild(li);
+    S.appendChild(gostep(2,"Test it again yourself","Needs Docker and a Claude Code token.","firstrun "+(g.best.url||u)));return}
+  if(!/^https?:\/\//i.test(u)){S.appendChild(gostep("!","Paste the docs page link","For example https://docs.getdbt.com/guides/duckdb, or a share code that starts with H4sI."));return}
+  S.appendChild(gostep(1,"Install FirstRun","Python 3.11 or newer. Docker must be running.","pip install git+https://github.com/HighnessAtharva/firstrun"));
+  S.appendChild(gostep(2,"Test the page","A clean container runs every step. A broken step gets a fix and a second clean run.","firstrun "+u));
+  var l3=gostep(3,"Paste the share code here","The run prints a line that starts with share:. Paste it in the bar above to replay it.");
+  var a3=el("div","acts"),h=el("a","b","Or let your coding agent run it");h.href="../#hero";a3.appendChild(h);l3.appendChild(a3);S.appendChild(l3);
+});
+
 
 /* wiring */
 $("dec").addEventListener("click",function(){

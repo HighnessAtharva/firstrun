@@ -150,5 +150,7 @@ def test_d6_no_secret_in_tracked_files():
 
 
 def test_d6_no_secret_in_git_history():
-    history = _git("log", "--all", "-p", "--no-color", "--format=%H")
+    # Project history only. --all would also read refs/entire/checkpoints, the Entire session
+    # transcripts, where base64 screenshot data can match AKIA[0-9A-Z]{16} by chance.
+    history = _git("log", "--branches", "--tags", "--remotes", "-p", "--no-color", "--format=%H")
     assert not _real_hits(history), "a secret-shaped string sits in git history"

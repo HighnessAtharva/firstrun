@@ -408,6 +408,49 @@ def audit_issue_cmd(audit_id, as_json) -> None:
         click.echo(f"run from {d}: {c}")
 
 
+@cli.command("audit-submit")
+@click.argument("audit_id", required=False)
+@click.option("--yes", is_flag=True, help="Upload without asking first.")
+@click.option("--open", "open_browser", is_flag=True, help="Open the prefilled issue in the browser.")
+def audit_submit_cmd(audit_id, yes, open_browser) -> None:
+    """Offer a local audit for the public doc-audit log: a secret gist plus a prefilled issue. A maintainer publishes it."""
+    import shutil
+    import subprocess
+
+    from firstrun import intake
+
+    dirs = sorted(d for d in Path(config.RUNS_DIR).glob("audit-*") if (d / "audit.json").exists())
+    if audit_id:
+        dirs = [d for d in dirs if d.name == audit_id]
+    if not dirs:
+        raise click.ClickException("no audit found. Run firstrun audit owner/repo first.")
+    path = dirs[-1] / "audit.json"
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        intake.validate(dict(doc))
+    except ValueError as e:
+        raise click.ClickException(f"{path} is not a complete audit: {e}") from e
+    repo = doc["repo"]
+    click.echo(f"{path} holds the docs paths, page titles and commit subjects of {repo}.")
+    click.echo("It goes into a secret gist. A maintainer reads it before it reaches the public log.")
+    if not yes and not click.confirm("Upload it?", default=False):
+        raise click.Abort()
+    if not shutil.which("gh"):
+        raise click.ClickException("the GitHub CLI (gh) is not installed. Paste audit.json into a secret gist at "
+                                   f"https://gist.github.com, then open {intake.submission_url(repo, '<gist link>')}")
+    p = subprocess.run(["gh", "gist", "create", str(path), "--desc", f"FirstRun doc-audit of {repo}"],
+                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+    gist = next((ln.strip() for ln in p.stdout.splitlines() if intake.gist_id(ln.strip())), "")
+    if p.returncode != 0 or not gist:
+        raise click.ClickException(f"gh gist create failed: {(p.stderr or p.stdout).strip()[:300]}")
+    url = intake.submission_url(repo, gist)
+    click.echo(f"gist: {gist}")
+    click.echo(f"issue: {url}")
+    click.echo("Submit the issue. The board appears at " + intake.SITE + f"?id={doc['id']} once it is published.")
+    if open_browser:
+        click.launch(url)
+
+
 @cli.command("publish")
 @click.argument("run_id", required=False)
 @click.option("--all", "everything", is_flag=True, help="Publish every run folder, not only the newest.")
