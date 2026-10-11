@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>For Judges | FirstRun</title>
-<meta name="description" content="Every FirstRun claim for the neatHack judges, with the file, trace or page that proves it. The agent, neatlogs, Entire, cfo.ai, the demo, the posts and the upstream PRs.">
+<meta name="description" content="FirstRun against the official neatHack judging criteria and the 7 official evidence rows, each with a link a judge can open: traces, checkpoints, the cfo.ai plan, the demo chapters, the posts and the dated commits.">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
@@ -16,6 +16,7 @@
 --bg:oklch(98.6% .004 200);--panel:oklch(99.7% .002 200);--sunk:oklch(97.2% .006 210);
 --line:oklch(90.5% .01 210);--ink:oklch(22% .014 230);--mut:oklch(45% .014 230);
 --ok:oklch(47% .12 155);--ok-bg:oklch(95.6% .035 155);
+--bad:oklch(50% .15 25);
 --sh:0 1px 2px oklch(30% .02 220/.06);
 --lift:0 1px 2px oklch(30% .03 220/.05),0 10px 28px -14px oklch(35% .05 220/.2);
 --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -38,6 +39,7 @@ img{max-width:100%;display:block}
 .col{max-width:860px;margin-left:auto;margin-right:auto}
 .skip{position:absolute;left:12px;top:-60px;z-index:80;background:var(--panel);padding:8px 14px;border-radius:10px;box-shadow:var(--lift)}
 .skip:focus{top:12px}
+[id]{scroll-margin-top:84px}
 
 /* bands: each section owns one tint from the family */
 .band{background:var(--tint);border-top:1px solid var(--edge);padding:var(--pad) 0}
@@ -55,13 +57,17 @@ img{max-width:100%;display:block}
 h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;letter-spacing:-.045em;font-weight:700;text-align:center;max-width:14em;margin:0 auto;text-wrap:balance}
 h2{font-size:clamp(28px,3.9vw,42px);line-height:1.08;letter-spacing:-.04em;font-weight:700;text-align:center;max-width:18em;margin:0 auto;text-wrap:balance}
 h3{font-size:clamp(20px,2.2vw,24px);line-height:1.2;letter-spacing:-.025em;font-weight:700;text-align:center;text-wrap:balance}
-.eyebrow{display:flex;justify-content:center;margin-bottom:16px}
+.eyebrow{display:flex;justify-content:center;margin-bottom:14px}
 .eyebrow span{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--c);background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:99px;padding:5px 14px 5px 6px}
 .eyebrow b{font:600 13px/1 var(--mono);background:var(--c);color:oklch(99% .004 200);border-radius:99px;padding:5px 9px}
+/* the official criterion, quoted above the claim */
+.crit{max-width:40em;margin:0 auto 18px;text-align:center;font-size:15px;line-height:1.5;color:var(--mut);text-wrap:balance}
+.crit small{display:block;font:600 11.5px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin-bottom:4px}
+.crit q{quotes:"\201C" "\201D"}
 .note{font-size:14.5px;color:var(--mut)}
 .src{text-align:center;margin-top:24px;color:var(--mut);font-size:15px}
 
-/* hero and the 30-second path */
+/* hero and the 60-second path */
 .hero{padding-top:clamp(36px,5vw,64px)}
 .lede{text-align:center;margin:18px auto 0;font-size:clamp(17px,1.9vw,20px);color:var(--mut);max-width:34em;text-wrap:balance}
 .path{list-style:none;counter-reset:p;margin:clamp(34px,4.5vw,52px) auto 0;max-width:720px;display:flex;flex-direction:column;gap:6px}
@@ -82,6 +88,24 @@ h3{font-size:clamp(20px,2.2vw,24px);line-height:1.2;letter-spacing:-.025em;font-
 .score a b{font:600 18px/1 var(--mono);color:var(--c)}
 .score a span{font-size:13.5px;line-height:1.25;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--edge)}
 
+/* the official evidence table */
+.evt{margin:clamp(30px,4vw,44px) auto 0;max-width:1000px}
+.evt table{font-size:15px}
+.evt td,.evt th{vertical-align:top;padding:15px 14px}
+.evt tbody th{width:22%;font-weight:650;font-size:16px;letter-spacing:-.015em;line-height:1.3}
+.evt tbody th i{display:block;font:600 12.5px/1 var(--mono);font-style:normal;color:var(--c);margin-bottom:6px}
+.evt .off{width:26%;color:var(--mut);font-size:14.5px}
+.evt .off q{quotes:"\201C" "\201D"}
+.evt .giv p+p{margin-top:6px}
+.evt .lk{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:14.5px;font-weight:600}
+.evt .stc{width:120px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1.2 Geist,sans-serif;border-radius:99px;padding:4px 10px;white-space:nowrap;border:1px solid}
+.chip:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.c-pub{background:var(--ok-bg);color:var(--ok);border-color:oklch(84% .06 155)}
+.c-repo{background:oklch(95.5% .02 250);color:oklch(42% .1 255);border-color:oklch(86% .04 250)}
+.c-shot{background:oklch(95.8% .03 85);color:oklch(42% .08 70);border-color:oklch(85% .06 80)}
+.evt .stc span.note{display:block;margin-top:6px;font-size:13px;line-height:1.35}
+
 /* the agent: eight focus areas as rows */
 .areas{list-style:none;margin-top:clamp(32px,4vw,48px);border-top:1px solid var(--edge)}
 .areas li{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1.05fr);gap:6px 24px;padding:15px 4px;border-bottom:1px solid var(--edge);align-items:baseline}
@@ -89,13 +113,25 @@ h3{font-size:clamp(20px,2.2vw,24px);line-height:1.2;letter-spacing:-.025em;font-
 .areas p{color:var(--ink);font-size:15.5px}
 .areas .pf{font-size:14.5px;color:var(--mut);display:flex;flex-wrap:wrap;gap:2px 14px}
 .ask{margin:28px auto 0;max-width:760px;text-align:center;font-size:16px;background:oklch(100% 0 0/.55);border:1px solid var(--edge);border-radius:16px;padding:16px 20px}
-.ba{margin-top:clamp(44px,5.5vw,64px);scroll-margin-top:96px}
+.sub{margin-top:clamp(48px,6vw,72px)}
 .tbl{overflow-x:auto;margin:22px auto 0;max-width:640px}
 table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
 th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--edge)}
 thead th{font-size:13px;font-weight:600;color:var(--mut);border-bottom-color:var(--c)}
 td.n,th.n{text-align:right;white-space:nowrap;font-family:var(--mono);font-size:14.5px}
+thead th.n{font-family:inherit;font-size:13px}
+.proof a+a,.feat a+a,.ask a+a,.src a+a{margin-left:.7em}
 td.up{color:var(--ok);font-weight:600}
+td.dn{color:var(--bad);font-weight:600}
+
+/* recovery: the spans in order */
+.rec{list-style:none;margin:24px auto 0;max-width:760px;border-left:0;display:flex;flex-direction:column}
+.rec li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:4px 18px;padding:13px 4px;border-bottom:1px solid var(--edge);align-items:baseline}
+.rec li:first-child{border-top:1px solid var(--edge)}
+.rec .sp{font:600 13.5px/1.3 var(--mono);display:flex;flex-direction:column;gap:3px}
+.rec .sp em{font-style:normal;font-size:12px;letter-spacing:.04em}
+.rec .er{color:var(--bad)}.rec .okk{color:var(--ok)}
+.rec p{font-size:15.5px}
 
 /* tools: three stacked rows, logo and role left, proof right */
 .tools{list-style:none;margin-top:clamp(32px,4vw,48px);display:flex;flex-direction:column;gap:18px}
@@ -109,15 +145,52 @@ td.up{color:var(--ok);font-weight:600}
 .proof li:before{content:"";width:18px;height:18px;margin-top:3px;border-radius:50%;background:var(--ok-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23277a4b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/12px no-repeat}
 .proof li.cv:before{background:oklch(92.5% .012 220) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23586373' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M12 8v.5M12 11.5v5'/%3E%3C/svg%3E") center/13px no-repeat}
 .proof li.cv{color:var(--mut);font-size:14.5px}
+.full{grid-column:1/-1;border-top:1px solid var(--edge);padding-top:22px}
+.full h4{font-size:15px;font-weight:650;letter-spacing:-.01em;margin-bottom:12px}
+
+/* neatlogs screenshots: fixed boxes, lazy, click for full size */
+.shots{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px}
+.shots figure{display:flex;flex-direction:column;gap:10px}
+.shots a.im{display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel);box-shadow:var(--sh);aspect-ratio:16/10}
+.shots a.im img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .5s var(--ease)}
+.shots a.im:hover img{transform:scale(1.02)}
+.shots figcaption{font-size:14.5px;line-height:1.45}
+.shots figcaption b{font-weight:650}
+.shots figcaption .note{display:block;margin-top:4px;font-size:13.5px}
+
+/* real terminal output */
+.outs{display:flex;flex-direction:column;gap:14px}
+.out{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.out p{font-size:13.5px;color:var(--mut);padding:8px 14px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px}
+.out pre{padding:12px 14px;font-size:12.5px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.out pre .p{color:var(--mut);user-select:none}
+
+/* cfo.ai plan tables */
+.plan{display:flex;flex-direction:column;gap:20px}
+.plan .lead{font-size:15px}
+.plan table{font-size:14.5px}
+.plan caption{caption-side:top;text-align:left;font-size:14px;font-weight:650;padding-bottom:6px}
+.plan .rule{font-size:14px;color:var(--mut)}
+.plan .lk{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14.5px;font-weight:600}
 
 /* demo */
-.demo{display:block;max-width:760px;margin:clamp(32px,4vw,44px) auto 0;border-radius:18px;overflow:hidden;box-shadow:var(--lift);border:1px solid var(--edge);position:relative;text-decoration:none}
+.demo{display:block;max-width:640px;margin:clamp(28px,3.5vw,40px) auto 0;border-radius:18px;overflow:hidden;box-shadow:var(--lift);border:1px solid var(--edge);position:relative;text-decoration:none}
 .demo img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
-.demo .pi{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:oklch(99.5% .003 200/.94);color:var(--c);display:grid;place-items:center;box-shadow:var(--lift);transition:transform .5s var(--ease)}
-.demo .pi svg{width:28px;height:28px;margin-left:4px}
+.demo .pi{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;background:oklch(99.5% .003 200/.94);color:var(--c);display:grid;place-items:center;box-shadow:var(--lift);transition:transform .5s var(--ease)}
+.demo .pi svg{width:26px;height:26px;margin-left:4px}
 .demo:hover .pi{transform:scale(1.07)}
 .demo .dur{position:absolute;right:14px;bottom:14px;font:600 13px/1 var(--mono);color:oklch(99% .003 200);background:oklch(22% .014 230/.82);border-radius:99px;padding:7px 11px}
-.big{text-align:center;margin-top:22px;font-size:clamp(18px,2vw,21px);font-weight:650}
+.chap{list-style:none;margin:28px auto 0;max-width:760px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,auto);grid-auto-flow:column;gap:0 28px;border-top:1px solid var(--edge)}
+.chap li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:10px 2px;border-bottom:1px solid var(--edge);font-size:15px}
+.chap a{font:600 14px var(--mono)}
+.chap .tg{font-size:12.5px;color:var(--mut);white-space:nowrap}
+.mx{margin:30px auto 0;max-width:1000px}
+.mx table{font-size:14.5px}
+.mx thead th{font-size:14px;color:var(--ink)}
+.mx thead th img{display:inline-block;width:20px;height:20px;border-radius:5px;vertical-align:-4px;margin-right:6px;border:1px solid var(--line)}
+.mx tbody th{font-weight:650;width:15%}
+.mx td{vertical-align:top;line-height:1.4}
+.mx td a{font:600 13.5px var(--mono);margin-right:6px}
 
 /* posts */
 .posts{list-style:none;margin-top:clamp(32px,4vw,44px);display:flex;flex-direction:column;border-top:1px solid var(--edge)}
@@ -134,15 +207,11 @@ td.up{color:var(--ok);font-weight:600}
 .st{font:600 12px Geist,sans-serif;border-radius:99px;padding:2px 9px;background:var(--ok-bg);color:var(--ok)}
 .prs a{font-size:17px;font-weight:650;letter-spacing:-.015em;line-height:1.3}
 .prs p{font-size:14.5px;color:var(--mut)}
-.more{list-style:none;margin:26px auto 0;max-width:760px;display:flex;flex-direction:column;gap:10px;text-align:center;font-size:16px}
-
-/* seven claims */
-.claims{list-style:none;counter-reset:c;margin-top:clamp(32px,4vw,44px);display:flex;flex-direction:column;gap:10px}
-.claims li{counter-increment:c;display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 16px;background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:16px;padding:16px 20px}
-.claims li:before{content:counter(c);grid-row:1/4;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 14px/1 var(--mono);background:var(--ok-bg);color:var(--ok);border:1.5px solid oklch(80% .07 155)}
-.claims b{font-size:17px;letter-spacing:-.015em}
-.claims a{font-size:15.5px;font-weight:600;justify-self:start}
-.claims .note{font-size:14px}
+.feat{list-style:none;margin:clamp(36px,4.5vw,52px) auto 0;max-width:860px;display:flex;flex-direction:column;gap:10px}
+.feat li{display:grid;grid-template-columns:200px minmax(0,1fr);gap:4px 24px;background:oklch(100% 0 0/.6);border:1px solid var(--edge);border-radius:16px;padding:15px 20px;align-items:baseline}
+.feat b{font-size:16px;letter-spacing:-.015em}
+.feat p{font-size:15px}
+.feat p a{font-weight:600}
 
 /* what broke */
 .broke{list-style:none;margin-top:clamp(32px,4vw,44px);display:flex;flex-direction:column;border-top:1px solid var(--edge)}
@@ -156,7 +225,7 @@ td.up{color:var(--ok);font-weight:600}
 .code-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 10px 9px 18px;border-bottom:1px solid var(--edge);font-size:14px;color:var(--mut)}
 .code pre{padding:16px 18px 18px;font-size:14px;line-height:1.75;overflow-x:auto;white-space:pre;color:var(--ink)}
 .code pre .p{color:var(--mut);user-select:none}
-.cp{font:inherit;font-size:13.5px;font-weight:600;min-height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--edge);background:var(--tint);color:var(--ink);cursor:pointer;transition:background .15s}
+.cp{font:inherit;font-size:13.5px;font-weight:600;min-height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--edge);background:var(--tint);color:var(--ink);cursor:pointer;transition:background .15s;flex:none}
 .cp:hover{background:oklch(100% 0 0/.8)}
 .code .note{padding:0 18px 16px}
 
@@ -175,6 +244,25 @@ footer .home{font-weight:650;font-size:16px}
  .who{align-items:center;text-align:center}.who h3{text-align:center}
  .posts li{grid-template-columns:minmax(0,1fr) auto}.posts q{grid-column:1/-1;grid-row:2}
  .prs li{grid-template-columns:minmax(0,1fr)}
+ .feat li{grid-template-columns:minmax(0,1fr)}
+ .chap{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row}
+}
+/* tables turn into labelled blocks on narrow screens */
+@media(max-width:760px){
+ .rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .rt,.rt tbody,.rt tr,.rt th,.rt td{display:block;width:auto!important}
+ .rt tr{border-bottom:1px solid var(--edge);padding:12px 0}
+ .rt th,.rt td{border:0;padding:3px 2px;text-align:left!important}
+ .rt td[data-l]:before{content:attr(data-l);display:block;font:600 11.5px/1.4 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}
+ .rt td.n{font-size:14px}
+ .rt caption{display:block;width:auto}
+ .kv td[data-l]{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+ .kv td[data-l]:before{display:inline;margin:0;flex:none}
+ .kv td:not(.n){text-align:right!important}
+ .evt tbody th{font-size:17px}
+ .evt .stc{padding-top:8px}
+ .shots{grid-template-columns:minmax(0,1fr)}
+ .rec li{grid-template-columns:minmax(0,1fr);gap:2px}
 }
 @media(max-width:640px){
  .wrap{padding:0 16px}footer{padding-left:16px;padding-right:16px}
@@ -184,11 +272,11 @@ footer .home{font-weight:650;font-size:16px}
  .score li a{border-radius:12px!important;flex-direction:row;align-items:center;gap:12px;padding:11px 14px;background:linear-gradient(90deg,oklch(100% 0 0/.7) calc(var(--w)*2.6%),var(--tint) 0)}
  .score a b{min-width:3ch}
  .broke li{grid-template-columns:minmax(0,1fr);gap:2px}.broke .num{text-align:left}
- .claims li{grid-template-columns:28px minmax(0,1fr);padding:14px 14px;gap:4px 12px}
- .claims li:before{width:28px;height:28px;font-size:13px}
- .code pre{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+ .tool{padding:18px 14px}
+ .code pre,.out pre{font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+ .code-h{flex-wrap:wrap;padding-left:14px}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero .wrap>*{animation:none}.demo .pi,.score a,.cp{transition:none}.demo:hover .pi{transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero .wrap>*{animation:none}.demo .pi,.score a,.cp,.shots a.im img{transition:none}.demo:hover .pi,.shots a.im:hover img{transform:none}}
 </style>
 </head>
 <body>
@@ -201,29 +289,72 @@ footer .home{font-weight:650;font-size:16px}
 <div class="wrap">
 <div class="eyebrow"><span><b>neatHack 2026</b>For judges</span></div>
 <h1 id="top-h">Check Every FirstRun Claim in 60 Seconds</h1>
-<p class="lede">Every number on this page links to the file, trace or page that proves it.</p>
-<ol class="path" aria-label="The 30-second path">
-<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc">Watch the 3-minute demo</a><span>2:59 on YouTube. It covers neatlogs, Entire and cfo.ai.</span></li>
-<li><a href="../receipts/FR-20261010-091740-help-accuknox-com.html">Open a real receipt</a><span>AccuKnox knoxctl: $0.0453 against a $0.04697 Team cap, 5 of 5 steps proven.</span></li>
+<p class="lede">The page follows the official criteria and the official evidence list. Every number links to the file, trace or page behind it.</p>
+<ol class="path" aria-label="The 60-second path">
+<li><a href="#evidence">Tick the 7 official evidence rows</a><span>Each row has the proof, a link and a status.</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc">Watch the 3-minute demo</a><span>2:59 on YouTube. neatlogs, Entire and cfo.ai each get a chapter.</span></li>
 <li><a href="#before-after">Read the before and after table</a><span>Version 1 finished 2 of 4 quickstarts. Version 2 finished 3 of 4.</span></li>
-<li><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Open the recovered trace evidence</a><span>neatlogs trace 5520c5cf, 30 spans: step 1 failed, recovery fixed it, a clean rerun passed.</span></li>
+<li><a href="../receipts/FR-20261010-091740-help-accuknox-com.html">Open a real receipt</a><span>AccuKnox knoxctl: $0.0453 against a $0.04697 Team cap, 5 of 5 steps proven.</span></li>
 </ol>
-<nav class="score" aria-label="Rubric categories">
+<nav class="score" aria-label="Official judging categories">
 <p>Jump to a category. Each width is its share of the score.</p>
 <ol>
 <li class="t-slate" style="--w:30"><a href="#agent"><b>30%</b><span>The agent</span></a></li>
 <li class="t-mint" style="--w:25"><a href="#tools"><b>25%</b><span>neatlogs, Entire, cfo.ai</span></a></li>
 <li class="t-mist" style="--w:20"><a href="#demo"><b>20%</b><span>Demo video</span></a></li>
-<li class="t-moss" style="--w:15"><a href="#public"><b>15%</b><span>In public</span></a></li>
-<li class="t-sea" style="--w:10"><a href="#useful"><b>10%</b><span>Useful</span></a></li>
+<li class="t-moss" style="--w:15"><a href="#public"><b>15%</b><span>Building in public</span></a></li>
+<li class="t-sea" style="--w:10"><a href="#useful"><b>10%</b><span>Useful, original</span></a></li>
 </ol>
 </nav>
+</div>
+</section>
+
+<section id="evidence" class="band t-steel" aria-labelledby="ev-h">
+<div class="wrap">
+<p class="crit"><small>Official evidence and verification</small><q>Back up each claim in your submission with evidence that judges can check.</q></p>
+<h2 id="ev-h">All 7 Official Evidence Rows Have Proof You Can Open</h2>
+<div class="evt">
+<table class="rt">
+<thead><tr><th scope="col">Claim</th><th scope="col">What judges can check</th><th scope="col">What FirstRun gives you</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><th scope="row"><i>1</i>The agent improved</th>
+<td class="off" data-l="What judges can check"><q>A run before your change and a run after it, e.g., two neatlogs traces, with the numbers you compared</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>On the Entire install quickstart, v1 trace <code>10c44df9</code> failed at step 1 and v2 trace <code>5520c5cf</code> ended verified. Over 4 targets, finished runs went from 2 to 3 and cost per run fell from $0.0262 to $0.0200.</p><span class="lk"><a href="#before-after">The v1 and v2 table</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-repo">In repo</span><span class="note">Trace pages need a neatlogs login.</span></td></tr>
+<tr><th scope="row"><i>2</i>You used neatlogs</th>
+<td class="off" data-l="What judges can check"><q>Links to neatlogs traces from your project, or screenshots of them</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>4 screenshots on this page: Investigate, a detection, an AI judge on a recovered trace and a Bisect trace. The 8 before and after trace IDs are in neatlogs.md, and one full trace is exported.</p><span class="lk"><a href="#nl-shots">The 4 screenshots</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">neatlogs.md</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-shot">Screenshots</span><span class="note">Trace pages need a neatlogs login.</span></td></tr>
+<tr><th scope="row"><i>3</i>You used Entire</th>
+<td class="off" data-l="What judges can check"><q>Checkpoints or entire-graph output from your repository</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>75 of 113 non-merge commits carry an <code>Entire-Checkpoint:</code> trailer. The planner fix commit opens its session on entire.io with no login. <code>graph.ndjson</code> is the entire-graph output: 102 files, 1,587 symbols.</p><span class="lk"><a href="#entire-out">The git and graph output</a><a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Entire commit page</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-pub">Public</span></td></tr>
+<tr><th scope="row"><i>4</i>You used cfo.ai</th>
+<td class="off" data-l="What judges can check"><q>A business plan covering your agent's pricing, costs, revenue and runway</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>3 tiers, cost per run from 88 neatlogs traces, revenue per run and 18 months of cash. Under the old $0.50 cap, cash runs out in month 14, so the plan sets a cap per tier.</p><span class="lk"><a href="#cfo-plan">The plan table</a><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">Public cfo.ai model</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">BUSINESS_PLAN.md</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-pub">Public</span></td></tr>
+<tr><th scope="row"><i>5</i>The agent recovers from failures</th>
+<td class="off" data-l="What judges can check"><q>A run where an action failed, showing what the agent did next</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>Trace <code>5520c5cf</code>: step 1 failed with <code>curl: command not found</code> and recovery installed curl. Step 2 failed until <code>~/.local/bin</code> was on <code>PATH</code>. A fresh container then passed 4 of 4.</p><span class="lk"><a href="#recovery">The span sequence</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">trace-recovered-entire-v2.md</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-repo">In repo</span><span class="note">The full trace is exported to the repo.</span></td></tr>
+<tr><th scope="row"><i>6</i>You built in public</th>
+<td class="off" data-l="What judges can check"><q>Links to what you shared during the hackathon, tagged #neatHack</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>11 posts tagged #neatHack, 10 on X and 1 on LinkedIn. Each one opens with no login.</p><span class="lk"><a href="#public">The 11 posts</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/hackathon.md#built-in-public">hackathon.md log</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-pub">Public</span></td></tr>
+<tr><th scope="row"><i>7</i>You wrote the code during the hackathon</th>
+<td class="off" data-l="What judges can check"><q>A public repository with commits dated during the hackathon</q></td>
+<td class="giv" data-l="What FirstRun gives you"><p>The first commit, <code>96541a8</code>, is dated 2026-10-10 at 12:34 IST, 4 minutes after the 12:30 IST kickoff. Planning happened before, in a private repo.</p><span class="lk"><a href="https://github.com/HighnessAtharva/firstrun/commit/96541a8b88ba2cb758f055c265f9f3d875ef4b08">First commit</a><a href="#dated">List the dates yourself</a></span></td>
+<td class="stc" data-l="Status"><span class="chip c-pub">Public</span></td></tr>
+</tbody>
+</table>
+</div>
 </div>
 </section>
 
 <section id="agent" class="band t-slate" aria-labelledby="agent-h">
 <div class="wrap">
 <div class="eyebrow"><span><b>30%</b>The agent</span></div>
+<p class="crit"><small>Official criterion</small><q>How well the agent, or the system of agents, handles a substantial task from start to finish.</q></p>
 <h2 id="agent-h">Each of the 8 Focus Areas Points to Code and a Span</h2>
 <ol class="areas col">
 <li><b>Planning</b><p>Claude turns the docs page into a runbook and copies each command exactly.</p><span class="pf"><a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/planner.py#L319">planner.py</a><span><code>planner</code> AGENT span</span></span></li>
@@ -237,7 +368,7 @@ footer .home{font-weight:650;font-size:16px}
 </ol>
 <p class="ask">The agent asks a human once, only when Jev's top failure class is below 0.7 confidence. The answer is stored in <code>precedents.json</code>, so the same question never comes back. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/recovery.py#L29">The 0.7 threshold</a> <a href="https://github.com/HighnessAtharva/firstrun/blob/main/src/firstrun/precedents.py">The ask-once store</a></p>
 
-<div class="ba" id="before-after">
+<div class="sub" id="before-after">
 <h3>Version 2 Beat Version 1 on the Same 4 Quickstarts</h3>
 <div class="tbl">
 <table>
@@ -252,48 +383,113 @@ footer .home{font-weight:650;font-size:16px}
 </tbody>
 </table>
 </div>
-<p class="src col">Each number comes from the 8 neatlogs traces in <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a>. v2 runs longer because a verified fix reruns the whole quickstart. Cost is Sonnet 5.5 list price and was not billed. <a href="https://github.com/HighnessAtharva/firstrun#version-2-finishes-3-of-4-quickstarts-and-recovers-3-failed-steps">Per-target results</a></p>
+<p class="src col">Each number comes from the 8 neatlogs traces in <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a>. v2 runs longer because a verified fix reruns the whole quickstart. Cost is Sonnet 5.5 list price and was not billed. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#before-and-after-traces-measure-the-fix-from-neatlogs">The 8 trace IDs</a></p>
+</div>
+
+<div class="sub" id="recovery">
+<h3>Trace 5520c5cf Failed Twice, Recovered and Passed 4 of 4 in a Fresh Container</h3>
+<ol class="rec">
+<li><span class="sp er"><em>ERROR</em>step.1</span><p>The Entire install step failed with <code>curl: command not found</code> in the <code>python:3.11-slim</code> container.</p></li>
+<li><span class="sp okk"><em>RECOVERED</em>recover.1</span><p>Recovery reused a stored precedent and installed curl. <code>step.1</code> then passed in 110 s.</p></li>
+<li><span class="sp er"><em>ERROR</em>step.2</span><p>The next step failed, because <code>~/.local/bin</code> was not on <code>PATH</code>.</p></li>
+<li><span class="sp okk"><em>RECOVERED</em>recover.2</span><p>Recovery ran <code>classify_failure</code> and one Claude call ($0.0080), then put <code>~/.local/bin</code> on <code>PATH</code>. Steps 2, 3 and 4 passed.</p></li>
+<li><span class="sp okk"><em>VERIFIED</em>verify</span><p>A fresh container ran steps 1 to 4 with no model call. All 4 passed in 264 s.</p></li>
+</ol>
+<p class="src col">30 spans, 417 s and $0.0095 at list price, from <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">trace-recovered-entire-v2.md</a>. The trace status reads ERROR because a failed step span rolls up to the trace. The run itself ended verified.</p>
 </div>
 </div>
 </section>
 
 <section id="tools" class="band t-mint" aria-labelledby="tools-h">
 <div class="wrap">
-<div class="eyebrow"><span><b>25%</b>neatlogs, Entire and cfo.ai</span></div>
-<h2 id="tools-h">neatlogs, Entire and cfo.ai Each Did One Job</h2>
-<ul class="tools col">
-<li class="tool">
+<div class="eyebrow"><span><b>25%</b>Use of neatlogs, Entire and cfo.ai</span></div>
+<p class="crit"><small>Official criterion</small><q>How effectively you used neatlogs, Entire and cfo.ai to build, improve and plan a business around the agent.</q></p>
+<h2 id="tools-h">neatlogs Improved the Agent, Entire Recorded the Build, cfo.ai Planned the Business</h2>
+<ul class="tools">
+<li class="tool" id="nl-shots">
 <div class="who"><img src="../assets/logo-neatlogs.webp" alt="" width="52" height="52" loading="lazy"><h3>neatlogs</h3><p>Traces every run, and found the agent's own bug.</p></div>
 <ul class="proof">
 <li><span>Each run is one <code>firstrun.run</code> trace with WORKFLOW, AGENT, TOOL and GUARDRAIL spans. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">neatlogs.md</a></span></li>
-<li><span>2 detections run on every trace. "Planner invented a step" flagged 3 v1 planner spans. "Docs step broke" flagged 78 tool spans. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-detection-docs-step-broke.png">Detection screenshot</a></span></li>
 <li><span>Investigate traced the invented steps to the planner prompt. A Claude Code session read the detection over the neatlogs MCP server and shipped the fix. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs-investigation.md">Investigate result</a> <a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Commit 3ca6f11</a></span></li>
 <li><span>2 AI evaluators scored real traces. The run judge named the real failed step in 46 of 52 runs and scored 17 runs at 1 or 2. The audit judge averaged 4.87 of 5 over 15 audits. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#two-launched-evals-scored-67-traces-and-found-where-the-agent-overclaims">Eval scores</a></span></li>
-<li><span>Cost per run fell from $0.0262 to $0.0200, as neatlogs measured it. <a href="#before-after">Before and after</a></span></li>
-<li class="cv"><span>neatlogs trace pages need a login. The trace IDs are in neatlogs.md, and one full trace is exported to the repo.</span></li>
+<li class="cv"><span>neatlogs trace pages need a login, so the screenshots below stand in. The trace IDs are in neatlogs.md, and one full trace is exported to the repo.</span></li>
 </ul>
+<div class="full">
+<h4>These 4 screenshots come from the neatlogs dashboard. Click one to open it at full size.</h4>
+<ul class="shots">
+<li><figure><a class="im" href="../assets/t-neatlogs-investigate.webp" target="_blank" rel="noopener"><img src="../assets/e-nl-investigate.webp" alt="neatlogs incident: 25 Execution Failed detections against a baseline of 0.5, a 52.8x increase over 10 traces, investigated with a root cause at 66% confidence" width="870" height="484" loading="lazy" decoding="async"></a>
+<figcaption><b>Investigate.</b> 25 failed executions, 52.8x the 0.5 baseline, over 10 traces. The root cause at 66% confidence: a step runs <code>cd</code>, then the file check looks in the old folder. <a href="https://github.com/HighnessAtharva/firstrun/commit/2de852f">Fixed in commit 2de852f</a><span class="note">Behind it: the 10 traces in the incident, shown in the screenshot.</span></figcaption></figure></li>
+<li><figure><a class="im" href="../assets/j-nl-detection.webp" target="_blank" rel="noopener"><img src="../assets/j-nl-detection.webp" alt="neatlogs detection docs step broke: 78 flagged spans and a peak of 78, flat at 0 from July until a spike on October 10 and 11" width="970" height="860" loading="lazy" decoding="async"></a>
+<figcaption><b>Detection "docs step broke".</b> 78 flagged tool spans, all on Oct 10 and 11, from a baseline of 0.<span class="note">Behind it: <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-detection-docs-step-broke.png">nl-detection-docs-step-broke.png</a> and <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md#two-launched-evals-scored-67-traces-and-found-where-the-agent-overclaims">neatlogs.md</a>.</span></figcaption></figure></li>
+<li><figure><a class="im" href="../assets/j-nl-eval-run.webp" target="_blank" rel="noopener"><img src="../assets/j-nl-eval-run.webp" alt="neatlogs evaluator run succeeded with 6 tool calls: names_real_failed_step true, failure_class environment for curl command not found, failure_class_correct true" width="872" height="770" loading="lazy" decoding="async"></a>
+<figcaption><b>AI judge on the recovered run.</b> 6 tool calls. It named step 1 as the first failed step and classed <code>curl: command not found</code> as environment, as the agent did.<span class="note">Behind it: trace <code>5520c5cff5e0ea61f130eced082b20c4</code>, <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/nl-eval-run-result.png">nl-eval-run-result.png</a>.</span></figcaption></figure></li>
+<li><figure><a class="im" href="../assets/t-neatlogs-bisect.webp" target="_blank" rel="noopener"><img src="../assets/e-nl-bisect.webp" alt="neatlogs trace of a Docs Bisect run: 5 probes across jafgen releases, last good 0.3.1, first bad 0.4.6" width="990" height="550" loading="lazy" decoding="async"></a>
+<figcaption><b>A <code>firstrun.bisect</code> trace.</b> 5 probes. jafgen 0.3.1 passes and 0.4.6 fails, released 2024-04-07.<span class="note">Behind it: <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">the finding on dbt PR #10149</a>. The repo does not record this trace ID.</span></figcaption></figure></li>
+</ul>
+</div>
 </li>
-<li class="tool">
+<li class="tool" id="entire-out">
 <div class="who"><img src="../assets/logo-entire.webp" alt="" width="52" height="52" loading="lazy"><h3>Entire</h3><p>Recorded the session behind each agent commit, and reviewed every layer.</p></div>
 <ul class="proof">
-<li><span>75 of 113 non-merge commits carry an <code>Entire-Checkpoint:</code> trailer, counted with <code>git log</code> on the launch branch on 2026-10-11, before the commit that records it. The 38 without are the 4 setup commits and site commits from 2026-10-10 and 2026-10-11; on many of those the Entire commit hook hung and was stopped so the commit could land. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">entire.md</a></span></li>
+<li><span>75 of 113 non-merge commits carry an <code>Entire-Checkpoint:</code> trailer, as entire.md counted on 2026-10-11. The other 38 are the 4 setup commits before the first agent session and site commits where the Entire commit hook hung and was stopped. Merge commits carry none. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">entire.md</a></span></li>
 <li><span>The planner fix commit opens its whole session with no login, checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN. <a href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Entire commit page</a></span></li>
 <li><span>Trails 3 to 12 reviewed every layer. The runners found 3 real bugs, and all 3 are fixed. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md#trails-reviewed-every-layer-and-the-runners-found-3-real-bugs">Trail findings</a></span></li>
-<li><span>The build agents searched the repo through Entire Graph: 10 calls saved about 56,254 tokens. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a></span></li>
-<li><span>The Entire judge plugin scored the repo 3.93 of 5, with integrity 5.0 and no excluded work. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/jury-selftest.txt">Jury self-test</a></span></li>
-<li class="cv"><span>Trail pages need an entire.io login. The 4 setup commits before the first agent session and 10 site commits carry no trailer. The self-test ran at 42 commits and flags thin commit-to-session coverage.</span></li>
+<li class="cv"><span>Trail pages need an entire.io login. The jury self-test ran at 42 commits and flags thin commit-to-session coverage.</span></li>
 </ul>
+<div class="full">
+<h4>This output comes straight from the repo.</h4>
+<div class="outs">
+<div class="out"><p><span>A checkpoint trailer on a commit</span><a href="https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Commit 3ca6f11 on GitHub</a></p>
+<pre><span class="p">$ </span>git log -1 --format="%h %s%n%(trailers:key=Entire-Checkpoint)" 3ca6f11
+3ca6f11 Planner fix from neatlogs Investigate: copy commands only, guard against invented steps
+Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
+<div class="out"><p><span>entire-graph output, the last line of graph.ndjson, fields trimmed</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/graph.ndjson">graph.ndjson</a></p>
+<pre><span class="p">$ </span>tail -1 evidence/graph.ndjson
+{"record_type": "summary", "languages": ["Git Ignore", "HTML", "JSON", "Markdown", "Python", "TOML", "YAML"],
+ "stats": {"files": 102, "parsed_files": 101, "symbols": 1587, "relations": 4644, "partial_failures": 1, "completeness_level": "ok"}}</pre></div>
+<div class="out"><p><span>The Entire judge plugin on a fresh clone, first lines</span><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/jury-selftest.txt">jury-selftest.txt</a></p>
+<pre>Combined: 3.93/5  (Grade A process 3.75 · Grade B solution 4.10)
+█████ 4.5/5 authenticity
+█████ 5.0/5 integrity</pre></div>
+</div>
+</div>
 </li>
-<li class="tool">
+<li class="tool" id="cfo-plan">
 <div class="who"><img src="../assets/logo-cfoai.webp" alt="" width="52" height="52" loading="lazy"><h3>cfo.ai</h3><p>Turned the measured cost into a price and a cost cap per plan.</p></div>
 <ul class="proof">
-<li><span>Ari built the model over the cfo.ai MCP server. It is public and read-only. <a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model</a></span></li>
+<li><span>Ari built the model over the cfo.ai MCP server, with 6 Scenarios. It is public and read-only. <a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model</a></span></li>
 <li><span>Every cost comes from neatlogs. The drivers file holds 88 traces, and each cost row names its trace. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">drivers.csv</a></span></li>
-<li><span>A 70% margin floor sets the cap per run: Free $0.0135, Team $0.0470, Scale $0.0279. <a href="../plan/">Plan page</a></span></li>
-<li><span>Under the old fixed $0.50 cap, cash goes negative in month 14. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">BUSINESS_PLAN.md</a></span></li>
-<li><span>A live run on the Free cap stopped at step 4 with <code>cost budget spent</code>. <a href="https://github.com/HighnessAtharva/firstrun/pull/15">Pull request 15</a></span></li>
-<li class="cv"><span>The tables inside BUSINESS_PLAN.md use the earlier 64-trace data. The caps above come from the 88-trace refresh in drivers.csv.</span></li>
+<li><span>A live run on the Free cap of the time, $0.0108, stopped at step 4 with <code>cost budget spent</code>. <a href="https://github.com/HighnessAtharva/firstrun/pull/15">Pull request 15</a></span></li>
 </ul>
+<div class="full plan">
+<p class="lead">Cost per run over 88 neatlogs traces: mean $0.01782, p95 $0.05286 (trace <code>495d510f</code>), max $0.10135. Compute adds $0.00203 a run, an assumption.</p>
+<div class="tbl" style="max-width:none;margin:0">
+<table class="rt kv">
+<caption>Pricing, revenue and the cost cap per tier</caption>
+<thead><tr><th scope="col">Tier</th><th scope="col" class="n">Price a month</th><th scope="col" class="n">Runs a month</th><th scope="col" class="n">Revenue per run</th><th scope="col" class="n">Cap per run</th><th scope="col" class="n">Margin at mean cost</th></tr></thead>
+<tbody>
+<tr><th scope="row">Free</th><td class="n" data-l="Price a month">$0</td><td class="n" data-l="Runs a month">4</td><td class="n" data-l="Revenue per run">$0</td><td class="n" data-l="Cap per run">$0.01355</td><td class="n" data-l="Margin at mean cost">No revenue</td></tr>
+<tr><th scope="row">Team</th><td class="n" data-l="Price a month">$49</td><td class="n" data-l="Runs a month">300</td><td class="n" data-l="Revenue per run">$0.1633</td><td class="n" data-l="Cap per run">$0.04697</td><td class="n" data-l="Margin at mean cost">87.8%</td></tr>
+<tr><th scope="row">Scale</th><td class="n" data-l="Price a month">$299</td><td class="n" data-l="Runs a month">3,000</td><td class="n" data-l="Revenue per run">$0.0997</td><td class="n" data-l="Cap per run">$0.02787</td><td class="n" data-l="Margin at mean cost">80.1%</td></tr>
+</tbody>
+</table>
+</div>
+<p class="rule">A 70% margin floor sets each cap: <code>price / runs per month x (1 - 0.70) - compute</code>. A Free run earns nothing, so its cap is the median run. Source: <a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/unit_economics.json">unit_economics.json</a>.</p>
+<div class="tbl" style="max-width:none;margin:0">
+<table class="rt kv">
+<caption>18 months of cash in cfo.ai, from $5,000 on 2026-11-01</caption>
+<thead><tr><th scope="col">Scenario</th><th scope="col" class="n">Month 18 MRR</th><th scope="col" class="n">Month 18 cash</th><th scope="col">Runway</th></tr></thead>
+<tbody>
+<tr><th scope="row">Base</th><td class="n" data-l="Month 18 MRR">$2,069</td><td class="n" data-l="Month 18 cash">$16,685</td><td data-l="Runway">No limit. Cash flow stays positive.</td></tr>
+<tr><th scope="row">Tail month, every run at p95 cost</th><td class="n" data-l="Month 18 MRR">$2,069</td><td class="n" data-l="Month 18 cash">$12,503</td><td data-l="Runway">No limit</td></tr>
+<tr><th scope="row">Scale at $529</th><td class="n" data-l="Month 18 MRR">$2,875</td><td class="n" data-l="Month 18 cash">$21,146</td><td data-l="Runway">No limit</td></tr>
+<tr><th scope="row">Old cap, every Scale run at $0.50</th><td class="n" data-l="Month 18 MRR">$2,069</td><td class="n dn" data-l="Month 18 cash">-$12,212</td><td class="dn" data-l="Runway">Cash goes negative in month 14, December 2027</td></tr>
+</tbody>
+</table>
+</div>
+<p class="rule">The Scenario figures were read back from cfo.ai on 2026-10-11 into <a href="https://github.com/HighnessAtharva/firstrun/blob/main/docs/data/cfo-model.json">cfo-model.json</a>. No customer has paid yet, so every customer count is an assumption.</p>
+<p class="lk"><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">Open the public cfo.ai model</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">Read BUSINESS_PLAN.md</a><a href="../plan/">See the plan page</a></p>
+</div>
 </li>
 </ul>
 </div>
@@ -302,15 +498,42 @@ footer .home{font-weight:650;font-size:16px}
 <section id="demo" class="band t-mist" aria-labelledby="demo-h">
 <div class="wrap">
 <div class="eyebrow"><span><b>20%</b>Demo video</span></div>
-<h2 id="demo-h">The Demo Shows All Three Tools in 2 Minutes 59 Seconds</h2>
+<p class="crit"><small>Official criterion</small><q>How clearly the demo video explains the agent and your use of neatlogs, Entire and cfo.ai.</q></p>
+<h2 id="demo-h">The 2:59 Demo Gives Each Tool Its Own Chapter</h2>
 <a class="demo" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" aria-label="Watch the FirstRun demo on YouTube, 2 minutes 59 seconds"><img src="../assets/vid-doctest.webp" alt="Demo thumbnail: step 10 of a quickstart fails with no such option --years, then the fix passes 9 of 9 steps" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:59</span></a>
-<p class="big"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc">Watch "Your Docs Lie. FirstRun DocTest Proves It" on YouTube</a></p>
+<ol class="chap" aria-label="The video's YouTube chapters">
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=0s">0:00</a><span>Your quickstart broke, and you did not know</span><span class="tg">Agent</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=12s">0:12</a><span>How FirstRun works on the dbt guide</span><span class="tg">Agent</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=36s">0:36</a><span>Docs Bisect finds the release that broke it</span><span class="tg">Agent</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=57s">0:57</a><span>4 upstream pull requests</span><span class="tg">Usefulness</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=67s">1:07</a><span>neatlogs</span><span class="tg">neatlogs</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=111s">1:51</a><span>Entire</span><span class="tg">Entire</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=139s">2:19</a><span>cfo.ai</span><span class="tg">cfo.ai</span></li>
+<li><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=163s">2:43</a><span>FirstRun on its own README</span><span class="tg">Agent</span></li>
+</ol>
+<div class="mx">
+<h3>Each Tool Gets Architecture, Implementation, Runtime, Reasoning and Result</h3>
+<div class="tbl" style="max-width:none">
+<table class="rt">
+<thead><tr><th scope="col">Part</th><th scope="col"><img src="../assets/logo-neatlogs.webp" alt="" width="20" height="20" loading="lazy">neatlogs</th><th scope="col"><img src="../assets/logo-entire.webp" alt="" width="20" height="20" loading="lazy">Entire</th><th scope="col"><img src="../assets/logo-cfoai.webp" alt="" width="20" height="20" loading="lazy">cfo.ai</th></tr></thead>
+<tbody>
+<tr><th scope="row">Architecture</th><td data-l="neatlogs"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=70s">1:10</a>One run is one trace, and every step is a span.</td><td data-l="Entire"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=117s">1:57</a>Each commit carries a checkpoint with the prompt behind it.</td><td data-l="cfo.ai"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=142s">2:22</a>The cost per run comes from neatlogs traces.</td></tr>
+<tr><th scope="row">Implementation</th><td data-l="neatlogs"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=76s">1:16</a>Setup is one init call.</td><td data-l="Entire"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=120s">2:00</a>One command turned it on before the first commit.</td><td data-l="cfo.ai"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=145s">2:25</a>Ari built the model with 6 Scenarios.</td></tr>
+<tr><th scope="row">Runtime</th><td data-l="neatlogs"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=78s">1:18</a>A budget guardrail span runs before every recovery, in a live run.</td><td data-l="Entire"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=123s">2:03</a>The session behind the planner fix, prompt by prompt.</td><td data-l="cfo.ai"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=151s">2:31</a>Every Scale run at the old $0.50 cap.</td></tr>
+<tr><th scope="row">Reasoning</th><td data-l="neatlogs"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=85s">1:25</a>An incident at 52.8x the baseline, with the cause named at 66% confidence.</td><td data-l="Entire"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=128s">2:08</a>Trail reviews found 3 real bugs.</td><td data-l="cfo.ai"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=154s">2:34</a>Cash runs out in month 14.</td></tr>
+<tr><th scope="row">Result</th><td data-l="neatlogs"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=101s">1:41</a>Commit 2de852f fixed it, and MkDocs went from a false fail to verified.</td><td data-l="Entire"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=133s">2:13</a>One commit wired in the <code>cd</code> guard. 68 checkpoints are on GitHub.</td><td data-l="cfo.ai"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc&amp;t=157s">2:37</a>The cap is now 2.8 cents a run, and a live run stopped at it.</td></tr>
+</tbody>
+</table>
+</div>
+<p class="src col">The chapters are the video's own YouTube chapters. The times in the table come from its captions. The video quotes 64 neatlogs traces, the data behind the cfo.ai Scenarios.</p>
+</div>
 </div>
 </section>
 
 <section id="public" class="band t-moss" aria-labelledby="public-h">
 <div class="wrap">
 <div class="eyebrow"><span><b>15%</b>Building in public</span></div>
+<p class="crit"><small>Official criterion</small><q>How you shared your project with other people while you built it.</q></p>
 <h2 id="public-h">11 Posts Tagged #neatHack Show the Build as It Happened</h2>
 <ol class="posts col">
 <li><time datetime="2026-10-10T10:45+05:30">Sat 10:45</time><q>my neatlogs hackathon project has already caught doc issues</q><a href="https://twitter.com/cultist_dev/status/2108788557670125946">Read on X</a></li>
@@ -332,33 +555,19 @@ footer .home{font-weight:650;font-size:16px}
 <section id="useful" class="band t-sea" aria-labelledby="useful-h">
 <div class="wrap">
 <div class="eyebrow"><span><b>10%</b>Usefulness and originality</span></div>
+<p class="crit"><small>Official criterion</small><q>Whether the agent solves a problem that people have, in a new way.</q></p>
 <h2 id="useful-h">FirstRun Found 4 Real Docs Bugs and Sent 4 Upstream PRs</h2>
 <ol class="prs col">
-<li><span class="rp">dbt-labs/docs.getdbt.com #10149 <span class="st">Open</span></span><div><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">Fix the jafgen command in the DuckDB quickstart</a><p><code>jafgen --years 6</code> fails. Docs Bisect found the release that dropped the flag in 5 probes.</p></div></li>
+<li><span class="rp">dbt-labs/docs.getdbt.com #10149 <span class="st">Open</span></span><div><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149">Fix the jafgen command in the DuckDB quickstart</a><p><code>jafgen --years 6</code> fails. Docs Bisect found the release that dropped the flag in 5 probes, at $0 in model calls. <a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">The bisect comment</a></p></div></li>
 <li><span class="rp">dbt-labs/docs.getdbt.com #10150 <span class="st">Open</span></span><div><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10150">State the Python version the DuckDB quickstart needs</a><p>The repo pins networkx 3.7, which needs Python 3.12. The guide named no version.</p></div></li>
 <li><span class="rp">entireio/cli #2724 <span class="st">Open</span></span><div><a href="https://github.com/entireio/cli/pull/2724">Say where install.sh puts entire on Linux</a><p>After a clean install, <code>entire</code> is not on <code>PATH</code> in a new shell.</p></div></li>
 <li><span class="rp">accuknox/help #671 <span class="st">Open</span></span><div><a href="https://github.com/accuknox/help/pull/671">knoxctl install: point at the latest release and list APT prerequisites</a><p>The page named 0.9.0 as latest while the installer fetched 0.9.58.</p></div></li>
 </ol>
-<ul class="more">
-<li><a href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">Read the bisect comment on #10149</a>: jafgen 0.3.1 passes, 0.4.6 fails, $0 in model calls.</li>
-<li><a href="../doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">Open the dbt-core Doc-audit board</a>: 15 stale pages and 72 features with no docs. Doc-audit has read 7 repos.</li>
-<li><a href="../receipts/FR-audit-20261010-163620-dbt-labs-dbt-core.html">Open an audit receipt</a>: every run and every audit ends with one.</li>
+<ul class="feat">
+<li><b>Receipts</b><p>76 receipts are published for runs and audits. Each one prices the work and shows it against each tier's cap. <code>firstrun receipt --check</code> fails when a receipt or one of its evidence files changed after it was issued. <a href="../receipts/FR-20261010-091740-help-accuknox-com.html">A sample bill</a> <a href="https://github.com/HighnessAtharva/firstrun/tree/main/docs/receipts">All receipts</a></p></li>
+<li><b>Doc-audit Top 10 and team map</b><p>7 repos are audited. Each board ranks the top 10 docs tasks and maps the people who work on each part, from 14 to 247 people. dbt-core shows 15 stale pages and 72 features with no docs. <a href="https://firstrun.atharvashah.com/doc-audit/">Open Doc-audit</a></p></li>
+<li><b>Estimated audit costs</b><p>The 7 audits from before cost tracking show an estimate marked "est.", from a re-run at $0.042 per million Jev input tokens. The range is $0.0001 for fastapi/typer to $0.0055 for dbt-core. <a href="https://github.com/HighnessAtharva/firstrun/blob/main/scripts/audit_cost_estimates.py">audit_cost_estimates.py</a></p></li>
 </ul>
-</div>
-</section>
-
-<section id="claims" class="band t-steel" aria-labelledby="claims-h">
-<div class="wrap">
-<h2 id="claims-h">Seven Claims, Each With the File That Proves It</h2>
-<ol class="claims col">
-<li><b>The agent improved.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/before_after_traces.json">before_after_traces.json</a><span class="note">8 neatlogs traces, 4 before the fix and 4 after. Cost is list price, not billed.</span></li>
-<li><b>neatlogs was used.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">evidence/neatlogs.md</a><span class="note">Trace pages need a neatlogs login. The IDs and one exported trace are in the repo.</span></li>
-<li><b>Entire was used.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">evidence/entire.md</a><span class="note">75 of 113 non-merge commits carry a checkpoint trailer. The other 38 are the 4 setup commits and site commits made when the commit hook hung.</span></li>
-<li><b>cfo.ai was used.</b><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">The public cfo.ai model</a><span class="note">Opens with no login. The plan and every assumption are in business/BUSINESS_PLAN.md.</span></li>
-<li><b>Recovery is shown.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">trace-recovered-entire-v2.md</a><span class="note">The trace status reads ERROR because a failed step rolls up to the trace. The run itself ended verified.</span></li>
-<li><b>The build happened in public.</b><a href="https://github.com/HighnessAtharva/firstrun/blob/main/hackathon.md#built-in-public">The Built in Public table</a><span class="note">11 of 13 published posts carry #neatHack.</span></li>
-<li><b>The code was written during the event.</b><a href="https://github.com/HighnessAtharva/firstrun/commit/96541a8b88ba2cb758f055c265f9f3d875ef4b08">First commit 96541a8</a><span class="note">2026-10-10 at 12:34 IST, after the 12:30 IST kickoff. Planning happened before, in a private repo.</span></li>
-</ol>
 </div>
 </section>
 
@@ -378,7 +587,7 @@ footer .home{font-weight:650;font-size:16px}
 
 <section id="reproduce" class="band t-lake" aria-labelledby="repro-h">
 <div class="wrap">
-<h2 id="repro-h">Two Commands Install FirstRun and Run a Quickstart</h2>
+<h2 id="repro-h">Run FirstRun and Check the Repo From Your Own Terminal</h2>
 <div class="code">
 <div class="code-h"><span>Install and run</span><button type="button" class="cp" data-copy="run" aria-describedby="cp-status">Copy</button></div>
 <pre id="run"><span class="p">$ </span>pip install git+https://github.com/HighnessAtharva/firstrun
@@ -390,6 +599,17 @@ footer .home{font-weight:650;font-size:16px}
 <pre id="test"><span class="p">$ </span>git clone https://github.com/HighnessAtharva/firstrun
 <span class="p">$ </span>cd firstrun &amp;&amp; pip install -e ".[dev]" &amp;&amp; pytest -q</pre>
 <p class="note">The README badge records 360 offline tests. A run on the launch branch on 2026-10-11 passed 360, skipped 65 that need <code>FIRSTRUN_LIVE=1</code> or a human check, and had 1 expected failure. <a href="https://github.com/HighnessAtharva/firstrun/actions">GitHub Actions</a></p>
+</div>
+<div class="code" id="dated">
+<div class="code-h"><span>List the first commits with their dates, inside the clone</span><button type="button" class="cp" data-copy="dates" aria-describedby="cp-status">Copy</button></div>
+<pre id="dates"><span class="p">$ </span>git log --reverse --date=iso --format="%h %ad %s" | head -3</pre>
+<p class="note">The first line reads <code>96541a8 2026-10-10 12:34:51 +0530</code>. The kickoff was 12:30 IST. <a href="https://github.com/HighnessAtharva/firstrun/commits/main">All commits on GitHub</a></p>
+</div>
+<div class="code">
+<div class="code-h"><span>Count the commits that carry an Entire checkpoint</span><button type="button" class="cp" data-copy="trail" aria-describedby="cp-status">Copy</button></div>
+<pre id="trail"><span class="p">$ </span>git log --no-merges --format="%(trailers:key=Entire-Checkpoint,valueonly)" | grep -c .
+<span class="p">$ </span>git rev-list --no-merges --count HEAD</pre>
+<p class="note">entire.md counted 75 and 113 on 2026-10-11. Both numbers grow as new commits land on main.</p>
 </div>
 <p class="src" id="cp-status" role="status" aria-live="polite"></p>
 </div>
