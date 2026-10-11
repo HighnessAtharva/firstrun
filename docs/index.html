@@ -257,13 +257,64 @@ mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,conic-gradien
 .vt p{color:var(--mut);font-size:14px;max-width:44em}
 .vt .k{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
 
-/* tools: a logo row, one line each */
-.tools{list-style:none;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:28px clamp(32px,6vw,72px);margin-top:44px}
-.tools li{flex:0 1 250px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
-.tools img{width:56px;height:56px;border-radius:14px;border:1px solid var(--line);box-shadow:var(--sh);background:var(--panel)}
-.tools b{font-size:19px;letter-spacing:-.025em;margin-top:4px}
-.tools span{color:var(--mut);font-size:15px;line-height:1.45}
-.tools a{font-weight:600;font-size:14.5px}
+/* tools: a calm graphite band. Three tabs, one per tool. Each tab shows a big screenshot and three numbered proofs. */
+.b-tools{--tint:oklch(96.6% .005 255);--glow:oklch(99.2% .002 255/.9);--dot:oklch(35% .012 255/.10);--edge:oklch(90.8% .007 255);--c:var(--ink);--cd:var(--ink);--link:var(--test-d)}
+.wrap.wide{max-width:1240px}
+.tt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:760px;margin:clamp(36px,4.5vw,52px) auto 0}
+.tt [role=tab]{display:flex;align-items:center;gap:14px;min-height:0;padding:14px 18px;border-radius:16px;background:oklch(98.4% .003 255/.7);border:1px solid var(--edge);color:var(--ink);font-weight:400;text-align:left;white-space:normal;box-shadow:none;transition:background .25s,box-shadow .35s var(--ease)}
+.tt [role=tab]:hover{background:var(--panel)}
+.tt [role=tab][aria-selected=true]{background:var(--panel);border-color:transparent;box-shadow:0 0 0 2px var(--ink),var(--lift)}
+.tt img{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);flex:none;background:var(--panel)}
+.tt b{display:block;font-size:18px;letter-spacing:-.025em;line-height:1.2}
+.tt small{display:block;font-size:14px;color:var(--mut);line-height:1.3;margin-top:2px}
+.tp{margin-top:clamp(28px,3.5vw,40px)}
+.role{text-align:center;font-size:clamp(18px,1.9vw,21px);line-height:1.4;letter-spacing:-.012em;max-width:42em;margin:0 auto;text-wrap:balance}
+.ph{display:none}
+.show{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(0,1fr);gap:clamp(24px,3.4vw,44px);align-items:center;margin-top:clamp(24px,3vw,32px)}
+.stg{position:relative;aspect-ratio:1400/780;border-radius:18px;overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:var(--lift)}
+.shot{position:absolute;inset:0;display:block;background:var(--panel);opacity:0;visibility:hidden;transition:opacity .55s var(--ease),visibility 0s linear .55s}
+.shot.on{opacity:1;visibility:visible;transition:opacity .55s var(--ease),visibility 0s}
+.shot img{display:block;width:100%;height:100%;object-fit:contain}
+.shot.dk{background:oklch(17.5% .004 255)}
+.shot.pad img{padding:5%}
+.shot:focus-visible{outline-offset:-4px;border-radius:18px}
+html.js .shot[href]:after{content:"Open full size";position:absolute;right:12px;bottom:12px;font:600 12.5px/1 Geist,sans-serif;letter-spacing:-.01em;color:var(--ink);background:oklch(99.5% .003 255/.94);border:1px solid var(--line);border-radius:99px;padding:7px 11px;box-shadow:var(--sh);opacity:.92;transition:opacity .2s}
+html.js .shot[href]:hover:after{opacity:1}
+.evs{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:ev}
+.ev{border-radius:16px;padding:14px 16px 14px 14px;transition:background .25s,box-shadow .35s var(--ease)}
+.ev:has([aria-pressed=true]){background:var(--panel);box-shadow:var(--lift)}
+.ev:hover{background:var(--panel)}
+.pk{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;width:100%;min-height:0;padding:0;border:0;border-radius:8px;background:none;color:var(--ink);font-weight:500;font-size:16.5px;line-height:1.4;letter-spacing:-.01em;text-align:left;white-space:normal;transition:none}
+.pk:hover{background:none}
+.pk:focus-visible{outline-offset:6px}
+.pk .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 13px/1 var(--mono);border:1.5px solid oklch(72% .01 255);color:var(--mut);transition:background .25s,color .25s,border-color .25s}
+.pk[aria-pressed=true] .n{background:var(--ink);border-color:var(--ink);color:oklch(99.5% .003 255)}
+.ev .src2{display:inline-block;margin:6px 0 0 42px;font-size:14px;font-weight:600}
+.ev figure{margin:0}
+.cash text{font:500 13px Geist,sans-serif;fill:var(--mut)}
+.cash .t{font-size:15px;font-weight:600;fill:var(--ink)}
+.cash .g{stroke:var(--line);stroke-width:1}
+.cash .z{stroke:oklch(70% .01 255);stroke-width:1.2;stroke-dasharray:3 4}
+.cash .b{fill:none;stroke:var(--ok);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cash .o{fill:none;stroke:var(--bad);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cash .lb{fill:var(--ok-d);font-weight:600}.cash .lo{fill:var(--bad);font-weight:600}
+.allp{text-align:center;margin-top:clamp(36px,4.5vw,52px);font-size:17px;font-weight:600}
+/* no JS: every tool stacked, every screenshot shown with its caption */
+html:not(.js) .tt{display:none}
+html:not(.js) .tp+.tp{margin-top:clamp(56px,7vw,80px)}
+html:not(.js) .ph{display:flex;align-items:center;justify-content:center;gap:12px;font-size:22px;font-weight:700;letter-spacing:-.025em;margin-bottom:12px}
+html:not(.js) .ph img{width:40px;height:40px;border-radius:11px;border:1px solid var(--line)}
+html:not(.js) .show{display:block}
+html:not(.js) .evs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
+html:not(.js) .ev{background:var(--panel);box-shadow:var(--lift);padding:0;overflow:hidden}
+html:not(.js) .shot{position:relative;opacity:1;visibility:visible;aspect-ratio:1400/780;border-bottom:1px solid var(--line)}
+html:not(.js) .cap{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:14px 16px 0;font-weight:500;line-height:1.4}
+html:not(.js) .cap .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 13px/1 var(--mono);background:var(--ink);color:oklch(99.5% .003 255)}
+html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
+@media(max-width:860px){.show{grid-template-columns:minmax(0,1fr);max-width:640px;margin-left:auto;margin-right:auto}}
+@media(max-width:600px){.tt{gap:8px}.tt [role=tab]{flex-direction:column;justify-content:center;gap:8px;padding:12px 4px;text-align:center}.tt small{display:none}.tt img{width:40px;height:40px}.tt b{font-size:16px}
+ .stg{border-radius:14px}.ev{padding:12px}.pk{font-size:16px}.cash text{font-size:20px}.cash .t{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.shot,.shot.on,.tt [role=tab],.ev,.pk .n{transition:none}}
 
 /* comparison, light */
 .cmp-s{overflow-x:auto;margin-top:40px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -520,14 +571,66 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 </div>
 </section>
 
-<section id="tools" aria-labelledby="tools-h">
-<div class="wrap">
-<h2 id="tools-h">Each Tool Caught a Real Problem in FirstRun</h2>
-<ul class="tools">
-<li><img src="assets/logo-neatlogs.webp" alt="" width="56" height="56" loading="lazy"><b>neatlogs</b><span>Traces every run and named the cause of 25 failed runs.</span><a href="https://neatlogs.com">neatlogs.com</a></li>
-<li><img src="assets/logo-entire.webp" alt="" width="56" height="56" loading="lazy"><b>Entire</b><span>Records every coding session and caught a fix that never ran.</span><a href="https://entire.io">entire.io</a></li>
-<li><img src="assets/logo-cfoai.webp" alt="" width="56" height="56" loading="lazy"><b>cfo.ai</b><span>Models the business and sets the cost cap on every plan.</span><a href="https://cfo.ai">cfo.ai</a></li>
-</ul>
+<!-- TOOLS: calm graphite world. One tab per tool, three proofs each. Without JS every tool and screenshot is stacked. -->
+<section id="tools" class="band b-tools" aria-labelledby="tools-h">
+<div class="wrap wide">
+<h2 id="tools-h">How FirstRun Used neatlogs, Entire and cfo.ai</h2>
+<div class="tt rv" role="tablist" aria-label="The three tools">
+<button type="button" role="tab" id="tab-neatlogs" aria-controls="tools-neatlogs" aria-selected="true"><img src="assets/logo-neatlogs.webp" alt="" width="44" height="44"><span><b>neatlogs</b><small>Traces every run</small></span></button>
+<button type="button" role="tab" id="tab-entire" aria-controls="tools-entire" aria-selected="false" tabindex="-1"><img src="assets/logo-entire.webp" alt="" width="44" height="44"><span><b>Entire</b><small>Records the build</small></span></button>
+<button type="button" role="tab" id="tab-cfoai" aria-controls="tools-cfoai" aria-selected="false" tabindex="-1"><img src="assets/logo-cfoai.webp" alt="" width="44" height="44"><span><b>cfo.ai</b><small>Prices every plan</small></span></button>
+</div>
+
+<div class="tp rv" id="tools-neatlogs" role="tabpanel" aria-labelledby="tab-neatlogs">
+<p class="ph"><img src="assets/logo-neatlogs.webp" alt="" width="40" height="40">neatlogs</p>
+<p class="role"><a href="https://neatlogs.com">neatlogs</a> traces every run, so a failed step comes with its cause.</p>
+<div class="show"><ol class="evs">
+<li class="ev"><figure><a class="shot" href="assets/t-neatlogs-investigate.webp" target="_blank" rel="noopener"><img src="assets/e-nl-investigate.webp" alt="neatlogs incident: 25 Execution Failed detections against a baseline of 0.5, a 52.8x spike, investigated with a root cause at 66% confidence" width="870" height="484" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">1</span><span>Investigate traced a 52.8x spike in failed steps to one root cause.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">Read the neatlogs evidence</a></figcaption></figure></li>
+<li class="ev"><figure><a class="shot" href="assets/t-neatlogs-recovery.webp" target="_blank" rel="noopener"><img src="assets/e-nl-recovery.webp" alt="neatlogs trace of a FirstRun run: step 3 fails, the recover.3 agent span classifies the failure and retries, and step 3 runs again" width="900" height="500" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">2</span><span>Every recovery is a span. Step 3 failed twice, and recover.3 retried it.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/trace-recovered-entire-v2.md">Read a full recovered trace</a></figcaption></figure></li>
+<li class="ev"><figure><a class="shot" href="assets/t-neatlogs-bisect.webp" target="_blank" rel="noopener"><img src="assets/e-nl-bisect.webp" alt="neatlogs trace of a Docs Bisect run: 5 probes across jafgen releases, last good 0.3.1, first bad 0.4.6" width="990" height="550" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">3</span><span>A Bisect trace tested 5 jafgen releases and found the first bad one, 0.4.6.</span></p><a class="src2" href="https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074">Read the finding on dbt PR #10149</a></figcaption></figure></li>
+</ol></div>
+</div>
+
+<div class="tp" id="tools-entire" role="tabpanel" aria-labelledby="tab-entire">
+<p class="ph"><img src="assets/logo-entire.webp" alt="" width="40" height="40">Entire</p>
+<p class="role"><a href="https://entire.io">Entire</a> records the session behind each commit and reviews code before it merges.</p>
+<div class="show"><ol class="evs">
+<li class="ev"><figure><a class="shot pad" href="assets/t-entire-checkpoint.webp" target="_blank" rel="noopener"><img src="assets/e-en-checkpoint.webp" alt="GitHub commit 3a0dcad whose message ends with an Entire-Checkpoint ID" width="650" height="214" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">1</span><span>74 commits each link to the Entire session that wrote them.</span></p><a class="src2" href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open a commit's session on Entire</a></figcaption></figure></li>
+<li class="ev"><figure><a class="shot dk" href="assets/t-entire-gate.webp" target="_blank" rel="noopener"><img src="assets/e-en-gate.webp" alt="Entire Trail 3 for Layer 1: merge blocked, no approvals and 1 unresolved high finding" width="660" height="366" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">2</span><span>Trail 3 blocked the merge while 1 high finding stayed open.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/entire.md">Read the Entire evidence</a></figcaption></figure></li>
+<li class="ev"><figure><a class="shot dk" href="assets/t-entire-findings.webp" target="_blank" rel="noopener"><img src="assets/e-en-findings.webp" alt="Entire Trail Review findings: a high finding in recovery.py, a retry loop on a missing secret, and a medium finding in config.py, a Docker default that only works on the author's machine" width="806" height="530" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">3</span><span>Trail reviews caught 3 real bugs before merge, and each one was fixed.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/commit/e2aacb7">See the fix commit</a></figcaption></figure></li>
+</ol></div>
+</div>
+
+<div class="tp" id="tools-cfoai" role="tabpanel" aria-labelledby="tab-cfoai">
+<p class="ph"><img src="assets/logo-cfoai.webp" alt="" width="40" height="40">cfo.ai</p>
+<p class="role">Ari, the <a href="https://cfo.ai">cfo.ai</a> agent, built the 18-month model that sets each plan's cost cap.</p>
+<div class="show"><ol class="evs">
+<li class="ev"><figure><div class="shot">
+<svg class="cash" viewBox="0 0 600 300" role="img" aria-label="Cash on hand in the cfo.ai model, November 2026 to April 2028. The Base plan grows to $16,685. With the old $0.50 cap, cash turns negative in December 2027, month 14, and ends at minus $12,212.">
+<text class="t" x="64" y="24">Cash on hand in the cfo.ai model</text>
+<line class="g" x1="64" x2="496" y1="89.5" y2="89.5"/><line class="g" x1="64" x2="496" y1="223.2" y2="223.2"/><line class="z" x1="64" x2="496" y1="156.4" y2="156.4"/>
+<text x="56" y="94" text-anchor="end">$10k</text><text x="56" y="161" text-anchor="end">$0</text><text x="56" y="228" text-anchor="end">-$10k</text>
+<text x="64" y="282">Nov 2026</text><text x="496" y="282" text-anchor="end">Apr 2028</text>
+<path class="b" d="M64.0 123.1 L89.4 123.0 L114.8 122.7 L140.2 122.0 L165.6 121.2 L191.1 120.2 L216.5 118.6 L241.9 116.6 L267.3 112.6 L292.7 108.3 L318.1 103.5 L343.5 96.9 L368.9 90.1 L394.4 83.0 L419.8 74.1 L445.2 65.0 L470.6 55.7 L496.0 44.8"/>
+<path class="o" d="M64.0 123.1 L89.4 123.0 L114.8 122.7 L140.2 122.0 L165.6 121.2 L191.1 120.2 L216.5 118.6 L241.9 116.6 L267.3 122.3 L292.7 127.3 L318.1 131.7 L343.5 143.6 L368.9 154.7 L394.4 165.0 L419.8 182.7 L445.2 199.3 L470.6 215.1 L496.0 238.0"/>
+<circle cx="394.4" cy="165" r="6" fill="var(--panel)" stroke="var(--bad)" stroke-width="2.5"/>
+<text class="lo" x="384" y="194" text-anchor="end">Month 14: cash runs out</text>
+<text class="lb" x="506" y="42">$16,685</text><text class="lb" x="506" y="65">Base</text>
+<text class="lo" x="506" y="234">-$12,212</text><text class="lo" x="506" y="257">Old cap</text></svg></div>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">1</span><span>Under the old $0.50 cap, the model runs out of cash in month 14.</span></p><a class="src2" href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">Open the public cfo.ai model</a></figcaption></figure></li>
+<li class="ev"><figure><a class="shot" href="assets/t-cfo-drivers.webp" target="_blank" rel="noopener"><img src="assets/e-cfo-drivers.webp" alt="cfo.ai drivers table: the mean, p50, p90, p95 and max cost per run are marked Measured yes, with drivers.csv as the source" width="1400" height="768" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">2</span><span>Its cost per run comes from 88 neatlogs traces, and each row names its source.</span></p><a class="src2" href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">See drivers.csv</a></figcaption></figure></li>
+<li class="ev"><figure><a class="shot" href="assets/e-cfo-caps.webp" target="_blank" rel="noopener"><img src="assets/e-cfo-caps.webp" alt="cfo.ai model notes: caps written to the FirstRun CLI, Scale $0.0279, Team $0.0470 and Free $0.0135 per run" width="1330" height="520" loading="lazy" decoding="async"></a>
+<figcaption><p class="cap"><span class="n" aria-hidden="true">3</span><span>The plan caps a Scale run at $0.0279 and a Team run at $0.0470.</span></p><a class="src2" href="plan/">See how each cap is set</a></figcaption></figure></li>
+</ol></div>
+</div>
+<p class="allp"><a href="judges/">See all the proof for judges</a></p>
 </div>
 </section>
 
@@ -765,9 +868,68 @@ fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
  }).catch(empty);
 })();
 
+/* tools: tabs per tool. Inside a tab, the numbered proofs pick which screenshot fills the stage.
+   Without JS the markup already shows every tool and every screenshot, stacked. */
+(function(){
+ var root=$("tools");if(!root)return;
+ var tabs=Array.prototype.slice.call(root.querySelectorAll("[role=tab]"));
+ var panels=tabs.map(function(t){return $(t.getAttribute("aria-controls"))});
+ function pick(p,i,focus){
+  var sh=p._shots,bt=p._btns;
+  for(var k=0;k<sh.length;k++){
+   var on=k===i;
+   sh[k].classList.toggle("on",on);
+   if(on)sh[k].removeAttribute("aria-hidden");else sh[k].setAttribute("aria-hidden","true");
+   bt[k].setAttribute("aria-pressed",on?"true":"false");
+  }
+  if(focus)bt[i].focus();
+ }
+ panels.forEach(function(p){
+  var show=p.querySelector(".show"),stg=document.createElement("div");
+  stg.className="stg";p._shots=[];p._btns=[];
+  Array.prototype.forEach.call(p.querySelectorAll(".ev"),function(li,i){
+   var s=li.querySelector(".shot"),cap=li.querySelector(".cap"),b=document.createElement("button");
+   s.id=p.id+"-shot"+(i+1);stg.appendChild(s);p._shots.push(s);
+   b.type="button";b.className="pk";b.setAttribute("aria-controls",s.id);
+   while(cap.firstChild)b.appendChild(cap.firstChild);
+   cap.parentNode.replaceChild(b,cap);p._btns.push(b);
+   b.addEventListener("click",function(){pick(p,i)});
+   b.addEventListener("keydown",function(e){
+    var n=p._btns.length,j=e.key==="ArrowDown"?(i+1)%n:e.key==="ArrowUp"?(i+n-1)%n:-1;
+    if(j>=0){e.preventDefault();pick(p,j,true)}});
+   /* a click anywhere on the row, except its source link, picks it */
+   li.addEventListener("click",function(e){if(!e.target.closest("a,button"))pick(p,i)});
+  });
+  show.insertBefore(stg,show.firstChild);
+  pick(p,0);
+ });
+ function sel(i,focus,push){
+  tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",on?"true":"false");t.tabIndex=on?0:-1;panels[k].hidden=!on});
+  if(focus)tabs[i].focus();
+  if(push&&history.replaceState)history.replaceState(null,"","#"+panels[i].id);
+ }
+ tabs.forEach(function(t,i){
+  t.addEventListener("click",function(){sel(i,false,true)});
+  /* warm the next tab's screenshots on intent, so the switch shows them at once */
+  t.addEventListener("pointerenter",function(){Array.prototype.forEach.call(panels[i].querySelectorAll("img[loading=lazy]"),function(m){m.loading="eager"})},{once:true});
+ });
+ root.querySelector("[role=tablist]").addEventListener("keydown",function(e){
+  var i=tabs.indexOf(document.activeElement),n=tabs.length,j=-1;if(i<0)return;
+  if(e.key==="ArrowRight")j=(i+1)%n;else if(e.key==="ArrowLeft")j=(i+n-1)%n;else if(e.key==="Home")j=0;else if(e.key==="End")j=n-1;
+  if(j>=0){e.preventDefault();sel(j,true,true)}});
+ /* deep links: #tools-entire opens the Entire tab and brings the section into view */
+ function fromHash(scroll){
+  var h=location.hash.slice(1);if(h==="tools-cfo")h="tools-cfoai";
+  for(var i=0;i<panels.length;i++)if(panels[i].id===h){sel(i);if(scroll)root.scrollIntoView({block:"start"});return}
+ }
+ sel(0);fromHash(false);
+ if(/^#tools-/.test(location.hash))addEventListener("load",function(){fromHash(true)});
+ addEventListener("hashchange",function(){fromHash(true)});
+})();
+
 /* reveal: each block fades and rises once as it enters, staggered inside its group */
 (function(){
- var groups=[".vids>.vc",".beats>.beat",".tools>li"];
+ var groups=[".vids>.vc",".beats>.beat"];
  groups.forEach(function(q){Array.prototype.forEach.call(document.querySelectorAll(q),function(el,i){el.classList.add("rv");el.style.transitionDelay=Math.min(i,5)*90+"ms"})});
  var els=document.querySelectorAll(".rv");
  if(RM||!("IntersectionObserver" in window)){Array.prototype.forEach.call(els,function(e){e.classList.add("in")});return}
