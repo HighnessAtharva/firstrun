@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01CumHmcXKsnaxtBH1cr9gxr",
+  "agent_id": "a11d971430bb59416",
+  "subagent_type": "general-purpose",
+  "task_description": "neatHack timeline and remaining work",
+  "token_usage": {
+    "input_tokens": 34,
+    "cache_creation_tokens": 138115,
+    "cache_read_tokens": 2185435,
+    "output_tokens": 12715,
+    "api_call_count": 17
+  },
+  "started_at": "2026-10-11T10:36:55.4842111+05:30",
+  "completed_at": "2026-10-11T10:39:30.5605249+05:30"
+}

@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_0142Lxitb36JYZ1BQSSgXxEE",
+  "agent_id": "a0bca4b6526a6ec87",
+  "subagent_type": "general-purpose",
+  "task_description": "Harvest neatlogs and Entire story data",
+  "files": [
+    "evidence/story-data.md"
+  ],
+  "token_usage": {
+    "input_tokens": 144,
+    "cache_creation_tokens": 672754,
+    "cache_read_tokens": 12926319,
+    "output_tokens": 52180,
+    "api_call_count": 72
+  },
+  "started_at": "2026-10-11T10:19:55.9747125+05:30",
+  "completed_at": "2026-10-11T11:03:24.3939032+05:30"
+}
