@@ -96,6 +96,14 @@ The 17 low scores show 3 patterns:
 
 **The detection behind the runs.** "docs step broke" flagged 78 tool spans, all on Oct 10 and 11, from a baseline of 0. [Screenshot](nl-detection-docs-step-broke.png).
 
+**neatlogs Copilot says the detection's name overclaims.** Atharva asked Detection Copilot to group the 78 spans by root cause. It found 3 groups:
+
+1. `command not found` for `curl`, `git`, `sudo`, `gpg`, `flask`, `create-dagster` and `entire`.
+2. `ModuleNotFoundError` for `httpx`, `sqlalchemy` and `typer`.
+3. Missing credentials, such as expired Claude auth or a secret outside the allowlist.
+
+Its verdict: most flagged spans are gaps in FirstRun's own `python:3.11-slim` container, not docs bugs. That fits the design, because recovery treats a first-attempt `environment` failure as something to fix and retry. A flagged span is therefore a step that broke once, and only the report says whether the docs were wrong. The next step is to rename the detection, or to exclude spans that a later attempt passed.
+
 **A radar batch for the evaluations to judge.** `scripts/radar.py` ranked 70 Exa results with Jev, and FirstRun ran the top 18 official quickstarts in 3 parallel lanes, tagged `radar`, under the Team cost cap. Two runs exposed a FirstRun bug: a dev server step (`flask --app hello run`, `litestar run`) never exits, so it timed out. The fix passes a server step once its output says it listens. The `radar-v2` rerun took Flask from 0 of 4 steps to verified 4 of 4.
 
 ## The Integration Check Passed the Organizer's Gates
