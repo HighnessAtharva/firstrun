@@ -14,6 +14,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
+<link rel="stylesheet" href="/assets/site-footer.css">
 <link rel="alternate" type="text/markdown" href="/agent.md" title="FirstRun agent quickstart">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -522,7 +523,7 @@ main{flex:1}
 .pq-st{display:flex;align-items:flex-start;gap:10px;margin-top:14px;font-size:14.5px;font-weight:500}
 .pq-st small{display:block;color:var(--mut);font-weight:400;font-size:13px;margin-top:2px}
 
-/* footer */
+/* run-it-yourself panel; the site footer lives in assets/site-footer.css */
 .foot{border-top:1px solid var(--line);margin-top:8px;background:var(--panel)}
 .foot-in{max-width:1280px;margin:0 auto;padding:28px 20px 36px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 40px;align-items:end}
 .foot h2{font-size:15px;font-weight:600}
@@ -530,9 +531,6 @@ main{flex:1}
 .cmdbox{display:flex;align-items:center;gap:10px;margin-top:12px;max-width:620px;border:1px solid var(--line);border-radius:10px;background:var(--sunk);padding:6px 6px 6px 14px}
 .cmdbox code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font-size:13.5px;padding:4px 0}
 .cmdbox .p{color:var(--faint)}
-.foot nav{display:flex;gap:18px;font-size:13.5px;flex-wrap:wrap}
-.foot nav a{color:var(--mut);text-decoration:none}
-.foot nav a:hover{color:var(--ink)}
 
 /* pager */
 .pager{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--line)}
@@ -721,10 +719,15 @@ html{scroll-padding-top:170px}
 </div>
 </main>
 
-<footer class="foot hide" id="foot"><div class="foot-in">
+<section class="foot hide" id="foot" aria-label="Run it on your own docs"><div class="foot-in">
 <div><h2>Run it on your own docs</h2><p>One command. A clean container, the first step that breaks, a fix, and a second clean run that proves it.</p>
 <div class="cmdbox"><code id="runc"><span class="p">$ </span><span id="runt"></span></code><button type="button" class="b sm" id="cpc" aria-label="Copy the command"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button></div></div>
-<nav aria-label="Footer"><a href="../">What is FirstRun?</a><a href="../doc-audit/">Doc-audit</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://neatlogs.com/hackathon">neatHack 2026</a><a href="https://x.com/cultist_dev">X</a></nav>
+</div></section>
+
+<footer class="sf"><div class="sf-in">
+<div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
 </div></footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span id="toastT"></span></div>

@@ -8,6 +8,7 @@
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
+<link rel="stylesheet" href="/assets/site-footer.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -81,7 +82,7 @@ td.num{font-family:var(--mono);font-size:13px}
 .btn:hover{background:var(--hover)}
 .btn img{width:18px;height:18px;border-radius:4px}
 .btn.pri{background:var(--teal);border-color:transparent;color:oklch(99% .005 190)}
-footer{max-width:1120px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-size:13.5px}
+.page-note{max-width:1120px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-size:13.5px}
 @media(max-width:900px){.loop{grid-template-columns:1fr 1fr}.loop li:nth-child(3){border-left:0}.loop li:nth-child(n+3){border-top:1px solid var(--line2)}.two{grid-template-columns:1fr}}
 @media(max-width:560px){.loop{grid-template-columns:1fr}.loop li+li{border-left:0;border-top:1px solid var(--line2)}.ptile{display:none}h1{font-size:30px}}
 </style>
@@ -129,7 +130,12 @@ footer{max-width:1120px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-
 </div>
 </section>
 </main>
-<footer>Refresh it with <code>firstrun econ</code>, then <code>python scripts/plan_snapshot.py</code>. Model costs are list price, not billed.</footer>
+<p class="page-note">Refresh it with <code>firstrun econ</code>, then <code>python scripts/plan_snapshot.py</code>. Model costs are list price, not billed.</p>
+<footer class="sf"><div class="sf-in">
+<div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
+</div></footer>
 
 <script>
 (function(){
