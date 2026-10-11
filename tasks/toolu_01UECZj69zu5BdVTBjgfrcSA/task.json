@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01UECZj69zu5BdVTBjgfrcSA",
+  "agent_id": "a610d7d3c1f50c545",
+  "subagent_type": "general-purpose",
+  "task_description": "Feature 3 YouTube videos on site",
+  "token_usage": {
+    "input_tokens": 86,
+    "cache_creation_tokens": 146186,
+    "cache_read_tokens": 5158272,
+    "output_tokens": 19123,
+    "api_call_count": 43
+  },
+  "started_at": "2026-10-11T13:25:34.0912284+05:30",
+  "completed_at": "2026-10-11T13:32:54.3161144+05:30"
+}

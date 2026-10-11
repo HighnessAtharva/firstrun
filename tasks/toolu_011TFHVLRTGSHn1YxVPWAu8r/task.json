@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_011TFHVLRTGSHn1YxVPWAu8r",
+  "agent_id": "a9ffd7205e88e4c8d",
+  "subagent_type": "general-purpose",
+  "task_description": "Teaser video and README GIF",
+  "token_usage": {
+    "input_tokens": 76,
+    "cache_creation_tokens": 174786,
+    "cache_read_tokens": 5946840,
+    "output_tokens": 40316,
+    "api_call_count": 38
+  },
+  "started_at": "2026-10-11T10:49:18.1069113+05:30",
+  "completed_at": "2026-10-11T11:06:59.3665502+05:30"
+}

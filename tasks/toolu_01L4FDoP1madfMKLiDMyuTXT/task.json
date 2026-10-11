@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01L4FDoP1madfMKLiDMyuTXT",
+  "agent_id": "a9e620bc6961ade7d",
+  "subagent_type": "general-purpose",
+  "task_description": "X posts for DocTest and DocAudit videos",
+  "token_usage": {
+    "input_tokens": 120,
+    "cache_creation_tokens": 429190,
+    "cache_read_tokens": 11731957,
+    "output_tokens": 30171,
+    "api_call_count": 60
+  },
+  "started_at": "2026-10-11T12:36:12.8591957+05:30",
+  "completed_at": "2026-10-11T12:53:48.070862+05:30"
+}

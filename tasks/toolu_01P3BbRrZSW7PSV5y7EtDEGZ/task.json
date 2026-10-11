@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01P3BbRrZSW7PSV5y7EtDEGZ",
+  "agent_id": "a1dd1a3855f1b5e22",
+  "subagent_type": "general-purpose",
+  "task_description": "Judge-cut demo video, 3 min",
+  "token_usage": {
+    "input_tokens": 224,
+    "cache_creation_tokens": 1166919,
+    "cache_read_tokens": 31252449,
+    "output_tokens": 104913,
+    "api_call_count": 112
+  },
+  "started_at": "2026-10-11T10:49:07.3322496+05:30",
+  "completed_at": "2026-10-11T11:44:28.4982568+05:30"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_018f7JHMUnZLpEjet7Y9WiwL",
+  "agent_id": "a60a55c3e2df9e267",
+  "subagent_type": "general-purpose",
+  "task_description": "Doc-audit feature video under 1 min",
+  "token_usage": {
+    "input_tokens": 152,
+    "cache_creation_tokens": 337234,
+    "cache_read_tokens": 17462906,
+    "output_tokens": 62763,
+    "api_call_count": 76
+  },
+  "started_at": "2026-10-11T12:30:05.7911205+05:30",
+  "completed_at": "2026-10-11T13:00:45.6909877+05:30"
+}

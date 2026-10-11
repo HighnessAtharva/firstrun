@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01KdvYYAoRBBjnrDY6pWt4hg",
+  "agent_id": "a9041a987d8f015c5",
+  "subagent_type": "general-purpose",
+  "task_description": "Pending tweets and LinkedIn posts",
+  "token_usage": {
+    "input_tokens": 152,
+    "cache_creation_tokens": 251280,
+    "cache_read_tokens": 14952974,
+    "output_tokens": 45523,
+    "api_call_count": 76
+  },
+  "started_at": "2026-10-11T10:49:32.6442051+05:30",
+  "completed_at": "2026-10-11T11:01:45.42805+05:30"
+}
