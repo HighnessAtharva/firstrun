@@ -1,0 +1,14 @@
+{
+  "tool_use_id": "toolu_01Y1EKu25z7eW9pPqKE1NYcW",
+  "agent_id": "a2c56545b6afd31f2",
+  "task_description": "Draft posts, blog and submission docs",
+  "token_usage": {
+    "input_tokens": 252,
+    "cache_creation_tokens": 418708,
+    "cache_read_tokens": 36043341,
+    "output_tokens": 83495,
+    "api_call_count": 126
+  },
+  "started_at": "2026-10-11T16:52:00.242243+05:30",
+  "completed_at": "2026-10-11T17:12:30.2083001+05:30"
+}

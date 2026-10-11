@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4NCRS1C9Z70C3JB46XF1RK4",
   "strategy": "manual-commit",
   "branch": "site/hero-polish",
-  "checkpoints_count": 50,
+  "checkpoints_count": 52,
   "files_touched": [
     "docs/index.html"
   ],
@@ -21,13 +21,20 @@
       "compact_transcript": "/1/transcript.jsonl",
       "content_hash": "/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/2/metadata.json",
+      "transcript": "/2/full.jsonl",
+      "compact_transcript": "/2/transcript.jsonl",
+      "content_hash": "/2/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
-    "input_tokens": 450,
-    "cache_creation_tokens": 317551,
-    "cache_read_tokens": 57546772,
-    "output_tokens": 108485,
-    "api_call_count": 215
+    "input_tokens": 460,
+    "cache_creation_tokens": 332177,
+    "cache_read_tokens": 59735910,
+    "output_tokens": 113007,
+    "api_call_count": 218
   }
 }
