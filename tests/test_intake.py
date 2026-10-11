@@ -1,3 +1,5 @@
+import json
+import re
 from urllib.parse import parse_qs, urlparse
 
 import pytest
@@ -23,11 +25,42 @@ def test_request_url_prefills_the_issue_form():
 def test_parse_issue_reads_the_form_body():
     body = ("### GitHub repo\n\nhttps://github.com/fastapi/typer\n\n"
             "### Audit gist (private repos only)\n\n_No response_\n")
-    assert intake.parse_issue(body) == {"repo": "fastapi/typer", "gist": ""}
+    assert intake.parse_issue(body) == {"repo": "fastapi/typer", "gist": "", "team": True}
     body2 = ("### GitHub repo\n\nacme/private\n\n### Audit gist (private repos only)\n\n"
              "https://gist.github.com/someone/0123456789abcdef0123\n")
-    assert intake.parse_issue(body2) == {"repo": "acme/private", "gist": "0123456789abcdef0123"}
-    assert intake.parse_issue("$(rm -rf /)") == {"repo": "", "gist": ""}
+    assert intake.parse_issue(body2) == {"repo": "acme/private", "gist": "0123456789abcdef0123", "team": True}
+    assert intake.parse_issue("$(rm -rf /)") == {"repo": "", "gist": "", "team": True}
+
+
+def test_parse_issue_reads_the_team_checkbox():
+    base = "### GitHub repo\n\nfastapi/typer\n\n### Team map\n\n"
+    assert intake.parse_issue(base + "- [X] Leave out the team map (contributor names and avatars)\n")["team"] is False
+    assert intake.parse_issue(base + "- [ ] Leave out the team map (contributor names and avatars)\n")["team"] is True
+
+
+def test_validate_keeps_an_old_board_as_it_was():
+    doc = intake.validate(_audit())
+    assert "team" not in doc and "next" not in doc
+
+
+def test_validate_sanitizes_a_malicious_team_map():
+    d = _audit()
+    people = [{"id": f"p{i + 1}", "name": f"Eve {i} eve{i}@corp.com", "login": "bad login" if i % 2 else f"eve{i}",
+               "gh": "123" if i % 3 else 7, "ini": "EV", "commits": 1, "share": 0.0, "last": "2026-10-01", "top": None,
+               "top_share": 0, "email": f"eve{i}@corp.com"} for i in range(500)]
+    d["team"] = {"v": 1, "people": people, "areas": [], "cells": [[0, 5, 1.0], [999, 0, 1.0]], "secret": "x@y.io"}
+    d["next"] = {"v": 1, "items": [{"rank": 1, "title": "Ask maya@corp.com", "owner": {"p": "p9999", "why": "x"},
+                                    "evidence": [{"sha": "not-a-sha"}, {"sha": "c78b284e6"}]}]}
+    doc = intake.validate(d)
+    text = json.dumps({"team": doc["team"], "next": doc["next"]})
+    assert not re.search(r"[\w.+-]+@[\w-]+\.[\w.-]+", text)
+    assert len(doc["team"]["people"]) <= 16 and "secret" not in doc["team"]
+    assert all("email" not in p for p in doc["team"]["people"])
+    assert all(p["login"] is None or re.fullmatch(r"[A-Za-z0-9-]{1,39}", p["login"]) for p in doc["team"]["people"])
+    assert all(p["gh"] is None or type(p["gh"]) is int for p in doc["team"]["people"])
+    assert doc["team"]["cells"] == []
+    item = doc["next"]["items"][0]
+    assert item["owner"] is None and [e["sha"] for e in item["evidence"]] == ["c78b284e6"]
 
 
 def _audit():

@@ -116,33 +116,37 @@ def _is_product(path: str) -> bool:
     return Path(path).suffix.lower() in CODE_EXT and not NOT_PRODUCT.search(path) and not is_doc_path(path)
 
 
-def read_history(repo: Path) -> list[dict]:
-    """Newest first: sha, date, author, subject, files."""
+def read_history(repo: Path, rev: str = "HEAD") -> list[dict]:
+    """Newest first: sha, date, author, subject, files, plus email, adate and parents for the team map.
+    The email stays inside firstrun.team and is never written to a board."""
     out = _git(repo, "log", f"--max-count={HISTORY_MAX}", "--no-renames", "--name-only",
-               "--format=%x01%H%x09%cI%x09%an%x09%s")
+               "--format=%x01%H%x09%cI%x09%aI%x09%P%x09%an%x09%ae%x09%s", rev, "--")
     commits = []
     for block in out.split("\x01")[1:]:
         head, _, files = block.partition("\n")
-        parts = head.split("\t", 3)
-        if len(parts) < 4:
+        parts = head.split("\t", 6)
+        if len(parts) < 7:
             continue
-        sha, iso, author, subject = parts
+        sha, iso, aiso, parents, author, email, subject = parts
         m = _CONV.match(re.sub(r"^\W+", "", subject.strip()))
         commits.append({"scope": (m.group("s") or "").lower() if m else "",
                         "sha": sha, "date": datetime.fromisoformat(iso).astimezone(timezone.utc),
-                        "author": author, "subject": subject.strip(),
-                        "files": [f for f in files.splitlines() if f.strip()]})
+                        "adate": datetime.fromisoformat(aiso).astimezone(timezone.utc),
+                        "parents": len(parents.split()), "author": author, "email": email.strip(),
+                        "subject": subject.strip(), "files": [f for f in files.splitlines() if f.strip()]})
     return commits
 
 
 def read_tags(repo: Path) -> list[dict]:
     out = _git(repo, "for-each-ref", "refs/tags", "--sort=-creatordate",
-               "--format=%(refname:short)\t%(creatordate:iso-strict)\t%(*objectname)%(objectname)", check=False)
+               "--format=%(refname:short)\t%(creatordate:iso-strict)\t%(*objectname)%(objectname)\t%(taggername)",
+               check=False)
     tags = []
     for line in out.splitlines():
         parts = line.split("\t")
-        if len(parts) == 3 and parts[1]:
-            tags.append({"name": parts[0], "date": datetime.fromisoformat(parts[1]).astimezone(timezone.utc)})
+        if len(parts) >= 3 and parts[1]:
+            tags.append({"name": parts[0], "date": datetime.fromisoformat(parts[1]).astimezone(timezone.utc),
+                         "tagger": parts[3].strip() if len(parts) > 3 else ""})
     return tags
 
 
@@ -672,24 +676,7 @@ def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, 
                                  if f.get("closest_page") else "Write a short how-to page and link it from the feature list."),
                       "evidence": [ev(f)]})
 
-    # Content: areas the team keeps shipping. Projects that scope their commits get scopes only.
-    use_scopes = sum(1 for f in feats if f.get("area_src") == "scope") >= max(3, len(feats) // 3)
-    picks: dict[str, tuple[dict, dict]] = {}
-    for f in ordered:
-        a = f["area"]
-        if not a or len(a) < 3 or a in repo_words or a in picks or (use_scopes and f.get("area_src") != "scope"):
-            continue
-        m = mom.get(a, {"commits": 1, "authors": 1})
-        if m["commits"] >= 4 or (m["commits"] >= 3 and m["authors"] >= 2):
-            picks[a] = (m, f)
-    for a, (m, f) in sorted(picks.items(), key=lambda kv: -kv[1][0]["commits"]):
-        cards.append({"kind": "content", "priority": 2, "title": f"Create content around `{a}`",
-                      "why": f"{m['commits']} user-facing commits by {m['authors']} "
-                             f"{'person' if m['authors'] == 1 else 'people'} touched it in {FEATURE_WINDOW_DAYS} days. "
-                             "The team keeps investing here, so it is worth a story."
-                             + (" It has no docs page yet, so write that first." if a in clustered else ""),
-                      "action": "Publish a tutorial, a 60-second demo and a changelog post. Reuse the highlight draft below.",
-                      "evidence": [ev(f)]})
+    # Momentum no longer makes its own "content" card: it raises the impact score of the area's item in `next`.
     judged = [f for f in feats if f.get("judge") == "jev"]
     for f in (judged or feats)[:5]:
         if f["date"] >= (datetime.now(timezone.utc) - timedelta(days=45)).date().isoformat():
@@ -714,7 +701,7 @@ def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, 
     cards.append({"kind": "quickstart", "priority": 3, "title": "Run the quickstart as a new developer",
                   "why": "An audit reads text. A run proves the steps still work in a clean container.",
                   "action": f"firstrun https://github.com/{repo}#readme", "evidence": []})
-    caps = {"document": 8, "refresh": 6, "feature": 4, "content": 4}
+    caps = {"document": 8, "refresh": 6, "feature": 4}
     kept, used = [], Counter()
     for c in sorted(cards, key=lambda c: c["priority"]):
         if used[c["kind"]] < caps.get(c["kind"], 3):
@@ -736,31 +723,71 @@ def _summary(pages: list[dict]) -> dict:
 
 
 def _trace_output(a: dict) -> dict:
-    """What the audit claimed, compact enough for a neatlogs evaluator to check against the spans."""
+    """What the audit claimed, compact enough for a neatlogs evaluator to check against the spans.
+    The ranked list goes in as titles and scores. Team counts only, never a name."""
+    from firstrun.team import counts
+
     return {"summary": a["summary"], "release": a["release"],
             "cards": [{"kind": c["kind"], "title": c["title"], "why": c["why"],
                        "evidence": [e.get("sha") or e.get("pr") for e in c.get("evidence", [])]} for c in a["cards"]],
+            "next": [{"rank": i["rank"], "kind": i["kind"], "title": i["title"], "score": i.get("score")}
+                     for i in (a.get("next") or {}).get("items", [])[:10]],
+            "team": counts(a.get("team")) if "team" in a else None,
             "stale_pages": [{"path": p["path"], "age_days": p["age_days"], "stale_p": p.get("stale_p"),
                              "commits": [e["subject"] for e in p["evidence"]]}
                             for p in a["pages"] if p["status"] == "stale"][:15]}
 
 
 def audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path | None = None,
-          docs_repo: str | None = None) -> dict:
+          docs_repo: str | None = None, team: bool = True) -> dict:
     """WORKFLOW trace `firstrun.audit`, in the docs site's neatlogs session. See _audit."""
     from firstrun.tracing import session_attrs
 
     _, name = resolve_target(target)
     with neatlogs.trace("firstrun.audit", kind="WORKFLOW", repo=name, docs_repo=docs_repo or "",
                         **session_attrs(name, "audit", docs_repo=docs_repo)) as root:
-        set_io(root, input={"target": target, "docs_repo": docs_repo, "stale_days": stale_days, "jev": use_jev})
-        result = _audit(target, stale_days, use_jev, keep, docs_repo)
+        set_io(root, input={"target": target, "docs_repo": docs_repo, "stale_days": stale_days, "jev": use_jev,
+                            "team": team})
+        result = _audit(target, stale_days, use_jev, keep, docs_repo, team)
         set_io(root, output=_trace_output(result))
         return result
 
 
+def changelog_recent(commits: list[dict], now: datetime) -> bool:
+    """True when a changelog or release notes file changed in the 60 days before `now`."""
+    return any(c["date"] >= now - timedelta(days=60) and c["date"] <= now + timedelta(hours=1)
+               and any(re.search(r"(^|/)(changelog|history|changes|release[-_ ]?notes?)", f, re.I) for f in c["files"])
+               for c in commits)
+
+
+def team_and_next(result: dict, code: dict, now: datetime, mom: dict, cl_recent: bool, docs: dict | None = None,
+                  release: dict | None = None, enabled: bool = True, github: bool = True,
+                  optout: dict | None = None) -> None:
+    """Add `team` and `next` to an audit. Never raises: a failed team map leaves `team` out and `next` without
+    owners, and a failed ranking leaves `next` out. code and docs: {"repo", "rev", "commits"}."""
+    from firstrun import nextup, team as team_mod
+
+    try:
+        with neatlogs.trace("audit.team", kind="TOOL") as span:
+            t, ctx = team_mod.collect(code, now, docs, release, enabled=enabled, github=github, optout=optout)
+            nxt = nextup.build_next(result, ctx, now, mom, cl_recent)
+            result["team"], result["next"] = t, nxt
+            set_io(span, output=team_mod.counts(t, nxt))
+    except Exception:  # noqa: BLE001 - the team map is optional, and the audit must finish without it
+        result.pop("team", None)
+        try:
+            result["next"] = nextup.build_next(result, None, now, mom, cl_recent)
+        except Exception:  # noqa: BLE001
+            result.pop("next", None)
+    try:
+        team_mod.sanitize(result)
+    except Exception:  # noqa: BLE001
+        result.pop("team", None)
+        result.pop("next", None)
+
+
 def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path | None = None,
-           docs_repo: str | None = None) -> dict:
+           docs_repo: str | None = None, team: bool = True) -> dict:
     """docs_repo: a second repo that holds the docs site, when the docs do not live next to the code."""
     now = datetime.now(timezone.utc)
     url, name = resolve_target(target)
@@ -777,6 +804,7 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
         if not commits:
             raise RuntimeError("the repository has no commits")
         docs_url = f"https://github.com/{name}" if "/" in name and not Path(name).exists() else ""
+        drepo, dcommits = None, []
         with neatlogs.trace("audit.pages", kind="TOOL") as span:
             if docs_repo:
                 durl, dname = resolve_target(docs_repo)
@@ -802,9 +830,8 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
         kinds = {c["sha"]: classify_subject(c["subject"]) for c in rel["commits"]}
         notes = draft_release_notes(name, rel, kinds)
         highlights = draft_highlights(name, feats, mom)
-        cl = [c for c in commits if c["date"] >= now - timedelta(days=60)
-              and any(re.search(r"(^|/)(changelog|history|changes|release[-_ ]?notes?)", f, re.I) for f in c["files"])]
-        cards = build_cards(name, pages, feats, mom, rel, notes, bool(cl), stale_days)
+        cl = changelog_recent(commits, now)
+        cards = build_cards(name, pages, feats, mom, rel, notes, cl, stale_days)
         stamp = now.strftime("%Y%m%d-%H%M%S")
         result = {
             "v": 1, "id": f"audit-{stamp}-{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}",
@@ -822,9 +849,18 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
             "jev": bool(use_jev and os.environ.get("TYPESAFE_API_KEY")),
             "cost": jev_cost(),
         }
+        team_and_next(result, {"repo": repo, "rev": commits[0]["sha"], "commits": commits}, now, mom, cl,
+                      docs={"repo": drepo, "rev": dcommits[0]["sha"], "commits": dcommits} if drepo and dcommits else None,
+                      release=release_info(rel, tags), enabled=team)
         return result
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def release_info(rel: dict, tags: list[dict]) -> dict:
+    """Who tagged the release the board names, and the commits in it, for the release notes owner."""
+    return {"tagger": next((t.get("tagger") or "" for t in tags if t["name"] == rel["name"]), ""),
+            "shas": [c["sha"] for c in rel["commits"]]}
 
 
 # ----------------------------------------------------------------------------- sitemap mode
@@ -871,13 +907,21 @@ def audit_sitemap(site: str, stale_days: int = 180) -> dict:
     cards.append({"kind": "automate", "priority": 3, "title": "Add the source repo for a full audit",
                   "why": "With the repo, the audit can tell stale from quiet and list features with no docs.",
                   "action": f"firstrun audit owner/repo", "evidence": []})
-    return {"v": 1, "id": f"audit-{now.strftime('%Y%m%d-%H%M%S')}-{re.sub(r'[^a-z0-9]+', '-', host.lower()).strip('-')}",
-            "repo": host, "url": base, "generated_at": now.isoformat(timespec="seconds"), "stale_days": stale_days,
-            "mode": "sitemap", "history": {"commits": 0, "since": "", "capped": False},
-            "summary": {**_summary(pages), "features": 0, "uncovered": 0, "cards": len(cards)},
-            "pages": pages[:PAGES_MAX], "release": {"name": "", "previous": "", "date": "", "commits": 0},
-            "features": [], "cards": cards, "drafts": {"release_notes": "", "highlights": []}, "jev": False,
-            "cost": {"jev_calls": 0, "jev_input_tokens": 0, "jev_usd": 0.0, "basis": "A sitemap audit makes no model call."}}
+    result = {"v": 1, "id": f"audit-{now.strftime('%Y%m%d-%H%M%S')}-{re.sub(r'[^a-z0-9]+', '-', host.lower()).strip('-')}",
+              "repo": host, "url": base, "generated_at": now.isoformat(timespec="seconds"), "stale_days": stale_days,
+              "mode": "sitemap", "history": {"commits": 0, "since": "", "capped": False},
+              "summary": {**_summary(pages), "features": 0, "uncovered": 0, "cards": len(cards)},
+              "pages": pages[:PAGES_MAX], "release": {"name": "", "previous": "", "date": "", "commits": 0},
+              "features": [], "cards": cards, "drafts": {"release_notes": "", "highlights": []}, "jev": False,
+              "cost": {"jev_calls": 0, "jev_input_tokens": 0, "jev_usd": 0.0, "basis": "A sitemap audit makes no model call."}}
+    # A sitemap has no commits, so the ranked list scores refresh items on age alone and names no owner.
+    try:
+        from firstrun import nextup
+
+        result["next"] = nextup.build_next(result, None, now)
+    except Exception:  # noqa: BLE001
+        pass
+    return result
 
 
 # ----------------------------------------------------------------------------- output
@@ -890,9 +934,32 @@ def to_markdown(a: dict) -> str:
          "## Oldest Pages", ""]
     for p in a["pages"][:15]:
         L.append(f"- `{p['path']}`: {p['last_touched'] or 'older than history'} ({p['age_days']} days, {p['status']})")
-    L += ["", "## Proposal Cards", ""]
-    for c in a["cards"]:
-        L += [f"**{c['kind']}: {c['title']}**", f"{c['why']} {c['action']}", ""]
+    people = {p["id"]: p for p in (a.get("team") or {}).get("people") or []}
+    items = (a.get("next") or {}).get("items") or []
+    if items:
+        L += ["", "## What to Ship Next", ""]
+        for it in items[:10]:
+            who = people.get((it.get("owner") or {}).get("p"))
+            L += [f"{it['rank']}. **{it['title']}**" + (f" (`{it['path']}`)" if it.get("path") else "")
+                  + f". Score {it['score']}, effort {it['effort']}.",
+                  f"   {it['rationale']}" + (f" Suggested: {who['name']}." if who else ""), ""]
+    else:
+        L += ["", "## Proposal Cards", ""]
+        for c in a["cards"]:
+            L += [f"**{c['kind']}: {c['title']}**", f"{c['why']} {c['action']}", ""]
+    t = a.get("team") or {}
+    if t.get("areas"):
+        names = {pid: p["name"] for pid, p in people.items()} | {"others": "everyone else"}
+        L += ["## Who Works on What", "",
+              f"From {_n(t['commits'], 'commit')} by {_n(t['total_people'], 'person').replace('persons', 'people')} "
+              f"in the last {t['window_days']} days. "
+              "Suggestions, not assignments.", ""]
+        for ar in t["areas"]:
+            own = ", ".join(f"{names.get(o['p'], o['p'])} {round(o['s'] * 100)}%" for o in ar["owners"])
+            flag = (" One person holds it." if ar["single"] else f" {ar['bus']} people hold half the work."
+                    if ar["bus"] > 1 else " One person holds half the work.")
+            L.append(f"- **{ar['label']}** (`{ar['path']}`): {own}.{flag}" + (" Quiet for 6 months." if ar["quiet"] else ""))
+        L.append("")
     if a["drafts"]["release_notes"]:
         L += ["## Release Notes Draft", "", a["drafts"]["release_notes"]]
     return "\n".join(L).rstrip() + "\n"
@@ -935,6 +1002,9 @@ def publish(a: dict, site: Path, evidence_dir: Path | None = None) -> Path:
     """Write the audit JSON to the site folder, upsert one row in index.json, and write its receipt.
 
     `evidence_dir` is the run folder that holds audit.json and audit.md, when one was saved."""
+    from firstrun.team import sanitize
+
+    sanitize(a)
     site.mkdir(parents=True, exist_ok=True)
     out = site / f"{a['id']}.json"
     out.write_text(json.dumps(a, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
@@ -965,7 +1035,8 @@ def publish(a: dict, site: Path, evidence_dir: Path | None = None) -> Path:
 
 
 def issue(a: dict) -> dict:
-    """A GitHub issue for the docs team: one checkbox per card, evidence linked, drafts folded."""
+    """A GitHub issue for the docs team: one checkbox per item of the ranked list (per card on an old board),
+    evidence linked, drafts folded."""
     s = a["summary"]
     url = a.get("url") or ""
     L = [f"FirstRun audited the docs of {a['repo']} on {a['generated_at'][:10]}.", "",
@@ -973,11 +1044,19 @@ def issue(a: dict) -> dict:
          f"- Oldest page: {s['oldest_days']} days. Median: {s['median_age_days']} days.",
          f"- {s['uncovered']} of {s['features']} user-facing features from the last {FEATURE_WINDOW_DAYS} days have no docs page that names them.",
          "", "## Proposed Work", ""]
-    for c in a["cards"]:
-        if c["kind"] == "quickstart":
-            continue
-        L.append(f"- [ ] **{c['title']}**. {c['why']}")
-        for e in c.get("evidence", [])[:3]:
+    people = {p["id"]: p for p in (a.get("team") or {}).get("people") or []}
+    items = (a.get("next") or {}).get("items") or []
+    # Logins go in without @, so nobody named here gets a GitHub notification.
+    rows = [(f"- [ ] **{it['title']}**" + (f" (`{it['path']}`)" if it.get("path") else "") + f". {it['rationale']}"
+             + "".join(f" Suggested: {p['name']}" + (f" ({p['login']})" if p.get("login") else "") + "."
+                       for p in [people.get((it.get("owner") or {}).get("p"))] if p),
+             it.get("evidence") or []) for it in items[:10]]
+    if not items:
+        rows = [(f"- [ ] **{c['title']}**. {c['why']}", c.get("evidence") or [])
+                for c in a["cards"] if c["kind"] not in ("quickstart", "content")]
+    for line, evidence in rows:
+        L.append(line)
+        for e in evidence[:3]:
             ref = f"#{e['pr']}" if e.get("pr") else (f"{url}/commit/{e['sha']}" if url else e["sha"])
             L.append(f"  - {e['date']}: {e['subject']} ({ref})")
     notes = a["drafts"].get("release_notes") or ""
