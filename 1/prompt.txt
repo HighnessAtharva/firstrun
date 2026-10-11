@@ -1,0 +1,59 @@
+do the app journey next and continue working until you are sure we are all good!there is also the pr 24 check if that can be safely merged do what needs to be done!
+
+---
+
+bring back the twitter embeds load them lazily!!
+
+---
+
+comparison should be open by default and not in an expandable and h2 should say Compare FirstRun with Claude Code, GitHub Actions, GitHub Agents
+
+---
+
+continue previous task which i interrupted
+
+as for the ui, pr 24 unifies the /runs and /audit grey screens into the actual app journey so respect that!
+
+mege safely when all is done!
+
+---
+
+don't restore the graident and shadows and unnecessary animations!
+
+---
+
+rest of things is fine!
+
+---
+
+keep twitter script and all that! but you understand the stuff rihgt?
+
+---
+
+commit the vault and sync the plan copies
+
+---
+
+so now i am assuming that the website is fully updated and cleaned and make uniform?
+
+---
+
+<task-notification>
+<task-id>b1dxv3822</task-id>
+<tool-use-id>toolu_01Wr26erSZ97PuaVnbGkubLg</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\8145d2ac-ce2b-4c05-98e5-7b8f7c2943cf\tasks\b1dxv3822.output</output-file>
+<status>completed</status>
+<summary>Background command "Rebase on remote, commit all vault changes, and push" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+yes do both and merge safely
+
+---
+
+this new things is good but i really liked parts from the previous page which showed borderless demo + race track style x tweets, comparisons table, homepage had more life - shadows and bit  more fluid stuff. Currently it is very text heavy!!
+
+I really liked the borderless demo that was fullscreen - navbar is preefect as it is now, no change needed but we need to massively add life to the homepage taking the best parts from previous versions!, /impeccable 
+
+Also this section is very very chunky and i am not comfortable showing this version you distilled it too much but the flow is good we just need to add more life to it and not make it feel so claustrophic. The two screenshotted sections image attached need most of the work. Nail it think like a senior expert designer and absolutely please nail it!!!
