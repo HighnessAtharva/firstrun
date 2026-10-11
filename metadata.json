@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4NCRS1C9Z70C3JB46XF1RK4",
+  "strategy": "manual-commit",
+  "branch": "site/hero-polish",
+  "checkpoints_count": 47,
+  "files_touched": [
+    "docs/index.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 450,
+    "cache_creation_tokens": 317551,
+    "cache_read_tokens": 57546772,
+    "output_tokens": 108485,
+    "api_call_count": 215
+  }
+}
