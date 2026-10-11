@@ -919,8 +919,22 @@ def find_audit_site(start: Path | None = None) -> Path | None:
     return None
 
 
-def publish(a: dict, site: Path) -> Path:
-    """Write the audit JSON to the site folder and upsert one row in index.json."""
+def _receipt(a: dict, site: Path, evidence_dir: Path | None) -> dict:
+    """Write the audit's receipt into docs/receipts. Returns the index fields, or nothing when it fails."""
+    from firstrun import receipt
+
+    try:
+        r = receipt.build_audit(a, evidence_dir)
+        receipt.publish_site(r, site.parent / "receipts")
+        return receipt.index_fields(r)
+    except Exception:  # noqa: BLE001 - a receipt failure never blocks the audit log
+        return {}
+
+
+def publish(a: dict, site: Path, evidence_dir: Path | None = None) -> Path:
+    """Write the audit JSON to the site folder, upsert one row in index.json, and write its receipt.
+
+    `evidence_dir` is the run folder that holds audit.json and audit.md, when one was saved."""
     site.mkdir(parents=True, exist_ok=True)
     out = site / f"{a['id']}.json"
     out.write_text(json.dumps(a, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
@@ -943,6 +957,7 @@ def publish(a: dict, site: Path) -> Path:
         elif r.get("id") != a["id"]:
             rows.append(r)
     row["docs_repo"] = a.get("docs_repo", "")
+    row.update(_receipt(a, site, evidence_dir))
     rows.append(row)
     rows.sort(key=lambda r: r["ts"], reverse=True)
     idx.write_text(json.dumps({"audits": rows}, indent=1) + "\n", encoding="utf-8")

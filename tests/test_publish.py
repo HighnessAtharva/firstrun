@@ -50,3 +50,16 @@ def test_publish_all_skips_broken_folders(tmp_path):
     (runs / "bad" / "state.json").write_text("{", encoding="utf-8")
     (runs / "bad" / "runbook.json").write_text("{", encoding="utf-8")
     assert publish.publish_all(runs, tmp_path / "site") == 1
+
+
+def test_publish_writes_the_receipt_when_the_plan_is_there(tmp_path):
+    econ = {"generated_at": "x", "margin_floor": 0.7, "drivers": {"compute_per_run": 0.002},
+            "tiers": {"Team": {"cap_usd_per_run": 0.05, "revenue_per_run": 0.2}}}
+    (tmp_path / "business").mkdir()
+    (tmp_path / "business" / "unit_economics.json").write_text(json.dumps(econ), encoding="utf-8")
+    site = tmp_path / "docs" / "runs"
+    publish.publish_run(_run(tmp_path), site)
+    row = json.loads((site / "index.json").read_text(encoding="utf-8"))["runs"][0]
+    assert row["receipt"] == f"FR-{row['id']}"
+    assert row["receipt_usd"] == round(round(row["cost"], 4) + 0.002, 4)
+    assert (tmp_path / "docs" / "receipts" / f"{row['receipt']}.html").exists()

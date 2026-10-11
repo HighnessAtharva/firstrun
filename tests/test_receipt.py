@@ -120,3 +120,107 @@ def test_jev_usage_counts_answered_calls_only():
     c = audit.jev_cost()
     assert c["jev_calls"] == 2 and c["jev_input_tokens"] == 1000
     assert c["jev_usd"] == round(1000 * 0.042 / 1_000_000, 6)
+
+
+# ----------------------------------------------------------------------------- the bill and the site copy
+
+def _receipt(tmp_path, **kw):
+    s = _state(**kw)
+    return receipt.build(s, _run_dir(tmp_path, s), ECON, bills="team")
+
+
+def test_bill_total_adds_model_usage_and_compute(tmp_path):
+    r = _receipt(tmp_path, cost=0.0453)
+    assert receipt.total_usd(r) == round(0.0453 + 0.002, 4)
+    page = receipt.render_html(r)
+    assert "$0.0453" in page and "$0.0020" in page and "$0.0473" in page
+    assert "Verified" in page and "Billed tier" in page and "over cap" in page
+    assert "firstrun receipt --check docs/receipts/FR-20261011-000000-example.json" in page
+    assert "—" not in page and "–" not in page
+
+
+def test_money_keeps_tiny_amounts_readable():
+    assert receipt.money(0.0) == "$0.0000"
+    assert receipt.money(0.000557) == "$0.000557"
+    assert receipt.money(0.0453) == "$0.0453"
+    assert receipt.money(None) == "Not recorded"
+
+
+def test_bill_renders_when_optional_fields_are_missing():
+    page = receipt.render_html({"receipt_id": "FR-x", "hash": "sha256:ab"})
+    assert "Receipt" in page and "Not recorded" in page and "Not verified" in page
+    audit_page = receipt.render_audit_html({"kind": "audit", "receipt_id": "FR-audit-x"})
+    assert "Not recorded" in audit_page
+
+
+def test_audit_bill_total_is_the_jev_cost_or_not_recorded():
+    r = receipt.build_audit(_audit(), None)
+    assert r["audit"]["evidence_sha256"] == {}
+    assert receipt.total_usd(r) == 0.00042
+    page = receipt.render_audit_html(r)
+    assert "$0.000420" in page and "1 of 2 cards cited" in page
+    old = receipt.build_audit(_audit(cost=False), None)
+    assert receipt.total_usd(old) is None
+    assert receipt.index_fields(old) == {"receipt": "FR-audit-20261011-000000-acme-widgets", "receipt_usd": None}
+
+
+def test_publish_site_keeps_the_first_issue_time(tmp_path):
+    r = _receipt(tmp_path)
+    out = tmp_path / "receipts"
+    receipt.publish_site({**r, "issued_at": "2026-01-01T00:00:00Z"}, out)
+    receipt.publish_site(r, out)
+    saved = json.loads((out / f"{r['receipt_id']}.json").read_text(encoding="utf-8"))
+    assert saved["issued_at"] == "2026-01-01T00:00:00Z" and saved["hash"] == receipt.body_hash(saved)
+    assert (out / f"{r['receipt_id']}.html").exists()
+    assert receipt.billed_tier(out, r["receipt_id"]) == "Team"
+
+
+def test_publish_all_covers_every_listed_run_and_audit(tmp_path):
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    s = _state()
+    d = _run_dir(runs, s)
+    (d / "runbook.json").write_text("{", encoding="utf-8")  # unreadable runbook: steps fall back to the state
+    docs = tmp_path / "docs"
+    (docs / "runs").mkdir(parents=True)
+    (docs / "audits").mkdir()
+    (tmp_path / "business").mkdir()
+    (tmp_path / "business" / "unit_economics.json").write_text(json.dumps(ECON), encoding="utf-8")
+    redacted = "20261011-000000-exa[REDACTED]"
+    (docs / "runs" / "index.json").write_text(json.dumps({"runs": [
+        {"id": redacted, "url": s.source_url, "cost": 0.04}, {"id": "gone", "url": "x", "cost": 0}]}), encoding="utf-8")
+    a = _audit(cost=False)
+    (docs / "audits" / f"{a['id']}.json").write_text(json.dumps(a), encoding="utf-8")
+    (docs / "audits" / "index.json").write_text(json.dumps({"audits": [{"id": a["id"]}]}), encoding="utf-8")
+    done = receipt.publish_all(docs, runs)
+    assert done["runs"] == 1 and done["audits"] == 1 and done["skipped"] == ["gone"]
+    row = json.loads((docs / "runs" / "index.json").read_text(encoding="utf-8"))["runs"][0]
+    assert row["receipt"] == f"FR-{s.run_id}" and row["receipt_usd"] == 0.042
+    arow = json.loads((docs / "audits" / "index.json").read_text(encoding="utf-8"))["audits"][0]
+    assert arow["receipt"] == f"FR-{a['id']}" and arow["receipt_usd"] is None
+    assert (docs / "receipts" / f"FR-{a['id']}.html").exists()
+
+
+def test_check_finds_the_evidence_in_the_run_folder(tmp_path, monkeypatch):
+    from firstrun import config
+
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    s = _state()
+    d = _run_dir(runs, s)
+    path = receipt.publish_site(receipt.build(s, d, ECON), tmp_path / "docs" / "receipts")
+    monkeypatch.setattr(config, "RUNS_DIR", runs)
+    assert receipt.check(path) == []
+    (d / "report.md").write_text("# changed\n", encoding="utf-8")
+    assert any("report.md changed" in p for p in receipt.check(path))
+
+
+def test_publishing_an_audit_writes_its_receipt(tmp_path):
+    from firstrun import audit
+
+    a = _audit()
+    a.update({"summary": {**a["summary"], "oldest_days": 1, "median_age_days": 1, "cards": 2}, "release": {"name": ""}})
+    audit.publish(a, tmp_path / "docs" / "audits")
+    row = json.loads((tmp_path / "docs" / "audits" / "index.json").read_text(encoding="utf-8"))["audits"][0]
+    assert row["receipt"] == f"FR-{a['id']}" and row["receipt_usd"] == 0.00042
+    assert (tmp_path / "docs" / "receipts" / f"FR-{a['id']}.html").exists()

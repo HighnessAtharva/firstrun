@@ -1,0 +1,57 @@
+{
+ "kind": "audit",
+ "receipt_id": "FR-audit-20261011-050359-neatlogs-neatlogs",
+ "issued_at": "2026-10-11T09:40:40Z",
+ "work": {
+  "repo": "neatlogs/neatlogs",
+  "docs_repo": "",
+  "url": "https://github.com/neatlogs/neatlogs",
+  "audited_at": "2026-10-11T05:03:59+00:00",
+  "head": "",
+  "commits_read": 423,
+  "since": "2025-06-05",
+  "history_capped": false,
+  "pages": 1,
+  "fresh": 1,
+  "aging": 0,
+  "stale": 0,
+  "quiet": 0,
+  "features": 16,
+  "uncovered": 16,
+  "cards": {
+   "document": 8,
+   "content": 4,
+   "feature": 4,
+   "automate": 1,
+   "quickstart": 1
+  },
+  "judged_by_jev": true
+ },
+ "price": {
+  "recorded": false,
+  "jev_calls": null,
+  "jev_input_tokens": null,
+  "usd": null,
+  "basis": "This audit ran before cost tracking, so its cost was not recorded."
+ },
+ "limits": {
+  "dollar_cap_per_audit": null,
+  "jev_stale_pages_max": 200,
+  "jev_commit_sorts_max": 80,
+  "jev_batch_size": 40,
+  "history_commits_max": 20000,
+  "note": "The plan sets no dollar cap per audit. Jev reads are limited by the counts below."
+ },
+ "proof": {
+  "cards": 18,
+  "cards_citing_evidence": 16,
+  "all_cited": false,
+  "claim": "16 of 18 cards cite commits or pages you can open. This audit did not record the commit it read."
+ },
+ "audit": {
+  "audit_id": "audit-20261011-050359-neatlogs-neatlogs",
+  "evidence_sha256": {},
+  "generated_by": "firstrun audit"
+ },
+ "hash": "sha256:93d0b718bcdcd23a8c1a5a176a21576b7253962855057d0cccb192dcac48e022"
+}
