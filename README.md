@@ -13,7 +13,7 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 [![Tests](https://img.shields.io/badge/tests-295%20offline-1B8A3A?style=for-the-badge)](.github)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
 
-[**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**Follow the build on X**](https://x.com/cultist_dev)
+[**Watch the 3-minute demo**](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**Follow the build on X**](https://x.com/cultist_dev)
 
 <br>
 
