@@ -1,6 +1,23 @@
 {
  "audits": [
   {
+   "id": "audit-20261011-054325-accuknox-help",
+   "repo": "AccuKnox/help",
+   "url": "https://github.com/AccuKnox/help",
+   "ts": "2026-10-11T05:43:25+00:00",
+   "mode": "repo",
+   "pages": 521,
+   "stale": 87,
+   "quiet": 184,
+   "oldest_days": 1100,
+   "median_age_days": 183,
+   "features": 43,
+   "uncovered": 0,
+   "cards": 16,
+   "release": "cdr-test",
+   "docs_repo": ""
+  },
+  {
    "id": "audit-20261011-050359-neatlogs-neatlogs",
    "repo": "neatlogs/neatlogs",
    "url": "https://github.com/neatlogs/neatlogs",
