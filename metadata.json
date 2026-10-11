@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4MK84RYJQF2CRJ6G5P19X10",
   "strategy": "manual-commit",
   "branch": "site/homepage-life",
-  "checkpoints_count": 2,
+  "checkpoints_count": 7,
   "files_touched": [
     "docs/index.html"
   ],
@@ -14,14 +14,21 @@
       "compact_transcript": "/0/transcript.jsonl",
       "content_hash": "/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/1/metadata.json",
+      "transcript": "/1/full.jsonl",
+      "compact_transcript": "/1/transcript.jsonl",
+      "content_hash": "/1/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
-    "input_tokens": 300,
-    "cache_creation_tokens": 335462,
-    "cache_read_tokens": 40688804,
-    "output_tokens": 110217,
-    "api_call_count": 150,
+    "input_tokens": 462,
+    "cache_creation_tokens": 859793,
+    "cache_read_tokens": 75539803,
+    "output_tokens": 169449,
+    "api_call_count": 230,
     "subagent_tokens": {
       "input_tokens": 48,
       "cache_creation_tokens": 216999,
