@@ -21,11 +21,11 @@ var T=BASE+"doc-test/",A=BASE+"doc-audit/";
 var GH='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .8a7.2 7.2 0 0 0-2.3 14c.4.1.5-.2.5-.4v-1.3c-2 .4-2.4-.9-2.4-.9-.3-.8-.8-1.1-.8-1.1-.7-.5 0-.5 0-.5.7.1 1.1.8 1.1.8.7 1.1 1.7.8 2.1.6.1-.5.3-.8.5-1-1.6-.2-3.3-.8-3.3-3.6 0-.8.3-1.4.7-1.9-.1-.2-.3-.9.1-1.9 0 0 .6-.2 2 .7a6.8 6.8 0 0 1 3.6 0c1.4-.9 2-.7 2-.7.4 1 .1 1.7.1 1.9.5.5.7 1.1.7 1.9 0 2.8-1.7 3.4-3.3 3.6.3.2.5.7.5 1.4v2.1c0 .2.1.5.5.4A7.2 7.2 0 0 0 8 .8z"/></svg>';
 var LOGO='<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="15" fill="#0A66D6"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></svg>';
 function app(k,label){return '<button type="button" class="sn-app" id="sn-b-'+k+'" aria-expanded="false" aria-controls="sn-m-'+k+'"'+(CUR===k?' aria-current="page"':"")+">"+tile(k)+"<b>"+label+"</b>"+svg("car","0 0 12 12").replace("<svg",'<svg class="sn-car"')+"</button>"}
-var links=[["How it works","#steps"],["Proof","#proof"],["Tools","#tools"],["Plan","plan/"]];
+var links=[["How it works","#steps"],["Proof","#proof"],["Tools","#tools"],["Plan","plan/","plan"],["For judges","judges/","judges"]];
 host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
  '<a class="sn-wm" href="'+BASE+'" aria-label="FirstRun home">'+LOGO+"<span>FirstRun</span></a>"+
  app("test","Doc-test")+app("audit","Doc-audit")+'<span class="sn-sep" aria-hidden="true"></span>'+
- links.map(function(l){return '<a class="sn-lk" href="'+BASE+l[1]+'"'+(CUR==="plan"&&l[1]==="plan/"?' aria-current="page"':"")+'>'+l[0]+"</a>"}).join("")+
+ links.map(function(l){return '<a class="sn-lk" href="'+BASE+l[1]+'"'+(l[2]&&CUR===l[2]?' aria-current="page"':"")+'>'+l[0]+"</a>"}).join("")+
  '<span class="sn-sp"></span><a class="sn-gh" href="https://github.com/HighnessAtharva/firstrun" aria-label="FirstRun on GitHub">'+GH+"</a>"+
  '<button type="button" class="sn-burger" id="sn-b-more" aria-label="More links" aria-expanded="false" aria-controls="sn-m-more">'+svg("burger")+"</button></div>"+
  '<div class="sn-mm mm-test" id="sn-m-test" role="region" aria-label="Doc-test">'+
@@ -46,7 +46,7 @@ host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
   it(A+"#start","plus","Audit your repo","Get the one-line command")+"</div></div>"+
  '<div class="sn-mm mm-more" id="sn-m-more" role="region" aria-label="More"><div class="sn-list">'+
   it(T,"test","Doc-test","Run a quickstart, fix it, prove it")+it(A,"audit","Doc-audit","Find the docs your code outgrew")+
-  '<div class="sn-h">FirstRun</div>'+links.map(function(l){return it(BASE+l[1],"repo",l[0],"On the home page")}).join("")+
+  '<div class="sn-h">FirstRun</div>'+links.map(function(l){return it(BASE+l[1],"repo",l[0],l[2]?"Its own page":"On the home page")}).join("")+
   it("https://github.com/HighnessAtharva/firstrun","repo","GitHub","The public repo")+"</div></div></nav>";
 
 var $=function(i){return document.getElementById(i)},open=null,timer;
