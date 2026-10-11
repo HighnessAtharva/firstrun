@@ -10,7 +10,7 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 [![Live site](https://img.shields.io/badge/site-firstrun.atharvashah.com-0A66D6?style=for-the-badge)](https://firstrun.atharvashah.com/)
 [![neatHack 2026](https://img.shields.io/badge/built%20for-%23neatHack%202026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
-[![Tests](https://img.shields.io/badge/tests-246%20offline-1B8A3A?style=for-the-badge)](.github)
+[![Tests](https://img.shields.io/badge/tests-295%20offline-1B8A3A?style=for-the-badge)](.github)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
 
 [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**Follow the build on X**](https://x.com/cultist_dev)
@@ -246,7 +246,7 @@ The planner, executor and verifier show up as spans, so a bad run has a cause yo
 <a href="https://entire.io"><img src="docs/assets/logo-entire.webp" alt="Entire logo" width="56"></a>
 <h3>Entire</h3>
 <b>Records every session.</b><br>
-Each commit carries the Claude Code session that wrote it, so any line traces to a prompt.
+Each agent commit carries the Claude Code session that wrote it, so its lines trace to a prompt.
 </td>
 <td width="33%" valign="top" align="center">
 <a href="https://cfo.ai"><img src="docs/assets/logo-cfoai.webp" alt="cfo.ai logo" width="56"></a>
@@ -284,15 +284,15 @@ The integration check read 3 real runs back from persisted traces. See [docs/nea
 
 <table>
 <tr>
-<td width="33%" valign="top"><img src="docs/assets/t-entire-checkpoint.webp" alt="A commit message with an Entire-Checkpoint ID"><br><b>Checkpoint on every commit.</b> Any commit maps back to the session that wrote it.</td>
+<td width="33%" valign="top"><img src="docs/assets/t-entire-checkpoint.webp" alt="A commit message with an Entire-Checkpoint ID"><br><b>A checkpoint on each agent commit.</b> The commit maps back to the session that wrote it.</td>
 <td width="33%" valign="top"><img src="docs/assets/t-entire-gate.webp" alt="An Entire merge gate blocking a merge on a high finding"><br><b>A merge gate.</b> The merge stays blocked while a high finding is open.</td>
 <td width="33%" valign="top"><img src="docs/assets/t-entire-review.webp" alt="An Entire inline review finding on recovery.py"><br><b>Inline review.</b> The finding sits on the line in <code>src/firstrun/recovery.py</code>.</td>
 </tr>
 </table>
 
-- **Checkpoints:** every commit carries an `Entire-Checkpoint:` trailer. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
+- **Checkpoints:** 74 of 88 normal commits carry an `Entire-Checkpoint:` trailer, counted with `git log` on 2026-10-11. The 4 setup commits before the first agent session and 10 site commits carry none. Merge commits carry none, because Entire's hook skips merges. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
 - **Trail reviews:** Entire runners reviewed every layer on Trails 3 to 7. They raised 2 real bugs on Layer 1, a secret retry loop and a Windows-only Docker default, both fixed in e2aacb7.
-- **Trails:** [Trail 1](https://entire.io/gh/HighnessAtharva/firstrun/trails/1) covers Layer 1.
+- **Trails:** [Trail 1](https://entire.io/gh/HighnessAtharva/firstrun/trails/1) covers Layer 1. Trail pages need an entire.io login. The commit and session pages open without one.
 - **Graph:** the build agents searched the repo through the graph. 4 graph calls saved about 11,662 tokens.
 - **Brain:** it holds 7 durable facts, such as why recovery stops at 3 attempts. Its last refresh indexed 63 files and 1,056 symbols.
 
@@ -303,15 +303,17 @@ The integration check read 3 real runs back from persisted traces. See [docs/nea
 <td width="45%" valign="top"><img src="docs/assets/t-cfo-ari.webp" alt="Ari, the cfo.ai agent, greets Atharva on day one"><br><sub>Ari, the cfo.ai agent, on day one.</sub></td>
 <td valign="top">
 
-The business plan sets the agent's spending limit. `firstrun econ` reads 64 neatlogs traces and writes [business/drivers.csv](business/drivers.csv) for cfo.ai. The mean run costs $0.0167, and the p95 run costs $0.0508. A 70% margin floor turns those costs into a cap per tier, and `firstrun run --tier scale` stops any run that spends past the cap.
+The business plan sets the agent's spending limit. `firstrun econ` reads 88 neatlogs traces and writes [business/drivers.csv](business/drivers.csv) for cfo.ai. The mean run costs $0.0178, and the p95 run costs $0.0529. A 70% margin floor turns those costs into a cap per tier, and `firstrun run --tier scale` stops any run that spends past the cap.
 
 | Tier | Price | Quickstarts | Cap per run | Runs over the cap |
 |---|---|---|---|---|
-| Free | $0 | 1, weekly | $0.0108 | 48.4% |
-| Team | $49 a month | 10, nightly | $0.0471 | 7.8% |
-| Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | $0.0280 | 25.0% |
+| Free | $0 | 1, weekly | $0.0135 | 50.0% |
+| Team | $49 a month | 10, nightly | $0.0470 | 9.1% |
+| Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | $0.0279 | 26.1% |
 
 The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over. The plan, the Scale fix and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md). The cfo.ai model is public at [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE). Under the old cap, cash goes negative in month 14.
+
+The [plan page](https://firstrun.atharvashah.com/plan/) shows the caps, the measured cost spread and the cash per Scenario. Every doc-test run is tagged against the caps. A neatlogs alert uses the Scale cap as its threshold, and `scripts/neatlogs_issues.py` mirrors each detection and alert as a GitHub issue labeled [`neatlogs`](https://github.com/HighnessAtharva/firstrun/issues?q=label%3Aneatlogs).
 
 </td>
 </tr>
@@ -507,7 +509,7 @@ Known limits are listed in [docs/known-limits.md](docs/known-limits.md). Example
 
 - **Build:** a lead session planned the work and ran worker agents in parallel, one track each: fixtures, planner, executor, recovery, verification, report page, then edge cases. All agents ran on Sonnet 5.5 at medium effort.
 - **Review:** each layer is an Entire Trail, so Entire runners reviewed every commit since kickoff. They found 3 real bugs, all fixed: a secret retry loop, a Windows-only Docker default, and a cd guard that was written but never called.
-- **CI:** GitHub Actions runs the 246 offline tests on every push and pull request.
+- **CI:** GitHub Actions runs the offline suite on every push and pull request. The run on main on 2026-10-11 passed 295 tests. It skipped 59 tests that need `FIRSTRUN_LIVE=1` or a human check, and 1 test is an expected failure.
 - **Jury self-test:** the Entire judge plugin, run on this repo with the real start time, ranked it with no excluded work: 3.93 of 5, authenticity 4.5, integrity 5.0. The report is [evidence/jury-selftest.txt](evidence/jury-selftest.txt).
 
 Planning happened before the event in a private repo. The build log is [hackathon.md](hackathon.md).

@@ -386,6 +386,8 @@ html:has(dialog[open]){overflow:hidden}
  .about{grid-template-columns:1fr}.tm-v figcaption,.tm-g{grid-template-columns:1fr}
  .film video{aspect-ratio:16/9}.pin{width:22px;height:22px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}#hero>*{animation:none}html.js .rv{opacity:1;transform:none;transition:none}.app,.tool,.pr,.shots figure,.lr,.lr i,.pr .shot img{transition:none}.app:hover,.tool:hover,.pr:hover,.shots figure:hover,.pr:hover .shot img{transform:none}}
+/* the PR shelf bleeds past the column on purpose; the page itself never scrolls sideways */
+html,body{overflow-x:clip}
 </style>
 </head>
 <body>
@@ -571,7 +573,7 @@ html:has(dialog[open]){overflow:hidden}
 <header><img src="assets/logo-cfoai.webp" alt="cfo.ai logo" width="30" height="30"><h3>cfo.ai</h3><a href="https://cfo.ai">cfo.ai</a></header>
 <p class="job">Found a budget cap that ends the company.</p>
 <ol class="flow">
-<li><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg><span><b>Model.</b> 18 months built from 64 measured runs.</span></li>
+<li><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg><span><b>Model.</b> 18 months built from 88 measured runs.</span></li>
 <li><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><span><b>Finding.</b> The old $0.50 cap runs out of cash in month 14.</span></li>
 <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span><b>Fix.</b> The plan now sets the cap. <a href="#plan">See the plan</a></span></li>
 </ol>
@@ -582,13 +584,13 @@ html:has(dialog[open]){overflow:hidden}
 </section>
 
 <section id="plan" aria-labelledby="plan-h">
-<h2 id="plan-h">The Business Plan Found a Bug in the Agent</h2>
-<p class="sub">neatlogs measured the cost. cfo.ai modeled the cash. The cap moved into the code.</p>
+<h2 id="plan-h">The cfo.ai Plan Caps What Every Run Spends</h2>
+<p class="sub">neatlogs measures each run. cfo.ai turns the cost into a cap per tier. The CLI stops a run at that cap, and neatlogs alerts when runs drift past it. <a href="plan/">Open the plan</a></p>
 <ol class="arc rv">
-<li><span class="nd"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><p class="k">neatlogs measured</p><b>64 runs, one cost spread</b><p>Mean $0.0167 a run. The worst run cost $0.1014.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">drivers.csv, a trace per row</a></li>
+<li><span class="nd"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><p class="k">neatlogs measured</p><b>88 runs, one cost spread</b><p>Mean $0.0178 a run. The worst run cost $0.1014.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/drivers.csv">drivers.csv, a trace per row</a></li>
 <li><span class="nd"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></span><p class="k">cfo.ai modeled</p><b>18 months from the traces</b><p>Three plans and six Scenarios. Every cost cell reads the measured drivers.</p><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE" target="_blank" rel="noopener">Open the public model</a></li>
 <li class="hot"><span class="nd"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg></span><p class="k">The plan found</p><b>Cash runs out in month 14</b><p>A $0.50 cap lets a Scale run cost five times its $0.0997 share.</p><a href="https://github.com/HighnessAtharva/firstrun/blob/main/business/BUSINESS_PLAN.md">Read the business plan</a></li>
-<li><span class="nd"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><p class="k">FirstRun fixed</p><b>The plan sets the cap</b><p><code>firstrun run --tier scale</code> stops a run at $0.028.</p><a href="https://github.com/HighnessAtharva/firstrun/pull/15">See the change, PR #15</a></li>
+<li><span class="nd"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><p class="k">FirstRun enforces</p><b>The plan sets the cap</b><p><code>firstrun run --tier scale</code> stops a run at $0.0279. A neatlogs alert fires when the p95 run costs more.</p><a href="plan/">See the caps and the alerts</a></li>
 </ol>
 <div class="pc2 card rv">
 <h3>Cash on hand, November 2026 to April 2028</h3>
@@ -597,7 +599,7 @@ html:has(dialog[open]){overflow:hidden}
 <div class="cw" id="plw"><p class="pl-note">The chart reads the cfo.ai figures from <a href="data/cfo-model.json">data/cfo-model.json</a>.</p></div>
 <details><summary>Show the numbers</summary><div class="tw" id="plt"></div></details>
 </div>
-<p class="pl-note">Figures read back from cfo.ai on 2026-10-10. Model costs are Sonnet 5.5 list price, which Anthropic did not bill. Customer counts are assumptions until a team pays.</p>
+<p class="pl-note">Figures read back from cfo.ai on 2026-10-11, after the drivers moved to 88 traces. Model costs are Sonnet 5.5 list price, which Anthropic did not bill. Customer counts are assumptions until a team pays.</p>
 </section>
 
 <section id="compare" aria-labelledby="cmp-h">

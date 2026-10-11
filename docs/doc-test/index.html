@@ -120,6 +120,9 @@ main{flex:1}
 .rr .rm{grid-column:2;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--mut)}
 .rr .rm b{color:var(--ink2);font-weight:600}
 .rr .rgo{grid-column:3;grid-row:1/span 3;align-self:center;font-weight:600;font-size:13.5px;color:var(--acc);white-space:nowrap}
+.capl{display:block;font-size:12px;margin-top:2px;text-decoration:none}
+.capl:hover{text-decoration:underline}
+.capt{font-size:11.5px;color:var(--ink2);background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:0 6px}
 .tagf{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--line);border-radius:5px;padding:0 5px}
 .empty{padding:36px 0;text-align:center;color:var(--mut)}
 .opennote{margin:0 0 12px;padding:12px 16px;border-radius:12px;background:var(--sunk);border:1px solid var(--line);font-size:13.5px;color:var(--ink2);line-height:1.5}
@@ -758,6 +761,12 @@ var SL={verified:"Fix proven",passed:"Docs work",unverified:"Inconclusive",faile
 function stClass(st){return st==="verified"||st==="passed"?"ok":"mute"}
 /* one verdict per run: fixed (a fix passed a clean rerun), works (passed as written), open (stopped before a fix was proven) */
 function verdictOf(st,fixes){return st==="verified"&&fixes>0?"fixed":(st==="passed"||st==="verified")?"works":"open"}
+/* tier caps come from the cfo.ai plan through data/plan.json */
+var CAPS=null;
+function capLine(cost){if(!CAPS||!(cost>0))return "";var t=Object.keys(CAPS).map(function(n){return [n,CAPS[n]]}).sort(function(a,b){return a[1]-b[1]}),under=t.filter(function(x){return cost<=x[1]}).map(function(x){return x[0]});
+  if(under.length===t.length)return "Under every tier cap";if(!under.length)return "Over every tier cap";return "Over the "+t[t.length-under.length-1][0]+" cap, under "+under.join(" and ")}
+function runCost(d){var r=RUNS.filter(function(x){return x.id===d.run_id})[0];return r&&+r.cost>0?+r.cost:(+d.cost_usd||0)}
+function paintCost(d){var f=$("costFact");if(!f||!d)return;var dd=f.querySelector("dd"),c=runCost(d);if(c>0)dd.firstChild.textContent="$"+c.toFixed(4);var old=f.querySelector(".capl");if(old)old.remove();var t=capLine(c);if(!t)return;var a=el("a","capl",t);a.href="../plan/";a.title="Tier caps from the cfo.ai plan";dd.appendChild(a)}
 var VL={fixed:"Fix proven",works:"Docs work",open:"Inconclusive"},VC={fixed:"ok",works:"acc",open:"mute"};
 function patchFor(d,id){return (d.patches||[]).filter(function(p){return String(p.step_id)===String(id)})}
 function stepBy(d,id){for(var i=0;i<d.steps.length;i++)if(String(d.steps[i].id)===String(id))return d.steps[i];return null}
@@ -1312,7 +1321,7 @@ function renderHead(d){
   else{add("Steps",(c.ok+c.fix)+"/"+(d.steps.length-c.skip)+" passed",c.skip?c.skip+" skipped":"");
   add("Fixes",String(ps.length),ps.length?plural(db,"docs bug"):"");
   add("Proof",v&&v.steps_total!=null?v.steps_passed+"/"+v.steps_total:"None",v&&v.status==="verified"?"fresh container":"")}
-  add("Cost",d.cost_usd!=null?"$"+(+d.cost_usd).toFixed(2):"Not recorded",d.cost_usd!=null?"list price, not billed":"");
+  add("Cost",d.cost_usd!=null?"$"+(+d.cost_usd).toFixed(2):"Not recorded",d.cost_usd!=null?"list price, not billed":"");F.lastChild.id="costFact";paintCost(d);
   renderVerdict(d);
   var Lk=$("links");Lk.textContent="";var ev=evAll(d).filter(function(e){return e.step_id==null||e.kind==="pr"});
   if(ev.length){Lk.appendChild(el("span","lh","Proof"));ev.forEach(function(e){Lk.appendChild(evChip(e,true))})}
@@ -1536,7 +1545,7 @@ function paintList(){
     a.appendChild(el("span","rs",g.v==="open"?String(r.summary||"").replace(/broke:/,"stopped:"):r.summary));
     var m=el("span","rm"),sp=el("span");sp.appendChild(el("b",null,r.passed+" of "+r.runnable));sp.appendChild(document.createTextNode(" steps passed"));m.appendChild(sp);
     if(r.fixes)m.appendChild(el("span",null,plural(r.fixes,"fix","fixes")));
-    if(r.cost>0)m.appendChild(el("span",null,"$"+(+r.cost).toFixed(3)+" model cost"));
+    if(r.cost>0){m.appendChild(el("span",null,"$"+(+r.cost).toFixed(3)+" model cost"));var cl=capLine(+r.cost);if(cl)m.appendChild(el("span","capt",cl))}
     m.appendChild(el("span",null,when(r.ts)));
     if(g.runs.length>1)m.appendChild(el("span",null,plural(g.runs.length-1,"other run")));
     if(r.fixture)m.appendChild(el("span","tagf","fixture"));
@@ -1544,7 +1553,8 @@ function paintList(){
   });
   show("none",n===0);
 }
-fetch("../runs/index.json").then(function(r){return r.json()}).then(function(j){RUNS=(j&&Array.isArray(j.runs)?j.runs:[]);grouped();paintList();if(S.d)renderVerdict(S.d)}).catch(function(){$("none").textContent="The run log did not load.";show("none",true)});
+fetch("../runs/index.json").then(function(r){return r.json()}).then(function(j){RUNS=(j&&Array.isArray(j.runs)?j.runs:[]);grouped();paintList();if(S.d){renderVerdict(S.d);paintCost(S.d)}}).catch(function(){$("none").textContent="The run log did not load.";show("none",true)});
+fetch("../data/plan.json").then(function(r){return r.json()}).then(function(j){CAPS={};Object.keys(j.tiers||{}).forEach(function(n){CAPS[n]=+j.tiers[n].cap_usd_per_run});paintList();if(S.d)paintCost(S.d)}).catch(function(){});
 fetch("../examples/index.json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
   (j&&Array.isArray(j.runs)?j.runs:[]).forEach(function(r){if(r&&r.summary)SUM[r.example]=String(r.summary)});if(S.d)renderVerdict(S.d);
 }).catch(function(){});
