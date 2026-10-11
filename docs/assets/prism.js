@@ -1,14 +1,18 @@
 /* The hero stage. Broken steps drift in on the left, a white beam strikes a dark
-   glass prism, and the spectrum fans out to the proof on the right.
+   glass prism, and the light leaves as three rays, one per angle on the right:
+   blue for the clean run, gold for the cost, violet for who should fix it.
    Canvas 2D, no library, DPR aware. It pauses off screen, in a hidden tab, and on
    request, and it draws one still frame under prefers-reduced-motion.
-   The scene is decorative. The same facts live as text in the hero markup.
+   The scene is decorative. The angles are real DOM text in the hero markup.
+   The stage attributes steer the rays: data-focus="0|1|2" lights one angle,
+   data-em="test|audit" lights the angles a route leads to.
    API: window.FRPrism.mode("test"|"audit") */
 (function(){
 "use strict";
 var st=document.getElementById("hero"),cv=document.getElementById("pz");
-if(!st||!cv||!cv.getContext)return;
-var c=cv.getContext("2d");if(!c)return;
+function flat(){if(st)st.classList.add("flat")}
+if(!st||!cv||!cv.getContext)return flat();
+var c=cv.getContext("2d");if(!c)return flat();
 var inL=document.getElementById("stIn"),outL=document.getElementById("stOut"),sky=document.getElementById("stSky"),pz=document.getElementById("stPause");
 var chips=[].slice.call(inL.children),labs=[].slice.call(outL.children);
 var MQ=matchMedia("(max-width:899px)"),RMQ=matchMedia("(prefers-reduced-motion:reduce)");
@@ -18,9 +22,12 @@ var POOL={
  test:["No such option: --years","entire: command not found","Migration guide link: 404","Python version never stated","No module named 'typer'","curl: command not found","Docs say 0.9.0, not 0.9.58","KeyError: 'NEATLOGS_API_KEY'"],
  audit:["Flags page: 453 days old","29 code changes since edit","72 features with no docs","Infer-configs: 709 days old","15 stale of 1,405 pages","AccuKnox: 87 stale pages","Hard-deletes: 631 days old","AccuKnox page: 1,100 days old"]
 };
-/* spectrum, top to bottom. sRGB of oklch(65% .23 28), (78% .17 62), (90% .18 100), (76% .2 150), (68% .16 245), (58% .2 290) */
-var BAND=[[255,72,66],[255,158,36],[255,222,60],[62,214,110],[64,166,255],[146,108,255]];
+/* three rays, two strands each, top to bottom: the clean run (blue, sky), the cost (gold, amber),
+   who fixes it (violet, orchid). The hues match the Doc-test, Receipt and Doc-audit sections below. */
+var BAND=[[64,160,255],[112,204,255],[255,206,72],[255,156,44],[150,110,255],[204,104,246]];
+var GC=[[90,178,255],[255,186,60],[176,108,255]];
 var WARM={test:[255,118,100],audit:[255,184,80]};
+var gw=[1,1,1];
 
 var W=0,H=0,dpr=1,mob=false,G=null,lanes=[],parts=[],pulses=[],raf=0,vis=true,paused=false,still=RMQ.matches;
 var t0=0,last=0,now=0,spawnAt=0,ks=0,rs=0,mode="test",mk=0,surge=0;
@@ -49,30 +56,40 @@ function layout(){
  G={};
  if(mob){
   var hm=Math.min(H*.66,W*.52);G.h=hm;G.w=hm*1.1547;G.cx=W*.46;G.ay=(H-hm)*.5;
-  G.fx=W-2;G.top=12;G.bot=H-12;G.ly=[];for(var m=0;m<6;m++)G.ly.push(lerp(H*.2,H*.86,m/5));
+  G.fx=W-2;G.top=12;G.bot=H-12;G.half=9;G.so=6;
+  G.gyT=[H*.26,H*.52,H*.78];G.gy=G.gyT.slice();
   G.y0=null;lanes=[];
-  chips.concat(labs).forEach(function(li){li.classList.remove("off");["transform","opacity","left","top"].forEach(function(p){li.style.removeProperty(p)})});
+  chips.concat(labs).forEach(function(li){li.classList.remove("off");li._a=null;["transform","opacity","left","top"].forEach(function(p){li.style.removeProperty(p)})});
+  ["left","top","width"].forEach(function(p){outL.style.removeProperty(p)});
+  geo(0,0);
  }else{
   var S=st.getBoundingClientRect(),h1=rel(st.querySelector("h1").getBoundingClientRect(),S),fm=rel(document.getElementById("f").getBoundingClientRect(),S),hn=rel(document.getElementById("hint").getBoundingClientRect(),S),ch=rel(document.getElementById("chips").getBoundingClientRect(),S);
-  /* vertical rhythm: a clear gap under the helper text, then the prism, then a margin above
+  /* vertical rhythm: a clear gap under the helper line, then the prism, then a margin above
      the horizon curve. A short stage shrinks the prism instead of letting it climb. */
-  var hz=document.querySelector(".hz"),hzT=hz?rel(hz.getBoundingClientRect(),S).t:H-62;
-  var gap=cl(H*.075,56,80),top=hn.b+gap,bot=hzT-cl(H*.05,36,56),sh=Math.max(120,bot-top);
-  var h=cl(sh,120,Math.min(360,W*.26));G.h=h;G.w=h*1.1547;G.cx=W/2;G.ay=top+(sh-h)*.45;G.top=top;G.bot=bot;
-  var lw=0,lh=0;labs.forEach(function(li){lw=Math.max(lw,li.offsetWidth);lh=Math.max(lh,li.offsetHeight)});
-  G.fx=Math.min(Math.max(G.cx+G.w*.5+70,W*.75),W-lw-34);
-  /* labels: a column on the right. Start beside the input when that column is clear of it,
-     else below the input when it clears the example chips and the hint, else under the hint */
-  var lx=G.fx+12,y0=lx>fm.r+24||lx>Math.max(ch.r,hn.r)+24?fm.b+30:hn.b+30;
-  var y1=bot-lh/2,tight=(y1-y0)/5<46;
-  outL.classList.toggle("tight",tight);
-  if(tight){lh=0;labs.forEach(function(li){lh=Math.max(lh,li.offsetHeight)});y1=bot-lh/2}
-  var sp=cl((y1-y0)/5,tight?26:46,92),mid=Math.min((y0+y1)/2,y1-sp*2.5);
-  G.ly=[];for(var i=0;i<6;i++)G.ly.push(mid+(i-2.5)*sp);G.sp=sp;
-  labs.forEach(function(li,k){li.style.left=lx+"px";li.style.top=(G.ly[k]-li.offsetHeight/2)+"px"});
-  G.cl=Math.min(h1.l,fm.l);G.ct=h1.t;G.cb=hn.b;
+  var hz=document.querySelector(".hz"),hzT=hz?rel(hz.getBoundingClientRect(),S).t:H-62,tb=Math.max(hn.b,ch.b);
+  var gap=cl(H*.075,62,80),top=tb+gap,bot=hzT-cl(H*.05,36,56),sh=Math.max(120,bot-top);
+  /* a narrow desktop gets a smaller prism, so the column of angles keeps its room */
+  var h=cl(sh,120,Math.min(360,W*(W<1200?.21:.26)));G.h=h;G.w=h*1.1547;G.cx=W/2;G.ay=top+(sh-h)*.45;G.top=top;G.bot=bot;
+  geo(0,0);
+  /* the angles: one column on the right, as wide as its titles need and never over the prism */
+  var cw=cl(W*.24,280,330);
+  G.fx=Math.min(Math.max(G.cx+G.w*.5+64,W*.72),W-cw-24);
+  var lx=G.fx+12;
+  outL.style.left=Math.round(lx)+"px";outL.style.width=Math.round(Math.min(cw,W-lx-22))+"px";
+  /* start under the input. Beside the examples and the helper line when the column clears them,
+     else under them */
+  var y0=lx>Math.max(ch.r,hn.r)+24?fm.b+30:tb+30;
+  /* room for the column at rest plus the tallest reveal, so an open angle never hits the horizon */
+  outL.classList.remove("tight");
+  function rest(){var v=outL.offsetHeight;labs.forEach(function(li){var m=li.querySelector(".gm");if(m)v-=m.offsetHeight});return v}
+  var E=0;labs.forEach(function(li){var m=li.querySelector(".gmi");if(m)E=Math.max(E,m.scrollHeight)});
+  var Hr=rest();
+  if(y0+Hr+E>bot){outL.classList.add("tight");Hr=rest()}
+  /* centered on the prism's exit, so the three rays fan out evenly */
+  outL.style.top=Math.round(cl(G.Pout.y-Hr*.5,y0,Math.max(y0,bot-Hr-E)))+"px";
+  G.half=11;G.so=7;G.gy=null;measure();
+  G.cl=Math.min(h1.l,fm.l);G.ct=h1.t;G.cb=tb;
  }
- geo(0,0);
  /* anchor the backdrop light to the scene: the halo on the prism, the bleed where the rays land */
  if(sky){var so=rel(cv.getBoundingClientRect(),st.getBoundingClientRect());
   [["--pcx",so.l+G.cx],["--pcy",so.t+G.ay+G.h*.62],["--pby",so.t+G.ay+G.h],["--pfx",so.l+(mob?W*.86:G.fx)]].forEach(function(v){sky.style.setProperty(v[0],Math.round(v[1])+"px")})}
@@ -104,6 +121,17 @@ function layout(){
  if(still||paused||!raf)frame(now||performance.now());
 }
 function beamY(x){return lerp(G.y0,G.Pin.y,x/G.Pin.x)}
+/* where each ray lands: the middle of its angle's icon. Read again when an angle opens or closes,
+   and the ray eases to the new spot. */
+var icons=labs.map(function(li){return li.querySelector(".gi")});
+function measure(redraw){
+ if(mob||!G||!W)return;
+ var S=st.getBoundingClientRect();
+ G.gyT=icons.map(function(e){var r=e.getBoundingClientRect();return r.top-S.top+r.height/2});
+ var r0=icons[0].getBoundingClientRect();G.ix=r0.left-S.left+r0.width/2;
+ if(!G.gy||still||paused)G.gy=G.gyT.slice();
+ if(redraw&&(still||paused||!raf))frame(now||performance.now());
+}
 /* the haze the beam lights on its way in: drawn once per layout at 1/12 scale, so the upscale
    blurs it for free. Each frame only blits the band around the beam. */
 var vc=document.createElement("canvas"),v=vc.getContext("2d"),VB=null;
@@ -166,16 +194,17 @@ function swapChips(){
 }
 
 /* ---------- drawing ---------- */
-function drawFan(t,fanK,shift){
- var P=G.Pout,fx=lerp(P.x,G.fx,fanK),half=(mob?(G.ly[1]-G.ly[0]):G.sp)*.52;
+function drawFan(t,fanK){
+ var P=G.Pout,fx=lerp(P.x,G.fx,fanK),half=G.half,so=G.so;
  o.setTransform(1,0,0,1,0,0);o.clearRect(0,0,off.width,off.height);o.globalCompositeOperation="lighter";
  var s=.5,bands=[];
  for(var i=0;i<6;i++){
-  var wob=still?0:Math.sin(t/1500+i*1.3)*H*.006+Math.sin(t/910+i*2.1)*H*.003;
-  var yy=lerp(P.y,G.ly[i]+shift+wob,fanK),y0=P.y+(i-2.5)*1.6;
+  /* two strands per ray, a few px apart, so each ray reads as one bundle of light */
+  var q=i>>1,wk=gw[q],wob=still?0:Math.sin(t/1500+i*1.3)*H*.003+Math.sin(t/910+i*2.1)*H*.0015;
+  var yy=lerp(P.y,G.gy[q]+(i&1?so:-so)+wob,fanK),y0=P.y+(i-2.5)*1.6;
   bands.push([y0,yy]);
   var g=o.createLinearGradient(P.x*s,0,fx*s,0),col=BAND[i];
-  g.addColorStop(0,rgba(col,.0));g.addColorStop(.06,rgba(col,.75));g.addColorStop(.6,rgba(col,.85));g.addColorStop(1,rgba(col,0));
+  g.addColorStop(0,rgba(col,.0));g.addColorStop(.06,rgba(col,Math.min(1,.75*wk)));g.addColorStop(.6,rgba(col,Math.min(1,.85*wk)));g.addColorStop(1,rgba(col,0));
   o.fillStyle=g;o.beginPath();o.moveTo(P.x*s,(y0-1.4)*s);o.lineTo(fx*s,(yy-half)*s);o.lineTo(fx*s,(yy+half)*s);o.lineTo(P.x*s,(y0+1.4)*s);o.closePath();o.fill();
  }
  o2.clearRect(0,0,off2.width,off2.height);o2.drawImage(off,0,0,off2.width,off2.height);
@@ -186,11 +215,11 @@ function drawFan(t,fanK,shift){
  c.globalAlpha=.75*(1+surge*.5);c.drawImage(off3,0,0,W,H);
  c.globalAlpha=1;
  /* crisp spines so each band reads as a ray */
- for(var j=0;j<6;j++){var lg=c.createLinearGradient(P.x,0,fx,0),cj=BAND[j];lg.addColorStop(0,rgba(cj,.0));lg.addColorStop(.12,rgba(cj,.7));lg.addColorStop(1,rgba(cj,0));
+ for(var j=0;j<6;j++){var lg=c.createLinearGradient(P.x,0,fx,0),cj=BAND[j];lg.addColorStop(0,rgba(cj,.0));lg.addColorStop(.12,rgba(cj,Math.min(1,.7*gw[j>>1])));lg.addColorStop(1,rgba(cj,0));
   c.strokeStyle=lg;c.lineWidth=1;c.beginPath();c.moveTo(P.x,bands[j][0]);c.lineTo(fx,bands[j][1]);c.stroke()}
- /* soft haze where the rays land */
- if(fanK>.6){var hk=(fanK-.6)/.4;for(var q=0;q<6;q++){var hy=G.ly[q]+shift,hx=G.fx-6,r=mob?40:Math.min(110,G.sp*1.3),hg=c.createRadialGradient(hx,hy,0,hx,hy,r);
-  hg.addColorStop(0,rgba(BAND[q],.26*hk));hg.addColorStop(1,rgba(BAND[q],0));c.fillStyle=hg;c.fillRect(hx-r,hy-r,2*r,2*r)}}
+ /* soft haze where each ray lands */
+ if(fanK>.6){var hk=(fanK-.6)/.4;for(var q=0;q<3;q++){var hy=G.gy[q],hx=G.fx-6,r=mob?44:80,hg=c.createRadialGradient(hx,hy,0,hx,hy,r);
+  hg.addColorStop(0,rgba(GC[q],Math.min(.5,.3*hk*gw[q])));hg.addColorStop(1,rgba(GC[q],0));c.fillStyle=hg;c.fillRect(hx-r,hy-r,2*r,2*r)}}
  c.restore();
 }
 function drawBeam(t,k){
@@ -275,35 +304,43 @@ function drawBlooms(t,beamK,fanK){
  if(fanK>0){var r2=h*.3,e=c.createRadialGradient(Q.x,Q.y,0,Q.x,Q.y,r2);e.addColorStop(0,"rgba(255,250,240,"+(.5*fanK*b)+")");e.addColorStop(.3,"rgba(255,220,200,"+(.12*fanK)+")");e.addColorStop(1,"rgba(255,255,255,0)");c.fillStyle=e;c.fillRect(Q.x-r2,Q.y-r2,2*r2,2*r2)}
  c.restore();
 }
-/* travelling signals: chip -> beam -> prism -> ray -> label */
+/* how bright each ray wants to be. An open angle wins, else the hovered route, else all three. */
+function wT(q){var f=st.getAttribute("data-focus"),e=st.getAttribute("data-em");
+ if(f!==null&&f!=="")return +f===q?1.3:.22;
+ if(e==="test")return q<2?1.15:.25;
+ if(e==="audit")return q===2?1.3:.25;
+ return 1}
+/* the rays a signal may travel: the lit ones */
+function act(){var a=[];for(var q=0;q<3;q++)if(wT(q)>=.9)a.push(q);return a.length?a:[0,1,2]}
+/* travelling signals: chip -> beam -> prism -> ray -> angle */
 function spawn(t){
  if(still||t-spawnAt<(mob?900:640))return;spawnAt=t;
  if(mob){parts.push({ph:1,t:0,d:1100,from:{x:-6,y:G.y0}});return}
  for(var i=0;i<lanes.length;i++){var L=lanes[(ks+i)%lanes.length];if(L.al>.6&&L.a){ks+=i+1;parts.push({ph:0,t:0,d:1700+Math.random()*400,L:L,a:{x:L.a.x,y:L.a.y},c1:{x:L.c1.x,y:L.c1.y},c2:{x:L.c2.x,y:L.c2.y}});return}}
  ks++;
 }
-function drawParts(dt,shift){
+function drawParts(dt){
  var warm=mix(WARM.test,WARM.audit,mk);
  for(var i=parts.length-1;i>=0;i--){
   var p=parts[i];p.t+=dt/p.d;
   if(p.t>=1){
    if(p.ph===0){p.ph=1;p.t=0;p.from={x:p.L.B.x,y:p.L.B.y};p.d=Math.max(380,(G.Pin.x-p.from.x)*1.6)}
    else if(p.ph===1){p.ph=2;p.t=0;p.d=320}
-   else if(p.ph===2){p.ph=3;p.t=0;p.r=rs++%6;p.d=1200}
-   else{pulses.push({r:p.r,t:0});var dot=!mob&&labs[p.r].querySelector("i");if(dot&&dot.animate)dot.animate([{transform:"scale(1)"},{transform:"scale(1.7)"},{transform:"scale(1)"}],{duration:620,easing:"cubic-bezier(.16,1,.3,1)"});parts.splice(i,1);continue}
+   else if(p.ph===2){p.ph=3;p.t=0;var A=act();p.r=A[rs++%A.length];p.d=1200}
+   else{pulses.push({r:p.r,t:0});var dot=!mob&&icons[p.r];if(dot&&dot.animate)dot.animate([{transform:"scale(1)"},{transform:"scale(1.14)"},{transform:"scale(1)"}],{duration:620,easing:"cubic-bezier(.16,1,.3,1)"});parts.splice(i,1);continue}
   }
   var k=p.t,x,y,col;
   if(p.ph===0){var q=cub(p.a,p.c1,p.c2,p.L.B,k);x=q.x;y=q.y;col=warm}
   else if(p.ph===1){x=lerp(p.from.x,G.Pin.x,k);y=lerp(p.from.y,G.Pin.y,k);col=[255,255,255]}
   else if(p.ph===2){x=lerp(G.Pin.x,G.Pout.x,k);y=lerp(G.Pin.y,G.Pout.y,k);col=[255,255,255]}
-  else{var e=1-Math.pow(1-k,2);x=lerp(G.Pout.x,G.fx,e);y=lerp(G.Pout.y,G.ly[p.r]+shift,e);col=BAND[p.r]}
+  else{var e=1-Math.pow(1-k,2);x=lerp(G.Pout.x,G.fx,e);y=lerp(G.Pout.y,G.gy[p.r],e);col=GC[p.r]}
   var al=p.ph===0?Math.sin(Math.PI*Math.min(1,k*.9+.1)):p.ph===3?Math.sin(Math.PI*Math.min(1,k*1.02)):.9;
   if(p.ph===2)al=.5;
   c.save();c.globalCompositeOperation="lighter";var gr=c.createRadialGradient(x,y,0,x,y,11);gr.addColorStop(0,rgba(col,.95*al));gr.addColorStop(.4,rgba(col,.32*al));gr.addColorStop(1,rgba(col,0));c.fillStyle=gr;c.fillRect(x-11,y-11,22,22);
   c.fillStyle="rgba(255,255,255,"+al+")";c.beginPath();c.arc(x,y,1.5,0,6.284);c.fill();c.restore();
  }
  for(var j=pulses.length-1;j>=0;j--){var u=pulses[j];u.t+=dt/700;if(u.t>=1){pulses.splice(j,1);continue}
-  if(mob)continue;var px=G.fx+17,py=G.ly[u.r]+shift;c.save();c.globalCompositeOperation="lighter";c.strokeStyle=rgba(BAND[u.r],.65*(1-u.t));c.lineWidth=1.5;c.beginPath();c.arc(px,py,6+u.t*18,0,6.284);c.stroke();c.restore()}
+  if(mob)continue;var px=G.ix,py=G.gy[u.r];c.save();c.globalCompositeOperation="lighter";c.strokeStyle=rgba(GC[u.r],.6*(1-u.t));c.lineWidth=1.5;c.beginPath();c.arc(px,py,17+u.t*14,0,6.284);c.stroke();c.restore()}
 }
 
 /* ---------- loop ---------- */
@@ -321,7 +358,9 @@ function frame(t){
  surge=Math.max(0,surge-dt/900);
  var th=still?0:ptr.x*.045+Math.sin(t/5300)*.006;
  geo(th,still?0:ptr.y*-4+Math.sin(t/4100)*1.5);
- var shift=still?0:ptr.y*10;
+ /* ease each ray toward its brightness and its landing spot */
+ var snap=still||paused;
+ for(var q=0;q<3;q++){var wt=wT(q);gw[q]=snap?wt:gw[q]+(wt-gw[q])*f;if(G.gy&&G.gyT)G.gy[q]=snap?G.gyT[q]:G.gy[q]+(G.gyT[q]-G.gy[q])*Math.min(1,f*2.2)}
  c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
  /* a dim pool of light under the prism */
  /* (kept inside the canvas on phones, where the canvas has visible edges) */
@@ -330,15 +369,15 @@ function frame(t){
  hz.addColorStop(0,rgba(ht,.16*prismK));hz.addColorStop(1,rgba(ht,0));c.fillStyle=hz;c.fillRect(G.cx-hr,hy-hr,2*hr,2*hr);
  chipsFrame(t);
  drawFunnels();
- if(fanK>0)drawFan(t,fanK,shift);
+ if(fanK>0)drawFan(t,fanK);
  drawCone(beamK,still?1:.9+.1*Math.sin(t/1700));
  drawBeam(t,beamK);
  drawPrism(t,prismK);
  drawBlooms(t,beamK,fanK);
  if(!still&&fanK>=1)spawn(t);
- drawParts(still?0:dt,shift);
- /* labels arrive as their ray reaches them */
- if(!mob){var lk=still?1:fanK;labs.forEach(function(li,i){var a=cl((lk-.4-i*.07)/.25,0,1);li.style.opacity=a.toFixed(3);li.style.transform="translate3d("+(ptr.x*-3).toFixed(1)+"px,"+shift.toFixed(1)+"px,0)"})}
+ drawParts(still?0:dt);
+ /* the angles arrive as their ray reaches them, then hold still so they stay easy to point at */
+ if(!mob){var lk=still?1:fanK;labs.forEach(function(li,i){var a=cl((lk-.4-i*.1)/.25,0,1).toFixed(3);if(li._a!==a){li._a=a;li.style.opacity=a}})}
  if(sky&&!still)sky.style.transform="translate3d("+(ptr.x*-8).toFixed(1)+"px,"+(ptr.y*-6).toFixed(1)+"px,0)";
 }
 function loop(t){
@@ -353,7 +392,9 @@ function onPtr(e){if(mob||e.pointerType==="touch")return;var r=st.getBoundingCli
 st.addEventListener("pointermove",onPtr,{passive:true});
 st.addEventListener("pointerleave",function(){ptr.tx=0;ptr.ty=0});
 var lay=0;function relayout(){if(lay)return;lay=requestAnimationFrame(function(){lay=0;layout()})}
-if("ResizeObserver" in window)new ResizeObserver(relayout).observe(st);else addEventListener("resize",relayout);
+if("ResizeObserver" in window){new ResizeObserver(relayout).observe(st);new ResizeObserver(function(){measure(true)}).observe(outL)}else addEventListener("resize",relayout);
+/* a still or paused scene redraws once when an angle or a route lights up */
+if("MutationObserver" in window)new MutationObserver(function(){if(still||paused||!raf)frame(performance.now())}).observe(st,{attributes:true,attributeFilter:["data-focus","data-em"]});
 if("IntersectionObserver" in window)new IntersectionObserver(function(en){vis=en[0].isIntersecting;st.classList.toggle("idle",!vis);if(vis)start();else stop()},{threshold:0}).observe(st);
 document.addEventListener("visibilitychange",function(){if(document.hidden)stop();else start()});
 function setStill(v){still=v;st.classList.toggle("still",v);if(pz)pz.hidden=v;if(v){stop();parts=[];pulses=[];frame(performance.now())}else{t0=performance.now()-4000;start()}}
