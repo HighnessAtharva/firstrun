@@ -363,6 +363,49 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.6;
 .arw:disabled{opacity:.35;cursor:default}
 .count{font:500 14px var(--mono);color:var(--mut);min-width:6.5em;text-align:center}
 .empty{text-align:center;color:var(--mut);padding:28px 0}
+/* the kind of each upstream item, so an issue never reads as a PR */
+.kd{flex:none;font-weight:600;font-size:12px;line-height:1;border-radius:7px;padding:5px 8px;background:var(--test-bg);color:var(--test-d)}
+.kd.k-issue{background:var(--gold-bg);color:var(--gold-d)}
+.kd.k-discussion{background:var(--audit-bg);color:var(--audit-d)}
+.kd.k-comment{background:var(--ok-bg);color:var(--ok-d)}
+.pr-top .repo{flex:1}
+
+/* real-world impact: the claim, the real org logos, then the carousel as proof */
+.impact{margin-top:clamp(64px,8vw,96px);text-align:center}
+h2:has(>.fr){max-width:18.2em}
+.impact h2{max-width:21em;font-size:clamp(28px,3.7vw,40px)}
+.orgs{list-style:none;padding:0;margin:28px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px}
+.orgs a{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;color:var(--ink);text-decoration:none;padding:4px 0}
+.orgs a:hover{color:var(--cd)}
+.orgs img{width:30px;height:30px;border-radius:8px;box-shadow:0 0 0 1px var(--line),var(--sh);background:var(--panel)}
+@media(max-width:600px){.orgs{gap:8px 18px}.orgs a{font-size:14px}.orgs img{width:26px;height:26px}}
+
+/* FirstRun in an H2: the app icon, then a yellow highlighter stroke behind the word */
+.fr{white-space:nowrap;display:inline-flex;align-items:baseline;gap:.16em}
+.fr-i{width:.78em;height:.78em;flex:none;align-self:center;transform:translateY(.02em);border-radius:.18em;box-shadow:0 2px 6px -2px oklch(40% .12 256/.35)}
+.fr mark{color:inherit;padding:0 .1em;margin:0 -.02em;border-radius:.12em .3em .16em .28em;
+ background:linear-gradient(100deg,oklch(92% .15 98/.0) 0,oklch(91% .16 98/.85) 4%,oklch(90% .17 96/.75) 60%,oklch(91% .16 98/.9) 96%,oklch(92% .15 98/0) 100%) 0 78%/100% .5em no-repeat;
+ -webkit-box-decoration-break:clone;box-decoration-break:clone}
+
+/* Doc-audit: three real findings, one row each, linked into the board */
+.finds{list-style:none;padding:0;margin:clamp(40px,5vw,56px) auto 0;max-width:780px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--lift);overflow:hidden;text-align:left}
+.finds li+li{border-top:1px solid var(--line)}
+.fd{display:grid;grid-template-columns:7.4em minmax(0,1fr) auto;align-items:center;gap:6px 16px;padding:16px 20px;color:var(--ink);text-decoration:none;transition:background .2s}
+.fd:hover{background:var(--hover)}
+.fd:hover b{color:var(--cd);text-decoration:underline;text-underline-offset:3px}
+.fd:focus-visible{outline-offset:-3px;border-radius:0}
+.fk{justify-self:start;font-weight:600;font-size:12px;line-height:1;border-radius:7px;padding:6px 9px;white-space:nowrap}
+.fk.k-st{background:var(--bad-bg);color:var(--bad)}
+.fk.k-nd{background:var(--audit-bg);color:var(--audit-d)}
+.fm{display:flex;flex-direction:column;gap:2px;min-width:0}
+.fm b{font:600 15px/1.3 var(--mono);overflow-wrap:anywhere}
+.fm small{font:500 12.5px/1.3 var(--mono);color:var(--mut)}
+.fx{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:13.5px;color:var(--mut);text-align:right;white-space:nowrap}
+.fx [data-f=since]{color:var(--ink);font-weight:600}
+@media(max-width:600px){.fd{grid-template-columns:minmax(0,1fr);padding:14px 16px}.fk{justify-self:start}.fx{align-items:flex-start;text-align:left;flex-direction:row;flex-wrap:wrap;gap:2px 12px;white-space:normal}}
+
+/* compare: the one-line honest edge under the H2 */
+.edge{text-align:center;margin:16px auto 0;max-width:34em;font-size:clamp(16px,1.6vw,18px);color:var(--mut);text-wrap:balance}
 
 /* Doc-audit beats */
 .repo-in{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:6px 6px 6px 12px;background:var(--panel);font:500 14px var(--mono)}
@@ -535,7 +578,9 @@ mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,conic-gradien
 .tt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:760px;margin:clamp(36px,4.5vw,52px) auto 0}
 .tt [role=tab]{display:flex;align-items:center;gap:14px;min-height:0;padding:14px 18px;border-radius:16px;background:oklch(98.4% .003 255/.7);border:1px solid var(--edge);color:var(--ink);font-weight:400;text-align:left;white-space:normal;box-shadow:none;transition:background .25s,box-shadow .35s var(--ease)}
 .tt [role=tab]:hover{background:var(--panel)}
-.tt [role=tab][aria-selected=true]{background:var(--panel);border-color:transparent;box-shadow:0 0 0 2px var(--ink),var(--lift)}
+.tt [role=tab][aria-selected=true]{background:var(--panel);border-color:transparent;box-shadow:0 0 0 1.5px oklch(78% .13 82),0 0 0 6px oklch(86% .11 88/.32),0 10px 32px -10px oklch(76% .15 78/.55),var(--lift)}
+/* the active tool tab glows warm gold. Keyboard focus adds a darker gold ring outside it */
+.tt [role=tab]:focus-visible{outline:2px solid var(--gold-d);outline-offset:4px;border-radius:16px}
 .tt img{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);flex:none;background:var(--panel)}
 .tt b{display:block;font-size:18px;letter-spacing:-.025em;line-height:1.2}
 .tt small{display:block;font-size:14px;color:var(--mut);line-height:1.3;margin-top:2px}
@@ -810,7 +855,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <section id="steps" class="band b-test" aria-labelledby="test-h">
 <div class="wrap">
 <p class="eyebrow"><span class="tile"><svg class="ic" aria-hidden="true"><use href="#i-term"/></svg></span>Doc-test</p>
-<h2 id="test-h">FirstRun Runs Your Quickstart Like a Brand-New User</h2>
+<h2 id="test-h"><span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Runs Your Quickstart Like a Brand-New User</h2>
 <ol class="beats" aria-label="A real Doc-test run on the dbt and DuckDB quickstart">
 <li class="beat">
 <p class="bl"><span class="bn">1</span>A step breaks</p>
@@ -830,13 +875,20 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 </ol>
 <p class="src">A real run on the dbt + DuckDB quickstart. <a href="doc-test/?s=10#ex=dbt">Replay this run</a></p>
 
-<div class="tally rv" id="proof">
-<p><b class="cu" id="n-tested">36</b>quickstarts tested in a clean container</p>
-<p><b class="cu" id="n-prs">4</b>fixes sent to real projects</p>
+<div class="impact" id="proof" role="region" aria-labelledby="impact-h">
+<h2 id="impact-h" class="rv"><span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Already Sent Fixes and Bug Reports to dbt, Entire, Polars, Chroma and HTTPX</h2>
+<ul class="orgs rv" aria-label="Projects that got a fix or a report">
+<li><a href="https://github.com/dbt-labs"><img src="assets/org-dbt-labs.webp" alt="" width="48" height="48" loading="lazy" decoding="async">dbt Labs</a></li>
+<li><a href="https://github.com/entireio"><img src="assets/org-entireio.webp" alt="" width="48" height="48" loading="lazy" decoding="async">Entire</a></li>
+<li><a href="https://github.com/accuknox"><img src="assets/org-accuknox.webp" alt="" width="48" height="48" loading="lazy" decoding="async">AccuKnox</a></li>
+<li><a href="https://github.com/pola-rs"><img src="assets/org-pola-rs.webp" alt="" width="48" height="48" loading="lazy" decoding="async">Polars</a></li>
+<li><a href="https://github.com/chroma-core"><img src="assets/org-chroma-core.webp" alt="" width="48" height="48" loading="lazy" decoding="async">Chroma</a></li>
+<li><a href="https://github.com/encode"><img src="assets/org-encode.webp" alt="" width="48" height="48" loading="lazy" decoding="async">HTTPX</a></li>
+</ul>
 </div>
 <div class="prs" id="prs">
-<div class="track" id="track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Docs fixes sent upstream as pull requests"></div>
-<div class="ctrl" id="ctrl" hidden><button type="button" class="arw" id="prP" aria-label="Previous pull request">&lsaquo;</button><span class="count" id="count" aria-live="polite"></span><button type="button" class="arw" id="prN" aria-label="Next pull request">&rsaquo;</button></div>
+<div class="track" id="track" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Pull requests, issues and findings sent upstream"></div>
+<div class="ctrl" id="ctrl" hidden><button type="button" class="arw" id="prP" aria-label="Previous item">&lsaquo;</button><span class="count" id="count" aria-live="polite"></span><button type="button" class="arw" id="prN" aria-label="Next item">&rsaquo;</button></div>
 </div>
 <p class="cta"><a class="btn" href="#hero" id="try">Test your docs</a></p>
 </div>
@@ -871,10 +923,11 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <a class="board card rv" href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core" aria-label="Open the real dbt-core audit board"><img src="assets/app-doc-audit.webp" alt="The Doc-audit board for dbt-labs/dbt-core: 15 stale pages and 72 features with no docs, in columns to ship next" width="2400" height="1126" loading="lazy" decoding="async"></a>
 <p class="src"><a href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core">Open the dbt-core audit</a></p>
 
-<div class="tally rv">
-<p><b class="cu" id="n-rep">7</b>repos audited</p>
-<p><b class="cu" id="n-stale">102</b>stale pages found</p>
-</div>
+<ul class="finds rv" id="finds" aria-label="Real findings from Doc-audit">
+<li><a class="fd" data-a="audit-20261010-163620-dbt-labs-dbt-core" data-p="website/docs/reference/global-configs/project-flags.md" href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core#c=3"><span class="fk k-st">Stale page</span><span class="fm"><b>project-flags.md</b><small>dbt-labs/dbt-core</small></span><span class="fx"><span data-f="when">Last edited Jul 14, 2025</span><span data-f="since">29 code changes since</span></span></a></li>
+<li><a class="fd" data-a="audit-20261010-163620-dbt-labs-dbt-core" data-p="website/docs/guides/databricks-qs.md" href="doc-audit/?id=audit-20261010-163620-dbt-labs-dbt-core#c=0"><span class="fk k-nd">Missing docs</span><span class="fm"><b>databricks-qs.md</b><small>dbt-labs/dbt-core</small></span><span class="fx"><span data-f="when">Shipped since Aug 28, 2026</span><span data-f="since">5 changes with no docs</span></span></a></li>
+<li><a class="fd" data-a="audit-20261011-054325-accuknox-help" data-p="docs/use-cases/cards/Process-based-asset-access.md" href="doc-audit/?id=audit-20261011-054325-accuknox-help#c=3"><span class="fk k-st">Stale page</span><span class="fm"><b>Process-based-asset-access.md</b><small>AccuKnox/help</small></span><span class="fx"><span data-f="when">Last edited Oct 25, 2023</span><span data-f="since">7 code changes since</span></span></a></li>
+</ul>
 <p class="cta"><a class="btn au" href="doc-audit/">Audit a repo</a></p>
 </div>
 </section>
@@ -932,7 +985,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 
 <section id="watch" aria-labelledby="watch-h">
 <div class="wrap">
-<h2 id="watch-h">Watch FirstRun Catch a Broken Guide</h2>
+<h2 id="watch-h">Watch <span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Catch a Broken Guide</h2>
 <div class="vids">
 <article class="vc big card">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" data-yt="JJNWWhSV9pc" aria-label="Play the Doc-test demo, 2 minutes 59 seconds"><img src="assets/vid-doctest.webp" alt="Doc-test thumbnail: step 10 of a quickstart fails with no such option --years, then the fix passes 9 of 9 steps" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:59</span></a></div>
@@ -953,7 +1006,7 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <!-- TOOLS: calm graphite world. One tab per tool, three proofs each. Without JS every tool and screenshot is stacked. -->
 <section id="tools" class="band b-tools" aria-labelledby="tools-h">
 <div class="wrap wide">
-<h2 id="tools-h">How FirstRun Used neatlogs, Entire and cfo.ai</h2>
+<h2 id="tools-h">Powered by neatlogs, Entire CLI and cfo.ai</h2>
 <div class="tt rv" role="tablist" aria-label="The three tools">
 <button type="button" role="tab" id="tab-neatlogs" aria-controls="tools-neatlogs" aria-selected="true"><img src="assets/logo-neatlogs.webp" alt="" width="44" height="44"><span><b>neatlogs</b><small>Traces every run</small></span></button>
 <button type="button" role="tab" id="tab-entire" aria-controls="tools-entire" aria-selected="false" tabindex="-1"><img src="assets/logo-entire.webp" alt="" width="44" height="44"><span><b>Entire</b><small>Records the build</small></span></button>
@@ -1015,7 +1068,8 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 
 <section id="compare" aria-labelledby="cmp-h">
 <div class="wrap">
-<h2 id="cmp-h">Compare FirstRun With Claude Code, GitHub Actions and GitHub Agents</h2>
+<h2 id="cmp-h">Compare <span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> With Claude Code, GitHub Actions and GitHub Agents</h2>
+<p class="edge">FirstRun does one job: it runs the quickstart, fixes the docs, proves the fix and opens the PR.</p>
 <div class="lgd3" aria-label="Legend"><span><svg class="mk2 y" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg> Yes</span><span><svg class="mk2 p" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z" class="f"/></svg> Partly or with setup</span><span><svg class="mk2 n" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg> No</span></div>
 <div class="cmp"><div class="cmp-s"><table>
 <thead><tr><th scope="col">Feature</th><th scope="col" class="me"><svg class="ci" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><span>FirstRun</span></th><th scope="col">Claude Code</th><th scope="col">GitHub Actions</th><th scope="col">GitHub Agents</th><th scope="col">Custom workflow</th></tr></thead>
@@ -1295,16 +1349,34 @@ $("try").addEventListener("click",function(e){e.preventDefault();$("hero").scrol
 
 /* live numbers. Each figure is computed from the data the page ships with. */
 function set(id,v){var e=$(id);if(e)e.textContent=v}
-/* quickstarts tested: distinct real docs pages in runs/index.json, test fixtures left out */
-fetch("runs/index.json").then(function(r){return r.json()}).then(function(j){
- var seen={};(j.runs||[]).forEach(function(r){if(!r.fixture&&r.url)seen[r.url]=1});
- var n=Object.keys(seen).length;if(n)set("n-tested",n);
-}).catch(function(){});
-/* repos audited and stale pages: audits/index.json */
-fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
- var a=j.audits||[];if(!a.length)return;
- set("n-rep",a.length);set("n-stale",a.reduce(function(n,x){return n+(+x.stale||0)},0));
-}).catch(function(){});
+/* Doc-audit findings: each row names an audit and a path. The audit JSON fills the dates, the counts
+   and the board link, so a row never shows a number the data does not hold. */
+(function(){
+ var rows=document.querySelectorAll("#finds .fd"),cache={};
+ var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ function d(s){var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s||"");return m?M[+m[2]-1]+" "+(+m[3])+", "+m[1]:""}
+ function get(id){return cache[id]||(cache[id]=fetch("audits/"+id+".json").then(function(r){if(!r.ok)throw 0;return r.json()}))}
+ Array.prototype.forEach.call(rows,function(a){
+  var id=a.getAttribute("data-a"),path=a.getAttribute("data-p");if(!/^[a-z0-9-]+$/.test(id))return;
+  get(id).then(function(j){
+   /* the board lists j.next.items by rank, and #c= opens the item at that position */
+   var items=((j.next||{}).items||[]).slice().sort(function(x,y){return x.rank-y.rank}),k=-1;
+   for(var i=0;i<items.length;i++)if(items[i].path===path){k=i;break}
+   if(k<0)return;var it=items[k],f=function(n){return a.querySelector("[data-f="+n+"]")};
+   a.href="doc-audit/?id="+id+"#c="+k;
+   if(it.kind==="refresh"){
+    var pg=(j.pages||[]).filter(function(p){return p.path===path})[0];
+    if(pg&&pg.last_touched)f("when").textContent="Last edited "+d(pg.last_touched);
+    if(+it.count)f("since").textContent=it.count+" code changes since";
+   }else if(it.kind==="document"){
+    var c=(j.cards||[]).filter(function(c){return c.kind==="document"&&c.action&&c.action.indexOf(path)>=0})[0];
+    var m=c&&/since (\d{4}-\d{2}-\d{2})/.exec(c.why||"");
+    if(m)f("when").textContent="Shipped since "+d(m[1]);
+    if(+it.count)f("since").textContent=it.count+" changes with no docs";
+   }
+  }).catch(function(){});
+ });
+})();
 /* the cost angle: a projection, never a bill. Team runs a month x the measured mean model cost a run,
    both from data/plan.json, which reads business/drivers.csv (88 neatlogs traces) */
 fetch("data/plan.json").then(function(r){return r.json()}).then(function(j){
@@ -1317,15 +1389,17 @@ fetch("data/plan.json").then(function(r){return r.json()}).then(function(j){
 /* PR carousel: reads data/prs.json. A screenshot shows when the entry names one. */
 (function(){
  var tr=$("track"),ctrl=$("ctrl"),pv=$("prP"),nx=$("prN"),ct=$("count"),N=0;
+ var KIND={pr:"Pull request",issue:"Issue",discussion:"Discussion",comment:"Bisect finding"};
  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
  function safe(u){u=String(u||"");return /^(https:\/\/|[a-z0-9][a-z0-9._\/-]*(\?[^"<>]*)?(#[^"<>]*)?$)/i.test(u)?u:""}
  function host(u){var m=/^https?:\/\/([^\/]+)(\/[^?#]*)?/i.exec(u||"");return m?(m[1]+(m[2]||"")).replace(/^www\./,"").replace(/\/$/,""):""}
  function card(p){
-  var url=safe(p.url),st=/^(open|merged|closed)$/.test(p.state)?p.state:"open",shot=safe(p.shot),rp=safe(p.replay),h=host(p.page);
+  var url=safe(p.url),st=/^(open|merged|closed)$/.test(p.state)?p.state:"",shot=safe(p.shot),rp=safe(p.replay),h=host(p.page);
+  var kd=KIND[p.kind]?p.kind:"pr";
   var cov=shot?'<a class="cover" href="'+esc(url)+'" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="'+esc(shot)+'" alt="" width="1200" height="668" loading="lazy" decoding="async"></a>'
    :'<a class="cover ty" href="'+esc(url)+'" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><b>#'+esc(p.number)+'</b><span>'+esc(h)+'</span></a>';
-  return '<article class="pr card" aria-roledescription="slide">'+cov+'<div class="pr-b"><div class="pr-top"><span class="repo">'+esc(p.repo)+'</span><span class="st '+st+'">'+st+'</span></div>'+
-   '<h3><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(p.title)+'</a> <small>#'+esc(p.number)+'</small></h3><p class="fix">'+esc(p.fix)+'</p>'+
+  return '<article class="pr card" aria-roledescription="slide">'+cov+'<div class="pr-b"><div class="pr-top"><span class="kd k-'+kd+'">'+KIND[kd]+'</span><span class="repo">'+esc(p.repo)+'</span>'+(st?'<span class="st '+st+'">'+st+'</span>':'')+'</div>'+
+   '<h3><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(p.title)+'</a> <small>'+(kd==="comment"?'on ':'')+'#'+esc(p.number)+'</small></h3><p class="fix">'+esc(p.fix)+'</p>'+
    '<p class="pr-a"><a href="'+esc(url)+'" target="_blank" rel="noopener">View on GitHub</a>'+(rp?'<a href="'+esc(rp)+'">Replay the fix</a>':'')+'</p></div></article>';
  }
  function step(){var c=tr.querySelector(".pr");return c?c.getBoundingClientRect().width+20:340}
@@ -1347,7 +1421,6 @@ fetch("data/plan.json").then(function(r){return r.json()}).then(function(j){
  fetch("data/prs.json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(list){
   list=Array.isArray(list)?list.filter(function(p){return p&&p.url&&p.repo}):[];
   N=list.length;if(!N)return empty();
-  set("n-prs",N);
   tr.innerHTML=list.map(card).join("");
   upd();
  }).catch(empty);
