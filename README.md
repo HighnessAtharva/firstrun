@@ -13,15 +13,17 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 [![Tests](https://img.shields.io/badge/tests-384%20offline-1B8A3A?style=for-the-badge)](.github)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
 
-[**Watch the 3-minute demo**](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
+[**Demo video (2:59): neatlogs, Entire and cfo.ai, architecture to result**](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
+
+**Before and after:** v1, the baseline, finished 2 of 4 quickstarts and recovered 0 failed steps. v2 finished 3 of 4, recovered 3 failed steps and proved 1 fix in a fresh container. [See the comparison](#before-and-after-finished-quickstarts-went-from-2-of-4-to-3-of-4).
 
 <br>
 
 <table>
 <tr>
-<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="280"></a><br><sub><b>DocTest demo</b>, 2:59</sub></td>
-<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="280"></a><br><sub><b>The dbt guide that never worked</b>, 0:36</sub></td>
-<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="280"></a><br><sub><b>DocAudit tour</b>, 0:57</sub></td>
+<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="280"></a><br><sub><b>Demo video (2:59)</b></sub></td>
+<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="280"></a><br><sub><b>Teaser (0:36)</b></sub></td>
+<td align="center" width="33%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="280"></a><br><sub><b>DocAudit tour (0:57)</b></sub></td>
 </tr>
 </table>
 
@@ -41,6 +43,10 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 pip install git+https://github.com/HighnessAtharva/firstrun
 firstrun https://docs.example.com/quickstart
 ```
+
+## The Demo Video Runs 2 Minutes 59 Seconds and Gives Each Tool a Chapter
+
+[Watch the demo video on YouTube (2:59)](https://www.youtube.com/watch?v=JJNWWhSV9pc). It runs FirstRun on the dbt guide at 0:12 and shows Bisect at 0:36. The neatlogs chapter starts at 1:07, Entire at 1:51 and cfo.ai at 2:19.
 
 ## Any Coding Agent Can Start From agent.md
 
@@ -347,6 +353,15 @@ The business plan sets the agent's spending limit. `firstrun econ` reads 88 neat
 | Team | $49 a month | 10, nightly | $0.0470 | 9.1% |
 | Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | $0.0279 | 26.1% |
 
+The [public cfo.ai model](https://cfo.ai/s/_u5lbrHIl9KX_JQE) covers the four parts of the plan.
+
+| Part | Figure | Source |
+|---|---|---|
+| Pricing | Free $0, Team $49 a month, Scale $299 a month | [business/unit_economics.json](business/unit_economics.json) |
+| Costs | $0.01862 per run, which is the trace mean plus compute. Fixed costs are $25 a month, and Stripe takes 2.9% plus $0.30 per invoice | [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) |
+| Revenue | $2,069 MRR in month 18 of the Base Scenario, and $5,427 in the Growth Scenario | [docs/data/cfo-model.json](docs/data/cfo-model.json) |
+| Runway | Cash starts at $5,000 on 2026-11-01 and ends month 18 at $16,685 in Base. Cash stays positive, so cfo.ai shows no runway limit | [docs/data/cfo-model.json](docs/data/cfo-model.json), [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) |
+
 The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over. The plan, the Scale fix and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md). The cfo.ai model is public at [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE). Under the old cap, cash goes negative in month 14.
 
 The [plan page](https://firstrun.atharvashah.com/plan/) shows the caps, the measured cost spread and the cash per Scenario. Every doc-test run is tagged against the caps. A neatlogs alert uses the Scale cap as its threshold, and `scripts/neatlogs_issues.py` mirrors each detection and alert as a GitHub issue labeled [`neatlogs`](https://github.com/HighnessAtharva/firstrun/issues?q=label%3Aneatlogs).
@@ -519,25 +534,27 @@ A `budget` GUARDRAIL span runs before every recovery. The root span `firstrun.ru
 | Verification | A model-free re-run in a new container | `verify` span, status `verified` |
 | Iteration | v1 traces, detections, a fix, v2 traces | The results table below |
 
-## Version 2 Finishes 3 of 4 Quickstarts and Recovers 3 Failed Steps
+<a id="version-2-finishes-3-of-4-quickstarts-and-recovers-3-failed-steps"></a>
+
+## Before and After, Finished Quickstarts Went From 2 of 4 to 3 of 4
 
 v1 ran with recovery off. v2 ran after the neatlogs planner fix (3ca6f11), with recovery and verification on. The same four targets ran both times. Cost and duration come from the neatlogs traces in [evidence/before_after_traces.json](evidence/before_after_traces.json). Cost is the Sonnet 5.5 list price and is not billed, because the runs use a subscription token.
 
-| Target | v1 (recovery off) | v2 (neatlogs fix, recovery, verify) |
+| Target | Before (v1, baseline, recovery off) | After (v2, neatlogs fix, recovery, verify) |
 |---|---|---|
 | neatlogs Python SDK | passed 3/3 | passed 3/3 |
 | Entire CLI install | failed at step 1, `curl: command not found` | verified 4/4 after 2 fixes, one of them a real docs fix |
 | Chroma getting started | passed 3/3 | passed 2/2 |
 | OpenAI v0 README (fixture, Wayback 2023-08-02) | failed at step 6, `openai: command not found` | pinned `openai==0.28.1`, then stopped honestly: the example needs an OpenAI key |
 
-| Metric | v1 | v2 |
-|---|---|---|
-| Quickstarts that end passed or verified | 2 of 4 | 3 of 4 |
-| Failed steps recovered | 0 | 3 |
-| Fixes proven in a fresh container | 0 | 1 |
-| Average tool spans per run | 4.25 | 6.0 |
-| Average cost per run, from neatlogs | $0.0262 | $0.0200 |
-| Average run time, verification included | 128 s | 201 s |
+| Metric | Before (v1, baseline) | After (v2) | Change |
+|---|---|---|---|
+| Quickstarts that end passed or verified | 2 of 4 | 3 of 4 | +1 |
+| Failed steps recovered | 0 | 3 | +3 |
+| Fixes proven in a fresh container | 0 | 1 | +1 |
+| Average tool spans per run | 4.25 | 6.0 | +1.75 |
+| Average cost per run, from neatlogs | $0.0262 | $0.0200 | -$0.0062 |
+| Average run time, verification included | 128 s | 201 s | +73 s |
 
 v2 takes longer because a verified fix runs the whole quickstart a second time in a new container.
 
@@ -549,6 +566,20 @@ The six mistakes the agent made in v1:
 4. A fake secret passes as a step. `export OPENAI_API_KEY='sk-...'` exits 0.
 5. The planner skips the steps that matter, because they need a key.
 6. 9 of 16 steps check only the exit code.
+
+## A Quickstart Step Failed, and FirstRun Fixed It and Proved the Fix
+
+Step 10 of the dbt DuckDB guide failed on 2026-10-10. FirstRun classed the failure, patched the command and retried it. A fresh container then passed 9 of 9 steps with no model calls. The run record is [docs/examples/dbt.txt](docs/examples/dbt.txt), a share code in the format of [docs/share-format.md](docs/share-format.md). [Open the dbt run on the site](https://firstrun.atharvashah.com/doc-test/#ex=dbt).
+
+1. **The step fails.** `jafgen --years 6` exits 2 with `No such option: --years`. The loop in [src/firstrun/executor.py lines 257 to 294](src/firstrun/executor.py#L257-L294) runs the step and sees the failure. Line 278 checks the budget before recovery starts.
+2. **Recovery classes the failure.** `_resolve` in [src/firstrun/recovery.py lines 87 to 118](src/firstrun/recovery.py#L87-L118) looks up the error signature in `precedents.json` first. That signature was stored as `docs_bug`, so the class came back with probability 1.0 and no model call. A new error goes to Jev, then Claude, then a regex table ([src/firstrun/classify.py lines 128 to 140](src/firstrun/classify.py#L128-L140)). Below 0.7 confidence, FirstRun asks the human once (`recovery.py` lines 98 to 118).
+3. **Recovery writes the patch.** A docs bug gets one Claude call with WebSearch and WebFetch ([recovery.py lines 385 to 396](src/firstrun/recovery.py#L385-L396)). It read the jafgen usage line and returned `jafgen 6`, with the jaffle-shop-generator repo as its source. Recovery rejects a patch that keeps less than 60% of the original command (lines 254 to 260 and 284 to 287).
+4. **The step retries.** `executor.py` lines 293 and 294 store the patch and rerun the step with the new command. `jafgen 6` exits 0. Each step gets 3 attempts at most (`src/firstrun/models.py` line 111, `src/firstrun/budget.py` line 17).
+5. **A fresh container proves the fix.** [src/firstrun/verify.py](src/firstrun/verify.py#L20-L100) applies the patches (lines 20 to 29) and names a new container (line 54). It runs every step inside `config.block_model_calls()` (line 57), where a Claude or Jev call raises `ModelCallBlocked`. The run ends `verified` only when every runnable step passes (lines 89 to 92). [tests/test_verify.py line 89](tests/test_verify.py#L89) fails if `verify.py` imports the planner, recovery or llm module.
+
+The same run fixed 2 more steps. Step 1 lacked git, which is an environment failure, so recovery added `apt-get install -y -qq git` with no model call. Step 3 hit `No matching distribution found for networkx==3.7`, and Jev classed it as a docs bug at 0.87.
+
+**The neatlogs trace shows the same loop on the Entire install.** [evidence/trace-recovered-entire-v2.md](evidence/trace-recovered-entire-v2.md) exports trace `5520c5cff5e0ea61f130eced082b20c4`. Step 1 failed with `curl: command not found`. Recovery reused the stored precedent (span 12), which classes that error as environment. The apt table in [recovery.py lines 139 to 146](src/firstrun/recovery.py#L139-L146) then added curl, and [lines 370 to 376](src/firstrun/recovery.py#L370-L376) built the patch. Step 2 failed until `~/.local/bin` was on `PATH` (spans 14 to 23). The `verify` span (26) then ran all 4 steps in a fresh container (spans 27 to 30). [evidence/neatlogs.md](evidence/neatlogs.md) says why the trace status reads ERROR while the run ended `verified`.
 
 ## What Broke While Building
 
