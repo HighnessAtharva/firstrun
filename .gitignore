@@ -11,3 +11,6 @@ secrets.allowlist
 !docs/runs/
 business/.buyers_cache.json
 spans_raw_optimized.log
+
+# the site page /plan/ is public, unlike the private plan/ folder at the root
+!docs/plan/
