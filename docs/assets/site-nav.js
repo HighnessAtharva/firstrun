@@ -16,6 +16,7 @@ var I={
  rcpt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',watch:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/>',
  cmp:'<path d="M4 6h16M4 12h16M4 18h16"/><path d="M9 4v16"/>',plan:'<path d="M4 19V9M10 19V5M16 19v-7M21 19H3"/>',
  agent:'<path d="M3.5 8.5l4 3.5-4 3.5M10.5 17.5h6"/><path class="sn-spark" d="M18.5 2.8l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1z"/>',
+proof:'<path d="M12 3.5l7 2.8v5.2c0 4.3-2.9 7.7-7 9-4.1-1.3-7-4.7-7-9V6.3z"/><path d="M8.8 12.2l2.3 2.3 4.2-4.4"/>',
  car:'<path d="M3 4.5l3 3 3-3"/>',burger:'<path d="M4 8h16M4 16h16"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>'
 };
 function svg(n,vb,cls){return '<svg'+(cls?' class="'+cls+'"':"")+' viewBox="'+(vb||"0 0 24 24")+'" aria-hidden="true">'+I[n]+"</svg>"}
@@ -26,19 +27,19 @@ var GH='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .8a7.2 7.2 0 0 0
 var LOGO='<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="15" fill="#0A66D6"/><path d="M21 22l13 10-13 10" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><rect x="38" y="39" width="12" height="5.5" rx="2.75" fill="#fff"/></svg>';
 function app(k,label){return '<button type="button" class="sn-app a-'+k+'" id="sn-b-'+k+'" aria-expanded="false" aria-controls="sn-m-'+k+'"'+(CUR===k?' aria-current="page"':"")+">"+tile(k)+"<b>"+label+"</b>"+svg("car","0 0 12 12","sn-car")+"</button>"}
 /* the section links name what is on the home page, in page order. [label, target, icon, subtitle] */
-var links=[["Receipts","#receipt","rcpt","What a run cost, and the proof"],["Watch","#watch","watch","Three short demos"],["Compare","#compare","cmp","FirstRun next to the usual tools"],["Plan","plan/","plan","What each plan may spend"],["For judges","judges/","ok","Each claim and its proof"]];
+var proof=[["Receipts","#receipt","rcpt","What each run cost and the proof it passed"],["Watch the demo","#watch","watch","The 3 minute run, start to finish"],["Compare","#compare","cmp","FirstRun next to Claude Code, Actions and Copilot"]];
+var links=[["Cost caps","plan/","plan","What each plan may spend"],["For judges","judges/","ok","Each claim and its proof"]];
 function href(l){return l[1].charAt(0)==="#"?(HOME?l[1]:BASE+l[1]):BASE+l[1]}
 function curLink(l){return l[1]===CUR+"/"}
-/* Agent Ready sits right after Compare. It is a link to agent.md that opens a dialog instead, so it still works if the dialog code fails to load. */
+/* Agent Ready lives in the floating launcher and the mobile menu. It is a link to agent.md that opens a dialog instead, so it still works if the dialog code fails to load. */
 var AG=BASE+"agent.md";
 function agent(cls,inner){return '<a class="'+cls+' sn-ag" href="'+AG+'" role="button" aria-haspopup="dialog" aria-expanded="false">'+inner+"</a>"}
-var AGBAR=agent("sn-lk sn-agent",svg("agent","0 0 24 24","sn-agi")+"Agent Ready");
 var AGMENU=agent("sn-it",svg("agent")+"<b>Agent Ready</b><small>One prompt for Claude Code, Cursor or Codex</small>");
 host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
  '<a class="sn-wm" href="'+BASE+'" aria-label="FirstRun home"'+(HOME?' aria-current="page"':"")+">"+LOGO+"<span>FirstRun</span></a>"+
- '<span class="sn-apps">'+app("test","Doc-test")+app("audit","Doc-audit")+"</span>"+
+ '<span class="sn-apps">'+app("test","Doc-test")+app("audit","Doc-audit")+app("proof","Proof")+"</span>"+
  '<span class="sn-sep" aria-hidden="true"></span><span class="sn-links">'+
- links.map(function(l){return '<a class="sn-lk" data-k="'+l[1]+'" href="'+href(l)+'"'+(curLink(l)?' aria-current="page"':"")+'>'+l[0]+"</a>"+(l[1]==="#compare"?AGBAR:"")}).join("")+
+ links.map(function(l){return '<a class="sn-lk" data-k="'+l[1]+'" href="'+href(l)+'"'+(curLink(l)?' aria-current="page"':"")+'>'+l[0]+"</a>"}).join("")+
  '</span><span class="sn-sp"></span><a class="sn-gh" href="https://github.com/HighnessAtharva/firstrun" aria-label="FirstRun on GitHub">'+GH+"</a>"+
  '<a class="sn-try" id="sn-try" href="'+BASE+'#hero">Try it</a>'+
  '<button type="button" class="sn-burger" id="sn-b-more" aria-label="Menu" aria-expanded="false" aria-controls="sn-m-more">'+svg("burger","0 0 24 24","sn-ib")+svg("x","0 0 24 24","sn-ix")+"</button></div>"+
@@ -58,11 +59,14 @@ host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
   '<a class="sn-go" href="'+A+'">Open Doc-audit</a></div>'+
   '<div class="sn-list"><div class="sn-h">Real audits</div><div id="sn-aud"></div>'+
   it(A+"#start","plus","Audit your repo","Paste a GitHub repo")+"</div></div>"+
+ '<div class="sn-mm mm-proof" id="sn-m-proof" role="region" aria-label="Proof"><div class="sn-list">'+
+  proof.map(function(l){return it(href(l),l[2],l[0],l[3],null,"sn-p-"+l[1].slice(1))}).join("")+"</div></div>"+
  '<div class="sn-mm mm-more" id="sn-m-more" role="region" aria-label="Menu"><div class="sn-list">'+
   '<div class="sn-h">The two tools</div>'+
   '<a class="sn-big b-test" href="'+T+'"'+(CUR==="test"?' aria-current="page"':"")+">"+tile("test")+"<b>Doc-test</b><small>Run a quickstart, fix it, prove it</small></a>"+
   '<a class="sn-big b-audit" href="'+A+'"'+(CUR==="audit"?' aria-current="page"':"")+">"+tile("audit")+"<b>Doc-audit</b><small>Find the docs your code outgrew</small></a>"+
-  '<div class="sn-h">On this site</div>'+links.map(function(l){return it(href(l),l[2],l[0],l[3])+(l[1]==="#compare"?AGMENU:"")}).join("")+
+  '<div class="sn-h">Proof</div>'+proof.map(function(l){return it(href(l),l[2],l[0],l[3])}).join("")+
+  '<div class="sn-h">On this site</div>'+links.map(function(l){return it(href(l),l[2],l[0],l[3])}).join("")+AGMENU+
   it("https://github.com/HighnessAtharva/firstrun","repo","GitHub","The public repo")+"</div></div></nav>";
 
 var $=function(i){return document.getElementById(i)},nav=host.firstChild,open=null,timer;
@@ -72,8 +76,11 @@ function set(k,on){
  b.setAttribute("aria-expanded",on?"true":"false");m.classList.toggle("on",on);open=on?k:(open===k?null:open);
  nav.classList.toggle("sn-open",!!open);
  if(on)load();
+ if(on&&k==="proof")place(b,m);
 }
-["test","audit","more"].forEach(function(k){
+function place(b,m){var n=nav.getBoundingClientRect(),r=b.getBoundingClientRect(),w=m.offsetWidth||340;
+ var c=r.left+r.width/2-n.left;c=Math.max(w/2,Math.min(n.width-w/2,c));m.style.left=c+"px"}
+["test","audit","proof","more"].forEach(function(k){
  var b=$("sn-b-"+k),m=$("sn-m-"+k);
  b.addEventListener("click",function(e){e.stopPropagation();set(k,b.getAttribute("aria-expanded")!=="true")});
  if(k!=="more"&&matchMedia("(hover:hover) and (pointer:fine)").matches){
@@ -112,8 +119,31 @@ function agLoad(){
  agP.catch(function(){agP=null});
  return agP;
 }
-var agBtns=host.querySelectorAll(".sn-ag");
-function agState(on){Array.prototype.forEach.call(agBtns,function(b){b.setAttribute("aria-expanded",on?"true":"false")})}
+/* Floating Agent Ready launcher, bottom right. It shows after the first screen is scrolled past and hides while the dialog is open. */
+(function(){
+ /* agent logos from @lobehub/icons 1.95.1 (MIT): Claude, Cursor, Codex. They are decoration, so the button label names the feature. */
+ var lg=function(n,p){return '<span class="fr-agl-lg lg-'+n+'"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+p+"</svg></span>"};
+ var w=document.createElement("div");w.id="fr-agw";w.className="fr-agw";
+ w.innerHTML='<div class="fr-agl-tip" id="fr-agl-tip" role="tooltip">agent.md tells Claude Code, Cursor or Codex how to run FirstRun for you. Click for the steps.</div>'+
+  '<a class="fr-agl sn-ag" href="'+AG+'" role="button" aria-haspopup="dialog" aria-expanded="false" aria-describedby="fr-agl-tip" aria-label="Agent Ready: copy steps for your coding agent">'+
+  '<span class="fr-agl-st">'+
+  lg('claude','<path d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z" fill="#D97757" fill-rule="nonzero"></path>')+
+  lg('cursor','<path fill="#14120B" d="M22.106 5.68L12.5.135a.998.998 0 00-.998 0L1.893 5.68a.84.84 0 00-.419.726v11.186c0 .3.16.577.42.727l9.607 5.547a.999.999 0 00.998 0l9.608-5.547a.84.84 0 00.42-.727V6.407a.84.84 0 00-.42-.726zm-.603 1.176L12.228 22.92c-.063.108-.228.064-.228-.061V12.34a.59.59 0 00-.295-.51l-9.11-5.26c-.107-.062-.063-.228.062-.228h18.55c.264 0 .428.286.296.514z"></path>')+
+  lg('codex','<path d="M19.503 0H4.496A4.496 4.496 0 000 4.496v15.007A4.496 4.496 0 004.496 24h15.007A4.496 4.496 0 0024 19.503V4.496A4.496 4.496 0 0019.503 0z" fill="#14120B"></path><path d="M9.064 3.344a4.578 4.578 0 012.285-.312c1 .115 1.891.54 2.673 1.275.01.01.024.017.037.021a.09.09 0 00.043 0 4.55 4.55 0 013.046.275l.047.022.116.057a4.581 4.581 0 012.188 2.399c.209.51.313 1.041.315 1.595a4.24 4.24 0 01-.134 1.223.123.123 0 00.03.115c.594.607.988 1.33 1.183 2.17.289 1.425-.007 2.71-.887 3.854l-.136.166a4.548 4.548 0 01-2.201 1.388.123.123 0 00-.081.076c-.191.551-.383 1.023-.74 1.494-.9 1.187-2.222 1.846-3.711 1.838-1.187-.006-2.239-.44-3.157-1.302a.107.107 0 00-.105-.024c-.388.125-.78.143-1.204.138a4.441 4.441 0 01-1.945-.466 4.544 4.544 0 01-1.61-1.335c-.152-.202-.303-.392-.414-.617a5.81 5.81 0 01-.37-.961 4.582 4.582 0 01-.014-2.298.124.124 0 00.006-.056.085.085 0 00-.027-.048 4.467 4.467 0 01-1.034-1.651 3.896 3.896 0 01-.251-1.192 5.189 5.189 0 01.141-1.6c.337-1.112.982-1.985 1.933-2.618.212-.141.413-.251.601-.33.215-.089.43-.164.646-.227a.098.098 0 00.065-.066 4.51 4.51 0 01.829-1.615 4.535 4.535 0 011.837-1.388zm3.482 10.565a.637.637 0 000 1.272h3.636a.637.637 0 100-1.272h-3.636zM8.462 9.23a.637.637 0 00-1.106.631l1.272 2.224-1.266 2.136a.636.636 0 101.095.649l1.454-2.455a.636.636 0 00.005-.64L8.462 9.23z" fill="url(#fr-cdx)"></path><defs><linearGradient gradientUnits="userSpaceOnUse" id="fr-cdx" x1="12" x2="12" y1="3" y2="21"><stop stop-color="#B1A7FF"></stop><stop offset=".5" stop-color="#7A9DFF"></stop><stop offset="1" stop-color="#3941FF"></stop></linearGradient></defs>')+
+  '</span><span class="fr-agl-t">Agent<span class="fr-agl-x"> Ready</span></span></a>';
+ document.body.appendChild(w);
+ var thr=function(){return HOME?innerHeight*.7:200},fin=false,raf=0;
+ function upd(){raf=0;w.classList.toggle("is-on",scrollY>thr()&&!fin)}
+ function tick(){if(!raf)raf=requestAnimationFrame(upd)}
+ addEventListener("scroll",tick,{passive:true});addEventListener("resize",tick);
+ var ft=document.querySelector("footer.sf,.sf");
+ if(ft&&"IntersectionObserver" in window)new IntersectionObserver(function(en){fin=en[0].isIntersecting;upd()}).observe(ft);
+ upd();
+})();
+
+var agBtns=document.querySelectorAll(".sn-ag");
+function agState(on){Array.prototype.forEach.call(agBtns,function(b){b.setAttribute("aria-expanded",on?"true":"false")});
+ var w=$("fr-agw");if(w)w.classList.toggle("is-open",!!on)}
 Array.prototype.forEach.call(agBtns,function(b){
  b.addEventListener("pointerenter",function(){if(window.HTMLDialogElement)agLoad()});
  b.addEventListener("focus",function(){if(window.HTMLDialogElement)agLoad()});
@@ -141,11 +171,11 @@ if("IntersectionObserver" in window){
  }
  /* home page: mark the part of the page you are reading */
  if(HOME){
-  var spy={steps:"sn-b-test",audit:"sn-b-audit",receipt:"#receipt",watch:"#watch",compare:"#compare"};
+  var spy={steps:"sn-b-test",audit:"sn-b-audit",receipt:"sn-b-proof",watch:"sn-b-proof",compare:"sn-b-proof"};
   var els=[];Object.keys(spy).forEach(function(id){var s=$(id);if(s)els.push(s)});
   var here=null;
   var so=new IntersectionObserver(function(en){en.forEach(function(e){
-    var t=spy[e.target.id],el=t.charAt(0)==="#"?nav.querySelector('.sn-lk[data-k="'+t+'"]'):$(t);if(!el)return;
+    var t=spy[e.target.id],el=$(t);if(!el)return;
     if(e.isIntersecting){if(here&&here!==el)here.classList.remove("is-here");el.classList.add("is-here");here=el}
     else if(here===el){el.classList.remove("is-here");here=null}
    })},{rootMargin:"-45% 0px -50% 0px"});
@@ -172,4 +202,13 @@ function load(){
  }).catch(function(){});
 }
 if("requestIdleCallback" in window)requestIdleCallback(load,{timeout:2500});else setTimeout(load,1500);
+
+/* Landing on /#receipt: the browser jumps before layout settles, so it can land too high. Jump again on load and 400 ms later.
+   Only act when the hash names an element id. Hashes like #ex=dbt belong to the page scripts. */
+function jump(){
+ try{var h=decodeURIComponent(location.hash.slice(1));if(!h)return;var el=document.getElementById(h);
+  if(el)el.scrollIntoView({block:"start",behavior:"instant"})}catch(e){}
+}
+function jumpAll(){jump();setTimeout(jump,400)}
+if(document.readyState==="complete")jumpAll();else addEventListener("load",jumpAll);
 })();

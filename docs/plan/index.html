@@ -5,10 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Plan | FirstRun</title>
 <meta name="description" content="The cfo.ai plan sets what one doc-test run may spend. FirstRun enforces the cap, and neatlogs alerts when real runs drift past it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Plan | FirstRun">
+<meta property="og:description" content="The cfo.ai plan sets what one doc-test run may spend. FirstRun enforces the cap, and neatlogs alerts when real runs drift past it.">
+<meta property="og:image" content="../assets/og-card-1200x630.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site-nav.css">
 <link rel="stylesheet" href="/assets/site-footer.css">
+<link rel="stylesheet" href="/assets/type.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -29,8 +35,8 @@ code{font-family:var(--mono);font-size:.92em}
 :focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:8px}
 svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 main{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
-h1{font-size:34px;line-height:1.1;letter-spacing:-.035em;font-weight:700}
-h2{font-size:19px;letter-spacing:-.02em;font-weight:650}
+h1{font-size:var(--t-h1);line-height:1.05;letter-spacing:-.04em;font-weight:700}
+h2{font-size:var(--t-h2);line-height:1.15;letter-spacing:-.03em;font-weight:700}
 .lede{font-size:16px;color:var(--mut);margin-top:6px;max-width:62ch}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh)}
 .sec{margin-top:34px}
@@ -43,9 +49,9 @@ h2{font-size:19px;letter-spacing:-.02em;font-weight:650}
 .loop{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:22px;overflow:hidden}
 .loop li{padding:16px 18px;display:flex;flex-direction:column;gap:6px;position:relative}
 .loop li+li{border-left:1px solid var(--line2)}
-.loop .who{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+.loop .who{display:flex;align-items:center;gap:8px;font-size:var(--t-meta);font-weight:600;letter-spacing:0;color:var(--mut)}
 .loop .who img{width:22px;height:22px;border-radius:6px;object-fit:cover}
-.loop .n{margin-left:auto;font-size:12px;color:var(--faint)}
+.loop .n{margin-left:auto;font-size:12.5px;color:var(--faint)}
 .loop b{font-size:15px;letter-spacing:-.01em}
 .loop p{font-size:13.5px;color:var(--ink2)}
 .loop a{font-size:13px}
@@ -54,16 +60,25 @@ h2{font-size:19px;letter-spacing:-.02em;font-weight:650}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line2);vertical-align:middle;white-space:nowrap}
 tr:last-child td{border-bottom:0}
-th{font-size:11.5px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.05em;background:var(--sunk)}
+th{font-size:var(--t-meta);color:var(--mut);font-weight:600;background:var(--sunk)}
 td.num{font-family:var(--mono);font-size:13px}
-.tw{overflow-x:auto}
-.chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:99px;font-size:12px;font-weight:600}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.twx{position:relative}
+.twx::after{content:"";position:absolute;top:1px;right:1px;bottom:1px;width:36px;border-radius:0 13px 13px 0;background:linear-gradient(to left,var(--panel),rgba(255,255,255,0));pointer-events:none;opacity:0;transition:opacity .15s}
+.twx.more::after{opacity:1}
+.twh{display:none;font-size:12.5px;color:var(--mut);margin:0 0 6px}
+@media(max-width:700px){.twh{display:block}}
+.biz{margin:14px 0 0;padding:14px 18px}
+.biz h3{font-size:var(--t-h3);letter-spacing:-.01em;margin:0 0 6px}
+.biz ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}
+.biz .note{margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:99px;font-size:12.5px;font-weight:600}
 .c-ok{background:var(--ok-bg);color:var(--ok)}.c-warn{background:var(--warn-bg);color:var(--warn)}.c-bad{background:var(--bad-bg);color:var(--bad)}
 .note{font-size:13px;color:var(--mut);margin-top:10px;max-width:80ch}
 /* charts */
 .two{display:grid;grid-template-columns:1.15fr 1fr;gap:12px}
 .chart{padding:16px 18px}
-.chart h3{font-size:15px;letter-spacing:-.01em}
+.chart h3{font-size:var(--t-h3);letter-spacing:-.01em}
 .chart p.s{font-size:13px;color:var(--mut);margin-top:2px}
 .chart svg.c{display:block;width:100%;height:auto;margin-top:10px}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--ink2);margin-top:8px}
@@ -84,7 +99,7 @@ td.num{font-family:var(--mono);font-size:13px}
 .btn.pri{background:var(--teal);border-color:transparent;color:oklch(99% .005 190)}
 .page-note{max-width:1120px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-size:13.5px}
 @media(max-width:900px){.loop{grid-template-columns:1fr 1fr}.loop li:nth-child(3){border-left:0}.loop li:nth-child(n+3){border-top:1px solid var(--line2)}.two{grid-template-columns:1fr}}
-@media(max-width:560px){.loop{grid-template-columns:1fr}.loop li+li{border-left:0;border-top:1px solid var(--line2)}.ptile{display:none}h1{font-size:30px}}
+@media(max-width:560px){.loop{grid-template-columns:1fr}.loop li+li{border-left:0;border-top:1px solid var(--line2)}.ptile{display:none}}
 </style>
 </head>
 <body>
@@ -108,9 +123,13 @@ td.num{font-family:var(--mono);font-size:13px}
 </ol>
 
 <section class="sec" aria-labelledby="t-h">
-<div class="sec-h"><h2 id="t-h">Each Tier Gets a Cap That Keeps a 70% Margin</h2><p id="t-src"></p></div>
-<div class="tw panel"><table><thead><tr><th scope="col">Tier</th><th scope="col">Price</th><th scope="col">Runs a month</th><th scope="col">Cap per run</th><th scope="col">Runs the cap stops</th><th scope="col">Margin at the mean run</th><th scope="col">Margin at the p95 run</th></tr></thead><tbody id="tiers"></tbody></table></div>
+<div class="sec-h"><h2 id="t-h">Each Tier Gets a Cap That Keeps a 70% Margin</h2></div>
+<p class="twh">Scroll sideways to see every column.</p>
+<div class="twx"><div class="tw panel"><table><thead><tr><th scope="col">Tier</th><th scope="col">Price</th><th scope="col">Runs a month</th><th scope="col">Cap per run</th><th scope="col">Runs the cap stops</th><th scope="col">Margin at the mean run</th><th scope="col">Margin at the p95 run</th></tr></thead><tbody id="tiers"></tbody></table></div></div>
+<script>(function(){var x=document.querySelector(".twx");if(!x)return;var t=x.firstElementChild;function u(){x.classList.toggle("more",t.scrollLeft+t.clientWidth<t.scrollWidth-2)}t.addEventListener("scroll",u,{passive:true});addEventListener("resize",u);addEventListener("load",u);new MutationObserver(u).observe(t,{childList:true,subtree:true});u()})()</script>
+<p class="note" id="t-src"></p>
 <p class="note" id="t-note"></p>
+<div class="biz panel"><h3>How FirstRun Makes Money</h3><ul><li>The buyer is a DevRel or docs team at a dev-tool company.</li><li>Teams pay a monthly tier: Free $0, Team $49, Scale $299.</li><li>Plan, no paying customers yet.</li></ul></div>
 </section>
 
 <section class="sec two" aria-label="Charts">
@@ -119,8 +138,9 @@ td.num{font-family:var(--mono);font-size:13px}
 </section>
 
 <section class="sec" aria-labelledby="g-h">
-<div class="sec-h"><h2 id="g-h">The Guardrails Fired 3 Times in 2 Days</h2><p>neatlogs alert history, read with the CLI</p></div>
+<div class="sec-h"><h2 id="g-h">The Guardrails Fired 3 Times in 2 Days</h2></div>
 <ol class="log panel" id="log"></ol>
+<p class="note">neatlogs alert history, read with the CLI</p>
 <p class="note" id="g-note"></p>
 <div class="links">
 <a class="btn pri" href="https://cfo.ai/s/_u5lbrHIl9KX_JQE" target="_blank" rel="noopener"><img src="../assets/logo-cfoai.webp" alt="">Open the cfo.ai model</a>
@@ -133,7 +153,7 @@ td.num{font-family:var(--mono);font-size:13px}
 <p class="page-note">Refresh it with <code>firstrun econ</code>, then <code>python scripts/plan_snapshot.py</code>. Model costs are list price, not billed.</p>
 <footer class="sf"><div class="sf-in">
 <div class="sf-top"><a class="sf-wm" href="/"><img src="/assets/logo.svg" alt="" width="22" height="22">FirstRun</a>
-<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Plan</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
+<nav class="sf-nav" aria-label="Footer"><a href="/doc-test/">Doc-test</a><a href="/doc-audit/">Doc-audit</a><a href="/plan/">Cost caps</a><a href="/judges/">For judges</a><a href="/agent.md">For agents</a><a href="/known-limits.md">Known limits</a><a href="https://github.com/HighnessAtharva/firstrun">GitHub</a><a href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/README.md">Evidence</a></nav></div>
 <p class="sf-cred"><a href="https://atharvashah.com">Atharva Shah</a> built FirstRun for <a href="https://neatlogs.com/hackathon">neatHack 2026</a>. <a href="https://neatlogs.com">neatlogs</a> traces each run, <a href="https://cfo.ai">cfo.ai</a> prices it, and <a href="https://entire.io">Entire</a> records the build. Follow <a href="https://x.com/cultist_dev">@cultist_dev</a> on X.</p>
 </div></footer>
 
