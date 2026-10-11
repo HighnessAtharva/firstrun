@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Receipt FR-20261010-091740-help-accuknox-com</title>
+<style>
+:root{--ink:#1d1d1f;--mut:#6e6e73;--line:#e5e5ea;--bg:#f5f5f7;--ok:#1a7f37;--no:#c62828;--gold:#b7791f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:32px 16px}
+.r{max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+h1{font-size:26px;margin:0}h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:28px 0 8px;border-top:1px solid var(--line);padding-top:18px}
+.m{color:var(--mut);font-size:14px;word-break:break-all}code{font:13px ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600}
+.big{font-size:32px;font-weight:700}.ok{color:var(--ok);font-weight:600}.no{color:var(--no);font-weight:600}tr.bill{background:#fff8e6}
+.stamp{display:inline-block;margin-top:8px;padding:4px 14px;border:2px solid var(--ok);color:var(--ok);border-radius:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:560px){.r{padding:20px}table{font-size:13px}}
+</style></head><body><main class="r">
+<h1>Receipt FR-20261010-091740-help-accuknox-com</h1>
+<p class="m">Issued 2026-10-11T07:57:37Z by FirstRun. Hash <code>sha256:2e011e13b8c61dda9454b664a50cbdfabc70958da85ec97a1dd05f3a29b37922</code></p>
+<h2>Work</h2>
+<p><a href="https://help.accuknox.com/knoxctl/">https://help.accuknox.com/knoxctl/</a><br>5 of 5 steps passed in 154.1 s.
+First failed step 2, classed environment by jev.</p>
+<table><tr><th>Step</th><th>Was</th><th>Now</th><th>Why</th></tr><tr><td>2</td><td><code title="curl -fsSL https://nexus.accuknox.com/repository/knoxctl-keys/public.key | \
+gpg --dearmor | sudo tee /usr/share/keyrings/knoxctl.gpg &gt; /dev/null">curl -fsSL https://nexus.accuknox.com/repository/knoxctl-keys/public....</code></td><td><code title="apt-get update -qq &amp;&amp; apt-get install -y -qq curl &amp;&amp; curl -fsSL https://nexus.accuknox.com/repository/knoxctl-keys/public.key | \
+gpg --dearmor | sudo tee /usr/share/keyrings/knoxctl.gpg &gt; /dev/null">apt-get update -qq &amp;&amp; apt-get install -y -qq curl &amp;&amp; curl -fsSL https...</code></td><td>the base image lacks curl; install it first</td></tr><tr><td>2</td><td><code title="apt-get update -qq &amp;&amp; apt-get install -y -qq curl &amp;&amp; curl -fsSL https://nexus.accuknox.com/repository/knoxctl-keys/public.key | \
+gpg --dearmor | sudo tee /usr/share/keyrings/knoxctl.gpg &gt; /dev/null">apt-get update -qq &amp;&amp; apt-get install -y -qq curl &amp;&amp; curl -fsSL https...</code></td><td><code title="apt-get update -qq &amp;&amp; apt-get install -y -qq curl gnupg sudo &amp;&amp; curl -fsSL https://nexus.accuknox.com/repository/knoxctl-keys/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/knoxctl.gpg &gt; /dev/null">apt-get update -qq &amp;&amp; apt-get install -y -qq curl gnupg sudo &amp;&amp; curl...</code></td><td>The curl install succeeded, but the pipeline then needs `gpg` and `sudo`, and the python:3.11-slim image ships with nei...</td></tr></table>
+<h2>Price</h2>
+<p class="big">$0.0453</p>
+<p class="m">10,963 tokens in, 1,941 out, 0 tool calls. list price, not billed. Compute adds $0.00203.</p>
+<h2>Cap</h2>
+<table><tr><th>Tier</th><th>Cap per run</th><th>Used</th><th>Result</th><th>Price per run</th><th>Margin</th></tr><tr class=""><td>Free</td><td>$0.01355</td><td>334.3%</td><td class="no">over</td><td>n/a</td><td>n/a</td></tr><tr class="bill"><td>Team</td><td>$0.04697</td><td>96.4%</td><td class="ok">within</td><td>$0.16333</td><td>71.0%</td></tr><tr class=""><td>Scale</td><td>$0.02787</td><td>162.5%</td><td class="no">over</td><td>$0.09967</td><td>52.5%</td></tr></table>
+<h2>Proof</h2>
+<span class="stamp">Verified</span>
+<p>A second clean container ran the patched steps with no model calls, and every step passed.</p>
+<h2>Audit Trail</h2>
+<p class="m">business/unit_economics.json, generated 2026-10-11T05:12:57Z.</p><p><a href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">cfo.ai model behind these caps</a></p>
+<table><tr><th>File</th><th>SHA-256</th></tr><tr><td>state.json</td><td><code>sha256:1d46590b91fb3f3ba76ee4a0ff348e4912f2e460ca56af74eced48360516665d</code></td></tr><tr><td>runbook.json</td><td><code>sha256:1e75bb10ec965e0b9d5c9b0137aa23f34f71deff6cc8773c6660c344ac7b87a2</code></td></tr><tr><td>report.md</td><td><code>sha256:3ba51732f14679dbfdd3b3657be4c5fec61357784da64f564848d39d498c6ed4</code></td></tr></table>
+<p class="m">Check it: <code>firstrun receipt --check runs/20261010-091740-help-accuknox-com/receipt.json</code></p>
+</main></body></html>
