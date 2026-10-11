@@ -99,20 +99,26 @@ def check_tool(name: str, why: str, fix: str) -> dict:
     return _check(name, bool(exe), (exe + ". " if exe else "not on PATH. ") + why, fix, optional=True)
 
 
-def probe_url(url: str, timeout: float = 8) -> tuple[bool, str]:
+def probe_url(url: str, timeout: float = 10, tries: int = 2) -> tuple[bool, str]:
+    """Any HTTP answer within `tries` attempts. One slow answer is common, so a single timeout is not a failure."""
     import httpx
 
-    try:
-        r = httpx.get(url, timeout=timeout, follow_redirects=False)
-    except httpx.HTTPError as exc:
-        return False, f"{url}: {exc.__class__.__name__}"
-    return True, f"{url}: HTTP {r.status_code}"
+    err = ""
+    for _ in range(tries):
+        try:
+            r = httpx.get(url, timeout=timeout, follow_redirects=False)
+        except httpx.HTTPError as exc:
+            err = exc.__class__.__name__
+            continue
+        return True, f"{url}: HTTP {r.status_code}"
+    return False, f"{url}: {err} after {tries} tries"
 
 
 def check_net(label: str, url: str, probe=probe_url) -> dict:
     ok, detail = probe(url)
     optional = label != "github"
-    return _check(f"net_{label}", ok, detail, f"Check the network or proxy. {url} must be reachable over HTTPS.",
+    return _check(f"net_{label}", ok, detail, f"{url} did not answer over HTTPS. Run firstrun doctor again. "
+                  "If it fails twice, check the network or the proxy.",
                   optional=optional)
 
 

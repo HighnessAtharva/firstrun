@@ -24,11 +24,18 @@ git --version
 docker info --format '{{.ServerVersion}}'
 ```
 
-- Python must be 3.11 or newer. On Windows, use `py -3.11`. If it is missing, ask the human to install Python 3.11.
-- git must be on PATH. The install and `firstrun audit` both need it. If it is missing, ask the human to install git.
-- Docker is needed for Doc-test only. On Windows, FirstRun calls `wsl -d Ubuntu-22.04 docker` when `docker` is not on PATH. If Docker fails, tell the human to start it, for example `wsl -d Ubuntu-22.04 sudo service docker start`. Doc-audit still works without Docker.
+On Windows, run these in PowerShell instead. FirstRun calls Docker inside WSL when `docker` is not on PATH.
 
-FirstRun reads keys from `.env` in the folder you run it from. Set `FIRSTRUN_ENV_FILE` to use another file. A key that is already in the environment wins over `.env`.
+```powershell
+py -3.11 --version
+git --version
+wsl -d Ubuntu-22.04 docker info --format '{{.ServerVersion}}'
+```
+
+- Python must be 3.11 or newer. If it is missing, ask the human to install Python 3.11.
+- git must be on PATH. The install and `firstrun audit` both need it. If it is missing, ask the human to install git.
+- Docker is needed for Doc-test only. If Docker fails, ask the human to start it, for example with `wsl -d Ubuntu-22.04 sudo service docker start`. Doc-audit works without Docker.
+FirstRun reads keys from `.env` in the folder you run it from. Set `FIRSTRUN_ENV_FILE` to use another file. A key that is already in the environment wins over `.env`. `firstrun doctor` names the file it read in `env_file.path`.
 
 | Variable | Needed for | Required | Without it |
 |---|---|---|---|
@@ -57,13 +64,22 @@ firstrun --help
 firstrun doctor --json
 ```
 
-On Windows, activate with `.venv\Scripts\activate`. If `firstrun doctor` is an unknown command, the install is old. Add `--upgrade --force-reinstall` to the pip line.
+On Windows, run these in PowerShell 7:
 
-`firstrun doctor --json` checks Python, git, Docker, each key and the network. It prints whether a key is set, never its value. It exits 0 when Doc-test and Doc-audit can both run. Use `--for audit` or `--for test` to gate on one tool. Read `can_run` and apply the `fix` of each check with `"status": "fail"`.
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install git+https://github.com/HighnessAtharva/firstrun
+firstrun --help
+firstrun doctor --json
+```
 
+If `firstrun doctor` is an unknown command, the install is old. Add `--upgrade --force-reinstall` to the pip line.
+
+`firstrun doctor --json` checks Python, git, Docker, each key and the network. It prints whether a key is set, never its value. It exits 0 when Doc-test and Doc-audit can both run. Gate an audit-only task with `--for audit` and a Doc-test task with `--for test`. Read `can_run` and apply the `fix` of each check with `"status": "fail"`. A `net_*` check that fails once can be a slow network, so run `firstrun doctor` again before you report it.
 ## 4. Run the Recipe That Matches the Task
 
-Every `--json` command prints one JSON object on stdout. Progress lines go to stderr. Parse stdout only.
+Every `--json` command prints one JSON object on stdout. Progress lines go to stderr. Parse stdout only, and read the exit code from its `exit_code` key. Windows PowerShell 5.1 writes UTF-16 with `>`, so use PowerShell 7 or `| Out-File -Encoding utf8` there. Paths in the JSON are absolute. Run and audit ids start with the UTC start time.
 
 **A. Test a docs URL.** Give the tool call a timeout of 30 minutes, because each step may run for up to 5 minutes.
 
@@ -83,7 +99,12 @@ firstrun audit fastapi/typer --no-publish --json > audit.json
 firstrun audit dbt-labs/dbt-core --docs-repo dbt-labs/docs.getdbt.com --no-publish --json > audit.json
 ```
 
-Use `--docs-repo` when the docs live in a second repo. Add `--no-jev` when `TYPESAFE_API_KEY` is not set and you want no model call at all. Add `--no-team` to leave out people. Read `top_tasks` for the ranked work list. Each task has `rank`, `title`, `score` from 0 to 100, `effort` of S, M or L, `action` and `owner`. `owner` is null when no person stands out. Present an owner to the human as a suggestion. Anyone can take any task.
+- `--docs-repo` reads the docs from a second repo.
+- `--no-jev` makes no model call. Use it when `TYPESAFE_API_KEY` is not set. Then `jev` is false and `stale` comes from text matching alone, so it can count too many pages.
+- With Jev, a candidate page that Jev did not read shows as `unchecked`.
+- `--no-team` leaves out people.
+
+Read `top_tasks` for the ranked work list. It holds up to 10 tasks and can hold fewer, so report the real count when the human asks for more. Each task has `rank`, `title`, `score` from 0 to 100, `effort` of S, M or L, `action` and `owner`. `owner` is null when no person stands out. Present an owner to the human as a suggestion, because anyone can take any task.
 
 To draft a GitHub issue for the docs team, run `firstrun audit-issue <audit_id> --json`. It writes `issue.md` to `body_file` and returns the `gh` command in `commands`. It opens nothing. The command targets the audited repo, so section 8 applies.
 
@@ -146,7 +167,7 @@ firstrun receipt --check runs/<id>/receipt.json --json
 Every `--json` object has `ok`, `command`, `exit_code` and `error`. `error` is null or `{"code", "message", "fix"}`. New keys may appear. Existing keys keep their names.
 
 - **`run`** adds `runs[]`. Each run has `run_id`, `source_url`, `target`, `status`, `stop_reason`, `cached`, `steps_total`, `steps_passed`, `first_failed_step`, `reported_failed_step`, `patches`, `verified`, `time_to_first_success_s`, `elapsed_s`, `cost_usd`, `run_dir`, `share_url`, `error` and `files`. `files` maps `state.json`, `runbook.json`, `report.md`, `patch.diff`, `pr_body.md` and `receipt.json` to a path or null.
-- **`audit`** adds `audit_id`, `repo`, `url`, `docs_repo`, `mode`, `summary`, `jev`, `cost`, `team`, `top_tasks[]`, `run_dir`, `files` and `published`. A task has `rank`, `kind`, `title`, `path`, `score`, `effort`, `action`, `rationale` and `owner` (`{"name", "login", "why"}` or null).
+- **`audit`** adds `audit_id`, `repo`, `url`, `docs_repo`, `mode`, `summary`, `jev`, `cost`, `team`, `top_tasks[]`, `run_dir`, `files` and `published`. `summary` counts `pages`, `fresh`, `aging`, `stale`, `quiet` and `unchecked`, plus `ancient` (pages 730 days old or older, also counted under their status), `median_age_days`, `oldest_days`, `features`, `uncovered` and `cards`. A task has `rank`, `kind`, `title`, `path`, `score`, `effort`, `action`, `rationale` and `owner` (`{"name", "login", "why"}` or null).
 - **`receipt`** adds `mode`. With `"mode": "write"` it adds `receipt_id`, `kind`, `hash`, `price_usd`, `price_basis`, `verified`, `cards`, `cards_citing_evidence` and `files`. With `"mode": "check"` it adds `path`, `valid`, `hash_ok` and `problems[]`.
 - **`prereqs`** adds `run_id`, `prereqs`, `proof` and `files`.
 - **`doctor`** adds `env_file`, `docker_cmd`, `can_run` and `checks[]`. A check has `name`, `status` (`pass`, `warn` or `fail`), `required_for`, `detail` and `fix`.

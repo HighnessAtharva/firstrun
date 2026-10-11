@@ -233,6 +233,28 @@ def test_doctor_no_network_blocks_audit(monkeypatch):
     assert res.exit_code == 1 and _one_json(res)["can_run"]["doc_audit"] is False
 
 
+def test_probe_url_retries_one_timeout(monkeypatch):
+    import httpx
+
+    calls = []
+
+    class R:
+        status_code = 200
+
+    def get(url, **k):
+        calls.append(url)
+        if len(calls) == 1:
+            raise httpx.ReadTimeout("slow")
+        return R()
+
+    monkeypatch.setattr(httpx, "get", get)
+    assert doctor.probe_url("https://github.com") == (True, "https://github.com: HTTP 200") and len(calls) == 2
+    calls.clear()
+    monkeypatch.setattr(httpx, "get", lambda url, **k: (_ for _ in ()).throw(httpx.ConnectError("down")))
+    ok, detail = doctor.probe_url("https://github.com")
+    assert not ok and "after 2 tries" in detail
+
+
 def test_prereqs_json_no_prove(monkeypatch, tmp_runs_dir):
     from firstrun import prereqs
 

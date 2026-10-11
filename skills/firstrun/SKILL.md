@@ -28,9 +28,9 @@ firstrun doctor --json
 ```
 
 - Python must be 3.11 or newer, and git must be on PATH.
-- On Windows, activate with `.venv\Scripts\activate`.
+- On Windows, use `py -3.11 -m venv .venv` and `.venv\Scripts\Activate.ps1` in PowerShell 7.
 - The install takes about 3 minutes.
-- Read `can_run.doc_test` and `can_run.doc_audit` from the doctor output. Apply the `fix` of each check with `"status": "fail"`.
+- Read `can_run.doc_test` and `can_run.doc_audit` from the doctor output. Use `--for audit` for an audit-only task. Run doctor again once if a `net_*` check fails. Apply the `fix` of each check with `"status": "fail"`.
 - Doc-test needs Docker and `CLAUDE_CODE_OAUTH_TOKEN`. The human creates the token with `claude setup-token` and adds it to `.env`.
 - Doc-audit needs no key. Add `--no-jev` when `TYPESAFE_API_KEY` is not set.
 - If `firstrun doctor` is an unknown command, add `--upgrade --force-reinstall` to the pip line.
@@ -40,7 +40,7 @@ firstrun doctor --json
 Parse stdout only. It holds one JSON object with `ok`, `command`, `exit_code` and `error`, where `error` is null or `{"code", "message", "fix"}`.
 
 - **Doc-test:** read `runs[0].status`. `passed` means every step worked as written. `verified` means FirstRun patched a step and a second clean container passed. `unverified` means the patch did not pass. `failed` means read `error.code` and `runs[0].files["report.md"]`.
-- **Doc-audit:** read `top_tasks[]`. Each task has `rank`, `title`, `score`, `effort`, `action` and `owner`. An owner is `{"name", "login", "why"}` or null. Present the owner as a suggestion.
+- **Doc-audit:** read `top_tasks[]`. It holds up to 10 tasks and can hold fewer, so report the real count. Each task has `rank`, `title`, `score`, `effort`, `action` and `owner`. An owner is `{"name", "login", "why"}` or null. Present the owner as a suggestion.
 - **Exit codes:** 0 means done, 1 means a step failed or the command hit an error, and 2 means setup failed before step 1.
 
 Give the tool call a timeout of 30 minutes for `firstrun run` and 20 minutes for `firstrun audit`.
