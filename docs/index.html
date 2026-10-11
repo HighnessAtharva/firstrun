@@ -70,8 +70,12 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
  background:radial-gradient(70% 50% at 50% -6%,oklch(21% .05 278),transparent 70%),linear-gradient(180deg,oklch(13.5% .03 278),oklch(10% .022 278) 75%)}
 .stage :focus-visible{outline-color:oklch(80% .12 256)}
 .st-c{position:relative;z-index:3;width:100%;max-width:1080px;margin:0 auto;padding:clamp(104px,14.5vh,150px) 24px 0}
+/* the text block lets the pointer through its empty margins to the angles beside it */
+.st-c{pointer-events:none}.st-c>*{pointer-events:auto}
 .st-c h1{color:var(--s-ink);max-width:13em;margin:0 auto;font-size:clamp(38px,5.3vw,68px);text-wrap:balance}
-.sub{margin:18px auto 0;font-size:clamp(17px,1.75vw,20px);line-height:1.5;max-width:31em;color:var(--s-mut);text-wrap:balance}
+/* one subtitle, three sentences. Each sentence wraps as a unit, so a line never breaks mid-thought */
+.sub{margin:18px auto 0;font-size:clamp(17px,1.75vw,20px);line-height:1.5;max-width:34em;color:var(--s-mut);text-wrap:balance}
+.sub span{display:inline-block}
 .st-room{flex:1 0 clamp(340px,44vh,470px)}
 /* the input with its two routes */
 .cap{display:flex;align-items:center;gap:6px;margin:30px auto 0;max-width:700px;padding:6px 6px 6px 20px;border-radius:18px;text-align:left;background:oklch(98.6% .004 275);
@@ -109,11 +113,14 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .pop-x .k{font:500 12px/1.4 Geist,sans-serif;color:var(--s-dim);margin-bottom:3px}
 .pop-x .er{color:oklch(79% .13 28)}.pop-x .ok{color:oklch(83% .15 150)}
 /* examples and the live hint */
-.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px}
-.chips .lbl{color:var(--s-dim);font-size:14px;align-self:center;margin-right:2px}
-.chips button{background:oklch(100% 0 0/.05);color:var(--s-ink);border:1px solid oklch(100% 0 0/.15);font-weight:500;font-size:14px;min-height:34px;padding:0 13px;border-radius:99px}
-.chips button:hover{background:oklch(100% 0 0/.12)}
-.hint{color:var(--s-dim);font-size:13.5px;margin-top:10px;min-height:1.5em;text-wrap:balance}
+/* the examples are a quiet second row: smaller and dimmer than the input they serve */
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;width:fit-content;max-width:100%;margin:14px auto 0}
+.chips .lbl{color:var(--s-dim);font-size:13px;align-self:center;margin-right:2px}
+.chips button{background:oklch(100% 0 0/.04);color:var(--s-mut);border:1px solid oklch(100% 0 0/.12);font-weight:500;font-size:13px;min-height:32px;padding:0 12px;border-radius:99px}
+.chips button:hover{background:oklch(100% 0 0/.1);color:var(--s-ink)}
+/* the helper line shows only while the box has focus. Live messages use the same line. */
+.hint{color:var(--s-dim);font-size:13.5px;max-width:34em;margin:10px auto 0;min-height:1.5em;text-wrap:balance}
+#f:focus-within~.hint:empty:before{content:attr(data-d)}
 .hint.cached{color:oklch(85% .14 150);font-weight:500}
 .hint.warn{color:var(--s-ink)}
 .hint .hb{display:inline;background:none;border:0;min-height:0;padding:0 2px;font:inherit;font-weight:600;color:oklch(82% .12 256);text-decoration:underline;text-underline-offset:3px;white-space:normal}
@@ -129,7 +136,7 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .st-sky i{position:absolute;left:0;top:0;display:block;pointer-events:none}
 .st-sky .halo{translate:calc(var(--pcx) - 560px) calc(var(--pcy) - 430px);width:1120px;height:860px;background:radial-gradient(closest-side,oklch(40% .13 272/.55),oklch(30% .1 276/.22) 50%,transparent);animation:bg-breathe 13s cubic-bezier(.45,0,.55,1) infinite alternate}
 .st-sky .bleed{translate:calc(var(--pfx) - 380px) calc(var(--pcy) - 390px);width:840px;height:780px;
- background:linear-gradient(180deg,transparent 4%,oklch(58% .2 28/.42) 22%,oklch(72% .16 70/.34) 38%,oklch(70% .17 150/.26) 56%,oklch(60% .16 245/.34) 74%,oklch(52% .2 290/.42) 90%,transparent);
+ background:linear-gradient(180deg,transparent 6%,oklch(58% .15 245/.4) 24%,oklch(70% .14 75/.34) 50%,oklch(54% .19 298/.42) 76%,transparent 94%);
  -webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent);animation:bg-drift 17s cubic-bezier(.45,0,.55,1) infinite alternate}
 .st-sky .warm,.st-sky .warm-a{translate:-280px calc(var(--pcy) - 300px);width:780px;height:560px;animation:bg-sway 19s cubic-bezier(.45,0,.55,1) infinite alternate;transition:opacity .6s var(--ease)}
 .st-sky .warm{background:radial-gradient(closest-side,oklch(40% .13 30/.38),transparent)}
@@ -147,7 +154,7 @@ button:hover,.btn:hover{background:var(--test-d);text-decoration:none}
 .st-scene{position:absolute;inset:0;z-index:1;pointer-events:none}
 .st-cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 .st-svg{position:absolute;left:0;bottom:104px;width:100%;height:29%;display:none}
-html:not(.js) .st-svg{display:block}
+html:not(.js) .st-svg{display:block}html:not(.js) .st-cv{display:none}
 .st-fx{position:absolute;inset:0;background:radial-gradient(125% 95% at 50% 42%,transparent 55%,oklch(6% .02 278/.6))}
 .st-fx:after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .st-in,.st-out{list-style:none;padding:0;margin:0}
@@ -155,13 +162,44 @@ html:not(.js) .st-svg{display:block}
 .st-in li.off{display:none}
 .st-in span{display:inline-block;font:500 12.5px/1.2 var(--mono);color:oklch(85% .085 28);background:oklch(19% .04 25/.94);box-shadow:inset 0 0 0 1px oklch(70% .16 28/.34),0 0 26px -8px oklch(62% .2 28/.55);border-radius:99px;padding:8px 14px;white-space:nowrap;transition:color .4s,background-color .4s,box-shadow .4s}
 .stage[data-mode=audit] .st-in span{color:oklch(88% .1 78);background:oklch(20% .035 70/.94);box-shadow:inset 0 0 0 1px oklch(80% .14 78/.34),0 0 26px -8px oklch(76% .15 78/.5)}
-.st-out li{position:absolute;left:0;top:0;display:flex;align-items:center;gap:11px;opacity:0;text-align:left;text-shadow:0 1px 14px oklch(8% .02 278)}
-.st-out i{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c);box-shadow:0 0 14px var(--c),0 0 3px var(--c)}
-.lx{display:grid}.lx>span{grid-area:1/1;transition:opacity .45s var(--ease),transform .5s var(--ease)}
-.lx .a{opacity:0;transform:translateY(5px)}
-.stage[data-mode=audit] .lx .t{opacity:0;transform:translateY(-5px)}.stage[data-mode=audit] .lx .a{opacity:1;transform:none}
-.st-out b{display:block;font-size:15px;font-weight:600;letter-spacing:-.015em;color:var(--s-ink);white-space:nowrap}
-.st-out small{display:block;font-size:12.5px;color:var(--s-mut);margin-top:1px;white-space:nowrap}
+/* the three angles on the right. Title first, one real number second, the rest on hover, focus or tap.
+   prism.js places the column and lands one ray on each icon. */
+.st-out{position:absolute;z-index:2;left:0;top:0;width:300px;display:grid;gap:24px;text-align:left;text-shadow:0 1px 14px oklch(8% .02 278)}
+html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
+.stage.live .grp{opacity:0}
+.grp{position:relative}
+.gw{display:grid;grid-template-columns:28px minmax(0,1fr);gap:0 12px;transition:opacity .3s var(--ease)}
+.gi{width:28px;height:28px;margin-top:-3px;border-radius:9px;display:grid;place-items:center;color:var(--c);
+ background:color-mix(in oklch,var(--c) 15%,oklch(16% .03 278));box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--c) 42%,transparent),0 0 20px -4px color-mix(in oklch,var(--c) 70%,transparent);transition:box-shadow .3s var(--ease)}
+.gi .ic{width:16px;height:16px}
+.gt{font-size:15.5px;font-weight:600;line-height:1.3;letter-spacing:-.015em;color:var(--s-ink);text-wrap:balance}
+.gn{margin-top:2px;font-size:13px;line-height:1.45;color:var(--s-mut)}
+.gn em{font-style:normal;font-weight:600;color:var(--s-ink)}
+/* the reveal: rows open with grid-template-rows, so nothing animates height */
+.gm{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s var(--ease)}
+.gmi{min-height:0;overflow:hidden;opacity:0;transition:opacity .25s var(--ease)}
+.grp.hot .gm,html:not(.js) .grp:focus-within .gm,html:not(.js) .gm{grid-template-rows:1fr}.grp.hot .gmi,html:not(.js) .grp:focus-within .gmi,html:not(.js) .gmi{opacity:1;transition-delay:.06s}
+.stage.flat:not(.live) .st-svg{display:block}
+.gd{padding-top:7px;font-size:12.5px;line-height:1.5;color:var(--s-mut)}
+.gd code{font:500 12px var(--mono);color:oklch(84% .09 28)}
+.gl{display:inline-block;margin-top:6px;font-size:12.5px;font-weight:600;color:var(--c);text-underline-offset:3px}
+.gl:after{content:"";position:absolute;inset:-10px -12px}
+.gl:focus-visible{outline:0}
+.grp:has(.gl:focus-visible){outline:2px solid var(--c);outline-offset:6px;border-radius:12px}
+.grp.hot .gi{box-shadow:inset 0 0 0 1px var(--c),0 0 26px -2px var(--c)}
+/* one ray at a time: the open group stays lit and the others step back. The route buttons do the
+   same: Test docs lights the run and the cost, Audit docs lights the ranked fixes. */
+.stage[data-focus] .grp:not(.hot) .gw,.stage[data-em=test]:not([data-focus]) .g2 .gw,.stage[data-em=audit]:not([data-focus]) .g0 .gw,.stage[data-em=audit]:not([data-focus]) .g1 .gw{opacity:.5}
+/* the ranked fixes: a short stack of real cards from the altimate-code board */
+.gq{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}
+.gq li{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:2px 8px;padding:7px 10px;border-radius:10px;font-size:12.5px;line-height:1.35;color:var(--s-mut);background:oklch(22% .035 285/.78);box-shadow:inset 0 0 0 1px oklch(100% 0 0/.08);text-shadow:none}
+.gq .q1{grid-template-columns:16px minmax(0,1fr);color:var(--s-ink);box-shadow:inset 0 0 0 1px oklch(100% 0 0/.1),0 5px 0 -2px oklch(24% .035 285/.7),0 10px 0 -4px oklch(24% .035 285/.4);transition:box-shadow .35s var(--ease)}
+.grp.hot .gq .q1{box-shadow:inset 0 0 0 1px color-mix(in oklch,var(--c) 45%,transparent)}
+.gmi .gq{margin-top:6px}
+.qr{font:600 11px/1 var(--mono);color:var(--c)}
+.qt{font-weight:500;min-width:0}
+.qo{grid-column:2;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--s-mut)}
+.qa{width:18px;height:18px;border-radius:50%;flex:none;display:grid;place-items:center;font:600 10px/1 Geist,sans-serif;color:oklch(20% .04 298);background:oklch(82% .1 298)}
 .st-pz{position:absolute;z-index:4;right:20px;bottom:46px;width:36px;height:36px;min-height:0;padding:0;border-radius:50%;background:oklch(100% 0 0/.06);border:1px solid oklch(100% 0 0/.16);color:var(--s-mut)}
 .st-pz:hover{background:oklch(100% 0 0/.13);color:var(--s-ink)}
 .st-pz svg{width:14px;height:14px;fill:currentColor;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -170,25 +208,29 @@ html:not(.js) .st-svg{display:block}
 .hz,.hz-glow{position:absolute;left:50%;width:max(240%,2600px);height:640px;border-radius:50%;transform:translateX(-50%);pointer-events:none}
 .hz{z-index:3;top:calc(100% - 62px);background:var(--bg);box-shadow:0 -1px 0 oklch(100% 0 0/.5),0 -10px 34px -8px oklch(86% .07 270/.55)}
 .hz-glow{z-index:2;top:calc(100% - 82px);filter:blur(22px);background:linear-gradient(90deg,transparent 30%,oklch(66% .15 256/.55) 40%,oklch(66% .17 300/.55) 47%,oklch(75% .16 30/.5) 54%,oklch(84% .15 80/.55) 60%,transparent 70%)}
+/* without the scene script: the prism drawing, and under it the three angles as three columns, open */
 @media(min-width:900px){
- .stage:not(.live) .st-in{position:absolute;left:3%;top:52%;display:grid;gap:10px;justify-items:start}
- .stage:not(.live) .st-out{position:absolute;right:4%;top:50%;display:grid;gap:12px}
- .stage:not(.live) .st-in li,.stage:not(.live) .st-out li{position:static;opacity:1}
- .stage:not(.live) .lx .a{display:none}
- .st-out.tight small{display:none}}
+ .stage:not(.live) .st-in{display:none}
+ html:not(.js) .st-room,.stage.flat:not(.live) .st-room{display:none}
+ html:not(.js) .st-scene,.stage.flat:not(.live) .st-scene{position:relative;inset:auto;height:clamp(200px,18vw,250px);margin-top:16px}
+ html:not(.js) .st-svg,.stage.flat:not(.live) .st-svg{inset:0;width:100%;height:100%}
+ html:not(.js) .st-out,.stage.flat:not(.live) .st-out{position:relative;width:min(1000px,calc(100% - 48px));margin:20px auto 0;padding-bottom:120px;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+ .stage:not(.live) .gm{grid-template-rows:1fr}.stage:not(.live) .gmi{opacity:1}
+ .st-out.tight{gap:16px}.st-out.tight .gq .q1{box-shadow:inset 0 0 0 1px oklch(100% 0 0/.1)}}
+/* a narrow desktop gives the stage more floor, so the column of angles and its reveals fit */
+@media(min-width:900px) and (max-width:1199px){html.js .st-room{flex-basis:clamp(470px,54vh,520px)}.gt{font-size:15px}}
 /* below 900 px the scene stacks under the text: broken steps, then the prism, then the proof */
 @media(max-width:899px){
  .stage{min-height:0}
  .st-room{display:none}
- .st-scene{position:relative;inset:auto;display:grid;gap:16px;padding:28px 16px 100px}
+ .st-scene{position:relative;inset:auto;display:grid;gap:16px;padding:28px 16px 4px}
  .st-cv{position:relative;height:clamp(220px,52vw,340px);order:2;margin:0 -16px;width:calc(100% + 32px);-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
  .st-in{order:1;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;transition:opacity .2s}
  .st-in.swap{opacity:0}
  .st-in li{position:static;opacity:1}.st-in li:nth-child(n+4){display:none}
- .st-out{order:3;display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;max-width:520px;margin:0 auto;width:100%}
- .st-out li{position:static;opacity:1;align-items:flex-start;gap:9px}
- .st-out i{margin-top:5px;width:9px;height:9px}
- .st-out b,.st-out small{white-space:normal}
+ /* the three angles as a tidy list under the prism */
+ .st-out,.stage:not(.live) .st-out{position:relative;z-index:2;left:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:440px;margin:0 auto;padding:4px 16px 132px;grid-template-columns:minmax(0,1fr);gap:22px}
+ .stage.live .grp{opacity:1}
  .st-svg{position:relative;bottom:auto;height:auto;order:2}
  .st-pz{bottom:64px;right:16px}
  .st-fx{display:none}}
@@ -199,7 +241,7 @@ html:not(.js) .st-svg{display:block}
  .cap input{flex:1 1 100%;padding:8px 10px}
  .routes{flex:1 1 100%}.rt{flex:1 1 0;padding:0 12px}
  .st-in span{font-size:11.5px;padding:6px 11px}
- .st-out b{font-size:14px}.st-out small{font-size:12px}
+ .gt{font-size:15px}
  .pop{grid-template-columns:minmax(0,1fr)}.pop-x{margin-top:14px}
  .hz{top:calc(100% - 46px)}.hz-glow{top:calc(100% - 64px)}}
 
@@ -533,8 +575,8 @@ html:not(.js) .show{display:block}
 html:not(.js) .evs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
 html:not(.js) .ev{background:var(--panel);box-shadow:var(--lift);padding:0;overflow:hidden}
 html:not(.js) .shot{position:relative;opacity:1;visibility:visible;aspect-ratio:1400/780;border-bottom:1px solid var(--line)}
-html:not(.js) .cap{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:14px 16px 0;font-weight:500;line-height:1.4}
-html:not(.js) .cap .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 13px/1 var(--mono);background:var(--ink);color:oklch(99.5% .003 255)}
+html:not(.js) .ev .cap{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:14px 16px 0;font-weight:500;line-height:1.4}
+html:not(.js) .ev .cap .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 13px/1 var(--mono);background:var(--ink);color:oklch(99.5% .003 255)}
 html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 @media(max-width:860px){.show{grid-template-columns:minmax(0,1fr);max-width:640px;margin-left:auto;margin-right:auto}}
 @media(max-width:600px){.tt{gap:8px}.tt [role=tab]{flex-direction:column;justify-content:center;gap:8px;padding:12px 4px;text-align:center}.tt small{display:none}.tt img{width:40px;height:40px}.tt b{font-size:16px}
@@ -606,7 +648,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
  .reel{aspect-ratio:16/9}.ctl{right:20px;bottom:6%}
  .tl{grid-template-columns:minmax(0,1fr);padding:0 0 0 40px}.tl li:nth-child(n){grid-column:auto}}
 @media(max-width:560px){.vids{grid-template-columns:1fr}.vc.big .pi{width:68px;height:68px;margin:-34px 0 0 -34px}.rcpt{padding:22px 18px 34px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.st-sky i{animation:none!important}.pop,.lx>span,.st-in span{transition:none}html.js .rv{opacity:1;transform:none;transition:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.st-sky i{animation:none!important}.pop,.st-in span,.gm,.gmi,.gw,.gi,.gq li{transition:none}html.js .rv{opacity:1;transform:none;transition:none}
  .pr,.vc,.pi,button,.btn{transition:none}.pr:hover,.vc:hover{transform:none}.vp:hover .pi{transform:none}.tw.vid{animation:none}}
 </style>
 </head>
@@ -617,6 +659,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <symbol id="i-audit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v6"/><path d="M6 3v18h7"/><circle cx="16.5" cy="16.5" r="3"/><path d="m21 21-2.3-2.3"/></symbol>
 <symbol id="i-rcpt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
 <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></symbol>
+<symbol id="i-who" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.6"/><path d="M3.5 20c.9-3.6 3.4-5.6 6.5-5.6 1.4 0 2.6.4 3.6 1.1"/><path d="m15.5 18 2 2 4-4.5"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></symbol>
 <symbol id="i-pr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M6 8.2v7.6M18 15.8V10a3 3 0 0 0-3-3h-3.5"/><path d="M13.5 4.5 11 7l2.5 2.5"/></symbol>
 </svg>
@@ -628,10 +671,11 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <div class="st-sky" id="stSky" aria-hidden="true"><i class="halo"></i><i class="warm"></i><i class="warm-a"></i><i class="bleed"></i><i class="floor"></i></div>
 <div class="st-c" id="stC">
 <h1 id="hero-h">Find the Broken Step Before Your Users Do</h1>
-<p class="sub">FirstRun runs your docs on a clean machine, fixes the step that breaks, and proves the fix.</p>
+<p class="sub"><span>Test your docs in a clean container.</span> <span>See what every run costs.</span> <span>Give each fix to whoever knows the code.</span></p>
 <form class="cap" id="f" action="doc-test/" autocomplete="off">
 <label class="sr" for="u">Docs URL, GitHub repo, or the name of a tool</label>
-<input id="u" type="text" inputmode="url" spellcheck="false" placeholder="Paste your docs URL or repo">
+<input id="u" type="text" inputmode="url" spellcheck="false" placeholder="Paste your docs URL or repo" aria-describedby="uHelp">
+<p class="sr" id="uHelp">A partial URL works. So does a tool name. Nothing leaves your browser.</p>
 <div class="routes">
 <a class="rt rt-test" id="goT" href="doc-test/" aria-describedby="popT-s"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg>Test docs</a>
 <a class="rt rt-audit" id="goA" href="doc-audit/" aria-describedby="popA-s"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg>Audit docs</a>
@@ -642,7 +686,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <div class="pop-h"><span class="pt" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><path d="M6.8 9.2l3 2.6-3 2.6M12.3 15.6h4.9"/></svg></span><div><b>Doc-test</b><small>Takes a docs URL</small></div></div>
 <p class="pop-s" id="popT-s">Runs your quickstart in a clean container, fixes the step that breaks, and proves it in a second run.</p>
 <p class="pop-k">You get</p>
-<ul class="pop-g"><li>The first broken step, named</li><li>A docs fix that passed a clean rerun</li><li>A pull request, opened after your yes</li></ul>
+<ul class="pop-g"><li>The first broken step, named</li><li>A docs fix that passed a clean rerun</li><li>A receipt with what the run cost</li></ul>
 </div>
 <div class="pop-x"><span class="k">dbt + DuckDB guide, step 10</span><code>$ jafgen --years 6</code><code class="er">No such option: --years</code><code class="ok">Fixed: jafgen 6</code><code class="ok">9 of 9 steps passed</code></div>
 </div>
@@ -651,7 +695,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <div class="pop-h"><span class="pt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg></span><div><b>Doc-audit</b><small>Takes a GitHub repo</small></div></div>
 <p class="pop-s" id="popA-s">Reads a repo's git history and lists the stale pages and the shipped features with no docs.</p>
 <p class="pop-k">You get</p>
-<ul class="pop-g"><li>Stale pages, with the commits behind each one</li><li>Features that shipped with no docs</li><li>A board of what to ship next</li></ul>
+<ul class="pop-g"><li>Stale pages, with the commits behind each one</li><li>Features that shipped with no docs</li><li>A ranked list of fixes, each with an owner</li></ul>
 </div>
 <div class="pop-x"><span class="k">dbt-core, 11,552 commits read</span><code>project-flags.md</code><code>last edit 453 days ago</code><code class="er">29 code changes since</code><code class="ok">15 stale pages</code><code class="ok">72 features with no docs</code></div>
 </div>
@@ -659,14 +703,14 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <button type="button" data-u="https://docs.getdbt.com/guides/duckdb">dbt + DuckDB</button>
 <button type="button" data-u="https://docs.dagster.io/getting-started/quickstart">Dagster</button>
 <button type="button" data-u="https://www.mkdocs.org/getting-started/">MkDocs</button></div>
-<p class="hint" id="hint" aria-live="polite" data-d="A partial URL works. So does a tool name. Nothing leaves your browser.">A partial URL works. So does a tool name. Nothing leaves your browser.</p>
+<p class="hint" id="hint" aria-live="polite" data-d="A partial URL works. So does a tool name. Nothing leaves your browser."></p>
 </div>
 <div class="st-room"></div>
 <div class="st-scene" id="stScene" aria-hidden="true">
 <svg class="st-svg" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="svB" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="svG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22273a"/><stop offset="1" stop-color="#05060c"/></linearGradient><linearGradient id="svR" gradientUnits="userSpaceOnUse" x1="525" y1="0" x2="915" y2="0"><stop offset="0" stop-color="#5ad7ff" stop-opacity=".2"/><stop offset=".3" stop-color="#926cff"/><stop offset=".55" stop-color="#ff4fd8"/><stop offset=".8" stop-color="#ff9e24"/><stop offset="1" stop-color="#ffde3c"/></linearGradient><linearGradient id="svF" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".7" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="svM"><rect x="830" y="0" width="290" height="400" fill="url(#svF)"/></mask><filter id="svBl" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="10"/></filter></defs>
 <path d="M0 262L613 222" stroke="url(#svB)" stroke-width="2.4" fill="none"/>
-<g mask="url(#svM)"><g filter="url(#svBl)" opacity=".9"><path d="M837 240L1110 118V162L837 241z" fill="#ff4842"/><path d="M837 241.6L1110 163V207L837 243z" fill="#ff9e24"/><path d="M837 243.2L1110 208V252L837 244.6z" fill="#ffde3c"/><path d="M837 244.8L1110 253V297L837 246.2z" fill="#3ed66e"/><path d="M837 246.4L1110 298V342L837 247.8z" fill="#40a6ff"/><path d="M837 248L1110 343V387L837 249.4z" fill="#926cff"/></g>
-<g opacity=".55"><path d="M837 240L1110 118V162L837 241z" fill="#ff4842"/><path d="M837 241.6L1110 163V207L837 243z" fill="#ff9e24"/><path d="M837 243.2L1110 208V252L837 244.6z" fill="#ffde3c"/><path d="M837 244.8L1110 253V297L837 246.2z" fill="#3ed66e"/><path d="M837 246.4L1110 298V342L837 247.8z" fill="#40a6ff"/><path d="M837 248L1110 343V387L837 249.4z" fill="#926cff"/></g></g>
+<g mask="url(#svM)"><g filter="url(#svBl)" opacity=".9"><path d="M837 240L1110 126V150L837 241z" fill="#40a6ff"/><path d="M837 241.6L1110 150V174L837 243z" fill="#6ccdff"/><path d="M837 243.2L1110 226V250L837 244.6z" fill="#ffce48"/><path d="M837 244.8L1110 250V274L837 246.2z" fill="#ff9e2c"/><path d="M837 246.4L1110 326V350L837 247.8z" fill="#9c70ff"/><path d="M837 248L1110 350V374L837 249.4z" fill="#ce68f6"/></g>
+<g opacity=".55"><path d="M837 240L1110 126V150L837 241z" fill="#40a6ff"/><path d="M837 241.6L1110 150V174L837 243z" fill="#6ccdff"/><path d="M837 243.2L1110 226V250L837 244.6z" fill="#ffce48"/><path d="M837 244.8L1110 250V274L837 246.2z" fill="#ff9e2c"/><path d="M837 246.4L1110 326V350L837 247.8z" fill="#9c70ff"/><path d="M837 248L1110 350V374L837 249.4z" fill="#ce68f6"/></g></g>
 <path d="M720 40L525 378H915z" fill="url(#svG)" stroke="#fff" stroke-opacity=".45"/><path d="M720 40L525 378" stroke="#fff" stroke-opacity=".9" stroke-width="1.4"/><path d="M525 378H915" stroke="url(#svR)" stroke-width="2.6"/>
 <circle cx="613" cy="222" r="46" fill="#fff" opacity=".22" filter="url(#svBl)"/></svg>
 <canvas class="st-cv" id="pz"></canvas>
@@ -674,20 +718,49 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 18px}
 <ul class="st-in" id="stIn">
 <li><span>No such option: --years</span></li><li><span>entire: command not found</span></li><li><span>Migration guide link: 404</span></li><li><span>Python version never stated</span></li><li><span>No module named 'typer'</span></li>
 </ul>
-<ul class="st-out" id="stOut">
-<li style="--c:oklch(65% .23 28)"><i></i><span class="lx"><span class="t"><b>Failure found</b><small>The first broken step, named</small></span><span class="a"><b>Stale pages</b><small>15 in dbt-core, commits cited</small></span></span></li>
-<li style="--c:oklch(78% .17 62)"><i></i><span class="lx"><span class="t"><b>Fix patched</b><small>A small change to the docs</small></span><span class="a"><b>Features with no docs</b><small>72 shipped, never explained</small></span></span></li>
-<li style="--c:oklch(90% .18 100)"><i></i><span class="lx"><span class="t"><b>Proven clean</b><small>A second fresh container passes</small></span><span class="a"><b>What to ship next</b><small>24 cards on one board</small></span></span></li>
-<li style="--c:oklch(76% .2 150)"><i></i><span class="lx"><span class="t"><b>PR opened</b><small>After you approve once</small></span><span class="a"><b>Release notes drafted</b><small>v2.0.5, ready to edit</small></span></span></li>
-<li style="--c:oklch(68% .16 245)"><i></i><span class="lx"><span class="t"><b>Run traced</b><small>Every step in neatlogs</small></span><span class="a"><b>Evidence cited</b><small>The commits behind every card</small></span></span></li>
-<li style="--c:oklch(62% .2 290)"><i></i><span class="lx"><span class="t"><b>Session recorded</b><small>An Entire checkpoint</small></span><span class="a"><b>History read</b><small>11,552 commits since 2016</small></span></span></li>
-</ul>
 </div>
+<!-- the three angles. Each one is a ray of the spectrum: blue for the clean run, gold for the cost,
+     violet for who should fix it. Hover, focus or tap opens one, lights its ray and shows where it leads. -->
+<ul class="st-out" id="stOut" aria-label="What FirstRun gives you">
+<li class="grp g0" data-g="0" style="--c:oklch(74% .15 245)"><div class="gw">
+<span class="gi" aria-hidden="true"><svg class="ic"><use href="#i-box"/></svg></span>
+<div class="gb">
+<p class="gt">Proven in a clean container</p>
+<p class="gn">dbt guide: step 10 fixed, <em>9 of 9</em> steps pass</p>
+<div class="gm"><div class="gmi">
+<p class="gd">It broke on <code>jafgen --years 6</code>. A second clean container ran the fixed page.</p>
+<a class="gl" href="#steps">See the run in Doc-test</a>
+</div></div>
+</div></div></li>
+<li class="grp g1" data-g="1" style="--c:oklch(84% .14 82)"><div class="gw">
+<span class="gi" aria-hidden="true"><svg class="ic"><use href="#i-rcpt"/></svg></span>
+<div class="gb">
+<p class="gt">Priced before you scale</p>
+<p class="gn"><em id="c-mo">$5.35</em> a month for <span id="c-runs">300</span> runs, projected</p>
+<div class="gm"><div class="gmi">
+<p class="gd">Basis: <span id="c-runs2">300</span> runs at <span id="c-mean">$0.0178</span>, the mean model cost of <span id="c-n">88</span> real runs, at list price. The Team plan caps a run at <span id="c-cap">$0.047</span>.</p>
+<a class="gl" href="#receipt">See a sample receipt</a>
+</div></div>
+</div></div></li>
+<li class="grp g2" data-g="2" style="--c:oklch(74% .16 298)"><div class="gw">
+<span class="gi" aria-hidden="true"><svg class="ic"><use href="#i-who"/></svg></span>
+<div class="gb">
+<p class="gt">Assigned to who knows the code</p>
+<ol class="gq">
+<li class="q1"><span class="qr">1</span><span class="qt">Write a page for workspace</span><span class="qo"><span class="qa" aria-hidden="true">H</span>Haider wrote 13 of its 22 changes</span></li>
+</ol>
+<div class="gm"><div class="gmi">
+<ol class="gq" start="2">
+<li><span class="qr">2</span><span class="qt">Altimate Base hosted model</span><span class="qa" aria-hidden="true">A</span><span class="sr">for anandgupta42</span></li>
+<li><span class="qr">3</span><span class="qt">YOLO mode on ctrl+y</span><span class="qa" aria-hidden="true">H</span><span class="sr">for Haider</span></li>
+</ol>
+<a class="gl" href="#audit">See the full board in Doc-audit</a>
+</div></div>
+</div></div></li>
+</ul>
 <div class="sr">
 <p>How Doc-test works. Broken steps go in. Real ones FirstRun found: jafgen --years 6 failed with No such option in the dbt guide. entire: command not found after the Entire install. A migration guide link that returns 404. A dbt guide that never states it needs Python 3.12. No module named typer. curl: command not found. AccuKnox docs that say 0.9.0 while the installer fetches 0.9.58. KeyError NEATLOGS_API_KEY.</p>
-<p>What comes out: the failure found, the fix patched, the fix proven clean in a second fresh container, a PR opened after you approve once, the run traced in neatlogs, and the session recorded as an Entire checkpoint.</p>
 <p>How Doc-audit works, on dbt-labs/dbt-core. The project flags page was last edited 453 days ago, with 29 code changes since. The infer-configs page is 709 days old. 15 of 1,405 pages are stale. 72 shipped features have no docs. AccuKnox/help has 87 stale pages, and its oldest page is 1,100 days old.</p>
-<p>What comes out: stale pages with the commits cited, features with no docs, 24 cards of what to ship next, release notes for v2.0.5, and the history read, 11,552 commits since 2016.</p>
 </div>
 <button type="button" class="st-pz" id="stPause" aria-pressed="false" aria-label="Pause the animation" hidden><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button>
 <div class="hz-glow" aria-hidden="true"></div><div class="hz" aria-hidden="true"></div>
@@ -1062,7 +1135,7 @@ function paintHit(h){
  $("hit-a").href="doc-test/#ex="+encodeURIComponent(h.example||h.name||"");
 }
 function build(r){
- var u=r.url,L=[];
+ var u=r.url,L=["Read https://firstrun.atharvashah.com/agent.md and follow it.",""];
  if(r.q){
   L.push('Goal: test the quickstart for "'+r.q+'" the way a new developer would, fix any step that breaks, and prove the fix.');
   L.push('');
@@ -1102,7 +1175,7 @@ function show(){
 function hintNow(){
  var h=lookup($("u").value),el=$("hint"),t,c;
  if(h){t="Saved run found: "+(h.title||h.name)+". Press Enter to watch it.";c="hint cached"}
- else{t=el.getAttribute("data-d");c="hint"}
+ else{t="";c="hint"}
  if(el.textContent!==t||el.className!==c){el.textContent=t;el.className=c}
 }
 $("u").addEventListener("input",hintNow);
@@ -1146,11 +1219,14 @@ $("f").addEventListener("submit",function(e){e.preventDefault();route("test")});
   var b=B[k].getBoundingClientRect(),c=$("stC").getBoundingClientRect(),f=$("f").getBoundingClientRect(),p=P[k],w=p.offsetWidth,vw=document.documentElement.clientWidth;
   /* centered under the input, so the chips on the left and the proof on the right stay in view */
   var mid=b.left+b.width/2,x=Math.max(12,Math.min(vw-w-12,f.left+f.width/2-w/2));
+  /* and it stays clear of the column of angles, which the route lights up */
+  var so=$("stOut");if(so&&getComputedStyle(so).position==="absolute")x=Math.max(12,Math.min(x,so.getBoundingClientRect().left-16-w));
   p.style.left=(x-c.left)+"px";p.style.top=(f.bottom-c.top+14)+"px";p.style.setProperty("--ax",Math.max(22,Math.min(w-22,mid-x))+"px");
  }
+ /* data-mode swaps the failures on the left. data-em lights the rays that route leads to. */
  function stage(k){var h=$("hero");if(h.getAttribute("data-mode")!==k){h.setAttribute("data-mode",k);if(window.FRPrism)FRPrism.mode(k)}}
- function open(k){clearTimeout(tm);if(cur&&cur!==k)shut(cur,true);cur=k;place(k);P[k].classList.add("on");B[k].classList.add("on");stage(k)}
- function shut(k,swap){P[k].classList.remove("on");B[k].classList.remove("on");if(cur===k)cur=null;if(!swap)stage("test")}
+ function open(k){clearTimeout(tm);if(cur&&cur!==k)shut(cur,true);cur=k;place(k);P[k].classList.add("on");B[k].classList.add("on");stage(k);$("hero").setAttribute("data-em",k)}
+ function shut(k,swap){P[k].classList.remove("on");B[k].classList.remove("on");if(cur===k)cur=null;if(!swap){stage("test");$("hero").removeAttribute("data-em")}}
  function later(k){clearTimeout(tm);tm=setTimeout(function(){if(cur===k&&document.activeElement!==B[k])shut(k)},200)}
  ["test","audit"].forEach(function(k){
   var b=B[k],p=P[k];
@@ -1172,6 +1248,29 @@ $("f").addEventListener("submit",function(e){e.preventDefault();route("test")});
  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&cur){shut(cur)}});
  document.addEventListener("pointerdown",function(e){if(cur&&!B[cur].contains(e.target)&&!P[cur].contains(e.target))shut(cur)});
  addEventListener("resize",function(){if(cur)place(cur)});
+})();
+/* the three angles. Hover or focus opens one: its ray lights, the others step back, and one more
+   line says where it leads. On a touch screen the first tap opens it and the second follows it. */
+(function(){
+ var h=$("hero"),G=[].slice.call(document.querySelectorAll("#stOut .grp")),hot=null,touch=false,was=false;
+ function set(g){
+  if(hot===g)return;
+  if(hot)hot.classList.remove("hot");
+  hot=g;
+  if(g){g.classList.add("hot");h.setAttribute("data-focus",g.getAttribute("data-g"))}else h.removeAttribute("data-focus");
+ }
+ G.forEach(function(g){
+  g.addEventListener("pointerenter",function(e){if(e.pointerType==="mouse")set(g)});
+  g.addEventListener("pointerleave",function(e){if(e.pointerType==="mouse"&&!g.contains(document.activeElement))set(null)});
+  g.addEventListener("pointerdown",function(e){touch=e.pointerType!=="mouse";was=hot===g});
+  g.addEventListener("focusin",function(){set(g)});
+  g.addEventListener("focusout",function(e){if(!g.contains(e.relatedTarget)&&!g.matches(":hover"))set(null)});
+  g.addEventListener("click",function(e){if(touch&&!was){e.preventDefault();set(g)}touch=false});
+ });
+ document.addEventListener("pointerdown",function(e){if(hot&&!hot.contains(e.target))set(null)});
+ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&hot)set(null)});
+ /* if the scene script never runs, show the angles as a still layout */
+ setTimeout(function(){if(!h.classList.contains("live"))h.classList.add("flat")},2500);
 })();
 /* arriving at #hero from another page: put the cursor in the box */
 if(location.hash==="#hero")setTimeout(function(){$("u").focus({preventScroll:true})},60);
@@ -1199,6 +1298,14 @@ fetch("runs/index.json").then(function(r){return r.json()}).then(function(j){
 fetch("audits/index.json").then(function(r){return r.json()}).then(function(j){
  var a=j.audits||[];if(!a.length)return;
  set("n-rep",a.length);set("n-stale",a.reduce(function(n,x){return n+(+x.stale||0)},0));
+}).catch(function(){});
+/* the cost angle: a projection, never a bill. Team runs a month x the measured mean model cost a run,
+   both from data/plan.json, which reads business/drivers.csv (88 neatlogs traces) */
+fetch("data/plan.json").then(function(r){return r.json()}).then(function(j){
+ var d=j.drivers||{},t=(j.tiers||{}).Team||{},m=+d.cost_mean,n=+t.runs_per_month,cap=+t.cap_usd_per_run;
+ if(!(m>0&&n>0))return;
+ set("c-mo","$"+(m*n).toFixed(2));set("c-runs",n.toLocaleString("en-US"));set("c-runs2",n.toLocaleString("en-US"));set("c-mean","$"+m.toFixed(4));
+ if(+d.traces)set("c-n",+d.traces);if(cap>0)set("c-cap","$"+cap.toFixed(3));
 }).catch(function(){});
 
 /* PR carousel: reads data/prs.json. A screenshot shows when the entry names one. */
