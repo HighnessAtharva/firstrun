@@ -55,6 +55,15 @@ Set up over the neatlogs CLI on 2026-10-10, after the hackathon lifted plan limi
 
 The Public API cannot assign an AI evaluator to a form question, so each form and its evaluator are set in the dashboard before launch.
 
+**Both evaluators scored real traces on 2026-10-11.** Atharva ran each one from the dashboard's Try it step. The direct run API returned `NOT_FOUND_OR_OPERATION_DISABLED`, so the dashboard was the only path.
+
+| Evaluator | Trace | Tool calls | Result |
+|---|---|---|---|
+| report names the real failed step | `5520c5cff5e0ea61f130eced082b20c4`, the recovered Entire run | 6 | Named step 1 as the first failed step. Classed `curl: command not found` as `environment`, and the agent's own class matched. Fix proven. |
+| audit cards are backed by evidence | `4e936e06f7af5cdadee5e0db7e5d22dc`, the audit of neatlogs/neatlogs | 5 | Score 5 of 5. Counts consistent, every evidence card cites a commit, 0 implausible stale pages. |
+
+Screenshots: [run judge](nl-eval-run-result.png) and [audit judge](nl-eval-audit-result.png).
+
 **A radar batch for the evaluations to judge.** `scripts/radar.py` ranked 70 Exa results with Jev, and FirstRun ran the top 18 official quickstarts in 3 parallel lanes, tagged `radar`, under the Team cost cap. Two runs exposed a FirstRun bug: a dev server step (`flask --app hello run`, `litestar run`) never exits, so it timed out. The fix passes a server step once its output says it listens. The `radar-v2` rerun took Flask from 0 of 4 steps to verified 4 of 4.
 
 ## The Integration Check Passed the Organizer's Gates
