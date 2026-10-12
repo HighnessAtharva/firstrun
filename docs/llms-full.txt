@@ -279,11 +279,13 @@ export FIRSTRUN_ENV_FILE=/path/to/your/.env
 
 FirstRun uses `docker` from your `PATH`. On Windows without it, FirstRun calls Docker inside WSL with `wsl -d Ubuntu-22.04 docker`. Set `FIRSTRUN_DOCKER` to use another command.
 
-Run it on a quickstart URL:
+Run it on a quickstart URL. This one passed 3 of 3 steps in the neatlogs v1 and v2 runs:
 
 ```bash
-firstrun https://docs.example.com/quickstart
+firstrun https://docs.neatlogs.com/sdk/python
 ```
+
+Check your setup first with `firstrun doctor`. It prints one line for each tool and key, and never prints a key value.
 
 A URL tested in the last 24 hours returns the cached result. Add `--fresh` to run it again.
 

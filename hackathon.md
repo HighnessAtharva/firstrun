@@ -177,7 +177,8 @@ Confirmed requirements from https://neatlogs.com/hackathon:
 
 - [x] Uses neatlogs, Entire and cfo.ai, with a clear role for each: [evidence/README.md](evidence/README.md).
 - [x] Demo video of 3 minutes or less covering all three tools: [https://www.youtube.com/watch?v=9xxgu_1bH-E](https://www.youtube.com/watch?v=9xxgu_1bH-E), 2:54. The 2:59 long cut stays at [https://www.youtube.com/watch?v=JJNWWhSV9pc](https://www.youtube.com/watch?v=JJNWWhSV9pc).
-- [x] Public repo with setup and run instructions.
+- [x] Public repo with setup and run instructions, and an MIT [LICENSE](LICENSE).
+- [x] Architecture, implementation, runtime, reasoning and result for each tool, in one table: [The Three Tools at a Glance](README.md#the-three-tools-at-a-glance).
 - [x] Entire checkpoint link plus its ID: [01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
 - [x] cfo.ai business plan with pricing, costs, revenue and runway: [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE) and [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md).
 - [ ] Quote post on X between 7:00 and 11:55 PM IST on Mon 2026-10-12.
