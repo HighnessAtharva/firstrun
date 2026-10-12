@@ -1,6 +1,25 @@
 {
  "audits": [
   {
+   "id": "audit-20261012-082419-kleros-kleros",
+   "repo": "kleros/kleros",
+   "url": "https://github.com/kleros/kleros",
+   "ts": "2026-10-12T08:24:19+00:00",
+   "mode": "repo",
+   "pages": 1,
+   "stale": 0,
+   "quiet": 1,
+   "oldest_days": 1426,
+   "median_age_days": 1426,
+   "features": 0,
+   "uncovered": 0,
+   "cards": 1,
+   "release": "Unreleased",
+   "docs_repo": "",
+   "receipt": "FR-audit-20261012-082419-kleros-kleros",
+   "receipt_usd": 0.0
+  },
+  {
    "id": "audit-20261012-080350-kleros-docs",
    "repo": "kleros/docs",
    "url": "https://github.com/kleros/docs",
