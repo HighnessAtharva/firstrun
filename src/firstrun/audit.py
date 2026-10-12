@@ -72,6 +72,25 @@ _FEATURE_WORDS = re.compile(r"^(add|adds|added|introduce|introduces|support|supp
 _FIX_WORDS = re.compile(r"^(fix|fixes|fixed|resolve|resolves|correct|patch|handle|prevent|avoid)\b", re.I)
 _INTERNAL_WORDS = re.compile(r"^(bump|merge|revert|update (deps|dependencies)|release|version|chore|ci|test|refactor|lint|format)\b", re.I)
 
+# A commit is not worth a docs suggestion when it says the change is hidden, or the code marks it so.
+_HIDDEN_SUBJECT = re.compile(r"\b(hidden|internal|experimental|undocumented)\b", re.I)
+_IDENT = re.compile(r"\b[a-z]+[A-Z][A-Za-z0-9]*\b|\b[a-z]+(?:_[a-z0-9]+)+\b")
+_USER_SIDE = re.compile(r"--[a-z]|\b[A-Z][A-Z0-9]+_[A-Z0-9_]+\b|\b(command|subcommand|flag|option|setting|config|configuration|env|variable|key)s?\b", re.I)
+_INTERNAL_AREAS = {"lifecycle", "plumbing", "internal", "internals"}
+_INTERNAL_DIR = re.compile(r"(^|/)(internal|plumbing)/")
+# Go cobra, click and typer, argparse. The command name sits on the nearest Use:, add_parser, command or name line.
+_HIDDEN_MARK = re.compile(r"\bHidden:\s*true\b|\bhidden\s*=\s*True\b|\bhelp\s*=\s*argparse\.SUPPRESS\b")
+_CMD_NAME = re.compile(r"""\bUse:\s*"([A-Za-z][\w-]*)|\bUse:\s*cmd([A-Za-z]\w*)|add_parser\(\s*["']([\w-]+)|\.command\(\s*["']([\w-]+)|\bname\s*=\s*["']([\w-]+)""")
+# Docs for people who work on the product. A user-facing page is never one of these.
+CONTRIB_DOC = re.compile(
+    r"(^|/)(development|dev|architecture|contributing|contributors?|internal|hacking|maintainers?|adrs?|rfcs?)(/|$)|"
+    r"(^|/)(contributing|hacking|development|maintaining|architecture)(\.[a-z]+)?$", re.I)
+# Markdown that proves nothing about coverage, or is not prose: it restates commits, or it is tooling config.
+MD_SKIP = re.compile(
+    r"(^|/)(node_modules|vendor|third[_-]party)(/|$)|(^|/)\.[^/]+/|"
+    r"(^|/)(changelog|changes|history|release[-_ ]?notes?|license|licence|notice|authors)(\.[a-z]+)?$", re.I)
+_CHANGELOG = re.compile(r"(^|/)(changelog|changes|history|release[-_ ]?notes?)(\.[a-z]+)?$", re.I)
+
 
 # ----------------------------------------------------------------------------- git plumbing
 
@@ -114,6 +133,84 @@ def is_doc_path(path: str) -> bool:
 
 def _is_product(path: str) -> bool:
     return Path(path).suffix.lower() in CODE_EXT and not NOT_PRODUCT.search(path) and not is_doc_path(path)
+
+
+def is_contributor_doc(path: str) -> bool:
+    return bool(CONTRIB_DOC.search(path.replace("\\", "/")))
+
+
+def names_only_code(subject: str) -> bool:
+    """True when the subject names a code identifier (getTemporaryStore) and nothing a user types: no flag,
+    env var, config word, or backticked command. That is an internal refactor."""
+    s = _CONV.sub(lambda m: m.group("m"), re.sub(r"\s*\(#\d+\)\s*$", "", subject.strip()), count=1)
+    if not _IDENT.search(s):
+        return False
+    if any(not _IDENT.fullmatch(t.strip()) for t in re.findall(r"`([^`]+)`", s)):
+        return False
+    return not _USER_SIDE.search(s)
+
+
+def command_of(subject: str, repo_words: set[str]) -> tuple[str, str] | None:
+    """(root, text) of the command the subject names in backticks, with the program name dropped.
+    "`entire repo mirror create`" gives ("repo", "repo mirror create")."""
+    for t in re.findall(r"`([^`]+)`", subject):
+        words = [w for w in t.split() if re.fullmatch(r"[a-z][\w-]*", w)]
+        while words and any(len(w) >= 4 and len(words[0]) >= 4 and (w.startswith(words[0]) or words[0].startswith(w))
+                            for w in repo_words):
+            words.pop(0)
+        if words and not _IDENT.fullmatch(words[0]):
+            return words[0].lower(), " ".join(words).lower()
+    return None
+
+
+def hidden_in_source(text: str, subject: str) -> bool:
+    """True when the file marks a command hidden and that command is the one the subject talks about.
+    A marker with no command name nearby counts as hidden."""
+    if not text:
+        return False
+    lines = text.splitlines()
+    words = set(re.findall(r"[a-z0-9_-]+", subject.lower()))
+    for i, line in enumerate(lines):
+        if not _HIDDEN_MARK.search(line):
+            continue
+        best = None
+        for j in range(max(0, i - 12), min(len(lines), i + 13)):
+            m = _CMD_NAME.search(lines[j])
+            if m and (best is None or abs(j - i) < best[0]):
+                best = (abs(j - i), next(g for g in m.groups() if g))
+        if best is None or best[1].lower() in words:
+            return True
+    return False
+
+
+def markdown_corpus(repo: Path, texts: dict[str, str], cap: int = 600) -> str:
+    """Lowercase text of the user docs plus every other markdown file at HEAD, to ask "is it covered".
+    Changelogs and tooling folders stay out, because a changelog restates every commit."""
+    try:
+        files = _git(repo, "ls-tree", "-r", "--name-only", "HEAD", check=False).splitlines()
+        extra = [f for f in files if Path(f).suffix.lower() in DOC_EXT and f not in texts and not MD_SKIP.search(f)][:cap]
+        more = read_doc_texts(repo, extra)
+    except Exception:  # noqa: BLE001 - coverage then reads the user docs only, as before
+        more = {}
+    return "\n".join([*texts.values(), *more.values()]).lower()
+
+
+def changelog_names_release(text: str, name: str) -> bool:
+    """True when the changelog text carries the release name as its own version token. Never for "Unreleased"."""
+    if not text or not name or name.lower() == "unreleased":
+        return False
+    return bool(re.search(rf"(?<![\w.])v?{re.escape(name.lstrip('vV'))}(?!\w|\.\d)", text, re.I))
+
+
+def read_changelog(repo: Path) -> str:
+    """CHANGELOG, CHANGES or HISTORY at HEAD, anywhere in the first two folder levels. Empty when none."""
+    try:
+        files = _git(repo, "ls-tree", "-r", "--name-only", "HEAD", check=False).splitlines()
+        paths = [f for f in files if _CHANGELOG.search(f) and f.count("/") <= 1
+                 and Path(f).suffix.lower() in {"", ".md", ".mdx", ".rst", ".txt", ".adoc"}][:4]
+        return "\n".join(read_doc_texts(repo, paths).values())
+    except Exception:  # noqa: BLE001
+        return ""
 
 
 def read_history(repo: Path, rev: str = "HEAD") -> list[dict]:
@@ -498,9 +595,14 @@ def jev_features(feats: list[dict], excerpts: list[str]) -> dict[int, tuple[str,
 
 
 def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool,
-                  texts: dict[str, str] | None = None) -> list[dict]:
+                  texts: dict[str, str] | None = None, sources=None, head_files: list[str] | None = None) -> list[dict]:
+    """sources: optional callable(paths) -> {path: text at HEAD}, to read which commands the code marks hidden.
+    head_files: every file at HEAD, to find the file that defines a command the subject names."""
     window = now - timedelta(days=FEATURE_WINDOW_DAYS)
     recent = [c for c in commits if c["date"] >= window and any(_is_product(f) for f in c["files"])]
+    every = [f for c in recent for f in c["files"] if _is_product(f)]
+    # A Go repo keeps all its code under internal/, and there the folder says nothing about the product.
+    all_internal = bool(every) and sum(bool(_INTERNAL_DIR.search(f)) for f in every) / len(every) > 0.8
     kinds = [classify_subject(c["subject"]) for c in recent]
     if use_jev:
         idx = [i for i, k in enumerate(kinds) if k == "unknown"][:JEV_MAX]
@@ -508,7 +610,7 @@ def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool
             kinds[idx[i]] = k
     feats = []
     for c, k in zip(recent, kinds):
-        if k != "feature":
+        if k != "feature" or _HIDDEN_SUBJECT.search(c["subject"]) or names_only_code(c["subject"]):
             continue
         strong, weak = _terms(c["subject"])
         hits = [t for t in strong if t in corpus]
@@ -521,6 +623,10 @@ def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool
         pfiles = [f for f in c["files"] if _is_product(f)]
         stem = Path(pfiles[0]).stem.lower() if pfiles else ""
         area = (m.group("s") or "").lower() if m and m.group("s") else ""
+        if area in _INTERNAL_AREAS or stem in _INTERNAL_AREAS:
+            continue
+        if not all_internal and pfiles and all(_INTERNAL_DIR.search(f) for f in pfiles):
+            continue
         area_src = "scope" if area else ""
         if not area:
             area = stem if stem and stem not in GENERIC | {"__init__", "core", "main", "utils", "util", "lib"} else top
@@ -529,7 +635,25 @@ def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool
                       "author": c["author"], "pr": _pr(c["subject"]), "term": top, "area": area, "area_src": area_src,
                       "strong": strong[:4], "covered": covered, "judge": "text",
                       "files": [f for f in c["files"] if _is_product(f)][:4], "_words": strong + weak})
-    texts = texts or {}
+    if sources and feats:
+        src = sources(sorted({f for ft in feats for f in ft["files"]})) or {}
+        feats = [ft for ft in feats if not any(hidden_in_source(src.get(p, ""), ft["subject"]) for p in ft["files"])]
+        # The command a subject names is defined in a file the commit may not have touched: trail_cmd.go for "trail".
+        stems: dict[str, list[str]] = defaultdict(list)
+        for f in head_files or []:
+            if _is_product(f):
+                stem = re.sub(r"^(cmd|command)[_-]|[_-](cmd|command|commands)$", "", Path(f).stem.lower())
+                stems[stem].append(f)
+
+        def defs(ft):
+            words = set(re.findall(r"[a-z][a-z0-9_-]{2,}", ft["subject"].lower()))
+            return [p for w in sorted(words) for p in stems.get(w, [])[:3]]
+
+        defn = src_defs = sorted({p for ft in feats for p in defs(ft)})
+        if defn:
+            more = sources(defn) or {}
+            feats = [ft for ft in feats if not any(hidden_in_source(more.get(p, ""), ft["subject"]) for p in defs(ft))]
+    texts = {p: t for p, t in (texts or {}).items() if not is_contributor_doc(p)}
     hint = [_excerpt(texts, f["_words"]) for f in feats]
     for f, (path, _) in zip(feats, hint):
         f["closest_page"] = path
@@ -562,7 +686,7 @@ def momentum(commits: list[dict], now: datetime, feats: list[dict]) -> dict[str,
 
 # ----------------------------------------------------------------------------- releases and drafts
 
-_PRE = re.compile(r"nightly|canary|alpha|beta|rc|-rc|dev|snapshot|preview|next", re.I)
+_PRE = re.compile(r"nightly|canary|alpha|beta|\brc|-rc|dev|snapshot|preview|next", re.I)
 
 
 def release_range(commits: list[dict], tags: list[dict], now: datetime) -> dict:
@@ -633,8 +757,27 @@ def _n(k: int, word: str) -> str:
     return f"{k} {word}" + ("" if k == 1 else "s")
 
 
+def _area_documented(area: str, corpus: str) -> bool:
+    """The area is a heading, or a name inside backticks, somewhere in the markdown corpus."""
+    if not corpus or not area:
+        return False
+    w = re.escape(area.lower())
+    return bool(re.search(rf"^#{{1,6}}[^\n]*(?<![\w-]){w}(?![\w-])", corpus, re.M | re.I)
+                or re.search(rf"`[^`\n]*(?<![\w-]){w}(?![\w-])[^`\n]*`", corpus, re.I))
+
+
+def _cluster_basis(area: str, fs: list[dict]) -> bool:
+    """A cluster needs a real name: the area comes from a commit scope, or names itself in half the subjects.
+    A shared file stem alone groups unrelated commands, such as four commands that all touched one file."""
+    if sum(1 for f in fs if f.get("area_src") == "scope") * 2 >= len(fs):
+        return True
+    word = re.compile(rf"(?<![a-z0-9]){re.escape(area.lower())}(?![a-z0-9])")
+    return sum(1 for f in fs if word.search(f["subject"].lower())) * 2 >= len(fs)
+
+
 def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, dict], rel: dict,
-                notes: str, has_changelog_recent: bool, stale_days: int) -> list[dict]:
+                notes: str, has_changelog_recent: bool, stale_days: int, md_corpus: str = "",
+                release_documented: bool = False) -> list[dict]:
     cards: list[dict] = []
 
     def ev(f):
@@ -649,15 +792,20 @@ def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, 
     by_area: dict[str, list[dict]] = defaultdict(list)
     for f in unc:
         by_area[f["area"]].append(f)
-    clustered = set()
+    clustered, documented = set(), set()
     for area, fs in sorted(by_area.items(), key=lambda kv: -len(kv[1])):
-        if len(fs) < 3 or not area or len(area) < 3 or area in repo_words:
+        if len(fs) < 3 or not area or len(area) < 3 or area in repo_words or not _cluster_basis(area, fs):
+            continue
+        own = sorted((p["path"] for p in pages if area.lower() in p["path"].lower()
+                      and not is_contributor_doc(p["path"])), key=len)
+        if not own and _area_documented(area, md_corpus):
+            documented.add(area)  # a README or a development doc already names it: no page to write
             continue
         clustered.add(area)
-        near = Counter(f.get("closest_page") for f in fs if f.get("closest_page")).most_common(1)
+        near = Counter(f.get("closest_page") for f in fs if f.get("closest_page")
+                       and not is_contributor_doc(f["closest_page"])).most_common(1)
         first = min(f["date"] for f in fs)
         judged = any(f.get("judge") == "jev" for f in fs)
-        own = sorted((p["path"] for p in pages if area.lower() in p["path"].lower()), key=len)
         if own:
             title = f"Document the new `{area}` changes"
             why = (f"{len(fs)} user-facing changes to `{area}` shipped since {first}. "
@@ -672,9 +820,25 @@ def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, 
                       + (f" Link it from {near[0][0]}." if near else ""))
         cards.append({"kind": "document", "priority": 0, "title": title, "why": why, "action": action,
                       "evidence": [ev(f) for f in fs[:3]], "count": len(fs)})
-    seen = set()
+    todo, roots, low = [], {}, md_corpus.lower()
     for f in unc:
-        if f["area"] in clustered or f["subject"] in seen:
+        if f["area"] in clustered or f["area"] in documented:
+            continue
+        cmd = command_of(f["subject"], repo_words)
+        if not cmd:
+            todo.append(f)
+            continue
+        root, text = cmd
+        flags = re.findall(r"--[a-z][\w-]*", f["subject"])
+        new = text not in low or any(fl not in low for fl in flags)
+        if _area_documented(root, md_corpus) and not new:
+            continue  # the root is documented and the subject names no subcommand or flag the docs lack
+        roots.setdefault(root, []).append(f)
+    for fs in roots.values():  # one question per command root: the newest change stands for all of them
+        todo.append(max(fs, key=lambda f: f["date"]))
+    seen = set()
+    for f in todo:
+        if f["subject"] in seen:
             continue
         seen.add(f["subject"])
         cards.append({"kind": "document", "priority": 1, "title": f"Document: {_clean(f['subject'])}",
@@ -701,7 +865,7 @@ def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, 
                       "action": ("Jev read the page and the commits and expects at least one to make it wrong or incomplete. "
                                  if p.get("judge") == "jev" else "") + "Re-read the page against the current code and update or delete what changed.",
                       "evidence": p["evidence"]})
-    if rel["commits"]:
+    if rel["commits"] and not release_documented:
         cards.append({"kind": "automate", "priority": 2, "title": f"Release notes for {rel['name']} are ready to edit",
                       "why": f"{_n(len(rel['commits']), 'commit')} since {rel['previous'] or 'the last 30 days'}. "
                              + ("A changelog file changed recently." if has_changelog_recent else "No changelog file changed in this window."),
@@ -829,9 +993,11 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
                 pages = analyze_pages(commits, docs, texts, now, stale_days, repo_name=name)
             cleared = jev_stale(pages, texts) if use_jev else 0
             set_io(span, input={"docs_repo": docs_repo or name}, output={**_summary(pages), "jev_cleared": cleared})
-        corpus = " ".join(texts.values()).lower()
+        corpus = markdown_corpus(repo, texts)
         with neatlogs.trace("audit.features", kind="TOOL") as span:
-            feats = find_features(commits, now, corpus, use_jev, texts)
+            feats = find_features(commits, now, corpus, use_jev, texts,
+                                  sources=lambda paths: read_doc_texts(repo, paths),
+                                  head_files=_git(repo, "ls-tree", "-r", "--name-only", "HEAD", check=False).splitlines())
             mom = momentum(commits, now, feats)
             set_io(span, output={"features": len(feats), "uncovered": sum(1 for f in feats if not f["covered"])})
         rel = release_range(commits, tags, now)
@@ -839,7 +1005,9 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
         notes = draft_release_notes(name, rel, kinds)
         highlights = draft_highlights(name, feats, mom)
         cl = changelog_recent(commits, now)
-        cards = build_cards(name, pages, feats, mom, rel, notes, cl, stale_days)
+        in_changelog = changelog_names_release(read_changelog(repo), rel["name"])
+        cards = build_cards(name, pages, feats, mom, rel, notes, cl, stale_days, md_corpus=corpus,
+                            release_documented=in_changelog)
         stamp = now.strftime("%Y%m%d-%H%M%S")
         result = {
             "v": 1, "id": f"audit-{stamp}-{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}",
@@ -851,7 +1019,8 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
             "summary": {**_summary(pages), "features": len(feats), "uncovered": sum(1 for f in feats if not f["covered"]),
                         "cards": len(cards)},
             "pages": pages[:PAGES_MAX],
-            "release": {"name": rel["name"], "previous": rel["previous"], "date": rel["date"], "commits": len(rel["commits"])},
+            "release": {"name": rel["name"], "previous": rel["previous"], "date": rel["date"], "commits": len(rel["commits"]),
+                        "in_changelog": in_changelog},
             "features": feats[:40], "cards": cards[:30],
             "drafts": {"release_notes": notes, "highlights": highlights},
             "jev": bool(use_jev and os.environ.get("TYPESAFE_API_KEY")),
