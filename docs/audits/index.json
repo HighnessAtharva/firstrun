@@ -1,6 +1,25 @@
 {
  "audits": [
   {
+   "id": "audit-20261012-080350-kleros-docs",
+   "repo": "kleros/docs",
+   "url": "https://github.com/kleros/docs",
+   "ts": "2026-10-12T08:03:50+00:00",
+   "mode": "repo",
+   "pages": 171,
+   "stale": 0,
+   "quiet": 2,
+   "oldest_days": 264,
+   "median_age_days": 88,
+   "features": 1,
+   "uncovered": 1,
+   "cards": 3,
+   "release": "Unreleased",
+   "docs_repo": "",
+   "receipt": "FR-audit-20261012-080350-kleros-docs",
+   "receipt_usd": 3.3e-05
+  },
+  {
    "id": "audit-20261011-054325-accuknox-help",
    "repo": "AccuKnox/help",
    "url": "https://github.com/AccuKnox/help",
