@@ -1,6 +1,25 @@
 {
  "audits": [
   {
+   "id": "audit-20261012-125752-entireio-cli",
+   "repo": "entireio/cli",
+   "url": "https://github.com/entireio/cli",
+   "ts": "2026-10-12T12:57:52+00:00",
+   "mode": "repo",
+   "pages": 26,
+   "stale": 0,
+   "quiet": 0,
+   "oldest_days": 164,
+   "median_age_days": 3,
+   "features": 154,
+   "uncovered": 75,
+   "cards": 13,
+   "release": "v0.11.4",
+   "docs_repo": "",
+   "receipt": "FR-audit-20261012-125752-entireio-cli",
+   "receipt_usd": 0.00214
+  },
+  {
    "id": "audit-20261012-091549-kleros-kleros-v2",
    "repo": "kleros/kleros-v2",
    "url": "https://github.com/kleros/kleros-v2",
@@ -97,26 +116,6 @@
    "docs_repo": "dbt-labs/docs.getdbt.com",
    "receipt": "FR-audit-20261010-163620-dbt-labs-dbt-core",
    "receipt_usd": 0.005498,
-   "receipt_est": true
-  },
-  {
-   "id": "audit-20261010-163526-entireio-cli",
-   "repo": "entireio/cli",
-   "url": "https://github.com/entireio/cli",
-   "ts": "2026-10-10T16:35:26+00:00",
-   "mode": "repo",
-   "pages": 26,
-   "stale": 0,
-   "quiet": 0,
-   "oldest_days": 163,
-   "median_age_days": 2,
-   "features": 235,
-   "uncovered": 82,
-   "cards": 18,
-   "release": "v0.11.4",
-   "docs_repo": "",
-   "receipt": "FR-audit-20261010-163526-entireio-cli",
-   "receipt_usd": 0.002153,
    "receipt_est": true
   },
   {
