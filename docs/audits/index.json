@@ -1,10 +1,10 @@
 {
  "audits": [
   {
-   "id": "audit-20261012-082419-kleros-kleros",
+   "id": "audit-20261012-090104-kleros-kleros",
    "repo": "kleros/kleros",
    "url": "https://github.com/kleros/kleros",
-   "ts": "2026-10-12T08:24:19+00:00",
+   "ts": "2026-10-12T09:01:04+00:00",
    "mode": "repo",
    "pages": 1,
    "stale": 0,
@@ -16,14 +16,14 @@
    "cards": 1,
    "release": "Unreleased",
    "docs_repo": "",
-   "receipt": "FR-audit-20261012-082419-kleros-kleros",
+   "receipt": "FR-audit-20261012-090104-kleros-kleros",
    "receipt_usd": 0.0
   },
   {
-   "id": "audit-20261012-080350-kleros-docs",
+   "id": "audit-20261012-090104-kleros-docs",
    "repo": "kleros/docs",
    "url": "https://github.com/kleros/docs",
-   "ts": "2026-10-12T08:03:50+00:00",
+   "ts": "2026-10-12T09:01:04+00:00",
    "mode": "repo",
    "pages": 171,
    "stale": 0,
@@ -35,7 +35,7 @@
    "cards": 3,
    "release": "Unreleased",
    "docs_repo": "",
-   "receipt": "FR-audit-20261012-080350-kleros-docs",
+   "receipt": "FR-audit-20261012-090104-kleros-docs",
    "receipt_usd": 3.3e-05
   },
   {
