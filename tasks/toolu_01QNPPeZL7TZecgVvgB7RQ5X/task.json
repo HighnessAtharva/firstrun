@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01QNPPeZL7TZecgVvgB7RQ5X",
+  "agent_id": "af5f75a0a9546c359",
+  "subagent_type": "general-purpose",
+  "task_description": "Board: Docs gap report button",
+  "token_usage": {
+    "input_tokens": 66,
+    "cache_creation_tokens": 100087,
+    "cache_read_tokens": 3783222,
+    "output_tokens": 22270,
+    "api_call_count": 33
+  },
+  "started_at": "2026-10-12T17:57:18.236162+05:30",
+  "completed_at": "2026-10-12T18:02:27.8322838+05:30"
+}

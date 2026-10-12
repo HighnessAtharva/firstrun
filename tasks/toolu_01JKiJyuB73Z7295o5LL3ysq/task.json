@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01JKiJyuB73Z7295o5LL3ysq",
+  "agent_id": "a765dee5727fd49ad",
+  "subagent_type": "general-purpose",
+  "task_description": "Substack pass and publish",
+  "token_usage": {
+    "input_tokens": 166,
+    "cache_creation_tokens": 271691,
+    "cache_read_tokens": 17249126,
+    "output_tokens": 40709,
+    "api_call_count": 83
+  },
+  "started_at": "2026-10-12T17:45:19.445307+05:30",
+  "completed_at": "2026-10-12T17:55:44.0983178+05:30"
+}

@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_011uqzB73j5Tt1v3tpwrUSN7",
+  "agent_id": "afb06b07e6bf36cba",
+  "subagent_type": "general-purpose",
+  "task_description": "Judge path: fresh clone test",
+  "token_usage": {
+    "input_tokens": 54,
+    "cache_creation_tokens": 87244,
+    "cache_read_tokens": 2926355,
+    "output_tokens": 11853,
+    "api_call_count": 27
+  },
+  "started_at": "2026-10-12T15:44:20.5973988+05:30",
+  "completed_at": "2026-10-12T16:00:16.9352752+05:30"
+}

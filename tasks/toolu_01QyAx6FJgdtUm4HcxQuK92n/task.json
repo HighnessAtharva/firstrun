@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01QyAx6FJgdtUm4HcxQuK92n",
+  "agent_id": "a6795d24ffe61668e",
+  "subagent_type": "general-purpose",
+  "task_description": "Test live FirstRun website",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 64594,
+    "cache_read_tokens": 869440,
+    "output_tokens": 5616,
+    "api_call_count": 10
+  },
+  "started_at": "2026-10-12T15:44:13.1084845+05:30",
+  "completed_at": "2026-10-12T15:50:47.3428422+05:30"
+}

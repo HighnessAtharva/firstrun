@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_017pFSaD1fJc6dVRKxWKsshp",
+  "agent_id": "a374cbf7537202f46",
+  "subagent_type": "general-purpose",
+  "task_description": "Draft Substack and X article",
+  "token_usage": {
+    "input_tokens": 106,
+    "cache_creation_tokens": 248605,
+    "cache_read_tokens": 10766390,
+    "output_tokens": 43437,
+    "api_call_count": 53
+  },
+  "started_at": "2026-10-12T15:44:52.044697+05:30",
+  "completed_at": "2026-10-12T15:54:20.8221376+05:30"
+}

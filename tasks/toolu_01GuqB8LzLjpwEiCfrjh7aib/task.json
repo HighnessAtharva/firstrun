@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01GuqB8LzLjpwEiCfrjh7aib",
+  "agent_id": "ab8d8bf5fb6d3299d",
+  "subagent_type": "general-purpose",
+  "task_description": "Test FirstRun CLI and suite",
+  "token_usage": {
+    "input_tokens": 40,
+    "cache_creation_tokens": 106513,
+    "cache_read_tokens": 1827190,
+    "output_tokens": 6903,
+    "api_call_count": 20
+  },
+  "started_at": "2026-10-12T15:44:02.889929+05:30",
+  "completed_at": "2026-10-12T15:55:53.0275244+05:30"
+}

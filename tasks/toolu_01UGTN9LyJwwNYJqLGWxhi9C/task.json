@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01UGTN9LyJwwNYJqLGWxhi9C",
+  "agent_id": "acfff4c985de773b2",
+  "subagent_type": "general-purpose",
+  "task_description": "Fact-check FirstRun draft numbers",
+  "token_usage": {
+    "input_tokens": 52,
+    "cache_creation_tokens": 111858,
+    "cache_read_tokens": 3126501,
+    "output_tokens": 15024,
+    "api_call_count": 26
+  },
+  "started_at": "2026-10-12T17:48:18.1141081+05:30",
+  "completed_at": "2026-10-12T17:51:56.4500199+05:30"
+}
