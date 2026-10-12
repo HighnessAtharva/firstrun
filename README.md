@@ -17,7 +17,7 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 [**Demo film (2:54): the problem, Doc-test, Doc-audit, Agent Ready, neatlogs incidents, Entire and cfo.ai**](https://www.youtube.com/watch?v=9xxgu_1bH-E) · [Long cut (2:59)](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
 
-**Before and after:** v1, the baseline, finished 2 of 4 quickstarts and recovered 0 failed steps. v2 finished 3 of 4, recovered 3 failed steps and proved 1 fix in a fresh container. [See the comparison](#before-and-after-finished-quickstarts-went-from-2-of-4-to-3-of-4).
+**Before and after:** v1, the baseline, finished 2 of 4 quickstarts and recovered 0 failed steps. v2 finished 3 of 4, recovered 3 failed steps and proved 1 fix in a fresh container. [See the comparison](#before-and-after-v1-versus-v2-on-the-same-4-quickstarts). Every claim below links to a file, a commit, a trace ID or a pull request, and [evidence/README.md](evidence/README.md) maps them all.
 
 <br>
 
@@ -99,6 +99,58 @@ Time to first success: 195 s
 
 FirstRun writes `report.md`, `patch.diff` and `pr_body.md` into the run folder. The patch is one line.
 
+<a id="version-2-finishes-3-of-4-quickstarts-and-recovers-3-failed-steps"></a>
+<a id="before-and-after-finished-quickstarts-went-from-2-of-4-to-3-of-4"></a>
+
+## Before and After: v1 Versus v2 on the Same 4 Quickstarts
+
+v1 ran with recovery off. v2 ran after the neatlogs planner fix ([3ca6f11](https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299)), with recovery and verification on. The same 4 targets ran both times, one run each. Every number comes from the neatlogs traces in [evidence/before_after_traces.json](evidence/before_after_traces.json), and [evidence/neatlogs.md](evidence/neatlogs.md) pairs the trace IDs. Cost is the Sonnet 5.5 list price and is not billed, because the runs use a subscription token.
+
+| Target | v1 outcome (recovery off) | v1 trace | v2 outcome (fix, recovery, verify) | v2 trace |
+|---|---|---|---|---|
+| neatlogs Python SDK | passed 3/3 | `fccdbad9a9c6177b90112911fe485bd6` | passed 3/3 | `495d510fd6da5546dbc6ab6e52bcee68` |
+| Entire CLI install | failed at step 1, `curl: command not found` | `10c44df9626c19f5ac801f1c6d84610e` | verified 4/4 after 2 fixes, one of them a real docs fix | `5520c5cff5e0ea61f130eced082b20c4` |
+| Chroma getting started | passed 3/3 | `66ec093b00333fa221fade5d2fc5f55f` | passed 2/2 | `f63d2b842c2257ae8c340f6ce44e3848` |
+| OpenAI v0 README (fixture, Wayback 2023-08-02) | failed at step 6, `openai: command not found` | `b98b419e286acf436083febdb5217cf9` | pinned `openai==0.28.1`, then stopped honestly: the example needs an OpenAI key | `78e538e63a65c5d00d0281effa119567` |
+| **Finished (passed or verified)** | **2 of 4** | | **3 of 4** | |
+
+| Target | Cost v1 | Cost v2 | Time v1 | Time v2 | Tool calls v1 | Tool calls v2 |
+|---|---|---|---|---|---|---|
+| neatlogs Python SDK | $0.0397 | $0.0529 | 118.9 s | 99.2 s | 4 | 4 |
+| Entire CLI install | $0.0170 | $0.0095 | 27.6 s | 416.8 s | 2 | 12 |
+| Chroma getting started | $0.0217 | $0.0019 | 272.9 s | 201.2 s | 4 | 3 |
+| OpenAI v0 README | $0.0266 | $0.0157 | 94.4 s | 86.2 s | 7 | 5 |
+| **Mean** | **$0.0262** | **$0.0200** | **128.4 s** | **200.8 s** | **4.25** | **6.0** |
+
+Across the 4 runs, v2 recovered 3 failed steps against 0 in v1, and proved 1 fix in a fresh container against 0.
+
+**v2 is slower, and one run explains it.** The mean time rose by 72.4 s. The Entire install took 27.6 s in v1 because it stopped at step 1. In v2 it recovered the step, fixed `PATH`, and then ran all 4 steps again in a fresh container, which took 416.8 s and 12 tool calls. The other 3 targets averaged 162.1 s in v1 and 128.9 s in v2. A verified fix costs a second full run, and that is the price of the proof. Four targets with one run each is a small sample.
+
+The six mistakes the agent made in v1:
+
+1. The plan changes between runs. The same neatlogs page gave 4 steps, then 3 steps, 5 minutes later.
+2. The planner invents steps. It added `command -v entire` and `test -f first_trace.py`, which the docs never say.
+3. The planner writes placeholder steps. Chroma step 2 is `true`.
+4. A fake secret passes as a step. `export OPENAI_API_KEY='sk-...'` exits 0.
+5. The planner skips the steps that matter, because they need a key.
+6. 9 of 16 steps check only the exit code.
+
+## The Business Plan Prices 3 Tiers and Ends Month 18 With $16,685 in Cash
+
+A 70% margin floor turns the measured cost per run into a cap per tier. The plan is [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md), the numbers are in [business/unit_economics.json](business/unit_economics.json), and the public model is [cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE).
+
+| Tier | Price | Runs a month | Cap per run | Margin at mean cost | Margin at p95 cost |
+|---|---|---|---|---|---|
+| Free | $0 | 4 | $0.01355 | no revenue | no revenue |
+| Team | $49 a month | 300 | $0.04697 | 87.8% | 66.4% |
+| Scale | $299 a month | 3,000 | $0.02787 | 80.1% | 44.9% |
+
+- **Cost per run:** the mean is $0.01782 over 88 neatlogs traces, and the p95 is $0.05286 (trace `495d510fd6da5546dbc6ab6e52bcee68`). Compute adds $0.00203. These are list prices, not billed.
+- **Revenue and cash at month 18:** Base ends at $2,069 MRR and $16,685 cash. Growth ends at $5,427 MRR and $44,674 cash. Cash starts at $5,000 on 2026-11-01. Source: [docs/data/cfo-model.json](docs/data/cfo-model.json).
+- **Payback:** in Base, cash is back above the $5,000 start in month 3 ($5,042, 2027-01). In Growth it happens in month 1 ($5,097).
+- **Runway:** under the old fixed $0.50 cap, cash goes negative in month 14 (2027-12, -$1,288) and ends month 18 at -$12,212. Base and Growth never run out.
+- **Limit:** no customer has paid yet, so every customer count in the model is an assumption.
+
 ## Seven Teams Get a Different Job Out of the Same Engine
 
 | # | You are | The problem | Run this | You get |
@@ -160,7 +212,7 @@ A DevRel team ships a quickstart once and a dependency moves the week after. The
 firstrun https://docs.example.com/quickstart
 ```
 
-A clean pass ends as `passed`. A break ends as `verified` once a second container proves the fix. The nightly check costs $0.0178 per run on average over 88 runs, measured by neatlogs at list price.
+A clean pass ends as `passed`. A break ends as `verified` once a second container proves the fix. The nightly check costs $0.0178 per run on average over 88 runs, measured by neatlogs at list price ([business/unit_economics.json](business/unit_economics.json)).
 
 </details>
 
@@ -261,16 +313,16 @@ FirstRun ran five open-source quickstarts whose docs live in public repos. Every
 </tr>
 </table>
 
-| Quickstart | Result | What FirstRun found | Upstream |
-|---|---|---|---|
-| [dbt Core with DuckDB](https://docs.getdbt.com/guides/duckdb) | verified 9/10 | `jafgen --years 6` fails because `years` is now positional | [dbt-labs/docs.getdbt.com#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149) |
-| same guide | verified | the cloned repo pins `networkx==3.7`, which needs Python 3.12, and the guide names no version | [dbt-labs/docs.getdbt.com#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150) |
-| [Entire CLI install](https://docs.entire.io/installation) | verified 4/4 | `install.sh` puts `entire` in `~/.local/bin`, which a clean shell lacks on `PATH` | [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) |
-| [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the page names 0.9.0 as latest while the installer fetches 0.9.58, and the APT steps need `curl`, `gnupg` and `sudo` | [accuknox/help#671](https://github.com/accuknox/help/pull/671) |
-| [MkDocs getting started](https://www.mkdocs.org/getting-started/) | verified 9/10 | the docs commands work, the container needed `curl` | none needed |
-| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | verified 10/10 | the docs already cover both gaps FirstRun hit: install `create-dagster` first, and pip 25.1 for `--group` | none needed |
+| Quickstart | Result | What FirstRun found | Upstream | State on 2026-10-12 |
+|---|---|---|---|---|
+| [dbt Core with DuckDB](https://docs.getdbt.com/guides/duckdb) | verified 9/10 | `jafgen --years 6` fails because `years` is now positional | [dbt-labs/docs.getdbt.com#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149) | open, review required |
+| same guide | verified | the cloned repo pins `networkx==3.7`, which needs Python 3.12, and the guide names no version | [dbt-labs/docs.getdbt.com#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150) | open, review required |
+| [Entire CLI install](https://docs.entire.io/installation) | verified 4/4 | `install.sh` puts `entire` in `~/.local/bin`, which a clean shell lacks on `PATH` | [entireio/cli#2724](https://github.com/entireio/cli/pull/2724) | open, review required |
+| [AccuKnox knoxctl](https://help.accuknox.com/knoxctl/) | verified 5/5 | the page names 0.9.0 as latest while the installer fetches 0.9.58, and the APT steps need `curl`, `gnupg` and `sudo` | [accuknox/help#671](https://github.com/accuknox/help/pull/671) | open, review required |
+| [MkDocs getting started](https://www.mkdocs.org/getting-started/) | verified 9/10 | the docs commands work, the container needed `curl` | none needed | n/a |
+| [Dagster quickstart](https://docs.dagster.io/getting-started/quickstart) | verified 10/10 | the docs already cover both gaps FirstRun hit: install `create-dagster` first, and pip 25.1 for `--group` | none needed | n/a |
 
-On #10149, a bisect comment shows jafgen 0.4.6 dropped `--years` 11 months before the guide shipped. Replay any run in the browser at [firstrun.atharvashah.com](https://firstrun.atharvashah.com/run.html).
+On #10149, [a bisect comment](https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6096827074) shows jafgen 0.4.6 dropped `--years` 11 months before the guide shipped. Each PR also carries a public replay of its run: [#10149](https://github.com/dbt-labs/docs.getdbt.com/pull/10149#issuecomment-6097945132), [#10150](https://github.com/dbt-labs/docs.getdbt.com/pull/10150#issuecomment-6097945350), [#2724](https://github.com/entireio/cli/pull/2724#issuecomment-6097945657), [#671](https://github.com/accuknox/help/pull/671#issuecomment-6097945911). The states above come from `gh pr view`, and none is merged yet. Replay any run in the browser at [firstrun.atharvashah.com](https://firstrun.atharvashah.com/run.html).
 
 ## Built for #neatHack With Three Required Tools
 
@@ -315,7 +367,7 @@ The measured cost per run from neatlogs goes into the pricing model.
 | **Implementation** | neatlogs Python SDK 1.4.26 in `src/firstrun/tracing.py`, plus 2 detections, 3 alerts and an AI evaluator. | `entire enable --agent claude-code`, a checkpoint trailer on each agent commit and 6 Trail runners. | `firstrun econ` reads 88 traces and writes `drivers.csv`. `firstrun run --tier NAME` applies the cap. |
 | **Runtime** | Every run and audit exports one trace. | Each agent commit records its session. An Entire merge gate blocks on a high finding. | The executor and the recovery agent check the tier cap in the `budget` GUARDRAIL span. |
 | **Reasoning** | The "planner invented a step" detection flagged 3 planner spans in v1. Investigate traced them to the planner prompt. | Entire runners reviewed every layer on Trails 3 to 7 and found real bugs, such as a secret retry loop. | The old $0.50 cap was 30 times the mean run of $0.0178, so the plan sets a cap for each tier. |
-| **Result** | Finished quickstarts went from 2 of 4 to 3 of 4. Cost per run went from $0.0262 to $0.0200. | 91 of 132 non-merge commits carry a checkpoint. The Entire judge ranked the repo 3.93 of 5. | The old cap runs out of cash in month 14. Base ends month 18 at $16,685. |
+| **Result** | Finished quickstarts went from 2 of 4 to 3 of 4. Cost per run went from $0.0262 to $0.0200. | 93 of 155 non-merge commits on main at `ac05fd6` carry a checkpoint. The Entire judge ranked the repo 3.93 of 5. | The old cap runs out of cash in month 14. Base ends month 18 at $16,685. |
 | **Proof** | [evidence/neatlogs.md](evidence/neatlogs.md) | [evidence/entire.md](evidence/entire.md) | [public model](https://cfo.ai/s/_u5lbrHIl9KX_JQE), [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) |
 
 ### neatlogs Shows What the Agent Did
@@ -325,7 +377,7 @@ Each run is one `firstrun.run` trace. The span kinds are WORKFLOW, AGENT, TOOL a
 <table>
 <tr>
 <td width="50%" valign="top"><img src="docs/assets/t-neatlogs-trace.webp" alt="neatlogs trace of a FirstRun run"><br><b>One trace per run.</b> Reading, planning, every step and verification sit under one root span.</td>
-<td width="50%" valign="top"><img src="docs/assets/t-neatlogs-detection.webp" alt="A custom neatlogs detection named docs step broke"><br><b>A custom detection.</b> "Docs step broke" flags failed tool spans. 40 flagged.</td>
+<td width="50%" valign="top"><img src="docs/assets/t-neatlogs-detection.webp" alt="A custom neatlogs detection named docs step broke"><br><b>A custom detection.</b> "Docs step broke" flags failed tool spans. 78 flagged on Oct 10 and 11, from a baseline of 0 ([evidence/neatlogs.md](evidence/neatlogs.md)).</td>
 </tr>
 <tr>
 <td width="50%" valign="top"><img src="docs/assets/t-neatlogs-analysis.webp" alt="neatlogs detection analysis over 132 traces"><br><b>Detection analysis.</b> 132 traces, 154 errors. "Docs step broke" hit 35 times, 12.9%.</td>
@@ -337,7 +389,7 @@ Each run is one `firstrun.run` trace. The span kinds are WORKFLOW, AGENT, TOOL a
 </tr>
 </table>
 
-Two detections run on the traces: "docs step broke" and "planner invented a step". The second one flagged 3 planner spans in v1. Investigate traced them to the planner prompt and proposed a stricter one ([evidence/neatlogs-investigation.md](evidence/neatlogs-investigation.md)). A Claude Code session read the detection and its trend over the neatlogs MCP server and applied the fix in commit 3ca6f11. The fix adds code guards that drop invented, placeholder and fake-secret steps.
+Two detections run on the traces: "docs step broke" and "planner invented a step". The second one flagged 3 planner spans in v1. Investigate traced them to the planner prompt and proposed a stricter one ([evidence/neatlogs-investigation.md](evidence/neatlogs-investigation.md)). A Claude Code session read the detection and its trend over the neatlogs MCP server and applied the fix in commit [3ca6f11](https://github.com/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299). The fix adds code guards that drop invented, placeholder and fake-secret steps.
 
 The integration check read 3 real runs back from persisted traces. See [docs/neatlogs-integration.md](docs/neatlogs-integration.md).
 
@@ -351,11 +403,11 @@ The integration check read 3 real runs back from persisted traces. See [docs/nea
 </tr>
 </table>
 
-- **Checkpoints:** 91 of 132 non-merge commits on main up to `f5d73eb` carry an `Entire-Checkpoint:` trailer, counted with `git log --no-merges` on 2026-10-11. The 41 without are the 4 setup commits before the first agent session and site commits from 2026-10-10 and 2026-10-11. On many of those the Entire commit hook hung and was stopped so the commit could land. Merge commits carry none, because Entire's hook skips merges. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
-- **Trail reviews:** Entire runners reviewed every layer on Trails 3 to 7. They raised 2 real bugs on Layer 1, a secret retry loop and a Windows-only Docker default, both fixed in e2aacb7.
-- **Trails:** [Trail 1](https://entire.io/gh/HighnessAtharva/firstrun/trails/1) covers Layer 1. Trail pages need an entire.io login. The commit and session pages open without one.
-- **Graph:** the build agents searched the repo through the graph. 4 graph calls saved about 11,662 tokens.
-- **Brain:** it holds 7 durable facts, such as why recovery stops at 3 attempts. Its last refresh indexed 63 files and 1,056 symbols.
+- **Checkpoints:** 93 of 155 non-merge commits on main at `ac05fd6` carry an `Entire-Checkpoint:` trailer, counted with `git log --no-merges --grep='^Entire-Checkpoint:'` on 2026-10-12. Up to `f5d73eb` the count was 91 of 132, and the 41 without are the 4 setup commits before the first agent session and site commits from 2026-10-10 and 2026-10-11. On many of those the Entire commit hook hung and was stopped so the commit could land. Merge commits carry none, because Entire's hook skips merges. The neatlogs fix commit shows the full agent session behind it: [checkpoint 01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
+- **Trail reviews:** Entire runners reviewed every layer on Trails 3 to 7. They raised 2 real bugs on Layer 1, a secret retry loop and a Windows-only Docker default, both fixed in [e2aacb7](https://github.com/HighnessAtharva/firstrun/commit/e2aacb7).
+- **Trails:** [Trail 3](https://entire.io/gh/HighnessAtharva/firstrun/trails/3) covers Layer 1, and each later layer has its own Trail, listed in [evidence/entire.md](evidence/entire.md). Trail pages need an entire.io login. The commit and session pages open without one.
+- **Graph:** the build agents searched the repo through the graph. `entire graph stats` counted 10 graph calls and about 56,254 tokens saved ([evidence/entire.md](evidence/entire.md)).
+- **Brain:** it holds 16 durable facts, such as why recovery stops at 3 attempts. A refresh from a clean `main` covered 38 sessions, 319 files, 6,770 symbols and 16,549 relations ([evidence/entire.md](evidence/entire.md), [graph.ndjson](evidence/graph.ndjson)).
 
 ### cfo.ai Prices the Nightly Check
 
@@ -372,18 +424,9 @@ The business plan sets the agent's spending limit. `firstrun econ` reads 88 neat
 | Team | $49 a month | 10, nightly | $0.0470 | 9.1% |
 | Scale | $299 a month | 100, nightly, with PRs, Bisect and Prerequisite Proof | $0.0279 | 26.1% |
 
-The [public cfo.ai model](https://cfo.ai/s/_u5lbrHIl9KX_JQE) covers the four parts of the plan.
+Prices, costs, revenue, cash and runway are in [the business plan section above](#the-business-plan-prices-3-tiers-and-ends-month-18-with-16685-in-cash). The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over, and [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) holds the Scale fix and every assumption.
 
-| Part | Figure | Source |
-|---|---|---|
-| Pricing | Free $0, Team $49 a month, Scale $299 a month | [business/unit_economics.json](business/unit_economics.json) |
-| Costs | $0.01862 per run, which is the trace mean plus compute. Fixed costs are $25 a month, and Stripe takes 2.9% plus $0.30 per invoice | [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) |
-| Revenue | $2,069 MRR in month 18 of the Base Scenario, and $5,427 in the Growth Scenario | [docs/data/cfo-model.json](docs/data/cfo-model.json) |
-| Runway | Cash starts at $5,000 on 2026-11-01 and ends month 18 at $16,685 in Base. Cash stays positive, so cfo.ai shows no runway limit | [docs/data/cfo-model.json](docs/data/cfo-model.json), [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) |
-
-The old fixed cap of $0.50 let one bad month cost a Scale customer's fee five times over. The plan, the Scale fix and every assumption are in [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md). The cfo.ai model is public at [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE). Under the old cap, cash goes negative in month 14.
-
-The [plan page](https://firstrun.atharvashah.com/plan/) shows the caps, the measured cost spread and the cash per Scenario. Every doc-test run is tagged against the caps. A neatlogs alert uses the Scale cap as its threshold, and `scripts/neatlogs_issues.py` mirrors each detection and alert as a GitHub issue labeled [`neatlogs`](https://github.com/HighnessAtharva/firstrun/issues?q=label%3Aneatlogs).
+The [plan page](https://firstrun.atharvashah.com/plan/) shows the caps, the measured cost spread and the cash per Scenario. Every doc-test run is tagged against the caps. A neatlogs alert fires when the p95 cost passes the Scale cap plus 25% ($0.035), and `scripts/neatlogs_issues.py` mirrors each detection and alert as a GitHub issue labeled [`neatlogs`](https://github.com/HighnessAtharva/firstrun/issues?q=label%3Aneatlogs).
 
 </td>
 </tr>
@@ -555,39 +598,6 @@ A `budget` GUARDRAIL span runs before every recovery. The root span `firstrun.ru
 | Verification | A model-free re-run in a new container | `verify` span, status `verified` |
 | Iteration | v1 traces, detections, a fix, v2 traces | The results table below |
 
-<a id="version-2-finishes-3-of-4-quickstarts-and-recovers-3-failed-steps"></a>
-
-## Before and After, Finished Quickstarts Went From 2 of 4 to 3 of 4
-
-v1 ran with recovery off. v2 ran after the neatlogs planner fix (3ca6f11), with recovery and verification on. The same four targets ran both times. Cost and duration come from the neatlogs traces in [evidence/before_after_traces.json](evidence/before_after_traces.json). Cost is the Sonnet 5.5 list price and is not billed, because the runs use a subscription token.
-
-| Target | Before (v1, baseline, recovery off) | After (v2, neatlogs fix, recovery, verify) |
-|---|---|---|
-| neatlogs Python SDK | passed 3/3 | passed 3/3 |
-| Entire CLI install | failed at step 1, `curl: command not found` | verified 4/4 after 2 fixes, one of them a real docs fix |
-| Chroma getting started | passed 3/3 | passed 2/2 |
-| OpenAI v0 README (fixture, Wayback 2023-08-02) | failed at step 6, `openai: command not found` | pinned `openai==0.28.1`, then stopped honestly: the example needs an OpenAI key |
-
-| Metric | Before (v1, baseline) | After (v2) | Change |
-|---|---|---|---|
-| Quickstarts that end passed or verified | 2 of 4 | 3 of 4 | +1 |
-| Failed steps recovered | 0 | 3 | +3 |
-| Fixes proven in a fresh container | 0 | 1 | +1 |
-| Average tool spans per run | 4.25 | 6.0 | +1.75 |
-| Average cost per run, from neatlogs | $0.0262 | $0.0200 | -$0.0062 |
-| Average run time, verification included | 128 s | 201 s | +73 s |
-
-v2 takes longer because a verified fix runs the whole quickstart a second time in a new container.
-
-The six mistakes the agent made in v1:
-
-1. The plan changes between runs. The same neatlogs page gave 4 steps, then 3 steps, 5 minutes later.
-2. The planner invents steps. It added `command -v entire` and `test -f first_trace.py`, which the docs never say.
-3. The planner writes placeholder steps. Chroma step 2 is `true`.
-4. A fake secret passes as a step. `export OPENAI_API_KEY='sk-...'` exits 0.
-5. The planner skips the steps that matter, because they need a key.
-6. 9 of 16 steps check only the exit code.
-
 ## A Quickstart Step Failed, and FirstRun Fixed It and Proved the Fix
 
 The dbt DuckDB guide ran on 2026-10-10 as a 10-step plan. Step 1 failed because the container had no git, step 3 hit a networkx pin that needs Python 3.12, which the guide never states, and step 10 used a removed flag (`jafgen --years 6`). Steps 3 and 10 are the two docs bugs. FirstRun classed each failure, patched the command and retried it. Step 7, `dbt docs serve`, starts a web server, so FirstRun skipped it and said why. A fresh container then passed 9 of 9 runnable steps with no model calls. The run record is [docs/examples/dbt.txt](docs/examples/dbt.txt), a share code in the format of [docs/share-format.md](docs/share-format.md). [Open the dbt run on the site](https://firstrun.atharvashah.com/doc-test/#ex=dbt).
@@ -618,7 +628,7 @@ Known limits are listed in [docs/known-limits.md](docs/known-limits.md). Example
 
 - **Build:** a lead session planned the work and ran worker agents in parallel, one track each: fixtures, planner, executor, recovery, verification, report page, then edge cases. All agents ran on Sonnet 5.5 at medium effort.
 - **Review:** each layer is an Entire Trail, so Entire runners reviewed every commit since kickoff. They found 3 real bugs, all fixed: a secret retry loop, a Windows-only Docker default, and a cd guard that was written but never called.
-- **CI:** GitHub Actions runs the offline suite on every push and pull request. On the launch branch on 2026-10-11 the offline suite gave 384 passed, 68 skipped (they need `FIRSTRUN_LIVE=1` or a human check) and 1 expected failure. On main on 2026-10-12 it gave 389 passed, 71 skipped and 1 expected failure.
+- **CI:** GitHub Actions runs the offline suite on every push and pull request. On the launch branch on 2026-10-11 the offline suite gave 384 passed, 68 skipped (they need `FIRSTRUN_LIVE=1` or a human check) and 1 expected failure. On main on 2026-10-12 it gave 389 passed, 72 skipped and 1 expected failure ([CI run](https://github.com/HighnessAtharva/firstrun/actions/runs/38249771615)).
 - **Jury self-test:** the Entire judge plugin, run on this repo with the real start time, ranked it with no excluded work: 3.93 of 5, authenticity 4.5, integrity 5.0. The report is [evidence/jury-selftest.txt](evidence/jury-selftest.txt).
 
 Planning happened before the event in a private repo. The build log is [hackathon.md](hackathon.md).
