@@ -1,6 +1,6 @@
 # FirstRun
 
-> FirstRun checks docs by running them: Doc-test runs a quickstart in a clean container and proves the fix, and Doc-audit ranks a repo's stale docs from its git history.
+> FirstRun checks docs by running them: Doc-test runs a quickstart in a clean container and proves the fix, and Doc-audit reads a repo's whole git history, ranks its stale docs and maps who works on which part of the code.
 
 An agent starts with agent.md. It holds the preflight, the install, the commands with `--json` output, the error codes and the safety rules.
 

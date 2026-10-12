@@ -54,7 +54,7 @@ host.innerHTML='<nav class="sn-nav" aria-label="Site"><div class="sn-bar">'+
   '<div class="sn-h">Watch one</div>'+
   it(T+"#ex=dbt","play","Replay the dbt run","A docs bug, the fix, the clean rerun, the PR")+"</div></div>"+
  '<div class="sn-mm mm-audit" id="sn-m-audit" role="region" aria-label="Doc-audit">'+
-  '<div class="sn-hero">'+tile("audit")+"<h3>Doc-audit</h3><p>Reads a repo's git history and lists the docs pages the code changed underneath, plus shipped features with no docs.</p>"+
+  '<div class="sn-hero">'+tile("audit")+"<h3>Doc-audit</h3><p>Reads a whole repo's git history, code and docs. Lists stale pages and shipped features with no docs, and maps who works on which part of the code.</p>"+
   '<div class="sn-nums"><span><b id="sn-n-aud">&nbsp;</b>repos audited</span><span><b id="sn-n-stale">&nbsp;</b>stale pages found</span></div>'+
   '<a class="sn-go" href="'+A+'">Open Doc-audit</a></div>'+
   '<div class="sn-list"><div class="sn-h">Real audits</div><div id="sn-aud"></div>'+

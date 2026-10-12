@@ -9,13 +9,13 @@
 <link rel="stylesheet" href="/assets/type.css">
 <link rel="alternate" type="text/markdown" href="/agent.md" title="FirstRun agent quickstart">
 <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
-<meta name="description" content="Docs break quietly, and a new user finds out first. Doc-test runs your quickstart in a clean container and proves the fix. Doc-audit finds the pages your code left behind.">
+<meta name="description" content="Docs break quietly, and a new user finds out first. Doc-test runs your quickstart in a clean container and proves the fix. Doc-audit reads a whole repo's git history, finds the pages your code left behind and shows who works on which part of the code.">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#0c0d17">
 <script>document.documentElement.className="js"</script>
 <meta property="og:type" content="website">
 <meta property="og:title" content="FirstRun: Docs that work (literally).">
-<meta property="og:description" content="Doc-test proves your quickstart works in a clean container. Doc-audit reads git history and finds stale docs pages.">
+<meta property="og:description" content="Doc-test proves your quickstart works in a clean container. Doc-audit reads a whole repo's git history, finds stale docs pages and maps who works on what.">
 <meta property="og:image" content="assets/og-card-1200x630.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
@@ -769,9 +769,9 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <div class="pop pop-a" id="popA" role="tooltip">
 <div class="pop-m">
 <div class="pop-h"><span class="pt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg></span><div><b>Doc-audit</b><small>Takes a GitHub repo</small></div></div>
-<p class="pop-s" id="popA-s">Reads a repo's git history and lists the stale pages and the shipped features with no docs.</p>
+<p class="pop-s" id="popA-s">Reads the whole repo's git history, code and docs. Lists stale pages, shipped features with no docs, and who works on which part of the code.</p>
 <p class="pop-k">You get</p>
-<ul class="pop-g"><li>Stale pages, with the commits behind each one</li><li>Features that shipped with no docs</li><li>A ranked list of fixes, each with an owner</li></ul>
+<ul class="pop-g"><li>Stale pages, with the commits behind each one</li><li>Features that shipped with no docs</li><li>A ranked list of fixes, each with an owner</li><li>A map of who works on which part of the code</li></ul>
 </div>
 <div class="pop-x"><span class="k">dbt-core, 11,552 commits read</span><code>project-flags.md</code><code>last edit 453 days ago</code><code class="er">29 code changes since</code><code class="ok">15 stale pages</code><code class="ok">72 features with no docs</code></div>
 </div>

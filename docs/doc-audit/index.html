@@ -507,7 +507,7 @@ pre.draft{white-space:pre-wrap;font:13px/1.55 var(--mono);background:var(--sunk)
 <div class="hero"><div class="hero-in">
 <div class="hero-l">
 <span class="sn-tile t-audit" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h4.2"/><path d="M12.5 3l5.5 5.5h-5.5z"/><circle cx="16" cy="15.8" r="3.1"/><path d="M18.3 18.1l2.7 2.7"/></svg></span>
-<h1>Doc-audit</h1><p class="lede">Point it at a GitHub repo. It reads the git history and shows which docs pages the code changed underneath, and what to ship next.</p>
+<h1>Doc-audit</h1><p class="lede">Point it at any GitHub repo, with or without a docs folder. It reads the whole git history, code and docs. It shows which pages the code left behind, who works on which part of the code, and what to ship next.</p>
 <div class="mode" role="group" aria-label="Repo type"><button type="button" id="m-pub" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg>Public repo</button><button type="button" id="m-priv" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Private repo</button></div>
 <form class="ask panel top" id="f"><svg class="i" aria-hidden="true"><use href="#i-gh"/></svg><label for="repo" class="sr">GitHub repo link</label><input id="repo" placeholder="github.com/fastapi/typer" autocomplete="off" spellcheck="false"><button class="btn pri" type="submit" id="go">Audit it</button></form>
 <p class="hint" id="hint"><span id="hint-t">Public repos are audited on GitHub Actions in about 2 minutes. The board link lands on the request issue.</span> Agents can read <a href="../agent.md">agent.md</a>.</p>
@@ -517,8 +517,8 @@ pre.draft{white-space:pre-wrap;font:13px/1.55 var(--mono);background:var(--sunk)
 <p class="demo-sub"><a href="https://www.youtube.com/watch?v=2vZb6pZAF8Q" target="_blank" rel="noopener">Watch the Doc-audit journey, 1:56</a><span>Short on time? <a href="https://www.youtube.com/watch?v=zo94agwRAXc" target="_blank" rel="noopener">The 57 s tour</a></span></p>
 <ol class="flow" aria-label="How the audit works">
 <li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-clone"/></svg></span><div><b>Clone</b><span>One blobless clone, on GitHub Actions or on your machine. $0 in model calls.</span></div></li>
-<li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-match"/></svg></span><div><b>Match</b><span>Each commit is matched to the docs pages on its topic.</span></div></li>
-<li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg></span><div><b>Board</b><span>Stale pages and missing docs land on one board.</span></div></li>
+<li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-match"/></svg></span><div><b>Match</b><span>Each commit is matched to the docs pages on its topic, and to the part of the code it changed.</span></div></li>
+<li><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg></span><div><b>Board</b><span>Stale pages, missing docs and the team map of the code land on one board.</span></div></li>
 </ol>
 </div>
 <ol class="steps" id="steps" hidden></ol>
@@ -748,14 +748,14 @@ function say(s){
   function ar(a){P.appendChild(el("b",null,a.label))}
   if(!s){
     var lead=T.rowsP[0];
-    if(T.solo){who(lead);t(" made every commit in the last 12 months");if(lead.topA){t(", most of it in ");ar(lead.topA)}t(".");return}
+    if(T.solo){who(lead);t(" made every commit "+PERIOD());if(lead.topA){t(", most of it in ");ar(lead.topA)}t(".");return}
     var k=T.A.filter(function(a){return a.single}).length;
     if(lead.i>=0&&lead.topA){who(lead);t(" works most on ");ar(lead.topA);t(". ")}
     t(k===0?"No area rests on one person.":k===1?"1 area rests on one person.":k+" areas rest on one person.");return}
   if(s.t==="p"||(s.t==="pa"&&!s.a)){var id=s.id||s.p;
     if(id==="others"){var O=T.O;t(O.people+" other people made ");P.appendChild(el("b",null,pct(O.share)));t(" of the work, each too little to list on their own.");return}
     var p=personOf(id);if(!p)return;who(p);
-    if(p.topA){t(" works most on ");ar(p.topA);if(p.top_share!=null)t(" ("+pct(p.top_share)+" of their recent work)");t(".")}else t(" made "+p.commits+" commits in the last year.");
+    if(p.topA){t(" works most on ");ar(p.topA);if(p.top_share!=null)t(" ("+pct(p.top_share)+" of their recent work)");t(".")}else t(" made "+p.commits+" commits "+PERIOD()+".");
     if(p.last)t(" Last commit "+md(p.last)+".");
     if(NX.length&&!NX[0].fb){var n=picks(p.id);t(n?" Suggested for "+n+(n===1?" task":" tasks")+" below.":" No task below is suggested for them yet.")}return}
   if(s.t==="pa"){var pp=personOf(s.p),aa=T.aById[s.a];if(!aa){say({t:"p",id:s.p});return}
@@ -794,13 +794,19 @@ function wire(node,s){
   node.addEventListener("mouseenter",function(){HOV=s;apply()});node.addEventListener("mouseleave",function(){HOV=null;apply()});
   node.addEventListener("focus",function(){HOV=s;apply()});node.addEventListener("blur",function(){HOV=null;apply()});
   if(node.tagName==="BUTTON")node.addEventListener("click",function(){togglePin(s)})}
-function personLabel(p){return p.name+", "+p.commits+" commits in the last year"+(p.topA?", works most on "+p.topA.label:"")+". Show their suggested tasks."}
+function personLabel(p){return p.name+", "+p.commits+" commits "+PERIOD()+""+(p.topA?", works most on "+p.topA.label:"")+". Show their suggested tasks."}
 
+function PERIOD(){return IDLE?"over the life of the repo":"in the last 12 months"}
+var IDLE=0;
 function paintTeam(a){
   var S=$("r-team");T=null;DRAWN=false;SVG=null;
   try{T=teamModel(a.team)}catch(e){T=null;console.warn("team map skipped",e)}
   if(!T){S.hidden=true;return}
   S.hidden=false;
+  /* a repo with no commit in 12 months maps its whole history up to the last commit, and the board says so */
+  var nt=S.querySelector(".tm-note"),idle=+(a.team&&a.team.idle_days)||0;IDLE=idle;
+  if(nt&&!nt.dataset.base)nt.dataset.base=nt.firstChild.textContent;
+  if(nt&&nt.dataset.base)nt.firstChild.textContent=idle?"This repo has been quiet for "+idle.toLocaleString("en-US")+" days. The map covers its public commits up to the last one, on "+fmt(a.team.as_of)+". Suggestions, not assignments: anyone can pick up any task. ":nt.dataset.base;
   try{buildTeam(a)}catch(e){T=null;S.hidden=true;console.warn("team map skipped",e)}
 }
 function buildTeam(a){
@@ -846,7 +852,7 @@ function buildTeam(a){
   /* facts */
   var F=$("tm-facts");F.textContent="";
   function fact(cls,icon,lead,rest){var li=el("li",cls),g=el("span","g");g.appendChild(ic(icon));li.appendChild(g);var sp=el("span");sp.appendChild(el("b",null,lead));if(rest)sp.appendChild(document.createTextNode(rest));li.appendChild(sp);F.appendChild(li)}
-  if(T.solo)fact("warn","one","One person made every commit in the last 12 months."," Every area rests on them.");
+  if(T.solo)fact("warn","one","One person made every commit "+PERIOD()+"."," Every area rests on them.");
   else{var single=T.A.filter(function(x){return x.single});
     if(single.length){var names=single.slice(0,4).map(function(x){return x.label});
       fact("warn","one",single.length+" of "+T.A.length+" areas rest on one person",": "+names.join(", ")+(single.length>4?" and "+(single.length-4)+" more":"")+".")}
