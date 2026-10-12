@@ -423,3 +423,26 @@ def test_published_boards_keep_the_contract(path):
         assert len(json.dumps(b["next"], separators=(",", ":"), ensure_ascii=False)) < 25_000
     text = json.dumps({k: b.get(k) for k in ("team", "next")}, ensure_ascii=False)
     assert EMAIL.search(text) is None
+
+
+def test_a_dormant_repo_maps_the_year_before_its_last_commit(tmp_path):
+    """kleros/kleros had no commit for two years, so a map of the last 12 months held nobody. It maps the code that was built."""
+    r = tmp_path / "dormant"
+    r.mkdir()
+    _git(r, "init", "-q", "-b", "main", str(r))
+    _commit(r, {"contracts/Court.sol": "a\n", "test/court.js": "b\n"}, "feat: court", 1200)
+    _commit(r, {"contracts/Court.sol": "c\n"}, "fix: court", 700)
+    commits = audit.read_history(r)
+    t, _ = team.collect({"repo": r, "rev": commits[0]["sha"], "commits": commits}, NOW, github=False, optout={})
+    assert t["total_people"] == 1
+    assert t["idle_days"] >= 699
+    assert t["window_days"] > 365
+    assert t["as_of"] == commits[0]["date"].date().isoformat()
+    assert any(a["label"].startswith("contracts") or a["path"].startswith("contracts") for a in t["areas"])
+    live = tmp_path / "live"
+    live.mkdir()
+    _git(live, "init", "-q", "-b", "main", str(live))
+    _commit(live, {"src/a.py": "a\n"}, "feat: a", 10)
+    lc = audit.read_history(live)
+    t2, _ = team.collect({"repo": live, "rev": lc[0]["sha"], "commits": lc}, NOW, github=False, optout={})
+    assert "idle_days" not in t2

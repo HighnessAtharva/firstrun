@@ -300,8 +300,8 @@ def _label(path: str, other: bool) -> str:
     return base + (" (other)" if other else "")
 
 
-def _decay(as_of: datetime, when: datetime) -> float:
-    return 2 ** (-max(0, (as_of - when).days) / HALF_LIFE_DAYS)
+def _decay(as_of: datetime, when: datetime, half_life: float = HALF_LIFE_DAYS) -> float:
+    return 2 ** (-max(0, (as_of - when).days) / half_life)
 
 
 def _mass(n: int) -> float:
@@ -322,6 +322,8 @@ class TeamCtx:
 
     def __init__(self, as_of: datetime) -> None:
         self.as_of = as_of
+        self.window_days = WINDOW_DAYS
+        self.idle = 0
         self.people: dict[str, dict] = {}  # key -> name, login, gh, last, hidden, weight, commits
         self.pid_of_sha: dict[str, str] = {}
         self.files_of_sha: dict[str, list[str]] = {}
@@ -375,12 +377,14 @@ class TeamCtx:
 
 def build_team(sources: list[dict], as_of: datetime, hidden: set | frozenset = frozenset(),
                extra_bots: set | frozenset = frozenset(), token: str | None = None, github: bool = True,
-               release: dict | None = None) -> tuple[dict, TeamCtx]:
+               release: dict | None = None, window_days: int = WINDOW_DAYS,
+               half_life: float = HALF_LIFE_DAYS) -> tuple[dict, TeamCtx]:
     """sources: [{"repo": "code" or "docs", "commits": read_history(), "paths": ls-tree at the audited commit,
     "slug": "owner/name" or ""}]. release: {"tagger": name, "shas": [...]} of the newest release.
     Returns (the board's team block, the context nextup reads)."""
-    start = as_of - timedelta(days=WINDOW_DAYS)
+    start = as_of - timedelta(days=window_days)
     ctx = TeamCtx(as_of)
+    ctx.window_days = window_days
     ctx.docs_repo = "docs" if any(s["repo"] == "docs" for s in sources) else "code"
     for s in sources:
         for c in s["commits"]:
@@ -410,7 +414,7 @@ def build_team(sources: list[dict], as_of: datetime, hidden: set | frozenset = f
     for r in rows:
         i = ids.setdefault(r["key"], {"names": Counter(), "login": None, "gh": None, "weight": 0.0, "newest": {}})
         i["names"][r["c"]["author"]] += 1
-        i["weight"] += _decay(as_of, r["when"]) * _mass(len(r["files"]))
+        i["weight"] += _decay(as_of, r["when"], half_life) * _mass(len(r["files"]))
         if r["slug"] and r["slug"] not in i["newest"]:
             i["newest"][r["slug"]] = r["c"]["sha"]  # rows run newest first
         if not i["login"]:
@@ -482,7 +486,7 @@ def build_team(sources: list[dict], as_of: datetime, hidden: set | frozenset = f
             continue
         p = ctx.people[pk]
         day = r["when"].date().isoformat()
-        each = _decay(as_of, r["when"]) * _mass(len(r["files"])) / len(r["files"])
+        each = _decay(as_of, r["when"], half_life) * _mass(len(r["files"])) / len(r["files"])
         p["weight"] += each * len(r["files"])
         p["commits"] += 1
         p["last"] = r["when"] if p["last"] is None or r["when"] > p["last"] else p["last"]
@@ -623,7 +627,7 @@ def build_team(sources: list[dict], as_of: datetime, hidden: set | frozenset = f
         o_commits = sum(ctx.people[k]["commits"] for k in others)
         ctx.team.clear()
         ctx.team.update({
-            "v": 1, "as_of": as_of.date().isoformat(), "window_days": WINDOW_DAYS, "half_life_days": HALF_LIFE_DAYS,
+            "v": 1, "as_of": as_of.date().isoformat(), "window_days": window_days, "half_life_days": round(half_life),
             "source": "git+github" if found_any else "git", "commits": sum(1 for r in rows if r["files"]),
             "bots_skipped": bots,
             "total_people": len(ranked), "capped": capped,
@@ -634,6 +638,8 @@ def build_team(sources: list[dict], as_of: datetime, hidden: set | frozenset = f
             "rest": {"share": round(rest_w / T_all, 3), "commits": len(rest_commits)},
             "cells": cells,
         })
+        if ctx.idle:
+            ctx.team["idle_days"] = ctx.idle
         # The board budget is 10 KB for the map. The thinnest ribbons go first, the people and areas never do.
         cells.sort(key=lambda c: -c[2])
         while cells and len(json.dumps(ctx.team, separators=(",", ":"), ensure_ascii=False)) > TEAM_BYTES:
@@ -681,6 +687,16 @@ def collect(code: dict, as_of: datetime, docs: dict | None = None, release: dict
         return {"v": 1, "disabled": "flag"}, None
     if os.environ.get("FIRSTRUN_TEAM", "").strip() == "0":
         return {"v": 1, "disabled": "env"}, None
+    # A repo with no commit in the window would map nobody. Anchor on its last commit, so the map shows who built it.
+    newest = [s["commits"][0]["date"] for s in (code, docs) if s and s["commits"]]
+    idle = (as_of - max(newest)).days if newest else 0
+    window = WINDOW_DAYS
+    if idle > WINDOW_DAYS:
+        as_of = max(newest)
+        oldest = min(s["commits"][-1]["date"] for s in (code, docs) if s and s["commits"])
+        window = max(WINDOW_DAYS, (as_of - oldest).days + 1)  # no activity in a year: map the whole life of the repo
+    else:
+        idle = 0
     sources = []
     for label, src in (("code", code), ("docs", docs)):
         if not src:
@@ -694,8 +710,13 @@ def collect(code: dict, as_of: datetime, docs: dict | None = None, release: dict
 
         site = find_audit_site()
         optout = load_optout(site / "team-optout.json" if site else None)
-    return build_team(sources, as_of, hidden=optout.get("hidden") or set(), extra_bots=optout.get("bots") or set(),
-                      github=github, release=release)
+    team, ctx = build_team(sources, as_of, hidden=optout.get("hidden") or set(), extra_bots=optout.get("bots") or set(),
+                           github=github, release=release, window_days=window,
+                           half_life=max(HALF_LIFE_DAYS, window / 2) if idle else HALF_LIFE_DAYS)
+    ctx.idle = idle
+    if idle:
+        team["idle_days"] = idle
+    return team, ctx
 
 
 def counts(team: dict | None, nxt: dict | None = None) -> dict:
@@ -713,7 +734,7 @@ def counts(team: dict | None, nxt: dict | None = None) -> dict:
 # ----------------------------------------------------------------------------- publishing rules
 
 _TEAM_KEYS = {"v", "as_of", "window_days", "half_life_days", "source", "commits", "bots_skipped", "total_people", "capped",
-              "people", "others", "areas", "rest", "cells", "disabled"}
+              "people", "others", "areas", "rest", "cells", "disabled", "idle_days"}
 _PERSON_KEYS = {"id", "name", "login", "gh", "ini", "commits", "share", "last", "top", "top_share"}
 _AREA_KEYS = {"id", "label", "path", "repo", "share", "commits", "last", "owners", "bus", "single", "quiet"}
 _ITEM_KEYS = {"rank", "kind", "title", "path", "area", "rationale", "why_now", "score", "parts", "effort", "effort_why",

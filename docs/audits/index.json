@@ -1,10 +1,29 @@
 {
  "audits": [
   {
-   "id": "audit-20261012-090104-kleros-kleros",
+   "id": "audit-20261012-091549-kleros-kleros-v2",
+   "repo": "kleros/kleros-v2",
+   "url": "https://github.com/kleros/kleros-v2",
+   "ts": "2026-10-12T09:15:49+00:00",
+   "mode": "repo",
+   "pages": 2,
+   "stale": 0,
+   "quiet": 0,
+   "oldest_days": 107,
+   "median_age_days": 104,
+   "features": 6,
+   "uncovered": 6,
+   "cards": 10,
+   "release": "@kleros/kleros-app@3.1.0",
+   "docs_repo": "",
+   "receipt": "FR-audit-20261012-091549-kleros-kleros-v2",
+   "receipt_usd": 0.000157
+  },
+  {
+   "id": "audit-20261012-091532-kleros-kleros",
    "repo": "kleros/kleros",
    "url": "https://github.com/kleros/kleros",
-   "ts": "2026-10-12T09:01:04+00:00",
+   "ts": "2026-10-12T09:15:32+00:00",
    "mode": "repo",
    "pages": 1,
    "stale": 0,
@@ -16,7 +35,7 @@
    "cards": 1,
    "release": "Unreleased",
    "docs_repo": "",
-   "receipt": "FR-audit-20261012-090104-kleros-kleros",
+   "receipt": "FR-audit-20261012-091532-kleros-kleros",
    "receipt_usd": 0.0
   },
   {

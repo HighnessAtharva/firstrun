@@ -10,14 +10,14 @@
 
 Canonical URL: https://firstrun.atharvashah.com/agent.md. Follow the steps in order. Ask the human only where a step says so.
 
-FirstRun checks documentation by running it. Doc-test runs a docs quickstart in a clean Docker container, fixes the first step that breaks and proves the fix in a second clean container. Doc-audit reads a GitHub repo's git history and ranks stale docs pages and the docs work to do next. Every run and every audit can end with a receipt that prices the work and carries a hash you can check.
+FirstRun checks documentation by running it. Doc-test runs a docs quickstart in a clean Docker container, fixes the first step that breaks and proves the fix in a second clean container. Doc-audit reads a GitHub repo's whole git history, code and docs. It ranks stale docs pages and the work to do next, and maps who works on which part of the code. A repo with no docs folder still gets a team map. Every run and every audit can end with a receipt that prices the work and carries a hash you can check.
 
 ## 1. Pick the Tool From the Task
 
 | The human gives you | Use | Command |
 |---|---|---|
 | A docs or quickstart URL | Doc-test | `firstrun run <url> --json` |
-| A GitHub repo and a question about its docs | Doc-audit | `firstrun audit <owner/repo> --no-publish --json` |
+| A GitHub repo and a question about its docs, or about who works on which part of its code | Doc-audit | `firstrun audit <owner/repo> --no-publish --json` |
 | A public GitHub repo, and no install is allowed | Hosted Doc-audit | Recipe D |
 | A question about a run or an audit already on the site | Public data | Recipe E |
 | A request for cost or proof of a run or an audit | Receipt | `firstrun receipt <id> --json` |
