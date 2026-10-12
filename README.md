@@ -8,6 +8,8 @@
 
 FirstRun runs your quickstart in a clean container, finds the first step that breaks, and proves the fix with a second clean run.
 
+**The problem:** Quickstarts break when a package is renamed, a flag is removed or a version moves. Nobody on the team gets an alert. The first person who finds the break is a new user, and most new users leave.
+
 [![Live site](https://img.shields.io/badge/site-firstrun.atharvashah.com-0A66D6?style=for-the-badge)](https://firstrun.atharvashah.com/)
 [![neatHack 2026](https://img.shields.io/badge/built%20for-%23neatHack%202026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
 [![Tests](https://img.shields.io/badge/tests-384%20offline-1B8A3A?style=for-the-badge)](.github)
@@ -43,12 +45,16 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 ```bash
 pip install git+https://github.com/HighnessAtharva/firstrun
-firstrun https://docs.example.com/quickstart
+firstrun https://docs.neatlogs.com/sdk/python
 ```
 
-## The Demo Video Runs 2 Minutes 59 Seconds and Gives Each Tool a Chapter
+That command needs the setup in [Run Your First Check in 5 Minutes](#run-your-first-check-in-5-minutes). Replace the URL with your own quickstart.
 
-[Watch the demo video on YouTube (2:59)](https://www.youtube.com/watch?v=JJNWWhSV9pc). It runs FirstRun on the dbt guide at 0:12 and shows Bisect at 0:36. The neatlogs chapter starts at 1:07, Entire at 1:51 and cfo.ai at 2:19.
+## The Demo Video Runs 2 Minutes 54 Seconds and Covers All Three Tools
+
+[Watch the demo video on YouTube (2:54)](https://www.youtube.com/watch?v=9xxgu_1bH-E). It covers the problem, Doc-test, Doc-audit, Agent Ready, neatlogs incidents, Entire and cfo.ai.
+
+The [2:59 long cut](https://www.youtube.com/watch?v=JJNWWhSV9pc) runs FirstRun on the dbt guide at 0:12 and shows Bisect at 0:36. In the long cut, the neatlogs chapter starts at 1:07, Entire at 1:51 and cfo.ai at 2:19.
 
 ## Any Coding Agent Can Start From agent.md
 
@@ -301,6 +307,17 @@ The measured cost per run from neatlogs goes into the pricing model.
 </tr>
 </table>
 
+### The Three Tools at a Glance
+
+| | neatlogs | Entire | cfo.ai |
+|---|---|---|---|
+| **Architecture** | One `firstrun.run` trace wraps reading, planning, every step and verification. | Checkpoints, Graph, Brain and Trails, enabled before commit 1 (Entire CLI 0.11.4). | `business/drivers.csv` from neatlogs traces goes to Ari over the `cfoai` MCP server, which builds the public model. |
+| **Implementation** | neatlogs Python SDK 1.4.26 in `src/firstrun/tracing.py`, plus 2 detections, 3 alerts and an AI evaluator. | `entire enable --agent claude-code`, a checkpoint trailer on each agent commit and 6 Trail runners. | `firstrun econ` reads 88 traces and writes `drivers.csv`. `firstrun run --tier NAME` applies the cap. |
+| **Runtime** | Every run and audit exports one trace. | Each agent commit records its session. An Entire merge gate blocks on a high finding. | The executor and the recovery agent check the tier cap in the `budget` GUARDRAIL span. |
+| **Reasoning** | The "planner invented a step" detection flagged 3 planner spans in v1. Investigate traced them to the planner prompt. | Entire runners reviewed every layer on Trails 3 to 7 and found real bugs, such as a secret retry loop. | The old $0.50 cap was 30 times the mean run of $0.0178, so the plan sets a cap for each tier. |
+| **Result** | Finished quickstarts went from 2 of 4 to 3 of 4. Cost per run went from $0.0262 to $0.0200. | 91 of 132 non-merge commits carry a checkpoint. The Entire judge ranked the repo 3.93 of 5. | The old cap runs out of cash in month 14. Base ends month 18 at $16,685. |
+| **Proof** | [evidence/neatlogs.md](evidence/neatlogs.md) | [evidence/entire.md](evidence/entire.md) | [public model](https://cfo.ai/s/_u5lbrHIl9KX_JQE), [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md) |
+
 ### neatlogs Shows What the Agent Did
 
 Each run is one `firstrun.run` trace. The span kinds are WORKFLOW, AGENT, TOOL and GUARDRAIL. Claude calls appear as typed LLM spans.
@@ -471,11 +488,13 @@ export FIRSTRUN_ENV_FILE=/path/to/your/.env
 
 FirstRun uses `docker` from your `PATH`. On Windows without it, FirstRun calls Docker inside WSL with `wsl -d Ubuntu-22.04 docker`. Set `FIRSTRUN_DOCKER` to use another command.
 
-Run it on a quickstart URL:
+Run it on a quickstart URL. This one passed 3 of 3 steps in the neatlogs v1 and v2 runs:
 
 ```bash
-firstrun https://docs.example.com/quickstart
+firstrun https://docs.neatlogs.com/sdk/python
 ```
+
+Check your setup first with `firstrun doctor`. It prints one line for each tool and key, and never prints a key value.
 
 A URL tested in the last 24 hours returns the cached result. Add `--fresh` to run it again.
 
