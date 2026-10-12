@@ -119,6 +119,38 @@ h3{font-size:var(--t-h3);letter-spacing:-.015em;font-weight:700}
  .jr .jv:hover .tt,.jr .jv:focus-visible .tt{transform:translate(0,-50%)}
 }
 
+/* behind the scenes: one tab per tool */
+.t-paper{--tint:oklch(98.3% .006 85);--edge:oklch(91% .014 85);--c:oklch(42% .03 250);--link:oklch(40% .08 250)}
+.segw{display:flex;justify-content:center;margin-top:24px}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:14px;background:oklch(100% 0 0/.75);border:1px solid var(--edge)}
+.seg button{font:inherit;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px 0 8px;border:0;border-radius:10px;background:none;color:var(--mut);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.seg button:hover{color:var(--ink)}
+.seg img{width:26px;height:26px;border-radius:7px;border:1px solid var(--line)}
+.seg button[aria-selected=true]{background:var(--panel);color:var(--ink);box-shadow:0 1px 4px oklch(30% .02 220/.16)}
+.seg{display:none}.js-tabs .seg{display:inline-flex}
+.bp{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(22px,3.4vw,48px);align-items:center;margin-top:30px}
+.bp+.bp{margin-top:56px}.js-tabs .bp+.bp{margin-top:30px}
+.js-tabs .bp[hidden]{display:none}
+.js-tabs .bp{animation:bp-in .5s var(--ease)}
+@keyframes bp-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.bp.nl{--c:var(--c-nl);--tc:var(--c-nl)}.bp.en{--c:var(--c-en);--tc:var(--c-en)}.bp.cf{--c:var(--c-cf);--tc:var(--c-cf)}
+.shot a{display:block;border-radius:16px;overflow:hidden;border:1px solid var(--edge);background:var(--panel);box-shadow:0 26px 50px -30px oklch(25% .03 230/.5);transition:transform .5s var(--ease)}
+.shot a:hover{transform:translateY(-3px)}
+.shot img{width:100%;height:auto}
+.shot figcaption{font-size:13px;color:var(--mut);margin-top:10px;text-align:center}
+.bp h3{display:flex;align-items:center;gap:10px;font-size:clamp(22px,2.2vw,28px);letter-spacing:-.025em;line-height:1.15}
+.bp h3 img{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);flex:none}
+.bs{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:14px}
+.bs b{display:block;font:600 clamp(22px,2.4vw,28px)/1.05 var(--mono);letter-spacing:-.04em;color:var(--tc)}
+.bs span{display:block;font-size:14.5px;line-height:1.4;margin-top:3px}
+.bp .btns{margin-top:20px}
+.who{display:flex;align-items:center;gap:10px;margin-top:18px}
+.who .jv img{width:36px;height:36px}
+.who .jv+.jv{margin-left:-14px}
+@media(max-width:860px){.bp{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:640px){.seg button{padding:0 10px 0 6px;font-size:13.5px;gap:6px}.seg img{width:22px;height:22px}}
+@media(prefers-reduced-motion:reduce){.js-tabs .bp{animation:none}}
+
 /* evidence grid */
 .ck{list-style:none;margin:28px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .ck li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:2px 10px;align-items:start;background:oklch(100% 0 0/.72);border:1px solid var(--edge);border-radius:14px;padding:14px 16px}
@@ -359,6 +391,34 @@ dialog.lb button{font:inherit;font-size:13px;font-weight:600;min-height:34px;min
 <li class="t-moss" style="--w:15"><a href="#public"><i></i><span><b>15%</b><span class="l">Building in public</span><span class="s">Public</span></span></a></li>
 <li class="t-sea" style="--w:12"><a href="#useful"><i></i><span><b>10%</b><span class="l">Usefulness</span><span class="s">Useful</span></span></a></li>
 </ol>
+</div>
+</section>
+
+<section id="behind" class="band t-paper" aria-labelledby="behind-h">
+<div class="wrap">
+<h2 id="behind-h">Behind Every Run, neatlogs Watched, Entire Recorded and cfo.ai Priced</h2>
+<div class="segw"><div class="seg" role="tablist" aria-label="Behind the scenes, one tool at a time"><button type="button" role="tab" id="bt-nl" aria-controls="bp-nl" aria-selected="true"><img src="../assets/logo-neatlogs.webp" alt="" width="26" height="26">neatlogs</button><button type="button" role="tab" id="bt-en" aria-controls="bp-en" aria-selected="false" tabindex="-1"><img src="../assets/logo-entire.webp" alt="" width="26" height="26">Entire</button><button type="button" role="tab" id="bt-cf" aria-controls="bp-cf" aria-selected="false" tabindex="-1"><img src="../assets/logo-cfoai.webp" alt="" width="26" height="26">cfo.ai</button></div></div>
+<div class="bp nl" role="tabpanel" id="bp-nl" aria-labelledby="bt-nl">
+<figure class="shot"><a href="../assets/t-neatlogs-investigate.webp"><img src="../assets/t-neatlogs-investigate.webp" alt="neatlogs Investigate on the planner directory incident: 52.8x spike, medium confidence 66%, root cause in the planner." loading="lazy" decoding="async"></a><figcaption>neatlogs Investigate names the planner bug at 66% confidence.</figcaption></figure>
+<div><h3><img src="../assets/logo-neatlogs.webp" alt="" width="34" height="34">neatlogs Caught the Agent Getting It Wrong</h3>
+<ol class="bs"><li><b>132</b><span>traces, one per run, $0.9071 in total</span></li><li><b>52.8x</b><span>spike in failed steps, traced to its cause at 66% and fixed in commit 2de852f</span></li><li><b>46 of 52</b><span>runs where the neatlogs AI judge named the right failed step</span></li></ol>
+<div class="btns l"><a class="btn sm" href="https://github.com/HighnessAtharva/firstrun/blob/main/evidence/neatlogs.md">Open neatlogs.md</a><a class="btn sm sec" href="#neatlogs">All 10 screenshots</a></div>
+<div class="who" role="group" aria-label="neatlogs judges"><a class="jv" href="https://x.com/bettersayAJ" aria-label="Ajay Yadav, Founder and CEO, neatlogs"><img src="../assets/judges/j-ajay.webp" alt="" width="36" height="36" loading="lazy" decoding="async"><span class="tt" aria-hidden="true">Ajay Yadav<small>Founder and CEO, neatlogs</small></span></a><a class="jv" href="https://x.com/akshay_hangloo" aria-label="Akshay Hangloo, Head of product engineering, neatlogs"><img src="../assets/judges/j-akshay.webp" alt="" width="36" height="36" loading="lazy" decoding="async"><span class="tt" aria-hidden="true">Akshay Hangloo<small>Head of product engineering, neatlogs</small></span></a></div></div>
+</div>
+<div class="bp en" role="tabpanel" id="bp-en" aria-labelledby="bt-en" hidden>
+<figure class="shot"><a href="../assets/t-entire-gate.webp"><img src="../assets/t-entire-gate.webp" alt="Entire Trail 3, Layer 1 review: merge blocked by one high severity finding." loading="lazy" decoding="async"></a><figcaption>Entire Trail 3 blocks the merge on a high severity finding.</figcaption></figure>
+<div><h3><img src="../assets/logo-entire.webp" alt="" width="34" height="34">Entire Recorded the Session Behind Each Commit</h3>
+<ol class="bs"><li><b>91 of 132</b><span>commits carry an Entire checkpoint</span></li><li><b>3</b><span>real bugs found by Trail reviews, all fixed</span></li><li><b>1</b><span>merge blocked by Trail 3 on a high severity finding</span></li></ol>
+<div class="btns l"><a class="btn sm" href="https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299">Open a checkpoint</a><a class="btn sm sec" href="#entire">All 6 screenshots</a></div>
+<div class="who" role="group" aria-label="Entire judges"><a class="jv" href="https://x.com/HaimantikaM" aria-label="Haimantika Mitra, Senior DevRel, Entire"><img src="../assets/judges/j-haimantika.webp" alt="" width="36" height="36" loading="lazy" decoding="async"><span class="tt" aria-hidden="true">Haimantika Mitra<small>Senior DevRel, Entire</small></span></a><a class="jv" href="https://www.linkedin.com/in/abhi-singhs/" aria-label="Abhi Singh, Senior solutions engineer, Entire"><img src="../assets/judges/j-abhi.webp" alt="" width="36" height="36" loading="lazy" decoding="async"><span class="tt" aria-hidden="true">Abhi Singh<small>Senior solutions engineer, Entire</small></span></a></div></div>
+</div>
+<div class="bp cf" role="tabpanel" id="bp-cf" aria-labelledby="bt-cf" hidden>
+<figure class="shot"><a href="../assets/t-cfo-drivers.webp"><img src="../assets/t-cfo-drivers.webp" alt="The cfo.ai FirstRun drivers table: mean cost per run 0.018, Scale cap 0.028, margin floor 0.7, measured from drivers.csv." loading="lazy" decoding="async"></a><figcaption>The cfo.ai drivers, measured from FirstRun's own traces.</figcaption></figure>
+<div><h3><img src="../assets/logo-cfoai.webp" alt="" width="34" height="34">cfo.ai Turned Measured Cost Into Each Plan's Cap</h3>
+<ol class="bs"><li><b>$0.01782</b><span>average run, measured over 88 traces</span></li><li><b>Month 14</b><span>when the old $0.50 cap runs out of cash</span></li><li><b>70%</b><span>margin sets each cap: Team $0.04697, Scale $0.02787</span></li></ol>
+<div class="btns l"><a class="btn sm" href="https://cfo.ai/s/_u5lbrHIl9KX_JQE">Open the cfo.ai model</a><a class="btn sm sec" href="#cfoai">Plans and the cash chart</a></div>
+</div>
+</div>
 </div>
 </section>
 
@@ -699,6 +759,18 @@ Entire-Checkpoint: 01M4JGJ6NTE7YNB9Z0YW5FYVHN</pre></div>
 <figure><img id="lb-i" alt="" width="1400" height="800"><figcaption><b id="lb-n"></b><span id="lb-c"></span><a id="lb-s" href="#">Source</a><button type="button" id="lb-p" aria-label="Previous image">←</button><button type="button" id="lb-x" aria-label="Next image">→</button><button type="button" id="lb-close">Close</button></figcaption></figure>
 </dialog>
 
+<script>
+(function(){
+var sec=document.getElementById("behind");if(!sec)return;
+var tabs=[].slice.call(sec.querySelectorAll('[role="tab"]'));
+sec.classList.add("js-tabs");
+function pick(t,focus){tabs.forEach(function(x){var on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;document.getElementById(x.getAttribute("aria-controls")).hidden=!on});if(focus)t.focus()}
+tabs.forEach(function(t,i){
+ t.addEventListener("click",function(){pick(t)});
+ t.addEventListener("keydown",function(e){var j=null;if(e.key==="ArrowRight")j=(i+1)%tabs.length;else if(e.key==="ArrowLeft")j=(i-1+tabs.length)%tabs.length;else if(e.key==="Home")j=0;else if(e.key==="End")j=tabs.length-1;if(j!==null){e.preventDefault();pick(tabs[j],true)}});
+});
+})();
+</script>
 <script>
 (function(){
 var status=document.getElementById("cp-status");
