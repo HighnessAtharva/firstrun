@@ -12,7 +12,7 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 [![Live site](https://img.shields.io/badge/site-firstrun.atharvashah.com-0A66D6?style=for-the-badge)](https://firstrun.atharvashah.com/)
 [![neatHack 2026](https://img.shields.io/badge/built%20for-%23neatHack%202026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
-[![Tests](https://img.shields.io/badge/tests-384%20offline-1B8A3A?style=for-the-badge)](.github)
+[![Tests](https://img.shields.io/badge/tests-389%20offline-1B8A3A?style=for-the-badge)](.github)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
 
 [**Demo film (2:54): the problem, Doc-test, Doc-audit, Agent Ready, neatlogs incidents, Entire and cfo.ai**](https://www.youtube.com/watch?v=9xxgu_1bH-E) · [Long cut (2:59)](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
@@ -618,7 +618,7 @@ Known limits are listed in [docs/known-limits.md](docs/known-limits.md). Example
 
 - **Build:** a lead session planned the work and ran worker agents in parallel, one track each: fixtures, planner, executor, recovery, verification, report page, then edge cases. All agents ran on Sonnet 5.5 at medium effort.
 - **Review:** each layer is an Entire Trail, so Entire runners reviewed every commit since kickoff. They found 3 real bugs, all fixed: a secret retry loop, a Windows-only Docker default, and a cd guard that was written but never called.
-- **CI:** GitHub Actions runs the offline suite on every push and pull request. On the launch branch on 2026-10-11 the offline suite gave 384 passed, 68 skipped (they need `FIRSTRUN_LIVE=1` or a human check) and 1 expected failure.
+- **CI:** GitHub Actions runs the offline suite on every push and pull request. On the launch branch on 2026-10-11 the offline suite gave 384 passed, 68 skipped (they need `FIRSTRUN_LIVE=1` or a human check) and 1 expected failure. On main on 2026-10-12 it gave 389 passed, 71 skipped and 1 expected failure.
 - **Jury self-test:** the Entire judge plugin, run on this repo with the real start time, ranked it with no excluded work: 3.93 of 5, authenticity 4.5, integrity 5.0. The report is [evidence/jury-selftest.txt](evidence/jury-selftest.txt).
 
 Planning happened before the event in a private repo. The build log is [hackathon.md](hackathon.md).
