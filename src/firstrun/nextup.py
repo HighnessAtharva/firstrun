@@ -81,6 +81,12 @@ def _clean(subject: str) -> str:
     return clean(subject)
 
 
+def _contributor(path: str) -> bool:
+    from firstrun.audit import is_contributor_doc
+
+    return is_contributor_doc(path)
+
+
 def _ev(e: dict) -> dict:
     subject = e.get("subject") or ""
     pr = e.get("pr") or (re.search(r"\(#(\d+)\)\s*$", subject) or [None, None])[1]
@@ -167,8 +173,11 @@ def _cluster(card: dict, feats: list[dict], by_sha: dict, pages: list[dict], as_
     strong = any(f.get("area_src") == "scope" or f.get("strong") for f in joined)
     own = re.search(r"Add them to (.+?), the `", card.get("action") or "")
     own_path = own.group(1) if own else ""
+    if own_path and _contributor(own_path):  # an old board may cite a development doc as the page
+        own_path = ""
     if not own_path and (card.get("title") or "").startswith("Document the new"):
-        own_path = next(iter(sorted((p["path"] for p in pages if area and area.lower() in p["path"].lower()), key=len)), "")
+        own_path = next(iter(sorted((p["path"] for p in pages if area and area.lower() in p["path"].lower()
+                                     and not _contributor(p["path"])), key=len)), "")
     d = _days(as_of, newest.get("date"))
     parts = {"impact": 0.55 + 0.25 * min(1, n / 10) + 0.20 * min(1, (mom.get(area) or {}).get("commits", 0) / 30),
              "urgency": _half(d, 45), "evidence": min(1, n / 5) * (1.0 if strong else 0.85),
@@ -241,7 +250,7 @@ def _announce(card: dict, by_sha: dict, as_of: date) -> dict | None:
 
 def _release(card: dict, rel: dict, as_of: date, changelog_recent: bool) -> dict | None:
     n = int(rel.get("commits") or 0)
-    if not n:
+    if not n or rel.get("in_changelog"):  # the changelog already names this release
         return None
     name, prev = rel.get("name") or "", rel.get("previous") or ""
     d = _days(as_of, rel.get("date"))
@@ -337,6 +346,13 @@ def rank(items: list[dict]) -> list[dict]:
     items = sorted(items, key=lambda it: it["title"])
     items = sorted(items, key=lambda it: it["_newest"] or "", reverse=True)
     items = sorted(items, key=lambda it: -it["score"])
+    seen, unique = set(), []  # one item per title: the best-scored copy stays
+    for it in items:
+        norm = re.sub(r"[^a-z0-9]+", " ", it["title"].lower()).strip()
+        if norm not in seen:
+            seen.add(norm)
+            unique.append(it)
+    items = unique
     top, rest, used = [], [], Counter()
     for it in items:
         if len(top) < TOP and used[it["kind"]] < CAPS.get(it["kind"], TOP):
