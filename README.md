@@ -13,7 +13,7 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 [![Tests](https://img.shields.io/badge/tests-384%20offline-1B8A3A?style=for-the-badge)](.github)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
 
-[**Demo video (2:59): neatlogs, Entire and cfo.ai, architecture to result**](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
+[**Demo film (2:45): the problem, neatlogs incidents, Entire and cfo.ai**](https://www.youtube.com/watch?v=XuQ1zg_qaGI) · [Long cut (2:59)](https://www.youtube.com/watch?v=JJNWWhSV9pc) · [**Try it in the browser**](https://firstrun.atharvashah.com/) · [**Watch a real run**](https://firstrun.atharvashah.com/run.html) · [**See the 4 upstream PRs**](#firstrun-found-4-real-docs-bugs-and-opened-4-upstream-prs) · [**For judges**](https://firstrun.atharvashah.com/judges/) · [**Follow the build on X**](https://x.com/cultist_dev)
 
 **Before and after:** v1, the baseline, finished 2 of 4 quickstarts and recovered 0 failed steps. v2 finished 3 of 4, recovered 3 failed steps and proved 1 fix in a fresh container. [See the comparison](#before-and-after-finished-quickstarts-went-from-2-of-4-to-3-of-4).
 
@@ -21,10 +21,11 @@ FirstRun runs your quickstart in a clean container, finds the first step that br
 
 <table>
 <tr>
-<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="210"></a><br><sub><b>DocTest demo (2:59)</b></sub></td>
-<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=2vZb6pZAF8Q"><img src="docs/assets/vid-docaudit-journey.webp" alt="DocAudit thumbnail: 15 stale pages found in dbt-core, each fix goes to the person who knows the code" width="210"></a><br><sub><b>DocAudit journey (1:56)</b></sub></td>
-<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="210"></a><br><sub><b>Teaser (0:36)</b></sub></td>
-<td align="center" width="25%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="210"></a><br><sub><b>DocAudit tour (0:57)</b></sub></td>
+<td align="center" width="20%"><a href="https://www.youtube.com/watch?v=XuQ1zg_qaGI"><img src="docs/assets/vid-hero.webp" alt="FirstRun film thumbnail: the dbt guide broke, fixed and proven, 9 of 9 steps pass" width="170"></a><br><sub><b>The film (2:45)</b></sub></td>
+<td align="center" width="20%"><a href="https://www.youtube.com/watch?v=JJNWWhSV9pc"><img src="docs/assets/vid-doctest.webp" alt="DocTest demo thumbnail: step 10 of a quickstart fails, then the fix passes 9 of 9 steps" width="170"></a><br><sub><b>DocTest demo (2:59)</b></sub></td>
+<td align="center" width="20%"><a href="https://www.youtube.com/watch?v=2vZb6pZAF8Q"><img src="docs/assets/vid-docaudit-journey.webp" alt="DocAudit thumbnail: 15 stale pages found in dbt-core, each fix goes to the person who knows the code" width="170"></a><br><sub><b>DocAudit journey (1:56)</b></sub></td>
+<td align="center" width="20%"><a href="https://www.youtube.com/watch?v=jKL8Ocb0Ki8"><img src="docs/assets/vid-teaser.webp" alt="Teaser thumbnail: step 10 of the dbt DuckDB guide fails" width="170"></a><br><sub><b>Teaser (0:36)</b></sub></td>
+<td align="center" width="20%"><a href="https://www.youtube.com/watch?v=zo94agwRAXc"><img src="docs/assets/vid-docaudit.webp" alt="DocAudit thumbnail: a dbt-core page is 453 days stale" width="170"></a><br><sub><b>DocAudit tour (0:57)</b></sub></td>
 </tr>
 </table>
 

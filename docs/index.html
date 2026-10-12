@@ -575,7 +575,9 @@ mask:linear-gradient(#000 0 0) top/100% calc(100% - 9px) no-repeat,conic-gradien
 .rlinks{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 32px;margin-top:clamp(36px,5vw,52px);font-weight:600}
 
 /* watch it work: three YouTube videos behind a click-to-load facade */
-.vids{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+.vids{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;margin-top:44px}.vids .vc.big{grid-column:span 3;order:0}.vids .vc.sm{grid-column:span 2;flex-direction:column;order:1}.vids .vc.sm .vm{flex:none;border-right:0;border-bottom:1px solid var(--line)}
+@media(max-width:900px){.vids{grid-template-columns:1fr 1fr}.vids .vc.big{grid-column:1/-1}.vids .vc.sm{grid-column:auto}}
+@media(max-width:560px){.vids{grid-template-columns:minmax(0,1fr)}}
 .vc{display:flex;flex-direction:column;overflow:hidden;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
 .vc:hover{transform:translateY(-4px);box-shadow:var(--lift-h)}
 .vc.big{grid-row:auto}
@@ -869,12 +871,12 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 </div>
 </section>
 
-<section id="film" class="film" aria-label="Launch film">
+<section id="film" class="film" aria-label="FirstRun demo film">
 <div class="reel rv">
-<video id="reel" muted loop playsinline preload="metadata" poster="assets/launch-poster.jpg" aria-label="FirstRun launch film, 44 seconds, plays silently on a loop"><source src="assets/firstrun-launch.mp4" type="video/mp4"></video>
+<video id="reel" muted loop playsinline preload="metadata" poster="assets/hero-poster.jpg" aria-label="FirstRun demo film, 2 minutes 45 seconds, with captions. It plays muted while on screen. Use Sound on for the voice."><source src="assets/firstrun-hero.mp4" type="video/mp4"></video>
 <div class="ctl"><button type="button" id="pp">Pause</button><button type="button" id="mu">Sound on</button></div>
 </div>
-<p class="credit"><a class="credit-me" href="#about"><img src="assets/atharva.webp" alt="Portrait of Atharva Shah" width="30" height="30" loading="lazy" decoding="async">Atharva Shah</a><span class="credit-dot" aria-hidden="true">&middot;</span><span class="credit-for">Built for <a href="https://neatlogs.com/hackathon" target="_blank" rel="noopener">neatHack</a>, the neatlogs hackathon</span></p>
+<p class="credit"><a class="credit-me" href="#about"><img src="assets/atharva.webp" alt="Portrait of Atharva Shah" width="30" height="30" loading="lazy" decoding="async">Atharva Shah</a><span class="credit-dot" aria-hidden="true">&middot;</span><span class="credit-for">Built for <a href="https://neatlogs.com/hackathon" target="_blank" rel="noopener">neatHack</a>, the neatlogs hackathon</span><span class="credit-dot" aria-hidden="true">&middot;</span><a href="https://www.youtube.com/watch?v=XuQ1zg_qaGI" target="_blank" rel="noopener">Watch on YouTube</a></p>
 </section>
 
 <!-- DOC-TEST: blue world -->
@@ -1045,8 +1047,12 @@ html:not(.js) .ev .src2{margin:6px 16px 16px 58px}
 <h2 id="watch-h">Watch <span class="fr"><svg class="fr-i" viewBox="0 0 64 64" aria-hidden="true"><use href="#lg"/></svg><mark>FirstRun</mark></span> Test a Guide and Audit a Repo</h2>
 <div class="vids">
 <article class="vc big card">
+<div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=XuQ1zg_qaGI" data-yt="XuQ1zg_qaGI" aria-label="Play the FirstRun submission film, 2 minutes 45 seconds"><img src="assets/vid-hero.webp" alt="FirstRun film thumbnail: the dbt guide broke, fixed and proven, 9 of 9 steps pass" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:45</span></a></div>
+<div class="vt"><p class="k">The film &middot; 2:45</p><h3>The AI Agent That Proves Your Docs Work</h3><p>The problem, a real run, a real audit, and how neatlogs, Entire and cfo.ai shaped the build.</p></div>
+</article>
+<article class="vc sm card">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=JJNWWhSV9pc" data-yt="JJNWWhSV9pc" aria-label="Play the Doc-test demo, 2 minutes 59 seconds"><img src="assets/vid-doctest.webp" alt="Doc-test thumbnail: step 10 of a quickstart fails with no such option --years, then the fix passes 9 of 9 steps" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">2:59</span></a></div>
-<div class="vt"><p class="k">Doc-test &middot; 2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3><p>A clean container runs the dbt guide, hits the step that breaks, fixes the page and passes a second run.</p></div>
+<div class="vt"><p class="k">Doc-test &middot; 2:59</p><h3>Your Docs Lie. FirstRun DocTest Proves It</h3></div>
 </article>
 <article class="vc big card au">
 <div class="vm"><a class="vp" href="https://www.youtube.com/watch?v=2vZb6pZAF8Q" data-yt="2vZb6pZAF8Q" aria-label="Play the Doc-audit journey, 1 minute 56 seconds"><img src="assets/vid-docaudit-journey.webp" alt="Doc-audit thumbnail: 15 stale pages found in dbt-core, each fix goes to the person who knows the code" width="1280" height="720" loading="lazy" decoding="async"><span class="pi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span><span class="dur" aria-hidden="true">1:56</span></a></div>
