@@ -1,0 +1,386 @@
+please note, we cannot do the final social post with zernio - give me all the things that I need to do which are pending - substack, linkedin posts x article, etc etc we need to do all that right now before submission beings, 
+
+also please use sonnet 5.5 agents to start testnig my app and ensuring we are all good fully going on autopilot to fix any issues to the best of my interest to ensure things work. total and complete autopilot mode please!! use superpowers plugin to do this well and nicely! 
+
+------
+
+MAKE A NOTE OF THIS!! 
+
+<pasted_content id="e907">
+neatHack submissions open today, October 12, from 7:00 to 11:55 PM IST.
+A few things to get ready before the window opens:
+
+* Your team name and project description
+* A public GitHub repo with your code
+* A demo video showing what you've built
+
+Here's how to submit
+1. Quote-tweet the official @neatlogs launch post on X.
+We'll share the link at 7 PM IST.
+Your quote-tweet must tag @neatlogs, @EntireHQ, and @arithecfo in the quote-tweet.
+2. Fill out the submission form.
+We'll share that link too.
+Important: Both steps are required. You must quote-tweet the official launch post and tag all three accounts. Our systems use these to detect your submission. If you only fill out the form, or miss the required tags, your submission won't be detected.
+Bonus points: Use your demo video to clearly explain the problem you're solving and how your solution works.
+We’ll engage with the first 50 quote-tweets, so it's worth getting everything ready ahead of time.
+We'll share the links when submissions open. Keep an eye on Discord for updates and any final cutoff changes.
+</pasted_content id="e907">
+
+---
+
+<task-notification>
+<task-id>a6795d24ffe61668e</task-id>
+<tool-use-id>toolu_01QyAx6FJgdtUm4HcxQuK92n</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\a6795d24ffe61668e.output</output-file>
+<status>completed</status>
+<summary>Agent "Test live FirstRun website" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>I found no defects in `docs/`, so I made no fixes, no branch and no PR.
+
+**Pages checked**
+- Live crawl of 109 internal URLs from the homepage, covering Doc-test, Doc-audit, For Judges, plan, audit, runs, receipts, audits, examples, assets and data. All returned 200 except two, and both are crawler false positives:
+  - `/assets/&lt;base&gt;assets/site-nav.js` comes from a usage comment in `docs/assets/site-nav.js:2`.
+  - `/receipts/` comes from JS string concatenation (`"../receipts/"+id`) in doc-test and doc-audit.
+- About 110 external links. All returned 200 except these:
+  - YouTube `9xxgu_1bH-E` returned 200, including every `&amp;t=` deep link.
+  - neatlogs.com, neatlogs.com/hackathon, entire.io, cfo.ai and the cfo.ai model link returned 200.
+  - GitHub (repo, commits, PR 15, PR 671 on accuknox/help, PR 2724 on entireio/cli) returned 200.
+  - `linkedin.com/in/abhi-singhs` returned 999, which is LinkedIn blocking bots. I could not verify it.
+  - Bare `fonts.googleapis.com` and `fonts.gstatic.com` returned 404. These are preconnect hints, not real links.
+- Headless Chromium on the local `docs/` copy, at 1280 px and 375 px width, covered 13 pages: home, doc-test, doc-audit, judges, plan, audit, 6 receipts, and the `?run=x` share URLs of doc-test and doc-audit.
+  - No console or page errors.
+  - No broken images.
+  - No `[FILL]`, `TODO`, `undefined`, `NaN`, `null` or `[object Object]` text.
+  - No horizontal overflow at 375 px.
+- Grep of `docs/` for `[FILL]`, `TODO`, `lorem` and `undefined` found only legitimate hits: JS `=== undefined` checks and a real lorem-markdownum URL inside a receipt.
+
+**Not a defect**
+The one request failure was `assets/firstrun-hero.mp4` on the local Python server, which aborts range requests. The live file returns 200 with `Accept-Ranges: bytes` and 206 on a range request.
+
+**Unverified**
+- The LinkedIn profile link (999 above).
+- Only 6 of the receipt pages loaded in the browser. The other receipts passed only the HTTP crawl.
+- I did not play the YouTube video or the hero video.
+- I did not run a real `run.html` share flow with an actual run ID.</result>
+<usage><subagent_tokens>101830</subagent_tokens><tool_uses>13</tool_uses><duration_ms>399430</duration_ms></usage>
+<worktree><worktreePath>D:\Atharva\firstrun\.claude\worktrees\agent-a6795d24ffe61668e</worktreePath><worktreeBranch>worktree-agent-a6795d24ffe61668e</worktreeBranch></worktree>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>a374cbf7537202f46</task-id>
+<tool-use-id>toolu_017pFSaD1fJc6dVRKxWKsshp</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\a374cbf7537202f46.output</output-file>
+<status>completed</status>
+<summary>Agent "Draft Substack and X article" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Both drafts are written and every scorer reports CRIT 0. Nothing was published, scheduled or committed.
+
+**Files**
+- `D:\Atharva\NOTES\SUBSTACK\0_IDEAS\I Gave an Agent 4 Quickstarts. Here Is What Broke.md` has 1,983 words.
+- `D:\Atharva\NOTES\SUBSTACK\0_IDEAS\I Gave an Agent 4 Quickstarts. Here Is What Broke - X Article.md` has the same body, a title line and no frontmatter.
+
+**Box 4 insight:** "An agent's fix counts as verified only when a model-free re-run in a fresh container passes, so the check cannot flatter itself."
+
+**Scorer results**
+- Slop: CRIT 0. The 10 MED findings are the `[X_URL]` markers.
+- Clarity: CRIT 0, with 16 MED number-pileup findings.
+- Craft: 0 on both files.
+- SEO: CRIT 0, with 1 LOW finding because the keyword is not in the first paragraph.
+- I stamped the slop and SEO scores into the Substack file and rebuilt the local review desk. The phone desk was not pushed.
+
+**Markers left for you**
+- 10 X posts have no recorded URL: `[X_URL: 6acb22718680b54fcd560d61]`, `6acb227d8680b54fcd560d9a`, `6acb22772982c226ebc16ae3`, `6aca475fe8b67041911bfd21`, `6acb7877727e3b9631f8a89d`, `6acb787b01295dd40c110146`, `6acb78836222d05c0200ebdf`, `6acb787f727e3b9631f8a8ac`, `6acb96ac9c6f6c5901d6a763`, `6acb78736222d05c0200ebbe`.
+- `[SUBSTACK_URL]` is the last line of the X Article.
+
+**Choices**
+- I left out the `command -v entire` mistake. `evidence/story-data.md` shows that the Entire docs do contain that command.
+- I did not build figures, headline A/B pairs or a paywall split.
+
+```
++- LOAD ORDER -------------------------------------------------+
+| [x] 1  core/runtime-contract              always             |
+| [x] 2  core/pattern-rules                 always             |
+| [x] 3  core/write-simply                  always             |
+| [x] 4  World.md                           always             |
+| [x] 5  core/net-new-value                 always             |
+| [x] 6  Voice.md                           always             |
+| [x] 7  Long-Form Writing Rules.md         on demand          |
+| [x] 8  skill:substack-writer              channel            |
++- WORLD ------------------------------------------------------+
+| villain  rented work                                         |
+| node     builds a gate that refuses bad work, rather than ...|
+| season   none           format  09 How We Got a Specific R...|
+| insight  An agent's fix counts as verified only when a mod...|
++- CHECKS, measured -------------------------------------------+
+| [x] pillar      ON (AI)                                      |
+| [x] slop        CRIT 0                                       |
+| [x] clarity     CRIT 0                                       |
+| [x] craft       0                                            |
+| [x] seo         CRIT 0                                       |
++--------------------------------------------------------------+
+```</result>
+<usage><subagent_tokens>284807</subagent_tokens><tool_uses>58</tool_uses><duration_ms>569523</duration_ms></usage>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>ab8d8bf5fb6d3299d</task-id>
+<tool-use-id>toolu_01GuqB8LzLjpwEiCfrjh7aib</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\ab8d8bf5fb6d3299d.output</output-file>
+<status>completed</status>
+<summary>Agent "Test FirstRun CLI and suite" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>No defects found, so I made no changes, no branch and no PR.
+
+**Tests:** I ran the suite twice from the README flow. It gave 389 passed, 71 skipped, 1 xfailed. Both runs had no env file, the first with `FIRSTRUN_ENV_FILE=/dev/null`. The second run had no env file set at all, and the suite stayed offline. No unexpected failures. The tree stayed clean after both runs.
+
+**README setup:** `py -3.11 -m venv` plus `pip install -e ".[dev]"` and plain `pytest -q` work with no `PYTHONPATH`. No README step is wrong.
+
+**CLI checks:**
+- `--help` exits 0 for the top level and all 13 commands.
+- `doctor` and `doctor --json` exit 0, and the JSON carries no key values.
+- A bare `firstrun &lt;url&gt;` works as a default run command.
+- `run --offline` on an unreachable URL fails cleanly with exit 2 and `docs_unreachable`.
+- Real audit, no model call: `audit fastapi/typer --no-jev --no-publish --no-team --json` exits 0. It found 78 pages, 4 stale. `audit-issue`, `receipt` and `receipt --check` on that audit all exit 0, and the check reports the evidence files untouched.
+- `report --html` and `share` exit 0.
+- Commands that need prior state exit 1 with clear messages: `bisect`, `prereqs`, `pr`, `audit-issue`, `receipt` and `publish`.
+- No model calls and no AWS. Total spend is $0.
+
+**Minor findings, not fixed:**
+- `README.md:13` and `README.md:602` still say 384 passed and 68 skipped. Today it is 389 and 71. The badge is stale but harmless.
+- `firstrun econ` run outside the checkout prints a raw `FileNotFoundError` traceback for `business\inputs.json`. Judges would run it from the checkout, so this is cosmetic.
+- `run` and `report` have no help text in the command list.
+
+**Not verified:** a real Docker run of a quickstart, because that spends model credit. I did not test `firstrun pr` with a verified run.
+
+I ran `receipt --all-published` by mistake. It rewrote files under `docs/`. I reverted them with `git checkout -- docs` and `git clean -fdq docs`, and `git status` is clean.</result>
+<usage><subagent_tokens>107646</subagent_tokens><tool_uses>21</tool_uses><duration_ms>714348</duration_ms></usage>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>afb06b07e6bf36cba</task-id>
+<tool-use-id>toolu_011uqzB73j5Tt1v3tpwrUSN7</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\afb06b07e6bf36cba.output</output-file>
+<status>completed</status>
+<summary>Agent "Judge path: fresh clone test" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>PR: https://github.com/HighnessAtharva/firstrun/pull/80 (not merged). It fixes four gaps (the first four below). I did not run the quickstart in Docker; the install test was on a local Python 3.11 venv.
+
+**Checked and fine**
+- The repo is public and the README loads logged out (200).
+- All 77 URLs in the README, `hackathon.md` and `evidence/README.md` return 200 logged out. That includes the cfo.ai share link, both YouTube videos, the Entire session and commit pages, and the site.
+- Every relative file path and image exists.
+- A fresh install from the main branch zip works, and `firstrun --help` and `firstrun doctor` run.
+- A real run on `https://docs.neatlogs.com/sdk/python` passed 3/3 steps. The tool reported about $0.06 list price, under the $0.10 limit.
+
+**Gaps**
+1. There was no `LICENSE` file, although `pyproject.toml` declares MIT. Fixed in the PR with an MIT `LICENSE`.
+2. The README demo section linked the 2:59 long cut, not the 2:54 submission video. It now leads with `9xxgu_1bH-E`. The long cut stays as a second link, and the chapter timestamps apply to it.
+3. The README quickstart used `docs.example.com`, which fails with a DNS error. It now uses `docs.neatlogs.com/sdk/python` and mentions `firstrun doctor`.
+4. The three tools were in three separate sections, with no table for architecture, implementation, runtime, reasoning and result. I added "The Three Tools at a Glance". Every figure in it comes from existing README or evidence text, and `hackathon.md` links to it.
+5. The problem statement was only in `hackathon.md`. It now sits under the README tagline.
+6. A README skim shows a README-only judge needs Python 3.11 or newer and git. Both are already in the README, and the Python 3.10 install failure matches the documented floor.
+
+**Gaps only Atharva can close**
+- The neatlogs trace pages, and the Entire Trail pages, need a login. The README says so for Trails, and evidence exports exist for the traces. A public neatlogs share link would help if one exists.
+- The Entire commit hook hung three times, each stopped by PID. The commit then landed.
+- The X quote post window is Monday 7:00 to 11:55 PM IST, and that box in `hackathon.md` is still unchecked.
+- Docker on this machine is only reachable through WSL, so the clean `python:3.11-slim` install test was not run.
+- The README says nothing about how a judge can run the tool without a Claude token. A judge without one can only run the tests.</result>
+<usage><subagent_tokens>124757</subagent_tokens><tool_uses>29</tool_uses><duration_ms>959198</duration_ms></usage>
+<worktree><worktreePath>D:\Atharva\firstrun\.claude\worktrees\agent-afb06b07e6bf36cba</worktreePath><worktreeBranch>worktree-agent-afb06b07e6bf36cba</worktreeBranch></worktree>
+</task-notification>
+
+---
+
+the submission form looks somewhat like this so i need to ensure that I keep responses for this ready in a safe file somewhere! It's imporant that i write in human, clear, precise format to get their attention and hook them and show the relevant data while filling form, keep it short!
+
+---
+
+<task-notification>
+<task-id>a765dee5727fd49ad</task-id>
+<tool-use-id>toolu_01JKiJyuB73Z7295o5LL3ysq</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\a765dee5727fd49ad.output</output-file>
+<status>completed</status>
+<summary>Agent "Substack pass and publish" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>The post is live at https://blog.atharvashah.com/p/agent-4-quickstarts-what-broke (post ID 220016735), and the email went to subscribers. The skill's default `publish` sends it, so I did not add `--no-email`.
+
+**What the pass changed**
+- **Cut:** 2,023 words down to 1,829.
+- **Fact fixes:**
+  - The `cd` bug: the file check ran from inside the new folder, not the old one.
+  - The commits: 91 of 132 carry an Entire checkpoint (the draft said 38 of 113 had none).
+  - FirstRun never opens a PR itself. It prints the `gh` command and a human approves each PR.
+  - "Ajay" is not in any source, so the post names only @bettersayAJ.
+- **Embeds:** the draft had 10 bare X links, all yours, and the skill allows one of your own. I kept the bisect post and added the 2:54 demo video. The other 9 are cut from both texts.
+- **Added:** the primary keyword in the opening, a gloss for MCP, a new cover, one loop diagram and 4 real screenshots.
+
+**Gates**
+- Slop, clarity, publication QA and SEO all report CRIT 0. Craft reports 0.
+- Every link returns 200. Each of the 2 embed URLs is on its own line.
+- Logged out, all images, the video and the X post render on the live page.
+
+**Load-order panel:** it exits 0. All 8 rule files loaded, and all 5 checks pass (pillar ON (AI), slop CRIT 0, clarity CRIT 0, craft 0, seo CRIT 0).
+
+**Not done**
+- No commit, because the skill does not ask for one.
+- Nothing posted on X, LinkedIn or Zernio.
+- Not done because the skill needs your decision or the Substack web screen:
+  - the paid-tier proposal (the post went out free)
+  - the title A/B test
+  - adding 2 internal links (`publish` warned there are 0)
+- The X Article now has the live URL and matches the post. It stays in `0_IDEAS`.
+- Two older drafts on this topic are still in `1_DRAFTS`.
+
+Files are in `D:\Atharva\NOTES\SUBSTACK\`:
+- `2_PUBLISHED\I Gave an Agent 4 Quickstarts. Here Is What Broke.md`
+- `0_IDEAS\I Gave an Agent 4 Quickstarts. Here Is What Broke - X Article.md`</result>
+<usage><subagent_tokens>274487</subagent_tokens><tool_uses>101</tool_uses><duration_ms>625295</duration_ms></usage>
+</task-notification>
+
+---
+
+YES PLEASE DO WHATEVER YOU NEED TO DO TO IMPROVE THE AUDIT!!
+
+<pasted_content id="e907">
+The 9 Entire issues came from the bulk “Open issue on GitHub” button on the Doc-audit board. They were opened at 17:08 IST, all within 2 seconds. A maintainer (gtrrz-victor) closed all 9 within 15 minutes: 7 as not planned, 1 as a duplicate and 1 as already done. Each close comment says why the audit was wrong. This is a bounded change to an existing flow, so I give a short design below and wait for your yes before I write code.
+The Maintainer’s Reasons Show Five Audit Faults
+
+* F1. Hidden or internal features. The audit asked for docs for `lifecycle`, which is internal plumbing. It also asked for `entire checkpoint create` and `entire trail`, which are hidden on purpose.
+* F2. Pages named after code packages. “Write a page for agent_help_cmd” grouped 4 unrelated commands under one shared code change.
+* F3. Docs that already exist. The README already covers `entire auth`. Other topics are in `docs/development/` and `docs/architecture/`. The audit did not search those places, and it cited a contributor guide as if it were user docs.
+* F4. Release notes already in sync. The audit did not check `CHANGELOG.md` or the latest GitHub release first.
+* F5. Duplicates and volume. 2739 and 2740 have the same title, and 9 issues in 2 seconds looks like spam.
+
+Recommended Design: Verify First, Then Send One Message
+
+1. Filter before any suggestion. Drop hidden and internal features (F1). Group commits by user-facing command, not by code package (F2). Search the README and every docs folder for the command name before saying “no docs” (F3). Check `CHANGELOG.md` and the latest release before a release-notes card (F4). Remove duplicate titles (F5).
+2. Replace the bulk button with one “Docs gap report.” It is a single issue per repo with at most 3 items. Each item asks a question, such as “Is `entire trail` meant to stay undocumented?”, and does not give an order. On a repo you do not own, the button copies the report text and opens nothing.
+3. Keep the board as it is. The audit still ranks every card. Only what leaves for GitHub changes.
+
+The changes go into src/firstrun/audit.py (filters) and docs/doc-audit/index.html (the button). Each filter gets a test built from one of these 9 real Entire cases. Time: about 1.5 to 2 hours with agents. It can wait until after 19:00, because the board itself is not broken
+</pasted_content id="e907">
+
+---
+
+<task-notification>
+<task-id>af5f75a0a9546c359</task-id>
+<tool-use-id>toolu_01QNPPeZL7TZecgVvgB7RQ5X</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\af5f75a0a9546c359.output</output-file>
+<status>completed</status>
+<summary>Agent "Board: Docs gap report button" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>The Doc-audit board now hands maintainers one "Docs gap report" instead of the bulk "Open all issues" button. PR: https://github.com/HighnessAtharva/firstrun/pull/81 (not merged). Only `docs/doc-audit/index.html` changed.
+
+**What changed**
+- The bulk button, its popover and their CSS and JS are gone.
+- "Copy docs gap report" builds one markdown report from at most 3 top-ranked items, with unique questions and highest impact first. Each item is a question with 1 to 3 evidence commit links.
+- The report opens with an automated-audit disclaimer and ends with the board link. It has no @mentions and no owner line.
+- The primary button copies the report with the existing `copy()` helper and shows a toast.
+- The quiet "Open as one GitHub issue" link opens a single prefilled issue under `GH_MAX`. The CONTRIBUTING hint sits beside it.
+- Per-card issue titles and first body lines are now questions, and the "Suggested owner" line is dropped. The opened-state marker stays.
+- The "Is `X` meant to stay undocumented" question covers the "Write a page for X" and "Document:" items. Other items get matching questions for stale pages, release notes, announcements and the quickstart. "Document:" items from kleros-v2 used to read "Is this a docs gap: Document: ...", which I fixed.
+
+**Sample report, entireio/cli** (items 2 and 3 are shortened here)
+```
+This report comes from an automated audit of the public commits and docs of entireio/cli, and it may be wrong. Please ignore any question that does not fit.
+
+## Docs gap report
+
+1. **Is `auth` meant to stay undocumented, or would a page help?**
+   6 user-facing auth changes shipped since Jun 25, 2026, newest c99d52ca5 on Sep 29, and Jev found no docs page that explains them.
+   Evidence:
+   - c99d52ca5, 1583df768, 545a86341 (each linked, with subject and date)
+
+2. **Is `repo` meant to stay undocumented, or would a page help?**
+3. **Is `agent_help_cmd` meant to stay undocumented, or would a page help?**
+
+Full audit board: https://firstrun.atharvashah.com/doc-audit/?id=audit-20261010-163526-entireio-cli
+```
+
+**Checks**
+- Playwright on the entireio-cli, kleros-v2 and fastapi-typer boards at 1280 and 375 px: no console errors and no horizontal overflow.
+- The clipboard copy worked with the toast. Issue URLs were 1.0 to 3.0 KB, under the 7500 cap.
+- `tests/test_agent_files.py` and `tests/test_site_footer.py`: 8 passed on Python 3.11. `llms-full.txt` is not stale.
+- Full `pytest -q` did not run: default Python 3.10 has no `tomllib`, and I did not run the other test files.
+- The commit hook hung as expected. I stopped only the `entire.exe` whose command line named this worktree.</result>
+<usage><subagent_tokens>137773</subagent_tokens><tool_uses>38</tool_uses><duration_ms>311184</duration_ms></usage>
+<worktree><worktreePath>D:\Atharva\firstrun\.claude\worktrees\agent-af5f75a0a9546c359</worktreePath><worktreeBranch>worktree-agent-af5f75a0a9546c359</worktreeBranch></worktree>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>a9a389330d297223c</task-id>
+<tool-use-id>toolu_01EGpGXxgiJMmrxZLHYeFJRc</tool-use-id>
+<output-file>C:\Users\ATHARV~1\AppData\Local\Temp\claude\D--Atharva-firstrun\4bfa7b44-cb26-416a-9c2e-4f027431a58c\tasks\a9a389330d297223c.output</output-file>
+<status>completed</status>
+<summary>Agent "Audit engine: F1-F5 filters" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>All five faults are fixed. None of the 9 closed titles appear in a fresh audit of entireio/cli. PR: https://github.com/HighnessAtharva/firstrun/pull/82 (not merged). The full offline suite passes: 409 passed, 72 skipped, 1 xfailed.
+
+**Changes, all in `src/firstrun/`**
+- **F1:** `audit.py:find_features` now drops a feature when its subject says hidden, internal, experimental or undocumented. It also drops it when `hidden_in_source` finds a hidden-command marker in a changed file at HEAD, or when its area or folder is lifecycle, plumbing or `internal/`.
+  - The hidden check matches the nearest command name to the subject. A marker with no name counts as hidden.
+  - The `internal/` rule is skipped when over 80% of the repo's code lives there.
+- **F2:** `audit.py:_cluster_basis`, used by `build_cards`. A "page" item needs the area to come from a commit scope (half the features or more), or to appear as a word in half the subjects.
+- **F3:**
+  - `audit.py:markdown_corpus` makes coverage read the user docs plus every other markdown file, excluding changelogs.
+  - `_area_documented` skips an area named in a heading or backticks in that corpus.
+  - `is_contributor_doc` (also used in `nextup.py:_cluster`) keeps contributor docs out of target and link pages.
+  - The stale-page list is unchanged.
+- **F4:** `audit.py:changelog_names_release` and `read_changelog` skip the release item and set `release.in_changelog`. `nextup.py:_release` honors that flag on old boards.
+- **F5:** `nextup.py:rank` keeps one item per normalized title.
+
+**Tests:** 20 new tests in `tests/test_audit_verify.py`, built from the real entire cases. I ran them failing first, then green. `tests/test_audit.py` and the docs files are untouched, and I did not need to regenerate `llms-full.txt`.
+
+**entireio/cli next items**
+- **Before (live run today):** auth, repo, agent_help_cmd, doctor, search, lifecycle and strategy pages, agent-guide.md and checkpoint-signing.md updates, v0.11.4 release notes, 3 announces, quickstart.
+- **After:**
+  - credential-helper tokens, defensible
+  - async mirror default, defensible
+  - selectable trail backend, weak
+  - `--debug-dir`, defensible
+  - 2 `repo mirror` items, doubtful
+  - `getTemporaryStore` helper, wrong
+  - 3 announces, quickstart
+
+**Gaps that remain:**
+- `getTemporaryStore` is an internal refactor that still passes.
+- `trail backend` slips through because the hidden marker sits in a file the commit did not change.
+- The `repo mirror` items may meet the same objection as `repo`.
+
+The merge from origin/main added the other agent's `docs/doc-audit/index.html` change. The commit hook hung once, so I committed through a started process and no `entire.exe` needed stopping.</result>
+<usage><subagent_tokens>184293</subagent_tokens><tool_uses>47</tool_uses><duration_ms>1005357</duration_ms></usage>
+<worktree><worktreePath>D:\Atharva\firstrun\.claude\worktrees\agent-a9a389330d297223c</worktreePath><worktreeBranch>worktree-agent-a9a389330d297223c</worktreeBranch></worktree>
+</task-notification>
+
+---
+
+maybe improve the readme even more?
+
+<pasted_content id="e907">
+Fix these first
+
+1. +8.9
+Before/after runs with numbers compared
+Add a section to the README that presents before/after runs with quantitative results comparing key metrics.
+2. +2.7
+cfo.ai business plan (pricing, costs, revenue, runway)
+Complete the CFO.ai business plan in the README by adding the missing pricing, cost, revenue, and runway details.
+3. +1.7
+README claims backed by evidence (agent)
+Similarly, back all agent, neatlogs, Entire, and usefulness claims with concrete evidence and references.
+4. +1.4
+README claims backed by evidence (neatlogs, Entire, cfo.ai)
+Back every README claim with a file, commit or trace link a judge can check. (README claims backed by evidence (neatlogs, Entire, cfo.ai): 2 verified, 2 unverified)
+5. +1.3
+README claims backed by evidence (usefulness)
+Back every README claim with a file, commit or trace link a judge can check. (README claims backed by evidence (usefulness): 1 unverified, 1 contradicted)
+</pasted_content id="e907">
