@@ -74,11 +74,13 @@ _INTERNAL_WORDS = re.compile(r"^(bump|merge|revert|update (deps|dependencies)|re
 
 # A commit is not worth a docs suggestion when it says the change is hidden, or the code marks it so.
 _HIDDEN_SUBJECT = re.compile(r"\b(hidden|internal|experimental|undocumented)\b", re.I)
+_IDENT = re.compile(r"\b[a-z]+[A-Z][A-Za-z0-9]*\b|\b[a-z]+(?:_[a-z0-9]+)+\b")
+_USER_SIDE = re.compile(r"--[a-z]|\b[A-Z][A-Z0-9]+_[A-Z0-9_]+\b|\b(command|subcommand|flag|option|setting|config|configuration|env|variable|key)s?\b", re.I)
 _INTERNAL_AREAS = {"lifecycle", "plumbing", "internal", "internals"}
 _INTERNAL_DIR = re.compile(r"(^|/)(internal|plumbing)/")
 # Go cobra, click and typer, argparse. The command name sits on the nearest Use:, add_parser, command or name line.
 _HIDDEN_MARK = re.compile(r"\bHidden:\s*true\b|\bhidden\s*=\s*True\b|\bhelp\s*=\s*argparse\.SUPPRESS\b")
-_CMD_NAME = re.compile(r"""\bUse:\s*"([A-Za-z][\w-]*)|add_parser\(\s*["']([\w-]+)|\.command\(\s*["']([\w-]+)|\bname\s*=\s*["']([\w-]+)""")
+_CMD_NAME = re.compile(r"""\bUse:\s*"([A-Za-z][\w-]*)|\bUse:\s*cmd([A-Za-z]\w*)|add_parser\(\s*["']([\w-]+)|\.command\(\s*["']([\w-]+)|\bname\s*=\s*["']([\w-]+)""")
 # Docs for people who work on the product. A user-facing page is never one of these.
 CONTRIB_DOC = re.compile(
     r"(^|/)(development|dev|architecture|contributing|contributors?|internal|hacking|maintainers?|adrs?|rfcs?)(/|$)|"
@@ -135,6 +137,30 @@ def _is_product(path: str) -> bool:
 
 def is_contributor_doc(path: str) -> bool:
     return bool(CONTRIB_DOC.search(path.replace("\\", "/")))
+
+
+def names_only_code(subject: str) -> bool:
+    """True when the subject names a code identifier (getTemporaryStore) and nothing a user types: no flag,
+    env var, config word, or backticked command. That is an internal refactor."""
+    s = _CONV.sub(lambda m: m.group("m"), re.sub(r"\s*\(#\d+\)\s*$", "", subject.strip()), count=1)
+    if not _IDENT.search(s):
+        return False
+    if any(not _IDENT.fullmatch(t.strip()) for t in re.findall(r"`([^`]+)`", s)):
+        return False
+    return not _USER_SIDE.search(s)
+
+
+def command_of(subject: str, repo_words: set[str]) -> tuple[str, str] | None:
+    """(root, text) of the command the subject names in backticks, with the program name dropped.
+    "`entire repo mirror create`" gives ("repo", "repo mirror create")."""
+    for t in re.findall(r"`([^`]+)`", subject):
+        words = [w for w in t.split() if re.fullmatch(r"[a-z][\w-]*", w)]
+        while words and any(len(w) >= 4 and len(words[0]) >= 4 and (w.startswith(words[0]) or words[0].startswith(w))
+                            for w in repo_words):
+            words.pop(0)
+        if words and not _IDENT.fullmatch(words[0]):
+            return words[0].lower(), " ".join(words).lower()
+    return None
 
 
 def hidden_in_source(text: str, subject: str) -> bool:
@@ -569,8 +595,9 @@ def jev_features(feats: list[dict], excerpts: list[str]) -> dict[int, tuple[str,
 
 
 def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool,
-                  texts: dict[str, str] | None = None, sources=None) -> list[dict]:
-    """sources: optional callable(paths) -> {path: text at HEAD}, to read which commands the code marks hidden."""
+                  texts: dict[str, str] | None = None, sources=None, head_files: list[str] | None = None) -> list[dict]:
+    """sources: optional callable(paths) -> {path: text at HEAD}, to read which commands the code marks hidden.
+    head_files: every file at HEAD, to find the file that defines a command the subject names."""
     window = now - timedelta(days=FEATURE_WINDOW_DAYS)
     recent = [c for c in commits if c["date"] >= window and any(_is_product(f) for f in c["files"])]
     every = [f for c in recent for f in c["files"] if _is_product(f)]
@@ -583,7 +610,7 @@ def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool
             kinds[idx[i]] = k
     feats = []
     for c, k in zip(recent, kinds):
-        if k != "feature" or _HIDDEN_SUBJECT.search(c["subject"]):
+        if k != "feature" or _HIDDEN_SUBJECT.search(c["subject"]) or names_only_code(c["subject"]):
             continue
         strong, weak = _terms(c["subject"])
         hits = [t for t in strong if t in corpus]
@@ -611,6 +638,21 @@ def find_features(commits: list[dict], now: datetime, corpus: str, use_jev: bool
     if sources and feats:
         src = sources(sorted({f for ft in feats for f in ft["files"]})) or {}
         feats = [ft for ft in feats if not any(hidden_in_source(src.get(p, ""), ft["subject"]) for p in ft["files"])]
+        # The command a subject names is defined in a file the commit may not have touched: trail_cmd.go for "trail".
+        stems: dict[str, list[str]] = defaultdict(list)
+        for f in head_files or []:
+            if _is_product(f):
+                stem = re.sub(r"^(cmd|command)[_-]|[_-](cmd|command|commands)$", "", Path(f).stem.lower())
+                stems[stem].append(f)
+
+        def defs(ft):
+            words = set(re.findall(r"[a-z][a-z0-9_-]{2,}", ft["subject"].lower()))
+            return [p for w in sorted(words) for p in stems.get(w, [])[:3]]
+
+        defn = src_defs = sorted({p for ft in feats for p in defs(ft)})
+        if defn:
+            more = sources(defn) or {}
+            feats = [ft for ft in feats if not any(hidden_in_source(more.get(p, ""), ft["subject"]) for p in defs(ft))]
     texts = {p: t for p, t in (texts or {}).items() if not is_contributor_doc(p)}
     hint = [_excerpt(texts, f["_words"]) for f in feats]
     for f, (path, _) in zip(feats, hint):
@@ -778,9 +820,25 @@ def build_cards(repo: str, pages: list[dict], feats: list[dict], mom: dict[str, 
                       + (f" Link it from {near[0][0]}." if near else ""))
         cards.append({"kind": "document", "priority": 0, "title": title, "why": why, "action": action,
                       "evidence": [ev(f) for f in fs[:3]], "count": len(fs)})
-    seen = set()
+    todo, roots, low = [], {}, md_corpus.lower()
     for f in unc:
-        if f["area"] in clustered or f["area"] in documented or f["subject"] in seen:
+        if f["area"] in clustered or f["area"] in documented:
+            continue
+        cmd = command_of(f["subject"], repo_words)
+        if not cmd:
+            todo.append(f)
+            continue
+        root, text = cmd
+        flags = re.findall(r"--[a-z][\w-]*", f["subject"])
+        new = text not in low or any(fl not in low for fl in flags)
+        if _area_documented(root, md_corpus) and not new:
+            continue  # the root is documented and the subject names no subcommand or flag the docs lack
+        roots.setdefault(root, []).append(f)
+    for fs in roots.values():  # one question per command root: the newest change stands for all of them
+        todo.append(max(fs, key=lambda f: f["date"]))
+    seen = set()
+    for f in todo:
+        if f["subject"] in seen:
             continue
         seen.add(f["subject"])
         cards.append({"kind": "document", "priority": 1, "title": f"Document: {_clean(f['subject'])}",
@@ -938,7 +996,8 @@ def _audit(target: str, stale_days: int = 180, use_jev: bool = True, keep: Path 
         corpus = markdown_corpus(repo, texts)
         with neatlogs.trace("audit.features", kind="TOOL") as span:
             feats = find_features(commits, now, corpus, use_jev, texts,
-                                  sources=lambda paths: read_doc_texts(repo, paths))
+                                  sources=lambda paths: read_doc_texts(repo, paths),
+                                  head_files=_git(repo, "ls-tree", "-r", "--name-only", "HEAD", check=False).splitlines())
             mom = momentum(commits, now, feats)
             set_io(span, output={"features": len(feats), "uncovered": sum(1 for f in feats if not f["covered"])})
         rel = release_range(commits, tags, now)

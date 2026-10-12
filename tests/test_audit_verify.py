@@ -17,8 +17,8 @@ def _c(i: int, subject: str, files: list[str], days: int = 5) -> dict:
             "files": files}
 
 
-def _feats(commits: list[dict], corpus: str = "", texts: dict | None = None, sources=None) -> list[dict]:
-    return audit.find_features(commits, NOW, corpus, False, texts or {}, sources=sources)
+def _feats(commits: list[dict], corpus: str = "", texts: dict | None = None, sources=None, head_files=None) -> list[dict]:
+    return audit.find_features(commits, NOW, corpus, False, texts or {}, sources=sources, head_files=head_files)
 
 
 def _feat(i: int, subject: str, area: str, src: str, files: list[str]) -> dict:
@@ -29,8 +29,8 @@ def _feat(i: int, subject: str, area: str, src: str, files: list[str]) -> dict:
 REL = {"name": "v1", "previous": "v0", "date": "2026-10-05", "commits": []}
 
 
-def _cards(feats, pages=None, corpus=""):
-    return audit.build_cards("acme/proj", pages or [], feats, {}, REL, "", False, 180, md_corpus=corpus)
+def _cards(feats, pages=None, corpus="", repo="entireio/cli"):
+    return audit.build_cards(repo, pages or [], feats, {}, REL, "", False, 180, md_corpus=corpus)
 
 
 # ----------------------------------------------------------------------------- F1 hidden and internal
@@ -221,3 +221,74 @@ def test_f5_rank_never_emits_two_items_with_the_same_title():
                        _item("Write a page for repo", 0.4)])
     assert [i["title"] for i in out] == ["Write a page for  Auth ", "Write a page for repo"]
     assert [i["rank"] for i in out] == [1, 2]
+
+
+# ----------------------------------------------------------------------------- G1 code identifiers
+
+def test_g1_subject_naming_only_a_code_identifier_is_dropped():
+    commits = [_c(1, "Add getTemporaryStore helper to dedup store access", ["cmd/cli/store.go"]),
+               _c(2, "feat: add `--format` flag to export", ["cmd/cli/export.go"]),
+               _c(3, "feat: add max_retries setting", ["cmd/cli/retry.go"]),
+               _c(4, "feat: add `entire sync` command with a runSync helper", ["cmd/cli/sync.go"])]
+    assert sorted(f["area"] for f in _feats(commits)) == ["export", "retry", "sync"]
+
+
+# ----------------------------------------------------------------------------- G2 command definition file
+
+_TRAIL = 'cmd := &cobra.Command{\n\tUse:    cmdTrail,\n\tShort:  "Manage trails",\n\tHidden: true,\n}\n'
+
+
+def test_g2_hidden_command_in_its_definition_file_drops_a_feature_that_changed_other_files():
+    commits = [_c(1, "Add selectable trail backend", ["cmd/cli/api/client.go", "cmd/cli/api/trail_json.go"])]
+    tree = ["cmd/cli/trail_cmd.go", "cmd/cli/trail_cmd_test.go", "cmd/cli/api/client.go", "cmd/cli/api/trail_json.go"]
+    seen = {}
+
+    def read(paths):
+        seen.update(dict.fromkeys(paths))
+        return {p: (_TRAIL if p == "cmd/cli/trail_cmd.go" else "") for p in paths}
+
+    assert _feats(commits, sources=read, head_files=tree) == []
+    assert "cmd/cli/trail_cmd.go" in seen
+
+
+def test_g2_definition_file_check_needs_the_command_in_the_subject():
+    tree = ["cmd/cli/trail_cmd.go", "cmd/cli/export_cmd.go", "cmd/cli/api/client.go"]
+
+    def read(paths):
+        return {p: (_TRAIL if p == "cmd/cli/trail_cmd.go" else 'Use: "export",\n') for p in paths}
+
+    commits = [_c(1, "Add selectable export backend", ["cmd/cli/api/client.go"])]
+    assert len(_feats(commits, sources=read, head_files=tree)) == 1
+
+
+# ----------------------------------------------------------------------------- G3 command roots
+
+MIRROR = ["Add `entire repo mirror create` onboarding wizard", "Add `repo mirror list --show-available`",
+          "Add `repo mirror collaborators` add/remove/list"]
+
+
+def _mirror_feats():
+    return [_feat(i, s, "repo_mirror", "file", ["cmd/cli/repo_mirror.go"]) for i, s in enumerate(MIRROR)]
+
+
+def _doc_titles(cards):
+    return [c["title"] for c in cards if c["kind"] == "document"]
+
+
+def test_g3_items_with_one_command_root_become_one_question():
+    titles = _doc_titles(_cards(_mirror_feats()))
+    assert titles == ["Document: Add `repo mirror collaborators` add/remove/list"]  # the newest; the rest fold in
+
+
+def test_g3_documented_root_drops_the_item_when_the_subcommand_is_in_the_corpus():
+    corpus = "## repositories\nrun `entire repo mirror create` then `entire repo mirror list`.\n"
+    feats = [_feat(0, MIRROR[0], "repo_mirror", "file", ["cmd/cli/repo_mirror.go"])]
+    assert _doc_titles(_cards(feats, corpus=corpus)) == []
+
+
+def test_g3_documented_root_keeps_an_item_that_names_a_new_flag_or_subcommand():
+    corpus = "## repositories\nrun `entire repo mirror create` then `entire repo mirror list`.\n"
+    flag = [_feat(0, MIRROR[1], "repo_mirror", "file", ["cmd/cli/repo_mirror.go"])]
+    sub = [_feat(0, MIRROR[2], "repo_mirror", "file", ["cmd/cli/repo_mirror.go"])]
+    assert len(_doc_titles(_cards(flag, corpus=corpus))) == 1
+    assert len(_doc_titles(_cards(sub, corpus=corpus))) == 1
