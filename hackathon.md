@@ -142,7 +142,8 @@ Landing page: https://firstrun.atharvashah.com (Netlify, published from docs/ on
 
 Run replay with the docs execution graph: https://1run.netlify.app/run.html?s=10#ex=dbt opens the dbt run on the step that broke.
 
-Demo video, 2:59, covering neatlogs, Entire and cfo.ai: https://www.youtube.com/watch?v=JJNWWhSV9pc
+Demo video, 2:45, covering the problem, neatlogs incidents, Entire and cfo.ai: https://www.youtube.com/watch?v=XuQ1zg_qaGI
+The 2:59 long cut, with each tool's architecture, implementation and runtime: https://www.youtube.com/watch?v=JJNWWhSV9pc
 
 ## Built in Public
 
@@ -175,7 +176,7 @@ Links were checked logged out on 2026-10-11 through the public X embed endpoint 
 Confirmed requirements from https://neatlogs.com/hackathon:
 
 - [x] Uses neatlogs, Entire and cfo.ai, with a clear role for each: [evidence/README.md](evidence/README.md).
-- [x] Demo video of 3 minutes or less covering all three tools: [https://www.youtube.com/watch?v=JJNWWhSV9pc](https://www.youtube.com/watch?v=JJNWWhSV9pc).
+- [x] Demo video of 3 minutes or less covering all three tools: [https://www.youtube.com/watch?v=XuQ1zg_qaGI](https://www.youtube.com/watch?v=XuQ1zg_qaGI), 2:45. The 2:59 long cut stays at [https://www.youtube.com/watch?v=JJNWWhSV9pc](https://www.youtube.com/watch?v=JJNWWhSV9pc).
 - [x] Public repo with setup and run instructions.
 - [x] Entire checkpoint link plus its ID: [01M4JGJ6NTE7YNB9Z0YW5FYVHN](https://entire.io/gh/HighnessAtharva/firstrun/commit/3ca6f118ecb0a8915315eea27b5588dd8a7c6299).
 - [x] cfo.ai business plan with pricing, costs, revenue and runway: [https://cfo.ai/s/_u5lbrHIl9KX_JQE](https://cfo.ai/s/_u5lbrHIl9KX_JQE) and [business/BUSINESS_PLAN.md](business/BUSINESS_PLAN.md).
