@@ -150,8 +150,16 @@ def read_tags(repo: Path) -> list[dict]:
     return tags
 
 
+# A root file that marks the repo as a docs site. Its pages sit in topic folders such as court/ or concepts/.
+DOC_SITE_MARKERS = {"docs.json", "mint.json", "mkdocs.yml", "mkdocs.yaml", "docusaurus.config.js", "docusaurus.config.ts",
+                    "book.toml", "conf.py", "_config.yml"}
+
+
 def head_docs(repo: Path) -> list[str]:
-    return [f for f in _git(repo, "ls-tree", "-r", "--name-only", "HEAD").splitlines() if is_doc_path(f)]
+    files = _git(repo, "ls-tree", "-r", "--name-only", "HEAD").splitlines()
+    if any(f in DOC_SITE_MARKERS or f.startswith(".vitepress/") for f in files):
+        return [f for f in files if Path(f).suffix.lower() in DOC_EXT and not DOC_SKIP.search(f)]
+    return [f for f in files if is_doc_path(f)]
 
 
 def _raw_base(repo: Path) -> str:

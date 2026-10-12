@@ -69,6 +69,16 @@
    "fixes": 4,
    "summary": "Verified 10/10 after container fixes. The docs already cover both gaps FirstRun hit: install create-dagster first, and pip 25.1 for --group.",
    "example": "dagster"
+  },
+  {
+   "fixes": 0,
+   "example": "kleros",
+   "status": "failed",
+   "url": "https://docs.kleros.io/developers/quickstart",
+   "title": "Kleros developer quickstart",
+   "name": "kleros",
+   "summary": "Step 1, npm install @kleros/kleros-v2-contracts, timed out at 300 s in a clean container. FirstRun found no fix, so nothing was patched or verified.",
+   "date": "2026-10-12"
   }
  ]
 }

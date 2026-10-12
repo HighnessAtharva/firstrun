@@ -240,6 +240,9 @@ html.js .stage:not(.live):not(.flat) .st-out{visibility:hidden}
 /* generated prompt */
 #out{padding-top:28px}
 .you{font-size:16px;line-height:1.5;margin:0 0 14px 4px;max-width:46em}.you b{overflow-wrap:anywhere}
+.you .alt{display:inline;background:none;border:0;min-height:0;padding:0;font:inherit;font-weight:600;color:var(--test);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+#out[data-kind=audit] .you .alt{color:var(--audit,oklch(52% .2 298))}
+#out[data-kind=audit] .strip,#out[data-kind=audit] .cli{display:none}
 .hit{padding:20px 22px;margin-bottom:16px}
 .hit[hidden],.fresh[hidden]{display:none}
 .hit-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;color:var(--mut);font-size:14px}
@@ -1255,30 +1258,25 @@ function paintHit(h){
  $("hit-p").textContent=st.charAt(0).toUpperCase()+st.slice(1);
  $("hit-p").className="pill"+(st==="verified"?"":" other");
  if(h.date)bits.push(fmtDate(h.date));
- bits.push(f?f+(f===1?" fix":" fixes"):"No fixes needed");
+ if(f)bits.push(f+(f===1?" fix":" fixes"));else if(st==="passed"||st==="verified")bits.push("No fixes needed");else bits.push("No fix found");
  $("hit-m").textContent=bits.join(" · ");
  $("hit-t").textContent=h.title||h.name||h.url;
  $("hit-s").textContent=h.summary||"";
  $("hit-a").href="doc-test/#ex="+encodeURIComponent(h.example||h.name||"");
 }
-function build(r){
- var u=r.url,L=["Read https://firstrun.atharvashah.com/agent.md and follow it.",""];
- if(r.q){
-  L.push('Goal: test the quickstart for "'+r.q+'" the way a new developer would, fix any step that breaks, and prove the fix.');
-  L.push('');
-  L.push('0. "'+r.q+'" is not a URL. Find the official quickstart page for it, show me the URL, and use it as <URL> below.');
+/* The prompt is two lines. agent.md holds the install, the preflight, the recipes and the safety rules,
+   so the prompt names the recipe and what to report. */
+function build(raw,kind){
+ var s=clean(raw),n=norm(s),rp=repoOf(s),L=["Read https://firstrun.atharvashah.com/agent.md and follow it."];
+ if(kind==="audit"){
+  if(rp)L.push("Audit the GitHub repo "+rp.repo+" with Doc-audit (Recipe B). Tell me the top 3 tasks and the suggested owner of each. Ask me before you open any PR or issue.");
+  else L.push("Audit the docs for "+(n.q?'"'+n.q+'"':n.url)+" with Doc-audit (Recipe B). Find the public GitHub repo that holds their source and tell me which repo you picked. Then audit that repo. Tell me the top 3 tasks and the suggested owner of each. Ask me before you open any PR or issue.");
  }else{
-  L.push("Goal: test the quickstart at "+u+" the way a new developer would, fix any step that breaks, and prove the fix.");
-  L.push('');
+  var tail="Tell me which step broke, the fix, and whether a clean container verified it. Ask me before you open any PR or issue.";
+  if(rp&&!rp.deep)L.push("Test the quickstart at https://github.com/"+rp.repo+" with Doc-test (Recipe A). "+tail);
+  else if(n.q)L.push('Find the official quickstart page for "'+n.q+'" and show me the URL. Then test that page with Doc-test (Recipe A). '+tail);
+  else L.push("Test the quickstart at "+n.url+" with Doc-test (Recipe A). "+tail);
  }
- L.push("1. Run `docker info`. If it fails, tell me what is missing and how to fix it. On Windows, use Docker inside WSL and set FIRSTRUN_DOCKER. Stop until it works.");
- L.push("2. Run `pip install git+https://github.com/HighnessAtharva/firstrun`.");
- L.push("3. Check that CLAUDE_CODE_OAUTH_TOKEN is set. If not, ask me to run `claude setup-token` and set it. Never print a secret.");
- L.push("4. Run `firstrun "+u+"`. While it runs, tell me in plain words which repo it uses and which step it is on.");
- L.push("5. Read runs/<id>/report.md. Tell me in 3 to 6 short sentences: which step broke, the error, the class Jev gave it, the fix, and whether a fresh container verified the fix.");
- L.push("6. If the fix is verified and patches the docs, show me the diff and the PR body. Ask \"Open this PR on <repo>?\" and wait for my yes. Open nothing before that.");
- L.push("7. After a yes, run `firstrun pr <id> --json` and run the gh commands it prints.");
- L.push("8. Last, print the line that starts with \"share:\" from the run output, so I can watch the replay.");
  return L.join("\n");
 }
 function render(){
@@ -1287,21 +1285,27 @@ function render(){
  for(var i=0;i<3;i++){var t=$("t"+i);t.setAttribute("aria-selected",i===cur?"true":"false");t.tabIndex=i===cur?0:-1}
  $("pre").setAttribute("aria-labelledby","t"+cur);
 }
-function show(){
+function show(kind){
+ kind=kind==="audit"?"audit":"test";
  var raw=$("u").value,r=norm(raw);
  if(!r){$("u").focus();return}
- txt=build(r);
+ txt=build(raw,kind);
  Promise.race([ready,new Promise(function(ok){setTimeout(ok,500)})]).then(function(){
-  var hit=lookup(raw);
+  var hit=kind==="test"?lookup(raw):null,rp=repoOf(raw);
   paintHit(hit);
   var y=$("you");y.textContent="";
   y.appendChild(document.createTextNode("You pasted "));
   var b=document.createElement("b");b.textContent=clean(raw).slice(0,120);y.appendChild(b);
-  y.appendChild(document.createTextNode(hit?". A saved run matches it, so watch the replay below. To run it fresh, copy the prompt into your coding agent. FirstRun runs on your machine, not on this site.":". FirstRun runs on your machine, not on this site. Copy this prompt into your coding agent, and it installs FirstRun and runs the page."));
-  if(r.url&&r.url!=="<URL>")$("cliU").textContent=r.url;
+  y.appendChild(document.createTextNode(hit?". A saved run matches it, so watch the replay below. To run it fresh, copy the prompt into your coding agent. FirstRun runs on your machine, not on this site.":(kind==="audit"?". Copy this prompt into your coding agent. It installs FirstRun, reads the repo's git history and ranks the docs work to do next. It opens no issue until you say yes. ":". Copy this prompt into your coding agent. It installs FirstRun, runs the quickstart in a clean container and proves each fix. It opens no PR until you say yes. ")));
+  /* the other route, one click away. Doc-audit also has a hosted board that needs no install. */
+  if(kind==="audit"&&rp){var a=document.createElement("a");a.className="alt";a.href="doc-audit/?repo="+encodeURIComponent(rp.repo);a.textContent="Or audit it in your browser, with no install.";y.appendChild(a)}
+  else if(kind==="test"){var t=document.createElement("button");t.type="button";t.className="alt";t.textContent=rp?"Audit this repo instead.":"Audit its repo instead.";t.addEventListener("click",function(){route("audit")});y.appendChild(t)}
+  if(kind==="test"&&r.url&&r.url!=="<URL>")$("cliU").textContent=r.url;
+  $("out").setAttribute("data-kind",kind);
   $("out").hidden=false;
   render();
-  $("out").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
+  /* instant, so the page never shows the stretch between the box and the prompt */
+  $("out").scrollIntoView({behavior:"instant",block:"start"});
  });
 }
 /* live hint: say so as soon as a typed URL or name has a saved run */
@@ -1331,18 +1335,12 @@ function say(parts,cls){
 }
 function toAudit(r){location.href="doc-audit/"+(r?"?repo="+encodeURIComponent(r):"")}
 function route(kind){
- var s=clean($("u").value),r=s?repoOf(s):null;
- if(kind==="audit"){
-  if(!s)return toAudit("");
-  if(r)return toAudit(r.repo);
-  if(norm(s).q)return say(["Doc-audit reads a GitHub repo, like dbt-labs/dbt-core. ",["Test the docs for “"+s.slice(0,40)+"” instead",function(){show()}]]);
-  return say(["Doc-audit reads a GitHub repo, not a docs page. ",["Test this page instead",function(){show()}]]);
- }
- if(!s){$("u").focus();return}
- if(r&&!r.deep)return say(["That looks like a GitHub repo. ",["Audit "+r.repo,function(){toAudit(r.repo)},1]," or ",["test its README",function(){show()}],"."]);
+ var s=clean($("u").value);
+ if(!s){if(kind==="audit")return toAudit("");$("u").focus();return}
+ /* every paste gets a prompt. Only a sentence that is no URL, no repo and no tool name gets a nudge. */
  var n=norm(s);
- if(n&&n.q&&!lookup(s)&&(/[^\w .+#-]/.test(s)||s.split(/\s+/).length>3))return say(["That is not a docs URL or a tool name. Paste a docs link, or try ",["dbt + DuckDB",function(){$("u").value="https://docs.getdbt.com/guides/duckdb";hintNow();show()}],"."]);
- show();
+ if(n&&n.q&&!lookup(s)&&!repoOf(s)&&(/[^\w .+#-]/.test(s)||s.split(/\s+/).length>3))return say(["That is not a docs URL, a repo or a tool name. Paste a docs link, or try ",["dbt + DuckDB",function(){$("u").value="https://docs.getdbt.com/guides/duckdb";hintNow();show()}],"."]);
+ show(kind);
 }
 $("f").addEventListener("submit",function(e){e.preventDefault();route("test")});
 

@@ -70,6 +70,21 @@ def test_is_doc_path():
     assert not audit.is_doc_path("node_modules/x/docs/a.md")
 
 
+def test_a_docs_site_repo_counts_every_page_in_its_topic_folders(tmp_path):
+    """kleros/docs is a Mintlify site: court/, concepts/ and the rest sit at the root, beside docs.json."""
+    r = tmp_path / "site"
+    r.mkdir()
+    subprocess.run(["git", "init", "-q", str(r)], check=True)
+    _commit(r, {"README.md": "# Site\n", "docs.json": "{}", "court/jurors.mdx": "# Jurors\n", "concepts/disputes.mdx": "# Disputes\n",
+                "contributing/how.md": "# How\n", "mava.js": "x=1\n"}, "initial", 30)
+    assert sorted(audit.head_docs(r)) == ["README.md", "concepts/disputes.mdx", "court/jurors.mdx"]
+    plain = tmp_path / "plain"
+    plain.mkdir()
+    subprocess.run(["git", "init", "-q", str(plain)], check=True)
+    _commit(plain, {"README.md": "# P\n", "court/jurors.mdx": "# Jurors\n"}, "initial", 30)
+    assert audit.head_docs(plain) == ["README.md"]
+
+
 def test_resolve_target_accepts_repo_shapes(tmp_path):
     assert audit.resolve_target("owner/repo") == ("https://github.com/owner/repo.git", "owner/repo")
     assert audit.resolve_target("https://github.com/owner/repo/tree/main")[1] == "owner/repo"
